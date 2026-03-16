@@ -1,18 +1,6 @@
-import 'package:cacao_boardgame_helper/core/data/models/boardgame_model.dart';
-import 'package:isar/isar.dart';
+import 'package:companion_for_cacao/core/data/database/app_database.dart';
 
-part 'module_model.g.dart';
-
-@collection
 class ModuleModel {
-  Id id;
-  late String name;
-  late String description;
-  final boardgame = IsarLink<BoardgameModel>();
-
-  @ignore
-  int? boardgameId;
-
   ModuleModel({
     required this.id,
     required this.name,
@@ -22,24 +10,38 @@ class ModuleModel {
 
   factory ModuleModel.fromJson(Map<String, dynamic> json) {
     return ModuleModel(
-      id: json['id'] as Id,
+      id: json['id'] as int,
       name: json['name'] as String,
       description: json['description'] as String,
       boardgameId: json['boardgame'] as int?,
     );
   }
 
+  factory ModuleModel.fromDrift(Module row) {
+    return ModuleModel(
+      id: row.id,
+      name: row.name,
+      description: row.description,
+      boardgameId: row.boardgameId,
+    );
+  }
+
+  int id;
+  late String name;
+  late String description;
+  int? boardgameId;
+
   ModuleModel copyWith({
+    int? id,
     String? name,
     String? description,
-    IsarLink<BoardgameModel>? boardgame,
+    int? boardgameId,
   }) {
-    final newModel = ModuleModel(
-      id: id,
+    return ModuleModel(
+      id: id ?? this.id,
       name: name ?? this.name,
       description: description ?? this.description,
+      boardgameId: boardgameId ?? this.boardgameId,
     );
-    newModel.boardgame.value = boardgame?.value ?? this.boardgame.value;
-    return newModel;
   }
 }

@@ -1,6 +1,6 @@
-import 'package:isar/isar.dart';
+import 'package:companion_for_cacao/core/data/database/app_database.dart';
 
 abstract class InitializationRepository {
   Future<void> initialize();
-  Isar getDatabase();
+  AppDatabase getDatabase();
 }

@@ -1,8 +1,6 @@
-import 'package:cacao_boardgame_helper/core/data/models/boardgame_model.dart';
-import 'package:cacao_boardgame_helper/core/data/models/module_model.dart';
-import 'package:isar/isar.dart';
-
-part 'tile_model.g.dart';
+import 'package:companion_for_cacao/core/data/database/app_database.dart';
+import 'package:companion_for_cacao/core/data/models/boardgame_model.dart';
+import 'package:companion_for_cacao/core/data/models/module_model.dart';
 
 enum TileType {
   player,
@@ -14,54 +12,15 @@ enum TileType {
   sunWorshipingSite,
 }
 
-enum TileColor {
-  red,
-  purple,
-  white,
-  yellow,
+enum TileColor { red, purple, white, yellow }
+
+class ModelLink<T> {
+  ModelLink([this.value]);
+
+  T? value;
 }
 
-@collection
 class TileModel {
-  final Id id;
-  final String name;
-  final String description;
-  final String filenameImage;
-  final boardgame = IsarLink<BoardgameModel>();
-  final module = IsarLink<ModuleModel>();
-  final int quantity;
-
-  @Enumerated(EnumType.name)
-  TileType? type;
-
-  @Enumerated(EnumType.name)
-  TileColor? color;
-
-  @ignore
-  int? boardgameId;
-
-  String get typeAsString {
-    if (type == null) return '';
-    switch (type) {
-      case TileType.player:
-        return 'Player';
-      case TileType.market:
-        return 'Market';
-      case TileType.plantation:
-        return 'Plantation';
-      case TileType.goldMine:
-        return 'Gold Mine';
-      case TileType.water:
-        return 'Water';
-      case TileType.temple:
-        return 'Temple';
-      case TileType.sunWorshipingSite:
-        return 'Sun-Worshiping Site';
-      default:
-        return '';
-    }
-  }
-
   TileModel({
     required this.id,
     required this.name,
@@ -71,11 +30,15 @@ class TileModel {
     this.type,
     this.color,
     this.boardgameId,
-  });
+    this.moduleId,
+    BoardgameModel? boardgame,
+    ModuleModel? module,
+  }) : boardgame = ModelLink<BoardgameModel>(boardgame),
+       module = ModelLink<ModuleModel>(module);
 
   factory TileModel.fromJson(Map<String, dynamic> json) {
     return TileModel(
-      id: json['id'] as Id,
+      id: json['id'] as int,
       name: json['name'] as String,
       description: json['description'] as String,
       filenameImage: json['filenameImage'] as String,
@@ -91,22 +54,84 @@ class TileModel {
             )
           : null,
       boardgameId: json['boardgame'] as int,
+      moduleId: json['module'] as int?,
     );
   }
 
+  factory TileModel.fromDrift(Tile row) {
+    return TileModel(
+      id: row.id,
+      name: row.name,
+      description: row.description,
+      filenameImage: row.filenameImage,
+      quantity: row.quantity,
+      type: row.type != null
+          ? TileType.values.firstWhere(
+              (type) => type.toString() == 'TileType.${row.type}',
+            )
+          : null,
+      color: row.color != null
+          ? TileColor.values.firstWhere(
+              (color) => color.toString() == 'TileColor.${row.color}',
+            )
+          : null,
+      boardgameId: row.boardgameId,
+      moduleId: row.moduleId,
+    );
+  }
+
+  final int id;
+  final String name;
+  final String description;
+  final String filenameImage;
+  final int quantity;
+
+  final ModelLink<BoardgameModel> boardgame;
+  final ModelLink<ModuleModel> module;
+
+  final TileType? type;
+  final TileColor? color;
+
+  final int? boardgameId;
+  final int? moduleId;
+
+  String get typeAsString {
+    switch (type) {
+      case null:
+        return '';
+      case TileType.player:
+        return 'Player';
+      case TileType.market:
+        return 'Market';
+      case TileType.plantation:
+        return 'Plantation';
+      case TileType.goldMine:
+        return 'Gold Mine';
+      case TileType.water:
+        return 'Water';
+      case TileType.temple:
+        return 'Temple';
+      case TileType.sunWorshipingSite:
+        return 'Sun-Worshiping Site';
+    }
+  }
+
   TileModel copyWith({
-    Id? id,
+    int? id,
     String? name,
     String? description,
     String? filenameImage,
     int? quantity,
     TileType? type,
     TileColor? color,
-    IsarLink<BoardgameModel>? boardgame,
-    IsarLink<ModuleModel>? module,
     int? boardgameId,
+    int? moduleId,
+    BoardgameModel? boardgame,
+    ModuleModel? module,
+    bool clearBoardgame = false,
+    bool clearModule = false,
   }) {
-    final newModel = TileModel(
+    return TileModel(
       id: id ?? this.id,
       name: name ?? this.name,
       description: description ?? this.description,
@@ -115,9 +140,9 @@ class TileModel {
       type: type ?? this.type,
       color: color ?? this.color,
       boardgameId: boardgameId ?? this.boardgameId,
+      moduleId: moduleId ?? this.moduleId,
+      boardgame: clearBoardgame ? null : (boardgame ?? this.boardgame.value),
+      module: clearModule ? null : (module ?? this.module.value),
     );
-    newModel.boardgame.value = boardgame?.value ?? this.boardgame.value;
-    newModel.module.value = module?.value ?? this.module.value;
-    return newModel;
   }
 }

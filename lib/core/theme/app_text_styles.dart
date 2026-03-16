@@ -1,5 +1,5 @@
-import 'package:cacao_boardgame_helper/core/theme/app_colors.dart';
-import 'package:cacao_boardgame_helper/core/theme/app_fonts.dart';
+import 'package:companion_for_cacao/core/theme/app_colors.dart';
+import 'package:companion_for_cacao/core/theme/app_fonts.dart';
 import 'package:flutter/material.dart';
 
 class AppTextStyles {
@@ -9,22 +9,10 @@ class AppTextStyles {
     fontFamily: AppFonts.headerFont,
     color: AppColors.brown,
     shadows: [
-      Shadow(
-        offset: Offset(-_offset, -_offset),
-        color: AppColors.gold,
-      ),
-      Shadow(
-        offset: Offset(_offset, -_offset),
-        color: AppColors.gold,
-      ),
-      Shadow(
-        offset: Offset(_offset, _offset),
-        color: AppColors.gold,
-      ),
-      Shadow(
-        offset: Offset(-_offset, _offset),
-        color: AppColors.gold,
-      ),
+      Shadow(offset: Offset(-_offset, -_offset), color: AppColors.gold),
+      Shadow(offset: Offset(_offset, -_offset), color: AppColors.gold),
+      Shadow(offset: Offset(_offset, _offset), color: AppColors.gold),
+      Shadow(offset: Offset(-_offset, _offset), color: AppColors.gold),
     ],
   );
 
@@ -91,16 +79,19 @@ class AppTextStyles {
     fontWeight: FontWeight.bold,
     color: AppColors.greenNormal,
     shadows: [
-      Shadow(
-        offset: Offset(1, 1),
-        color: AppColors.black,
-        blurRadius: 4,
-      ),
-      Shadow(
-        offset: Offset(-1, -1),
-        color: AppColors.black,
-        blurRadius: 4,
-      ),
+      Shadow(offset: Offset(1, 1), color: AppColors.black, blurRadius: 4),
+      Shadow(offset: Offset(-1, -1), color: AppColors.black, blurRadius: 4),
     ],
+  );
+
+  static const TextStyle bodyMedium = TextStyle(
+    fontFamily: AppFonts.bodyFont,
+    color: AppColors.brown,
+  );
+
+  static const TextStyle bodySmall = TextStyle(
+    fontFamily: AppFonts.bodyFont,
+    fontSize: 12,
+    color: AppColors.brown,
   );
 }

@@ -1,15 +1,15 @@
-import 'package:cacao_boardgame_helper/core/theme/app_colors.dart';
-import 'package:cacao_boardgame_helper/core/theme/app_text_styles.dart';
-import 'package:cacao_boardgame_helper/features/game_setup/domain/entities/game_setup_state_entity.dart';
-import 'package:cacao_boardgame_helper/features/game_setup/presentation/widgets/detailed_preparation_widget.dart';
-import 'package:cacao_boardgame_helper/features/game_setup/presentation/widgets/detailed_sumary_widget.dart';
-import 'package:cacao_boardgame_helper/features/tile/presentation/widgets/settings_icon_widget.dart';
-import 'package:cacao_boardgame_helper/features/tile/presentation/widgets/tile_list_grill_widget.dart';
-import 'package:cacao_boardgame_helper/shared/widgets/custom_scaffold_widget.dart';
+import 'package:companion_for_cacao/core/theme/app_colors.dart';
+import 'package:companion_for_cacao/core/theme/app_text_styles.dart';
+import 'package:companion_for_cacao/features/game_setup/domain/entities/game_setup_state_entity.dart';
+import 'package:companion_for_cacao/features/game_setup/presentation/widgets/detailed_preparation_widget.dart';
+import 'package:companion_for_cacao/features/game_setup/presentation/widgets/detailed_summary_widget.dart';
+import 'package:companion_for_cacao/features/tile/presentation/widgets/settings_icon_widget.dart';
+import 'package:companion_for_cacao/features/tile/presentation/widgets/tile_list_grill_widget.dart';
+import 'package:companion_for_cacao/shared/widgets/custom_scaffold_widget.dart';
 import 'package:flutter/material.dart';
 
 class GameSetupDetailScreen extends StatelessWidget {
-  const GameSetupDetailScreen({super.key, required this.gameSetup});
+  const GameSetupDetailScreen({required this.gameSetup, super.key});
 
   final GameSetupStateEntity gameSetup;
 
@@ -18,7 +18,7 @@ class GameSetupDetailScreen extends StatelessWidget {
     return DefaultTabController(
       length: 3,
       child: CustomScaffoldWidget(
-        actions: [SettingsIconWidget()],
+        actions: const [SettingsIconWidget()],
         title: 'Game Setup',
         showBackButton: true,
         appBarBottom: TabBar(
@@ -26,34 +26,39 @@ class GameSetupDetailScreen extends StatelessWidget {
           tabs: [
             Tab(
               child: Text(
-                'Sumary',
+                'Summary',
                 textAlign: TextAlign.center,
-                style: AppTextStyles.boardgameTitleTextStyle
-                    .copyWith(fontSize: 16),
+                style: AppTextStyles.boardgameTitleTextStyle.copyWith(
+                  fontSize: 16,
+                ),
               ),
             ),
             Tab(
-              child: Text('Preparation',
-                  textAlign: TextAlign.center,
-                  style: AppTextStyles.boardgameTitleTextStyle
-                      .copyWith(fontSize: 16)),
+              child: Text(
+                'Preparation',
+                textAlign: TextAlign.center,
+                style: AppTextStyles.boardgameTitleTextStyle.copyWith(
+                  fontSize: 16,
+                ),
+              ),
             ),
             Tab(
               child: Text(
                 'Tiles',
                 textAlign: TextAlign.center,
-                style: AppTextStyles.boardgameTitleTextStyle
-                    .copyWith(fontSize: 16),
+                style: AppTextStyles.boardgameTitleTextStyle.copyWith(
+                  fontSize: 16,
+                ),
               ),
             ),
           ],
         ),
         body: TabBarView(
           children: [
-            DetailedSumaryWidget(gameSetup: gameSetup),
+            DetailedSummaryWidget(gameSetup: gameSetup),
             DetailedPreparationWidget(preparation: gameSetup.preparation),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
+            const Padding(
+              padding: EdgeInsets.all(8),
               child: TileListGrillWidget(),
             ),
           ],

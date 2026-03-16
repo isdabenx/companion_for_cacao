@@ -1,12 +1,12 @@
-import 'package:cacao_boardgame_helper/features/tile/presentation/providers/tile_settings_notifier.dart';
+import 'package:companion_for_cacao/features/tile/presentation/providers/tile_settings_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class SettingsItemWidget extends ConsumerWidget {
   const SettingsItemWidget({
-    super.key,
     required this.title,
     required this.settingsName,
+    super.key,
   });
 
   final String title;

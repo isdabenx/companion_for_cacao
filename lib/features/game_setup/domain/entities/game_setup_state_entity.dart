@@ -1,16 +1,10 @@
-import 'package:cacao_boardgame_helper/core/data/models/boardgame_model.dart';
-import 'package:cacao_boardgame_helper/core/data/models/module_model.dart';
-import 'package:cacao_boardgame_helper/core/data/models/tile_model.dart';
-import 'package:cacao_boardgame_helper/features/game_setup/domain/entities/player_entity.dart';
-import 'package:cacao_boardgame_helper/features/game_setup/domain/entities/preparation_entity.dart';
+import 'package:companion_for_cacao/core/data/models/boardgame_model.dart';
+import 'package:companion_for_cacao/core/data/models/module_model.dart';
+import 'package:companion_for_cacao/core/data/models/tile_model.dart';
+import 'package:companion_for_cacao/features/game_setup/domain/entities/player_entity.dart';
+import 'package:companion_for_cacao/features/game_setup/domain/entities/preparation_entity.dart';
 
 class GameSetupStateEntity {
-  final List<PlayerEntity> players;
-  final List<BoardgameModel> expansions;
-  final List<ModuleModel> modules;
-  final List<TileModel> tiles;
-  final List<PreparationEntity> preparation;
-
   GameSetupStateEntity({
     this.players = const [],
     this.expansions = const [],
@@ -18,6 +12,11 @@ class GameSetupStateEntity {
     this.tiles = const [],
     this.preparation = const [],
   });
+  final List<PlayerEntity> players;
+  final List<BoardgameModel> expansions;
+  final List<ModuleModel> modules;
+  final List<TileModel> tiles;
+  final List<PreparationEntity> preparation;
 
   GameSetupStateEntity copyWith({
     List<PlayerEntity>? players,

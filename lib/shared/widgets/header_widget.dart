@@ -1,12 +1,9 @@
-import 'package:cacao_boardgame_helper/core/theme/app_colors.dart';
-import 'package:cacao_boardgame_helper/core/theme/app_text_styles.dart';
+import 'package:companion_for_cacao/core/theme/app_colors.dart';
+import 'package:companion_for_cacao/core/theme/app_text_styles.dart';
 import 'package:flutter/material.dart';
 
 class HeaderWidget extends StatelessWidget {
-  const HeaderWidget({
-    super.key,
-    required this.text,
-  });
+  const HeaderWidget({required this.text, super.key});
   final String text;
 
   @override
@@ -20,12 +17,9 @@ class HeaderWidget extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(horizontal: 8),
                 decoration: BoxDecoration(
                   color: AppColors.greenNormal,
-                  borderRadius: BorderRadius.circular(4.0),
+                  borderRadius: BorderRadius.circular(4),
                 ),
-                child: Text(
-                  text,
-                  style: AppTextStyles.markdownH2,
-                ),
+                child: Text(text, style: AppTextStyles.markdownH2),
               ),
             ),
           ],

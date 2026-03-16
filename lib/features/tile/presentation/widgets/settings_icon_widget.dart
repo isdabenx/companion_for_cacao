@@ -1,7 +1,8 @@
-import 'package:cacao_boardgame_helper/config/constants/tile_settings.dart';
-import 'package:cacao_boardgame_helper/features/tile/presentation/widgets/settings_item_widget.dart';
+import 'dart:async';
+
+import 'package:companion_for_cacao/config/constants/tile_settings.dart';
+import 'package:companion_for_cacao/features/tile/presentation/widgets/settings_item_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 class SettingsIconWidget extends StatelessWidget {
   const SettingsIconWidget({super.key});
@@ -9,13 +10,16 @@ class SettingsIconWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return IconButton(
-      icon: Icon(Icons.settings),
+      icon: const Icon(Icons.settings),
       onPressed: () {
-        showMaterialModalBottomSheet<void>(
-          context: context,
-          builder: (context) {
-            return SafeArea(
-              child: Column(
+        unawaited(
+          showModalBottomSheet<void>(
+            context: context,
+            isScrollControlled: true,
+            useSafeArea: true,
+            showDragHandle: true,
+            builder: (context) {
+              return const Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   SettingsItemWidget(
@@ -35,17 +39,17 @@ class SettingsIconWidget extends StatelessWidget {
                     settingsName: TileSettings.playerColorInBorder,
                   ),
                   SettingsItemWidget(
-                    title: 'Player color in cercle',
-                    settingsName: TileSettings.playerColorInCercle,
+                    title: 'Player color in circle',
+                    settingsName: TileSettings.playerColorInCircle,
                   ),
                   SettingsItemWidget(
                     title: 'Show quantity',
                     settingsName: TileSettings.showQuantity,
                   ),
                 ],
-              ),
-            );
-          },
+              );
+            },
+          ),
         );
       },
     );

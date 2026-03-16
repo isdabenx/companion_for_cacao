@@ -49,7 +49,7 @@ Future<bool> _preCommit() async {
   try {
     final result = await DartPreCommit.run();
     return result.isSuccess;
-  } catch (e) {
+  } on Exception catch (e) {
     _printMessage('❌ Error en pre-commit: $e', CommitColors.error);
     return false;
   }
@@ -72,7 +72,7 @@ Future<bool> _conventionalCommitMsg() async {
     } else {
       CommitValidator.printInvalidCommitTypeMessage(commitMsg);
     }
-  } catch (e) {
+  } on Exception catch (e) {
     _printMessage(
       '❌ Error al obtener el mensaje de commit: $e',
       CommitColors.error,
@@ -139,6 +139,6 @@ class CommitValidator {
 }
 
 void _printMessage(String message, AnsiPen pen) {
-  // ignore: avoid_print
+  // ignore: avoid_print, this is a CLI tool that needs stdout output
   print(pen(message));
 }

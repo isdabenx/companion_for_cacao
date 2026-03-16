@@ -1,25 +1,24 @@
-import 'package:cacao_boardgame_helper/config/constants/tile_settings.dart';
+import 'package:companion_for_cacao/config/constants/tile_settings.dart';
 
 class TileSettingsEntity {
-  final bool playerColorInBorder;
-  final bool playerColorInCercle;
-  final bool badgeTypeInImage;
-  final bool badgeTypeInText;
-  final bool boardgameInTitle;
-  final bool showQuantity;
-
   TileSettingsEntity({
     this.playerColorInBorder = true,
-    this.playerColorInCercle = true,
+    this.playerColorInCircle = true,
     this.badgeTypeInImage = true,
     this.badgeTypeInText = true,
     this.boardgameInTitle = true,
     this.showQuantity = true,
   });
+  final bool playerColorInBorder;
+  final bool playerColorInCircle;
+  final bool badgeTypeInImage;
+  final bool badgeTypeInText;
+  final bool boardgameInTitle;
+  final bool showQuantity;
 
   TileSettingsEntity copyWith({
     bool? playerColorInBorder,
-    bool? playerColorInCercle,
+    bool? playerColorInCircle,
     bool? badgeTypeInImage,
     bool? badgeTypeInText,
     bool? boardgameInTitle,
@@ -27,7 +26,7 @@ class TileSettingsEntity {
   }) {
     return TileSettingsEntity(
       playerColorInBorder: playerColorInBorder ?? this.playerColorInBorder,
-      playerColorInCercle: playerColorInCercle ?? this.playerColorInCercle,
+      playerColorInCircle: playerColorInCircle ?? this.playerColorInCircle,
       badgeTypeInImage: badgeTypeInImage ?? this.badgeTypeInImage,
       badgeTypeInText: badgeTypeInText ?? this.badgeTypeInText,
       boardgameInTitle: boardgameInTitle ?? this.boardgameInTitle,
@@ -36,12 +35,21 @@ class TileSettingsEntity {
   }
 
   bool settings(String action) {
-    if (action == TileSettings.playerColorInBorder) return playerColorInBorder;
-    if (action == TileSettings.playerColorInCercle) return playerColorInCercle;
-    if (action == TileSettings.badgeTypeInImage) return badgeTypeInImage;
-    if (action == TileSettings.badgeTypeInText) return badgeTypeInText;
-    if (action == TileSettings.boardgameInTitle) return boardgameInTitle;
-    if (action == TileSettings.showQuantity) return showQuantity;
-    return false;
+    switch (action) {
+      case TileSettings.playerColorInBorder:
+        return playerColorInBorder;
+      case TileSettings.playerColorInCircle:
+        return playerColorInCircle;
+      case TileSettings.badgeTypeInImage:
+        return badgeTypeInImage;
+      case TileSettings.badgeTypeInText:
+        return badgeTypeInText;
+      case TileSettings.boardgameInTitle:
+        return boardgameInTitle;
+      case TileSettings.showQuantity:
+        return showQuantity;
+      default:
+        return false;
+    }
   }
 }

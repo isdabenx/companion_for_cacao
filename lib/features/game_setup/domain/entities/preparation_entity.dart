@@ -1,15 +1,14 @@
 class PreparationEntity {
-  final String description;
-  final String? imagePath;
-  bool isCompleted;
-  final String? color;
-
-  PreparationEntity({
+  const PreparationEntity({
     required this.description,
     this.imagePath,
     this.isCompleted = false,
     this.color,
   });
+  final String description;
+  final String? imagePath;
+  final bool isCompleted;
+  final String? color;
 
   PreparationEntity copyWith({
     String? description,

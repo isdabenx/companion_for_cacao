@@ -1,84 +1,85 @@
 import 'dart:convert';
 
-import 'package:cacao_boardgame_helper/config/constants/assets.dart';
-import 'package:cacao_boardgame_helper/core/data/models/boardgame_model.dart';
-import 'package:cacao_boardgame_helper/core/data/models/module_model.dart';
-import 'package:cacao_boardgame_helper/core/data/models/tile_model.dart';
-import 'package:cacao_boardgame_helper/features/splash/domain/repositories/initialization_repository.dart';
+import 'package:companion_for_cacao/config/constants/assets.dart';
+import 'package:companion_for_cacao/core/data/database/app_database.dart';
+import 'package:companion_for_cacao/features/splash/domain/repositories/initialization_repository.dart';
+import 'package:drift/drift.dart';
 import 'package:flutter/services.dart';
-import 'package:isar/isar.dart';
-import 'package:path_provider/path_provider.dart';
 
 class InitializationRepositoryImpl implements InitializationRepository {
-  late final Isar _isar;
+  late final AppDatabase _db;
 
   @override
   Future<void> initialize() async {
     await _initializeDatabase();
-    await _poblateDatabase();
+    await _populateDatabase();
   }
 
   @override
-  Isar getDatabase() {
-    return _isar;
+  AppDatabase getDatabase() {
+    return _db;
   }
 
   Future<void> _initializeDatabase() async {
-    final appDirectory = await getApplicationDocumentsDirectory();
-    _isar = await Isar.open(
-      [BoardgameModelSchema, ModuleModelSchema, TileModelSchema],
-      directory: appDirectory.path,
-    );
+    _db = AppDatabase();
   }
 
-  Future<void> _poblateDatabase() async {
-    final String boardgamesJson =
-        await rootBundle.loadString(Assets.boardgamesJson);
-    final List<dynamic> boardgamesData =
-        json.decode(boardgamesJson) as List<dynamic>;
-    final List<BoardgameModel> boardgames = boardgamesData
-        .map((boardgameData) =>
-            BoardgameModel.fromJson(boardgameData as Map<String, dynamic>))
-        .toList();
+  Future<void> _populateDatabase() async {
+    final existing = await _db.getAllBoardgames();
+    if (existing.isNotEmpty) {
+      return;
+    }
 
-    await _isar.writeTxn(() async {
-      await _isar.boardgameModels.putAll(boardgames);
-    });
+    final boardgamesJson = await rootBundle.loadString(Assets.boardgamesJson);
+    final boardgamesData = json.decode(boardgamesJson) as List<dynamic>;
 
-    final String modulesJson = await rootBundle.loadString(Assets.modulesJson);
-    final List<dynamic> modulesData = json.decode(modulesJson) as List<dynamic>;
-    final List<ModuleModel> modules = modulesData
-        .map((moduleData) =>
-            ModuleModel.fromJson(moduleData as Map<String, dynamic>))
-        .toList();
+    final modulesJson = await rootBundle.loadString(Assets.modulesJson);
+    final modulesData = json.decode(modulesJson) as List<dynamic>;
 
-    await _isar.writeTxn(() async {
-      for (final module in modules) {
-        if (module.boardgameId != null) {
-          final boardgame =
-              await _isar.boardgameModels.get(module.boardgameId!);
-          module.boardgame.value = boardgame!;
-        }
-        await _isar.moduleModels.put(module);
-        await module.boardgame.save();
-      }
-    });
+    final tilesJson = await rootBundle.loadString(Assets.tilesJson);
+    final tilesData = json.decode(tilesJson) as List<dynamic>;
 
-    final String tilesJson = await rootBundle.loadString(Assets.tilesJson);
-    final List<dynamic> tilesData = json.decode(tilesJson) as List<dynamic>;
-    final List<TileModel> tiles = tilesData
-        .map((tileData) => TileModel.fromJson(tileData as Map<String, dynamic>))
-        .toList();
-
-    await _isar.writeTxn(() async {
-      for (final tile in tiles) {
-        if (tile.boardgameId != null) {
-          final boardgame = await _isar.boardgameModels.get(tile.boardgameId!);
-          tile.boardgame.value = boardgame!;
-        }
-        await _isar.tileModels.put(tile);
-        await tile.boardgame.save();
-      }
+    await _db.batch((batch) {
+      batch
+        ..insertAll(
+          _db.boardgames,
+          boardgamesData.map(
+            (b) => BoardgamesCompanion.insert(
+              id: Value((b as Map<String, dynamic>)['id'] as int),
+              name: b['name'] as String,
+              description: b['description'] as String,
+              filenameImage: b['filenameImage'] as String,
+              requireId: Value(b['require'] as int?),
+            ),
+          ),
+        )
+        ..insertAll(
+          _db.modules,
+          modulesData.map(
+            (m) => ModulesCompanion.insert(
+              id: Value((m as Map<String, dynamic>)['id'] as int),
+              name: m['name'] as String,
+              description: m['description'] as String,
+              boardgameId: Value(m['boardgame'] as int?),
+            ),
+          ),
+        )
+        ..insertAll(
+          _db.tiles,
+          tilesData.map(
+            (t) => TilesCompanion.insert(
+              id: Value((t as Map<String, dynamic>)['id'] as int),
+              name: t['name'] as String,
+              description: t['description'] as String,
+              filenameImage: t['filenameImage'] as String,
+              quantity: t['quantity'] as int,
+              type: Value(t['type'] as String?),
+              color: Value(t['color'] as String?),
+              boardgameId: t['boardgame'] as int,
+              moduleId: Value(t['module'] as int?),
+            ),
+          ),
+        );
     });
   }
 }

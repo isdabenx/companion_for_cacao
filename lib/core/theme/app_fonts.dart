@@ -1,4 +1,4 @@
 class AppFonts {
-  static const String headerFont = 'burrito';
-  static const String bodyFont = 'agenda';
+  static const String headerFont = 'Burrito';
+  static const String bodyFont = 'Agenda';
 }

@@ -1,14 +1,11 @@
-import 'package:cacao_boardgame_helper/core/theme/app_colors.dart';
-import 'package:cacao_boardgame_helper/features/game_setup/domain/entities/player_entity.dart';
-import 'package:cacao_boardgame_helper/features/game_setup/presentation/providers/game_setup_notifier.dart';
+import 'package:companion_for_cacao/core/theme/app_colors.dart';
+import 'package:companion_for_cacao/features/game_setup/domain/entities/player_entity.dart';
+import 'package:companion_for_cacao/features/game_setup/presentation/providers/game_setup_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class PlayerRowWidget extends ConsumerStatefulWidget {
-  const PlayerRowWidget({
-    super.key,
-    required this.colorString,
-  });
+  const PlayerRowWidget({required this.colorString, super.key});
 
   final String colorString;
 
@@ -34,32 +31,33 @@ class _PlayerRowWidgetState extends ConsumerState<PlayerRowWidget> {
 
     final player = gameSetupState.players.firstWhere(
       (p) => p.color == widget.colorString,
-      orElse: () =>
-          PlayerEntity(name: '', color: widget.colorString, isSelected: false),
+      orElse: () => PlayerEntity(name: '', color: widget.colorString),
     );
 
-    bool isSelected = player.isSelected;
-    if (isSelected) {
+    // Sync controller with state when they differ (e.g. navigating back)
+    if (player.isSelected && controller.text != player.name) {
       controller.text = player.name;
     }
 
     void onTogglePlayer() {
-      setState(() {
-        isSelected = !isSelected;
-        gameSetupNotifier.updatePlayerSelection(widget.colorString, isSelected);
-        if (isSelected) {
-          gameSetupNotifier.addPlayer(controller.text, widget.colorString);
-          focusNode.requestFocus();
-        } else {
-          gameSetupNotifier.removePlayer(widget.colorString);
-        }
-      });
+      final newSelected = !player.isSelected;
+      gameSetupNotifier.updatePlayerSelection(
+        widget.colorString,
+        isSelected: newSelected,
+      );
+      if (newSelected) {
+        gameSetupNotifier.addPlayer(controller.text, widget.colorString);
+        focusNode.requestFocus();
+      } else {
+        gameSetupNotifier.removePlayer(widget.colorString);
+      }
     }
 
     void onPlayerNameChanged(String name) {
-      if (isSelected) {
-        gameSetupNotifier.removePlayer(widget.colorString);
-        gameSetupNotifier.addPlayer(name, widget.colorString);
+      if (player.isSelected) {
+        gameSetupNotifier
+          ..removePlayer(widget.colorString)
+          ..addPlayer(name, widget.colorString);
       }
     }
 
@@ -81,16 +79,18 @@ class _PlayerRowWidgetState extends ConsumerState<PlayerRowWidget> {
               shape: BoxShape.circle,
               color: AppColors.findColorByName(widget.colorString),
               border: Border.all(
-                color: isSelected ? AppColors.brown : AppColors.greenNormal,
-                width: 2.0,
+                color: player.isSelected
+                    ? AppColors.brown
+                    : AppColors.greenNormal,
+                width: 2,
               ),
             ),
           ),
         ),
-        SizedBox(width: 16),
+        const SizedBox(width: 16),
         Expanded(
           child: Visibility(
-            visible: isSelected,
+            visible: player.isSelected,
             maintainSize: true,
             maintainAnimation: true,
             maintainState: true,
@@ -100,7 +100,7 @@ class _PlayerRowWidgetState extends ConsumerState<PlayerRowWidget> {
                 suffixIcon: controller.text.isNotEmpty
                     ? IconButton(
                         onPressed: clearTextField,
-                        icon: Icon(Icons.clear),
+                        icon: const Icon(Icons.clear),
                       )
                     : null,
               ),

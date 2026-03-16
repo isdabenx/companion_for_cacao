@@ -1,11 +1,11 @@
-import 'package:cacao_boardgame_helper/core/theme/app_text_styles.dart';
+import 'package:companion_for_cacao/core/theme/app_text_styles.dart';
 import 'package:flutter/material.dart';
 
 class CardTileBoardgameTitleWidget extends StatelessWidget {
   const CardTileBoardgameTitleWidget({
-    super.key,
     required this.title,
     required this.color,
+    super.key,
   });
 
   final String title;
@@ -21,11 +21,7 @@ class CardTileBoardgameTitleWidget extends StatelessWidget {
             style: AppTextStyles.boardgameTitleTextStyle,
           ),
         ),
-        Divider(
-          height: 1,
-          color: color,
-          thickness: 0.75,
-        ),
+        Divider(height: 1, color: color, thickness: 0.75),
       ],
     );
   }

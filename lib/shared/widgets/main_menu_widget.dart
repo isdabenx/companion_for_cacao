@@ -1,33 +1,31 @@
-import 'package:cacao_boardgame_helper/core/theme/app_colors.dart';
-import 'package:cacao_boardgame_helper/shared/widgets/menu_widget.dart';
+import 'package:companion_for_cacao/core/theme/app_colors.dart';
+import 'package:companion_for_cacao/shared/widgets/menu_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_zoom_drawer/flutter_zoom_drawer.dart';
+import 'package:flutter_advanced_drawer/flutter_advanced_drawer.dart';
 
 class MainMenuWidget extends StatelessWidget {
-  final Scaffold child;
-  final ZoomDrawerController drawerController;
-
   const MainMenuWidget({
-    super.key,
     required this.child,
     required this.drawerController,
+    super.key,
   });
+  final Scaffold child;
+  final AdvancedDrawerController drawerController;
 
   @override
   Widget build(BuildContext context) {
-    return ZoomDrawer(
+    return AdvancedDrawer(
       controller: drawerController,
-      menuScreen: MenuWidget(
-        drawerController: drawerController,
+      drawer: MenuWidget(drawerController: drawerController),
+      openRatio: 0.65,
+      openScale: 0.9,
+      animateChildDecoration: true,
+      childDecoration: const BoxDecoration(
+        borderRadius: BorderRadius.all(Radius.circular(24)),
+        boxShadow: [BoxShadow(color: AppColors.shadow, blurRadius: 10)],
       ),
-      mainScreen: child,
-      slideHeight: 0,
-      slideWidth: MediaQuery.of(context).size.width * 0.65,
-      mainScreenScale: 0.1,
-      borderRadius: 24.0,
-      angle: 0,
-      mainScreenTapClose: true,
-      menuBackgroundColor: AppColors.menuBackground,
+      backdrop: const ColoredBox(color: AppColors.menuBackground),
+      child: child,
     );
   }
 }

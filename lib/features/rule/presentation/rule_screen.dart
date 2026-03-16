@@ -1,10 +1,13 @@
-import 'package:cacao_boardgame_helper/config/constants/assets.dart';
-import 'package:cacao_boardgame_helper/core/theme/app_colors.dart';
-import 'package:cacao_boardgame_helper/core/theme/app_text_styles.dart';
-import 'package:cacao_boardgame_helper/features/rule/presentation/rule_pdf_screen.dart';
-import 'package:cacao_boardgame_helper/shared/widgets/container_full_style_widget.dart';
-import 'package:cacao_boardgame_helper/shared/widgets/custom_scaffold_widget.dart';
+import 'dart:async';
+
+import 'package:companion_for_cacao/config/constants/assets.dart';
+import 'package:companion_for_cacao/config/routes/app_routes.dart';
+import 'package:companion_for_cacao/core/theme/app_colors.dart';
+import 'package:companion_for_cacao/core/theme/app_text_styles.dart';
+import 'package:companion_for_cacao/shared/widgets/container_full_style_widget.dart';
+import 'package:companion_for_cacao/shared/widgets/custom_scaffold_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class RuleScreen extends StatelessWidget {
   const RuleScreen({super.key});
@@ -16,17 +19,16 @@ class RuleScreen extends StatelessWidget {
       body: ContainerFullStyleWidget(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             GestureDetector(
               onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute<RulePdfScreen>(
-                    builder: (context) => RulePdfScreen(
-                      title: 'Instructions',
-                      pdfPath: Assets.ruleCacaoPdf,
-                    ),
+                unawaited(
+                  context.push(
+                    AppRoutes.rulePdf,
+                    extra: const <String, String>{
+                      'title': 'Instructions',
+                      'pdfPath': Assets.ruleCacaoPdf,
+                    },
                   ),
                 );
               },
@@ -37,18 +39,19 @@ class RuleScreen extends StatelessWidget {
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: Padding(
-                  padding: const EdgeInsets.all(16.0),
+                  padding: const EdgeInsets.all(16),
                   child: Row(
                     children: [
-                      CircleAvatar(
+                      const CircleAvatar(
                         backgroundImage: AssetImage(Assets.boardgameCacao),
                         radius: 30,
                       ),
-                      SizedBox(width: 16),
+                      const SizedBox(width: 16),
                       Text(
-                        "Instructions",
-                        style:
-                            AppTextStyles.titleTextStyle.copyWith(fontSize: 24),
+                        'Instructions',
+                        style: AppTextStyles.titleTextStyle.copyWith(
+                          fontSize: 24,
+                        ),
                       ),
                     ],
                   ),
@@ -57,12 +60,13 @@ class RuleScreen extends StatelessWidget {
             ),
             GestureDetector(
               onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute<RulePdfScreen>(
-                    builder: (context) => RulePdfScreen(
-                        title: 'Overview',
-                        pdfPath: Assets.ruleCacaoOverviewPdf),
+                unawaited(
+                  context.push(
+                    AppRoutes.rulePdf,
+                    extra: const <String, String>{
+                      'title': 'Overview',
+                      'pdfPath': Assets.ruleCacaoOverviewPdf,
+                    },
                   ),
                 );
               },
@@ -73,18 +77,19 @@ class RuleScreen extends StatelessWidget {
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: Padding(
-                  padding: const EdgeInsets.all(16.0),
+                  padding: const EdgeInsets.all(16),
                   child: Row(
                     children: [
-                      CircleAvatar(
+                      const CircleAvatar(
                         backgroundImage: AssetImage(Assets.boardgameCacao),
                         radius: 30,
                       ),
-                      SizedBox(width: 16),
+                      const SizedBox(width: 16),
                       Text(
-                        "Overview",
-                        style:
-                            AppTextStyles.titleTextStyle.copyWith(fontSize: 24),
+                        'Overview',
+                        style: AppTextStyles.titleTextStyle.copyWith(
+                          fontSize: 24,
+                        ),
                       ),
                     ],
                   ),

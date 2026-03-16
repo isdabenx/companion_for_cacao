@@ -1,9 +1,9 @@
-import 'package:cacao_boardgame_helper/shared/widgets/custom_scaffold_widget.dart';
+import 'package:companion_for_cacao/shared/widgets/custom_scaffold_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 
 class RulePdfScreen extends StatelessWidget {
-  const RulePdfScreen({super.key, required this.pdfPath, required this.title});
+  const RulePdfScreen({required this.pdfPath, required this.title, super.key});
   final String title;
   final String pdfPath;
 

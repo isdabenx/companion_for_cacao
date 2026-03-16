@@ -1,8 +1,12 @@
-import 'package:cacao_boardgame_helper/features/tile/presentation/providers/tile_notifier.dart';
-import 'package:cacao_boardgame_helper/features/tile/presentation/widgets/card_tile_widget.dart';
-import 'package:dynamic_height_grid_view/dynamic_height_grid_view.dart';
+import 'dart:async';
+
+import 'package:companion_for_cacao/config/routes/app_routes.dart';
+import 'package:companion_for_cacao/features/tile/presentation/providers/tile_notifier.dart';
+import 'package:companion_for_cacao/features/tile/presentation/widgets/card_tile_widget.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:go_router/go_router.dart';
 
 class TileListGrillWidget extends ConsumerStatefulWidget {
   const TileListGrillWidget({super.key});
@@ -17,19 +21,16 @@ class _TileListGrillWidgetState extends ConsumerState<TileListGrillWidget> {
   Widget build(BuildContext context) {
     final tiles = ref.watch(tileNotifierProvider);
 
-    return DynamicHeightGridView(
+    return MasonryGridView.count(
       crossAxisCount: 3,
-      crossAxisSpacing: 6.0,
-      mainAxisSpacing: 6.0,
+      crossAxisSpacing: 6,
+      mainAxisSpacing: 6,
       itemCount: tiles.length,
-      builder: (context, index) {
+      itemBuilder: (context, index) {
         return GestureDetector(
+          key: ValueKey(tiles[index].id),
           onTap: () {
-            Navigator.pushNamed(
-              context,
-              '/tile_detail',
-              arguments: tiles[index],
-            );
+            unawaited(context.push(AppRoutes.tileDetail, extra: tiles[index]));
           },
           child: CardTileWidget(tile: tiles[index]),
         );

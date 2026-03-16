@@ -1,9 +1,9 @@
-import 'package:cacao_boardgame_helper/core/theme/app_colors.dart';
-import 'package:cacao_boardgame_helper/core/theme/app_text_styles.dart';
-import 'package:cacao_boardgame_helper/features/game_setup/presentation/widgets/start_button_widget.dart';
-import 'package:cacao_boardgame_helper/features/game_setup/presentation/widgets/step_expansion_widget.dart';
-import 'package:cacao_boardgame_helper/features/game_setup/presentation/widgets/step_module_widget.dart';
-import 'package:cacao_boardgame_helper/features/game_setup/presentation/widgets/step_player_widget.dart';
+import 'package:companion_for_cacao/core/theme/app_colors.dart';
+import 'package:companion_for_cacao/core/theme/app_text_styles.dart';
+import 'package:companion_for_cacao/features/game_setup/presentation/widgets/start_button_widget.dart';
+import 'package:companion_for_cacao/features/game_setup/presentation/widgets/step_expansion_widget.dart';
+import 'package:companion_for_cacao/features/game_setup/presentation/widgets/step_module_widget.dart';
+import 'package:companion_for_cacao/features/game_setup/presentation/widgets/step_player_widget.dart';
 import 'package:flutter/material.dart';
 
 class GameSetupWidget extends StatefulWidget {
@@ -26,28 +26,28 @@ class _GameSetupWidgetState extends State<GameSetupWidget> {
 
   @override
   Widget build(BuildContext context) {
-    final double heightAllExpansions = 200;
-    final double heightExpansion = heightAllExpansions - 25;
-    final double widthExpansion = heightExpansion * 0.72;
+    const double heightAllExpansions = 200;
+    const heightExpansion = heightAllExpansions - 25;
+    const widthExpansion = heightExpansion * 0.72;
     return Column(
       children: [
         Expanded(
-          flex: 1,
           child: SingleChildScrollView(
             child: Stepper(
-              stepIconMargin: EdgeInsets.all(0),
-              connectorColor: WidgetStatePropertyAll(AppColors.greenDarker),
-              steps: [
+              stepIconMargin: EdgeInsets.zero,
+              connectorColor: const WidgetStatePropertyAll(
+                AppColors.greenDarker,
+              ),
+              steps: const [
                 Step(
-                  title: Text(
-                    'Players',
-                    style: AppTextStyles.labelStep,
-                  ),
+                  title: Text('Players', style: AppTextStyles.labelStep),
                   content: StepPlayerWidget(),
                 ),
                 Step(
-                  title: Text('Expansions (work in progress)',
-                      style: AppTextStyles.labelStep),
+                  title: Text(
+                    'Expansions (work in progress)',
+                    style: AppTextStyles.labelStep,
+                  ),
                   content: StepExpansionWidget(
                     heightAllExpansions: heightAllExpansions,
                     heightExpansion: heightExpansion,
@@ -55,20 +55,20 @@ class _GameSetupWidgetState extends State<GameSetupWidget> {
                   ),
                 ),
                 Step(
-                  title: const Text(
+                  title: Text(
                     'Modules (work in progress)',
                     style: AppTextStyles.labelStep,
                   ),
                   content: StepModuleWidget(),
                 ),
               ],
-              controlsBuilder: (_, __) => Container(),
+              controlsBuilder: (_, details) => const SizedBox.shrink(),
               onStepTapped: _onStepTapped,
               currentStep: _currentStep,
             ),
           ),
         ),
-        StartButtonWidget(),
+        const StartButtonWidget(),
       ],
     );
   }

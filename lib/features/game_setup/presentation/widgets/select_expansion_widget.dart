@@ -1,15 +1,15 @@
-import 'package:cacao_boardgame_helper/config/constants/assets.dart';
-import 'package:cacao_boardgame_helper/core/data/models/boardgame_model.dart';
-import 'package:cacao_boardgame_helper/features/game_setup/presentation/providers/game_setup_notifier.dart';
+import 'package:companion_for_cacao/config/constants/assets.dart';
+import 'package:companion_for_cacao/core/data/models/boardgame_model.dart';
+import 'package:companion_for_cacao/features/game_setup/presentation/providers/game_setup_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class SelectExpansionWidget extends ConsumerWidget {
   const SelectExpansionWidget({
-    super.key,
     required this.boardgame,
     required this.width,
     required this.height,
+    super.key,
   });
 
   final double width;
@@ -20,8 +20,9 @@ class SelectExpansionWidget extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final gameSetupState = ref.watch(gameSetupProvider);
     final gameSetupNotifier = ref.read(gameSetupProvider.notifier);
-    final isSelected =
-        gameSetupState.expansions.any((e) => e.id == boardgame.id);
+    final isSelected = gameSetupState.expansions.any(
+      (e) => e.id == boardgame.id,
+    );
 
     void onToggleExpansion() {
       gameSetupNotifier.toggleExpansion(boardgame);
@@ -34,27 +35,25 @@ class SelectExpansionWidget extends ConsumerWidget {
           Container(
             width: width,
             height: height,
-            margin: EdgeInsets.symmetric(horizontal: 5.0),
+            margin: const EdgeInsets.symmetric(horizontal: 5),
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(8.0),
-              border: Border.all(
-                color: Colors.transparent,
-                width: 2.0,
-              ),
+              borderRadius: BorderRadius.circular(8),
+              border: Border.all(color: Colors.transparent, width: 2),
               image: DecorationImage(
                 image: AssetImage(
-                    '${Assets.imagesBoardgamePath}${boardgame.filenameImage}'),
+                  '${Assets.imagesBoardgamePath}${boardgame.filenameImage}',
+                ),
                 fit: BoxFit.cover,
                 colorFilter: isSelected
                     ? null
-                    : ColorFilter.mode(Colors.grey, BlendMode.saturation),
+                    : const ColorFilter.mode(Colors.grey, BlendMode.saturation),
               ),
             ),
           ),
-          SizedBox(height: 4),
+          const SizedBox(height: 4),
           Text(
             boardgame.name,
-            style: TextStyle(fontSize: 12),
+            style: Theme.of(context).textTheme.bodySmall,
             textAlign: TextAlign.center,
           ),
         ],

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 class AppColors {
+  // Semantic aliases for game-specific UI elements
   static const Color menuBackground = greenLight;
   static const Color badgeBackground = greenDarker;
   static const Color badgeText = gold;
@@ -9,8 +10,8 @@ class AppColors {
   static const Color tileBackground = greenNormal;
   static const Color tileBorder = Colors.grey;
   static const Color tileShadow = brown;
-  static const Color appBarBackground = greenNormal;
   static const Color iconColor = brown;
+  static const Color shadow = Color(0x1F000000);
 
   static const Color greenLight = Color(0xFFE7F3DE);
   static const Color greenNormal = Color(0xFFC1DFAE);
@@ -38,8 +39,10 @@ class AppColors {
 
   static String findColorName(Color color) {
     return colors.entries
-        .firstWhere((entry) => entry.value == color,
-            orElse: () => MapEntry('', Colors.transparent))
+        .firstWhere(
+          (entry) => entry.value == color,
+          orElse: () => const MapEntry('', Colors.transparent),
+        )
         .key;
   }
 }
