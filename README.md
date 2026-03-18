@@ -1,100 +1,266 @@
+<div align="center">
+
+<img src="assets/icon/icon_play_store_512.png" alt="Companion for Cacao" width="150">
+
 # Companion for Cacao
 
-## Descripció
-Companion for Cacao és una aplicació mòbil desenvolupada amb Flutter dissenyada per ajudar els jugadors del joc de taula Cacao i les seves expansions (Chocolatl i Diamante). L'objectiu és proporcionar eines digitals que millorin l'experiència de joc, facilitant la preparació de partides, la consulta de regles i el càlcul de puntuacions.
+**L'aplicació company per al joc de taula Cacao i les seves expansions**
 
-## Estat del Projecte
-🚧 **En Desenvolupament** 🚧
+[![Flutter](https://img.shields.io/badge/Flutter-3.9+-02569B?logo=flutter&logoColor=white)](https://flutter.dev)
+[![Dart](https://img.shields.io/badge/Dart-3.11+-0175C2?logo=dart&logoColor=white)](https://dart.dev)
+[![License](https://img.shields.io/badge/License-CC%20BY--NC--SA%204.0-lightgrey)](LICENSE)
+[![Platform](https://img.shields.io/badge/Platform-Android-3DDC84?logo=android&logoColor=white)](https://play.google.com/store)
+[![Version](https://img.shields.io/badge/Version-2.0.0-blue)]()
 
-### Característiques
-- ✅ **Splash Screen:** Càrrega inicial de l'aplicació.
-- ✅ **Menú Principal:** Accés ràpid a totes les funcionalitats.
-- ✅ **Base de Dades de Rajoles:** Llistat complet amb detalls de cada rajola.
-- ✅ **Configuració de Partida:** Stepper per triar jugadors, expansions i mòduls.
-- ✅ **Manuals Integrats:** Visor de PDF per al manual del joc base.
-- 🔄 **Assistència durant la Partida:** Consulta ràpida de regles (en procés).
-- ⏳ **Calculadora de Puntuació Final:** Recompte automàtic (pendent).
-- ⏳ **Historial de Partides:** Registre de sessions anteriors (pendent).
+*Eines digitals per millorar l'experiencia de joc: preparacio de partides, consulta de regles i calcul de puntuacions.*
+
+<img src="assets/icon/feature_graphic_1024x500.png" alt="Feature Graphic" width="600">
+
+</div>
+
+---
+
+## Contingut
+
+- [Sobre el Projecte](#sobre-el-projecte)
+- [Screenshots](#screenshots)
+- [Funcionalitats](#funcionalitats)
+- [Tecnologia](#tecnologia)
+- [Arquitectura](#arquitectura)
+- [Començar](#comencar)
+- [Estructura del Projecte](#estructura-del-projecte)
+- [Full de Ruta](#full-de-ruta)
+- [Convencions](#convencions)
+- [Documentació](#documentacio)
+- [Llicència](#llicencia)
+
+---
+
+## Sobre el Projecte
+
+**Companion for Cacao** es una aplicacio mobil dissenyada per acompanyar els jugadors del joc de taula [Cacao](https://boardgamegeek.com/boardgame/171499/cacao) i les seves dues expansions oficials: **Chocolatl** i **Diamante**.
+
+L'objectiu es proporcionar eines digitals que complementin l'experiencia de joc fisic — des de la preparacio inicial fins al calcul de la puntuacio final — sense substituir cap component fisic del joc.
+
+### Per que aquesta app?
+
+- **Preparacio rapida:** Configura partides en segons, amb seleccio automatica de rajoles segons jugadors, expansions i moduls actius.
+- **Regles sempre a ma:** Consulta el manual complet sense haver de buscar el llibret de regles.
+- **Cataleg de rajoles:** Explora totes les rajoles del joc amb imatges i descripcions detallades.
+- **Calcul precis:** *(Properament)* Calculadora de puntuacio final amb suport per totes les expansions.
+
+---
 
 ## Screenshots
-*(Properament)*
 
-## Tech Stack
-- **Framework:** Flutter 3.41+ (SDK ^3.9.0)
-- **Llenguatge:** Dart 3.11+
-- **Gestió d'estat:** Riverpod 3.3+
-- **Navegació:** GoRouter 17+
-- **Base de dades local:** Drift 2.32+ (SQLite)
-- **Linting:** flutter_lints 6.0+
-- **Arquitectura:** Feature-first Clean Architecture (MVVM)
+<div align="center">
 
-## Prerequisits
-- [Flutter SDK](https://flutter.dev/docs/get-started/install)
-- [Dart SDK](https://dart.dev/get-dart)
+| | | | |
+|:---:|:---:|:---:|:---:|
+| <img src="assets/screenshots/phone_01.png" width="180"> | <img src="assets/screenshots/phone_02.png" width="180"> | <img src="assets/screenshots/phone_03.png" width="180"> | <img src="assets/screenshots/phone_04.png" width="180"> |
+| <img src="assets/screenshots/phone_05.png" width="180"> | <img src="assets/screenshots/phone_06.png" width="180"> | <img src="assets/screenshots/phone_07.png" width="180"> | <img src="assets/screenshots/phone_08.png" width="180"> |
 
-## Instal·lació
+</div>
 
-### 1. Clonar el repositori
+---
+
+## Funcionalitats
+
+### Disponibles (v2.0.0)
+
+| Funcionalitat | Descripcio |
+|---|---|
+| **Menu Principal** | Navegacio rapida amb menu lateral tematic |
+| **Base de Dades de Rajoles** | Cataleg complet amb imatges, descripcions i filtres de visualitzacio |
+| **Configuracio de Partida** | Stepper de 3 passos: jugadors, expansions i moduls |
+| **Preparacio Automatica** | Generacio pas a pas de la preparacio segons la configuracio triada |
+| **Manual de Regles** | Visor PDF integrat del manual del joc base |
+
+### En Desenvolupament
+
+| Funcionalitat | Fase | Descripcio |
+|---|---|---|
+| Calculadora de Puntuacio | 1 | Formulari pas a pas amb suport per expansions, empats i desempats |
+| Filtre i Cerca de Rajoles | 1 | Filtrar per tipus, color, expansio i modul |
+| Selector de Primer Jugador | 1 | Aleatori tematic, rotacio per historial o manual |
+| Rajoles d'Expansions | 1 | Fitxes completes de Chocolatl i Diamante |
+| Historial de Partides | 2 | Registre de sessions amb puntuacions i estadistiques |
+| Perfils de Jugador | 2 | Estadistiques personals i rendiment per expansio |
+
+> Consulta el [Full de Ruta](#full-de-ruta) complet per a totes les fases.
+
+---
+
+## Tecnologia
+
+| Component | Tecnologia | Versio |
+|---|---|---|
+| Framework | [Flutter](https://flutter.dev) | 3.41+ (SDK ^3.9.0) |
+| Llenguatge | [Dart](https://dart.dev) | 3.11+ |
+| Gestio d'Estat | [Riverpod](https://riverpod.dev) | 3.3+ |
+| Navegacio | [GoRouter](https://pub.dev/packages/go_router) | 17+ |
+| Base de Dades | [Drift](https://drift.simonbinder.eu) (SQLite) | 2.32+ |
+| PDF | [Syncfusion PDF Viewer](https://pub.dev/packages/syncfusion_flutter_pdfviewer) | 32+ |
+| Markdown | [flutter_markdown_plus](https://pub.dev/packages/flutter_markdown_plus) | 1.0+ |
+| Linting | [flutter_lints](https://pub.dev/packages/flutter_lints) | 6.0+ |
+
+---
+
+## Arquitectura
+
+L'aplicacio segueix els principis de **Clean Architecture** amb una organitzacio **feature-first** i el patro **MVVM**:
+
+```
+┌─────────────────────────────────────────┐
+│              Presentacio                │
+│   (Screens, Widgets, ViewModels)        │
+├─────────────────────────────────────────┤
+│                Domini                   │
+│   (Entities, Use Cases, Notifiers)      │
+├─────────────────────────────────────────┤
+│                Dades                    │
+│   (Models, Repositories, Data Sources)  │
+├─────────────────────────────────────────┤
+│            Infraestructura              │
+│   (Drift DB, JSON, SharedPreferences)   │
+└─────────────────────────────────────────┘
+```
+
+**Patrons utilitzats:**
+- **MVVM** — Separacio clara entre vista i logica de negoci
+- **Repository Pattern** — Abstraccio de les fonts de dades
+- **UDF** (Unidirectional Data Flow) — Flux de dades predictible amb Riverpod
+
+---
+
+## Comencar
+
+### Prerequisits
+
+- [Flutter SDK](https://flutter.dev/docs/get-started/install) (^3.9.0)
+- [Android Studio](https://developer.android.com/studio) o [VS Code](https://code.visualstudio.com/)
+- Un dispositiu Android o emulador
+
+### Installacio
+
 ```bash
+# 1. Clonar el repositori
 git clone https://github.com/isdabenx/companion_for_cacao.git
 cd companion_for_cacao
-```
 
-### 2. Instal·lar dependències
-```bash
+# 2. Installar dependencies
 flutter pub get
-```
 
-### 3. Generar codi de base de dades
-```bash
+# 3. Generar codi de base de dades (Drift)
 dart run build_runner build
-```
 
-### 4. Executar l'aplicació
-```bash
+# 4. Executar l'aplicacio
 flutter run
 ```
 
-## Configuració dels Git Hooks
-Utilitzem Git Hooks per mantenir la qualitat del codi i automatitzar tasques abans de cada commit.
-
-```bash
-pub global activate git_hooks
-git_hooks create git_hooks.dart
-```
+---
 
 ## Estructura del Projecte
-L'aplicació segueix una estructura organitzada per funcionalitats (features):
 
-```ascii
+```
 lib/
-├── config/             # Configuració global (rutes, constants)
-│   ├── constants/      # Actius i configuracions de rajoles
-│   └── routes/         # Definició de rutes de navegació
-├── core/               # Components transversals
-│   ├── data/           # Models de dades i base de dades (Drift)
-│   ├── providers/      # Providers de base de dades
-│   └── theme/          # Estils, colors i tipografies
-├── features/           # Funcionalitats de l'aplicació
-│   ├── game_setup/     # Configuració de la partida
-│   ├── home/           # Pantalla principal
-│   ├── rule/           # Visor de regles
-│   ├── splash/         # Pantalla de benvinguda
-│   └── tile/           # Base de dades de rajoles
-├── shared/             # Ginys i providers compartits
-│   ├── providers/      # Notificadors compartits
-│   └── widgets/        # Components de la interfície comuns
-└── main.dart           # Punt d'entrada de l'aplicació
+├── config/                 # Configuracio global
+│   ├── constants/          # Assets i configuracions de rajoles
+│   └── routes/             # Rutes de navegacio (GoRouter)
+├── core/                   # Components transversals
+│   ├── data/models/        # Models de dades (Drift)
+│   ├── providers/          # Providers de base de dades
+│   └── theme/              # Colors, tipografies i estils
+├── features/               # Funcionalitats (feature-first)
+│   ├── splash/             # Pantalla de carrega
+│   ├── home/               # Menu principal
+│   ├── tile/               # Cataleg de rajoles
+│   ├── game_setup/         # Configuracio de partida
+│   └── rule/               # Visor de regles
+├── shared/                 # Components compartits
+│   ├── providers/          # Notificadors globals
+│   └── widgets/            # Ginys reutilitzables
+└── main.dart               # Punt d'entrada
 ```
 
-## Convencions de Noms
-- **Classes i Enums:** `PascalCase` (ex: `TileModel`)
-- **Mètodes i Variables:** `camelCase` (ex: `calculateScore`)
-- **Arxius:** `snake_case` (ex: `app_routes.dart`)
-- **Sufixos:** `*_model.dart`, `*_provider.dart`, `*_screen.dart`, `*_widget.dart`
+Cada feature segueix l'estructura interna:
+```
+feature/
+├── presentation/           # Screens i widgets
+├── domain/                 # Entities i logica de negoci
+└── data/                   # Models i repositoris (si aplica)
+```
 
-## Documentació Detallada
-Per a una descripció exhaustiva de les regles del joc, els mòduls de les expansions i la lògica de puntuació, consulta el fitxer [DESIGN.md](DESIGN.md).
+---
 
-## Llicència
-Aquest projecte està llicenciat sota la Llicència Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International. Consulta l'arxiu `LICENSE` per a més detalls.
+## Full de Ruta
+
+### Fase 1 — Funcionalitats Core
+- [ ] Calculadora de puntuacio final
+- [ ] Filtre i cerca de rajoles
+- [ ] Selector de primer jugador
+- [ ] Rajoles d'expansions completes (Chocolatl + Diamante)
+- [ ] Notificacio d'actualitzacio de l'app (upgrader)
+
+### Fase 2 — Diferenciacio
+- [ ] Historial de partides
+- [ ] Perfils de jugador amb estadistiques
+- [ ] Comptador de probabilitats de rajoles
+- [ ] Foto de partida
+- [ ] Gestor d'expansions millorat
+
+### Fase 3 — Engagement
+- [ ] Sistema d'assoliments
+- [ ] Grups de joc amb classificacions
+- [ ] Analisi post-partida
+- [ ] Temporitzador de torns
+
+### Fase 4 — Qualitat i Accessibilitat
+- [ ] Mode daltonic
+- [ ] Internacionalitzacio (catala, castella, angles)
+- [ ] Configuracio general de l'app
+
+> Per a detalls complets de cada funcionalitat, consulta [DESIGN.md](DESIGN.md).
+
+---
+
+## Convencions
+
+| Element | Format | Exemple |
+|---|---|---|
+| Classes i Enums | `PascalCase` | `TileModel` |
+| Metodes i Variables | `camelCase` | `calculateScore` |
+| Arxius | `snake_case` | `app_routes.dart` |
+| Sufixos | Segons tipus | `*_model.dart`, `*_provider.dart`, `*_screen.dart`, `*_widget.dart` |
+
+**Commits:** [Conventional Commits](https://www.conventionalcommits.org/) amb [Gitmoji](https://gitmoji.dev/) (ex: `feat: :sparkles: add score calculator`).
+
+---
+
+## Documentacio
+
+- **[DESIGN.md](DESIGN.md)** — Document de disseny complet: regles del joc, expansions, models de dades i arquitectura
+- **[Politica de Privadesa](docs/privacy-policy.html)** — Politica de privadesa per a Google Play
+
+---
+
+## Llicencia
+
+Aquest projecte esta llicenciat sota la **Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International**.
+
+Pots copiar, redistribuir i adaptar el material sempre que:
+- Atribueixis l'autoria original
+- No el facis servir amb fins comercials
+- Distribueixis les teves contribucions sota la mateixa llicencia
+
+Consulta l'arxiu [LICENSE](LICENSE) per als termes complets.
+
+---
+
+<div align="center">
+
+Fet amb :chocolate_bar: per [isdabenx](https://github.com/isdabenx)
+
+*Companion for Cacao no esta afiliat ni avalat pels creadors del joc de taula Cacao.*
+
+</div>
