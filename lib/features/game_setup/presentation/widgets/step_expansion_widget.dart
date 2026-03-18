@@ -29,7 +29,7 @@ class StepExpansionWidget extends StatelessWidget {
           child: Consumer(
             builder: (context, ref, child) {
               final boardgames = ref
-                  .watch(boardgameNotifierProvider)
+                  .watch(boardgameProvider)
                   .where((element) => element.id != 1)
                   .toList();
 

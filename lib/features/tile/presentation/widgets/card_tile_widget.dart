@@ -14,7 +14,7 @@ class CardTileWidget extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final tileSettings = ref.watch(tileSettingsNotifier);
+    final tileSettings = ref.watch(tileSettingsProvider);
     final tileColor = tile.color == null
         ? null
         : AppColors.findColorByName(tile.color.toString().split('.').last);

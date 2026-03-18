@@ -19,7 +19,7 @@ class TileListGrillWidget extends ConsumerStatefulWidget {
 class _TileListGrillWidgetState extends ConsumerState<TileListGrillWidget> {
   @override
   Widget build(BuildContext context) {
-    final tiles = ref.watch(tileNotifierProvider);
+    final tiles = ref.watch(tileProvider);
 
     return MasonryGridView.count(
       crossAxisCount: 3,

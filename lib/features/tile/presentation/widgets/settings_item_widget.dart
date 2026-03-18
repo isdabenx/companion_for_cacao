@@ -14,7 +14,7 @@ class SettingsItemWidget extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final tileSettings = ref.watch(tileSettingsNotifier);
+    final tileSettings = ref.watch(tileSettingsProvider);
 
     return ListTile(
       title: Text(title),
@@ -24,7 +24,7 @@ class SettingsItemWidget extends ConsumerWidget {
             : Icons.check_box_outline_blank,
       ),
       onTap: () =>
-          ref.read(tileSettingsNotifier.notifier).toggleSettings(settingsName),
+          ref.read(tileSettingsProvider.notifier).toggleSettings(settingsName),
     );
   }
 }

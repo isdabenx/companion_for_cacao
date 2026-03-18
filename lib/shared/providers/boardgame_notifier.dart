@@ -1,9 +1,12 @@
 import 'package:companion_for_cacao/core/data/models/boardgame_model.dart';
 import 'package:companion_for_cacao/core/data/repositories/boardgame_repository.dart';
 import 'package:companion_for_cacao/core/providers/repository_providers.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-class BoardgameNotifier extends Notifier<List<BoardgameModel>> {
+part 'boardgame_notifier.g.dart';
+
+@Riverpod(keepAlive: true)
+class BoardgameNotifier extends _$BoardgameNotifier {
   @override
   List<BoardgameModel> build() {
     return [];
@@ -46,8 +49,3 @@ class BoardgameNotifier extends Notifier<List<BoardgameModel>> {
     );
   }
 }
-
-final boardgameNotifierProvider =
-    NotifierProvider<BoardgameNotifier, List<BoardgameModel>>(
-      BoardgameNotifier.new,
-    );

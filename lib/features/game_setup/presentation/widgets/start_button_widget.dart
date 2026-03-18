@@ -14,7 +14,7 @@ class StartButtonWidget extends ConsumerWidget {
   void _onStartButtonPressed(BuildContext context, WidgetRef ref) {
     ref.read(gameSetupProvider.notifier).startGame();
     final gameSetupState = ref.read(gameSetupProvider);
-    ref.read(tileNotifierProvider.notifier).setTiles(gameSetupState.tiles);
+    ref.read(tileProvider.notifier).setTiles(gameSetupState.tiles);
     unawaited(context.push(AppRoutes.gameSetupDetail, extra: gameSetupState));
   }
 

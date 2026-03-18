@@ -3,10 +3,13 @@ import 'dart:async';
 import 'package:companion_for_cacao/config/constants/tile_settings.dart';
 import 'package:companion_for_cacao/features/tile/domain/entities/tile_settings_entity.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class TileSettingsNotifier extends Notifier<TileSettingsEntity> {
+part 'tile_settings_notifier.g.dart';
+
+@Riverpod(keepAlive: true)
+class TileSettingsNotifier extends _$TileSettingsNotifier {
   @override
   TileSettingsEntity build() {
     unawaited(_loadSettings());
@@ -90,8 +93,3 @@ class TileSettingsNotifier extends Notifier<TileSettingsEntity> {
     }
   }
 }
-
-final tileSettingsNotifier =
-    NotifierProvider<TileSettingsNotifier, TileSettingsEntity>(
-      TileSettingsNotifier.new,
-    );

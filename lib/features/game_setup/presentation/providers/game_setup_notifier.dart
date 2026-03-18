@@ -6,14 +6,15 @@ import 'package:companion_for_cacao/features/game_setup/domain/entities/player_e
 import 'package:companion_for_cacao/features/game_setup/domain/services/base_game_handler.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/services/preparation_pipeline.dart';
 import 'package:companion_for_cacao/shared/providers/boardgame_notifier.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-class GameSetupNotifier extends Notifier<GameSetupStateEntity> {
+part 'game_setup_notifier.g.dart';
+
+@Riverpod(keepAlive: true)
+class GameSetupNotifier extends _$GameSetupNotifier {
   @override
   GameSetupStateEntity build() {
-    final boardgame = ref
-        .read(boardgameNotifierProvider.notifier)
-        .boardgameById(1);
+    final boardgame = ref.read(boardgameProvider.notifier).boardgameById(1);
     return GameSetupStateEntity(expansions: [boardgame]);
   }
 
@@ -89,8 +90,7 @@ class GameSetupNotifier extends Notifier<GameSetupStateEntity> {
         .toList();
     final baseGame = state.expansions.firstWhere(
       (expansion) => expansion.id == 1,
-      orElse: () =>
-          ref.read(boardgameNotifierProvider.notifier).boardgameById(1),
+      orElse: () => ref.read(boardgameProvider.notifier).boardgameById(1),
     );
 
     final pipeline = PreparationPipeline(
@@ -114,8 +114,3 @@ class GameSetupNotifier extends Notifier<GameSetupStateEntity> {
     );
   }
 }
-
-final gameSetupProvider =
-    NotifierProvider<GameSetupNotifier, GameSetupStateEntity>(() {
-      return GameSetupNotifier();
-    });

@@ -10,6 +10,6 @@ final initializeAppUseCaseProvider = Provider<InitializeAppUseCase>(
 final splashScreenProvider = FutureProvider<void>((ref) async {
   final initializeAppUseCase = ref.read(initializeAppUseCaseProvider);
   await initializeAppUseCase.initialize();
-  final boardgameNotifier = ref.read(boardgameNotifierProvider.notifier);
+  final boardgameNotifier = ref.read(boardgameProvider.notifier);
   await boardgameNotifier.initialize();
 });
