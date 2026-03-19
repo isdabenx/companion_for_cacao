@@ -34,15 +34,22 @@ class TileDetailScreen extends ConsumerWidget {
                     width: 4,
                   ),
                 ),
-                child: Image.asset(
-                  '${Assets.imagesTilePath}${tile.filenameImage}',
+                child: Hero(
+                  tag: 'tile-image-${tile.filenameImage}',
+                  child: Material(
+                    color: Colors.transparent,
+                    child: Image.asset(
+                      '${Assets.imagesTilePath}${tile.filenameImage}',
+                    ),
+                  ),
                 ),
               ),
               const SizedBox(height: 8),
-              Text(tile.name, style: AppTextStyles.titleTextStyle),
+              SelectableText(tile.name, style: AppTextStyles.titleTextStyle),
               const SizedBox(height: 8),
               MarkdownBody(
                 data: tile.description,
+                selectable: true,
                 styleSheet: AppMarkdownStyleSheet.styleSheet,
               ),
             ],

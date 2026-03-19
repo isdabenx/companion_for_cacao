@@ -11,6 +11,8 @@ void main() async {
   await SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
+    DeviceOrientation.landscapeLeft,
+    DeviceOrientation.landscapeRight,
   ]);
   runApp(const ProviderScope(child: MainApp()));
 }
@@ -55,6 +57,12 @@ class MainApp extends ConsumerWidget {
         ),
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
+            backgroundColor: AppColors.greenDark,
+            foregroundColor: AppColors.white,
+          ),
+        ),
+        filledButtonTheme: FilledButtonThemeData(
+          style: FilledButton.styleFrom(
             backgroundColor: AppColors.greenDark,
             foregroundColor: AppColors.white,
           ),

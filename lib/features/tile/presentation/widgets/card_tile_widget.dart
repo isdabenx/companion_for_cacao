@@ -14,7 +14,12 @@ class CardTileWidget extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final tileSettings = ref.watch(tileSettingsProvider);
+    final tileSettings = ref.watch(tileSettingsProvider.select((s) => s.value));
+
+    if (tileSettings == null) {
+      return const Center(child: CircularProgressIndicator());
+    }
+
     final tileColor = tile.color == null
         ? null
         : AppColors.findColorByName(tile.color.toString().split('.').last);
@@ -35,7 +40,7 @@ class CardTileWidget extends ConsumerWidget {
             quantity: tile.quantity,
             showQuantity: tileSettings.showQuantity,
           ),
-          if (tileSettings.boardgameInTitle)
+          if (tileSettings.boardgameInTitle && tile.boardgame.value != null)
             CardTileBoardgameTitleWidget(
               title: tile.boardgame.value!.name,
               color: borderColor,

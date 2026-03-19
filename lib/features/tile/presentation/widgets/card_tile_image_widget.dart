@@ -23,10 +23,13 @@ class CardTileImageWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        Image.asset(
-          '${Assets.imagesTilePath}$filenameImage',
-          fit: BoxFit.cover,
-          width: double.infinity,
+        Hero(
+          tag: 'tile-image-$filenameImage',
+          child: Image.asset(
+            '${Assets.imagesTilePath}$filenameImage',
+            fit: BoxFit.cover,
+            width: double.infinity,
+          ),
         ),
         if (badgeTypeInImage)
           Positioned(

@@ -14,17 +14,22 @@ class SettingsItemWidget extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final tileSettings = ref.watch(tileSettingsProvider);
+    final tileSettingsAsync = ref.watch(tileSettingsProvider);
 
-    return ListTile(
-      title: Text(title),
-      trailing: Icon(
-        tileSettings.settings(settingsName)
-            ? Icons.check_box
-            : Icons.check_box_outline_blank,
+    return tileSettingsAsync.when(
+      data: (tileSettings) => ListTile(
+        title: Text(title),
+        trailing: Icon(
+          tileSettings.settings(settingsName)
+              ? Icons.check_box
+              : Icons.check_box_outline_blank,
+        ),
+        onTap: () => ref
+            .read(tileSettingsProvider.notifier)
+            .toggleSettings(settingsName),
       ),
-      onTap: () =>
-          ref.read(tileSettingsProvider.notifier).toggleSettings(settingsName),
+      loading: () => const Center(child: CircularProgressIndicator()),
+      error: (error, _) => Center(child: Text('Error: $error')),
     );
   }
 }

@@ -13,34 +13,41 @@ class StartButtonWidget extends ConsumerWidget {
 
   void _onStartButtonPressed(BuildContext context, WidgetRef ref) {
     ref.read(gameSetupProvider.notifier).startGame();
-    final gameSetupState = ref.read(gameSetupProvider);
-    ref.read(tileProvider.notifier).setTiles(gameSetupState.tiles);
-    unawaited(context.push(AppRoutes.gameSetupDetail, extra: gameSetupState));
+    final gameSetupValue = ref.read(gameSetupProvider).value;
+    if (gameSetupValue != null) {
+      ref.read(tileProvider.notifier).setTiles(gameSetupValue.tiles);
+      unawaited(context.push(AppRoutes.gameSetupDetail, extra: gameSetupValue));
+    }
   }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final gameSetupState = ref.watch(gameSetupProvider);
-    final isStartButtonEnabled =
-        gameSetupState.players
-            .where((p) => p.isSelected && p.name.isNotEmpty)
-            .length >=
-        2;
+    final isStartButtonEnabled = ref.watch(
+      gameSetupProvider.select(
+        (s) =>
+            (s.value?.players
+                    .where((p) => p.isSelected && p.name.isNotEmpty)
+                    .length ??
+                0) >=
+            2,
+      ),
+    );
 
-    return ElevatedButton(
-      onPressed: isStartButtonEnabled
-          ? () => _onStartButtonPressed(context, ref)
-          : null,
-      child: const Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          FittedBox(
-            child: Text(
-              'Start Game',
-              style: AppTextStyles.boardgameTitleTextStyle,
+    return Padding(
+      padding: const EdgeInsets.all(16),
+      child: SizedBox(
+        width: double.infinity,
+        child: FilledButton(
+          onPressed: isStartButtonEnabled
+              ? () => _onStartButtonPressed(context, ref)
+              : null,
+          child: Text(
+            'Start Game',
+            style: AppTextStyles.boardgameTitleTextStyle.copyWith(
+              color: Colors.white,
             ),
           ),
-        ],
+        ),
       ),
     );
   }
