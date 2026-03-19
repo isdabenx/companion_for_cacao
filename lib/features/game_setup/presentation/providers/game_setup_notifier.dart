@@ -13,45 +13,78 @@ part 'game_setup_notifier.g.dart';
 @Riverpod(keepAlive: true)
 class GameSetupNotifier extends _$GameSetupNotifier {
   @override
-  GameSetupStateEntity build() {
-    final boardgame = ref.read(boardgameProvider.notifier).boardgameById(1);
-    return GameSetupStateEntity(expansions: [boardgame]);
+  FutureOr<GameSetupStateEntity> build() async {
+    final boardgames = await ref.watch(boardgameProvider.future);
+    final baseGame = boardgames.firstWhere(
+      (b) => b.id == 1,
+      orElse: () => BoardgameModel(
+        id: 1,
+        name: 'Cacao',
+        description: '',
+        filenameImage: '',
+      ),
+    );
+    return GameSetupStateEntity(expansions: [baseGame]);
   }
 
   void addPlayer(String name, String color) {
-    final player = PlayerEntity(name: name, color: color, isSelected: true);
-    state = state.copyWith(players: [...state.players, player]);
+    if (state.value == null) return;
+    state = AsyncData(
+      state.value!.copyWith(
+        players: [
+          ...state.value!.players,
+          PlayerEntity(name: name, color: color, isSelected: true),
+        ],
+      ),
+    );
   }
 
   void removePlayer(String color) {
-    state = state.copyWith(
-      players: state.players.where((p) => p.color != color).toList(),
+    if (state.value == null) return;
+    state = AsyncData(
+      state.value!.copyWith(
+        players: state.value!.players.where((p) => p.color != color).toList(),
+      ),
     );
   }
 
   void updatePlayerSelection(String color, {required bool isSelected}) {
-    state = state.copyWith(
-      players: state.players.map((p) {
-        if (p.color == color) {
-          return p.copyWith(isSelected: isSelected);
-        }
-        return p;
-      }).toList(),
+    if (state.value == null) return;
+    state = AsyncData(
+      state.value!.copyWith(
+        players: state.value!.players.map((p) {
+          if (p.color == color) {
+            return p.copyWith(isSelected: isSelected);
+          }
+          return p;
+        }).toList(),
+      ),
     );
   }
 
   void addExpansion(BoardgameModel expansion) {
-    state = state.copyWith(expansions: [...state.expansions, expansion]);
+    if (state.value == null) return;
+    state = AsyncData(
+      state.value!.copyWith(
+        expansions: [...state.value!.expansions, expansion],
+      ),
+    );
   }
 
   void removeExpansion(BoardgameModel expansion) {
-    state = state.copyWith(
-      expansions: state.expansions.where((e) => e.id != expansion.id).toList(),
+    if (state.value == null) return;
+    state = AsyncData(
+      state.value!.copyWith(
+        expansions: state.value!.expansions
+            .where((e) => e.id != expansion.id)
+            .toList(),
+      ),
     );
   }
 
   void toggleExpansion(BoardgameModel expansion) {
-    if (state.expansions.any((e) => e.id == expansion.id)) {
+    if (state.value == null) return;
+    if (state.value!.expansions.any((e) => e.id == expansion.id)) {
       removeExpansion(expansion);
     } else {
       addExpansion(expansion);
@@ -59,17 +92,24 @@ class GameSetupNotifier extends _$GameSetupNotifier {
   }
 
   void addModule(ModuleModel module) {
-    state = state.copyWith(modules: [...state.modules, module]);
+    if (state.value == null) return;
+    state = AsyncData(
+      state.value!.copyWith(modules: [...state.value!.modules, module]),
+    );
   }
 
   void removeModule(ModuleModel module) {
-    state = state.copyWith(
-      modules: state.modules.where((m) => m.id != module.id).toList(),
+    if (state.value == null) return;
+    state = AsyncData(
+      state.value!.copyWith(
+        modules: state.value!.modules.where((m) => m.id != module.id).toList(),
+      ),
     );
   }
 
   void toggleModule(ModuleModel module) {
-    if (state.modules.any((m) => m.id == module.id)) {
+    if (state.value == null) return;
+    if (state.value!.modules.any((m) => m.id == module.id)) {
       removeModule(module);
     } else {
       addModule(module);
@@ -77,10 +117,13 @@ class GameSetupNotifier extends _$GameSetupNotifier {
   }
 
   void startGame() {
-    final modules = state.modules
-        .where((m) => state.expansions.any((e) => e.id == m.boardgameId))
+    if (state.value == null) return;
+
+    final currentSetup = state.value!;
+    final modules = currentSetup.modules
+        .where((m) => currentSetup.expansions.any((e) => e.id == m.boardgameId))
         .toList();
-    final players = state.players
+    final players = currentSetup.players
         .where((p) => p.isSelected && p.name.isNotEmpty)
         .toList();
 
@@ -88,29 +131,29 @@ class GameSetupNotifier extends _$GameSetupNotifier {
     final filteredColors = AppColors.colors.keys
         .where(playerColors.contains)
         .toList();
-    final baseGame = state.expansions.firstWhere(
-      (expansion) => expansion.id == 1,
-      orElse: () => ref.read(boardgameProvider.notifier).boardgameById(1),
-    );
+
+    final baseGame = currentSetup.expansions.firstWhere((e) => e.id == 1);
 
     final pipeline = PreparationPipeline(
       baseHandler: BaseGameHandler(
         baseGame: baseGame,
-        activeExpansions: state.expansions,
+        activeExpansions: currentSetup.expansions,
         selectedColors: filteredColors,
       ),
       moduleHandlers: const {},
     );
 
     final result = pipeline.execute(
-      state.copyWith(players: players, modules: modules),
+      currentSetup.copyWith(players: players, modules: modules),
     );
 
-    state = state.copyWith(
-      players: players,
-      modules: modules,
-      tiles: result.tiles,
-      preparation: result.preparation,
+    state = AsyncData(
+      currentSetup.copyWith(
+        players: players,
+        modules: modules,
+        tiles: result.tiles,
+        preparation: result.preparation,
+      ),
     );
   }
 }

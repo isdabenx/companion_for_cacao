@@ -11,8 +11,10 @@ import 'package:companion_for_cacao/features/splash/presentation/screens/splash_
 import 'package:companion_for_cacao/features/tile/presentation/screens/tile_detail_screen.dart';
 import 'package:companion_for_cacao/features/tile/presentation/screens/tile_list_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+
+part 'app_router.g.dart';
 
 /// A [ChangeNotifier] bridge that allows Riverpod providers to trigger
 /// GoRouter's redirect re-evaluation via [refreshListenable].
@@ -20,7 +22,8 @@ class _RouterRefreshNotifier extends ChangeNotifier {
   void notify() => notifyListeners();
 }
 
-final goRouterProvider = Provider<GoRouter>((ref) {
+@Riverpod(keepAlive: true)
+GoRouter goRouter(Ref ref) {
   final refreshNotifier = _RouterRefreshNotifier();
 
   // Listen for splash state changes and notify the router to re-evaluate redirects
@@ -117,4 +120,4 @@ final goRouterProvider = Provider<GoRouter>((ref) {
       return null;
     },
   );
-});
+}

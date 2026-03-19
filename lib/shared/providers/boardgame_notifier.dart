@@ -1,5 +1,4 @@
 import 'package:companion_for_cacao/core/data/models/boardgame_model.dart';
-import 'package:companion_for_cacao/core/data/repositories/boardgame_repository.dart';
 import 'package:companion_for_cacao/core/providers/repository_providers.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -8,21 +7,13 @@ part 'boardgame_notifier.g.dart';
 @Riverpod(keepAlive: true)
 class BoardgameNotifier extends _$BoardgameNotifier {
   @override
-  List<BoardgameModel> build() {
-    return [];
-  }
-
-  Future<void> initialize() async {
+  Future<List<BoardgameModel>> build() async {
     final repository = await ref.read(boardgameRepositoryProvider.future);
-    await _loadBoardgames(repository);
-  }
-
-  Future<void> _loadBoardgames(BoardgameRepository repository) async {
     final boardgames = await repository.getAllBoardgames();
     final modules = await repository.getAllModules();
     final tiles = await repository.getAllTiles();
 
-    state = boardgames
+    return boardgames
         .map(
           (boardgame) => boardgame.copyWith(
             modules: modules
@@ -38,7 +29,8 @@ class BoardgameNotifier extends _$BoardgameNotifier {
   }
 
   BoardgameModel boardgameById(int id) {
-    return state.firstWhere(
+    final boardgames = state.value ?? [];
+    return boardgames.firstWhere(
       (b) => b.id == id,
       orElse: () => BoardgameModel(
         description: 'Unknown',

@@ -7,4 +7,5 @@ class AppRoutes {
   static const String rulePdf = '/rules/pdf';
   static const String gameSetup = '/game_setup';
   static const String gameSetupDetail = '/game_setup/detail';
+  static const String gameSetupMinimal = '/game_setup/minimal';
 }
