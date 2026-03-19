@@ -76,10 +76,12 @@ class MainApp extends ConsumerWidget {
           headlineMedium: AppTextStyles.markdownH2,
           titleLarge: AppTextStyles.boardgameTitleTextStyle,
           titleMedium: AppTextStyles.labelStep,
+          titleSmall: AppTextStyles.summaryTitle,
           bodyLarge: AppTextStyles.markdownBody,
           bodyMedium: AppTextStyles.bodyMedium,
           bodySmall: AppTextStyles.bodySmall,
           labelLarge: AppTextStyles.menu,
+          labelSmall: AppTextStyles.summarySubtitle,
         ),
       ),
     );

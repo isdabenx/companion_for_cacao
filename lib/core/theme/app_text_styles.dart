@@ -94,4 +94,24 @@ class AppTextStyles {
     fontSize: 12,
     color: AppColors.brown,
   );
+
+  // Summary widget styles
+  static const TextStyle summaryTitle = TextStyle(
+    fontFamily: AppFonts.headerFont,
+    fontSize: 16,
+    fontWeight: FontWeight.bold,
+    color: AppColors.brown,
+    shadows: [
+      Shadow(offset: Offset(-_offset, -_offset), color: AppColors.gold),
+      Shadow(offset: Offset(_offset, -_offset), color: AppColors.gold),
+      Shadow(offset: Offset(_offset, _offset), color: AppColors.gold),
+      Shadow(offset: Offset(-_offset, _offset), color: AppColors.gold),
+    ],
+  );
+
+  static const TextStyle summarySubtitle = TextStyle(
+    fontFamily: AppFonts.bodyFont,
+    fontSize: 12,
+    color: AppColors.brown,
+  );
 }
