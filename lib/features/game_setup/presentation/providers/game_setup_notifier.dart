@@ -30,9 +30,6 @@ class GameSetupNotifier extends _$GameSetupNotifier {
   void reorderColorOrder(int oldIndex, int newIndex) {
     if (state.value == null) return;
     final order = List<String>.from(state.value!.colorOrder);
-    if (oldIndex < newIndex) {
-      newIndex -= 1;
-    }
     final item = order.removeAt(oldIndex);
     order.insert(newIndex, item);
     state = AsyncData(state.value!.copyWith(colorOrder: order));
