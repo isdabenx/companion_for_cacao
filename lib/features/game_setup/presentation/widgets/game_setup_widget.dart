@@ -17,6 +17,7 @@ class GameSetupWidget extends ConsumerWidget {
     final currentStep = ref.watch(gameSetupStepProvider);
     final gameSetupAsync = ref.watch(gameSetupProvider);
     final screenHeight = MediaQuery.sizeOf(context).height;
+    final selectedCount = gameSetupAsync.value?.players.length ?? 0;
 
     // Adaptive heights
     const double baseHeightAllExpansions = 180;
@@ -46,7 +47,65 @@ class GameSetupWidget extends ConsumerWidget {
               controlsBuilder: (_, details) => const SizedBox.shrink(),
               steps: [
                 Step(
-                  title: Text('Players', style: AppTextStyles.labelStep),
+                  title: Row(
+                    children: [
+                      Text('Players', style: AppTextStyles.labelStep),
+                      const SizedBox(width: 8),
+                      // Player count badge
+                      Container(
+                        constraints: const BoxConstraints(minWidth: 52),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 8,
+                          vertical: 2,
+                        ),
+                        decoration: BoxDecoration(
+                          color: AppColors.greenDarker.withValues(alpha: 0.1),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(
+                              Icons.people,
+                              size: 14,
+                              color: AppColors.greenDarker,
+                            ),
+                            const SizedBox(width: 4),
+                            Text(
+                              '$selectedCount/4',
+                              style: TextStyle(
+                                fontSize: 12,
+                                fontWeight: FontWeight.w600,
+                                color: AppColors.greenDarker,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      if (selectedCount < 2) ...[
+                        const SizedBox(width: 6),
+                        Container(
+                          constraints: const BoxConstraints(minWidth: 48),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 6,
+                            vertical: 2,
+                          ),
+                          decoration: BoxDecoration(
+                            color: AppColors.gold.withValues(alpha: 0.3),
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: Text(
+                            'Need ${2 - selectedCount}+',
+                            textAlign: TextAlign.center,
+                            style: const TextStyle(
+                              fontSize: 10,
+                              color: AppColors.brown,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ],
+                  ),
                   content: const StepPlayerWidget(),
                 ),
                 Step(
