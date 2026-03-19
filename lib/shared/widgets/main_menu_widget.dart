@@ -7,17 +7,19 @@ class MainMenuWidget extends StatelessWidget {
   const MainMenuWidget({
     required this.child,
     required this.drawerController,
+    required this.openRatio,
     super.key,
   });
   final Scaffold child;
   final AdvancedDrawerController drawerController;
+  final double openRatio;
 
   @override
   Widget build(BuildContext context) {
     return AdvancedDrawer(
       controller: drawerController,
       drawer: MenuWidget(drawerController: drawerController),
-      openRatio: 0.65,
+      openRatio: openRatio,
       openScale: 0.9,
       animateChildDecoration: true,
       childDecoration: const BoxDecoration(
