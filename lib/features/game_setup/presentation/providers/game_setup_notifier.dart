@@ -27,8 +27,20 @@ class GameSetupNotifier extends _$GameSetupNotifier {
     return GameSetupStateEntity(expansions: [baseGame]);
   }
 
+  void reorderColorOrder(int oldIndex, int newIndex) {
+    if (state.value == null) return;
+    final order = List<String>.from(state.value!.colorOrder);
+    if (oldIndex < newIndex) {
+      newIndex -= 1;
+    }
+    final item = order.removeAt(oldIndex);
+    order.insert(newIndex, item);
+    state = AsyncData(state.value!.copyWith(colorOrder: order));
+  }
+
   void addPlayer(String name, String color) {
     if (state.value == null) return;
+    // Add player to the end of the list
     state = AsyncData(
       state.value!.copyWith(
         players: [
@@ -46,6 +58,17 @@ class GameSetupNotifier extends _$GameSetupNotifier {
         players: state.value!.players.where((p) => p.color != color).toList(),
       ),
     );
+  }
+
+  void reorderPlayers(int oldIndex, int newIndex) {
+    if (state.value == null) return;
+    final players = List<PlayerEntity>.from(state.value!.players);
+    if (oldIndex < newIndex) {
+      newIndex -= 1;
+    }
+    final item = players.removeAt(oldIndex);
+    players.insert(newIndex, item);
+    state = AsyncData(state.value!.copyWith(players: players));
   }
 
   void updatePlayerSelection(String color, {required bool isSelected}) {

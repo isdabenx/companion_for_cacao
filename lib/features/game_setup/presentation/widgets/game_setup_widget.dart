@@ -32,7 +32,7 @@ class GameSetupWidget extends ConsumerWidget {
 
     return gameSetupAsync.when(
       data: (_) => Column(
-        mainAxisSize: MainAxisSize.min,
+        mainAxisSize: MainAxisSize.max,
         children: [
           Expanded(
             child: Stepper(

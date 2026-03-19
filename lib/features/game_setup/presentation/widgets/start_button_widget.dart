@@ -34,7 +34,7 @@ class StartButtonWidget extends ConsumerWidget {
     );
 
     return Padding(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
       child: SizedBox(
         width: double.infinity,
         child: FilledButton(

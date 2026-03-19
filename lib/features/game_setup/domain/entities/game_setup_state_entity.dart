@@ -11,12 +11,14 @@ class GameSetupStateEntity {
     this.modules = const [],
     this.tiles = const [],
     this.preparation = const [],
+    this.colorOrder = const ['white', 'red', 'purple', 'yellow'],
   });
   final List<PlayerEntity> players;
   final List<BoardgameModel> expansions;
   final List<ModuleModel> modules;
   final List<TileModel> tiles;
   final List<PreparationEntity> preparation;
+  final List<String> colorOrder;
 
   GameSetupStateEntity copyWith({
     List<PlayerEntity>? players,
@@ -24,6 +26,7 @@ class GameSetupStateEntity {
     List<ModuleModel>? modules,
     List<TileModel>? tiles,
     List<PreparationEntity>? preparation,
+    List<String>? colorOrder,
   }) {
     return GameSetupStateEntity(
       players: players ?? this.players,
@@ -31,6 +34,7 @@ class GameSetupStateEntity {
       modules: modules ?? this.modules,
       tiles: tiles ?? this.tiles,
       preparation: preparation ?? this.preparation,
+      colorOrder: colorOrder ?? this.colorOrder,
     );
   }
 }
