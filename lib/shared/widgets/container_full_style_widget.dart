@@ -7,21 +7,16 @@ class ContainerFullStyleWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        return Container(
-          margin: const EdgeInsets.all(8),
-          padding: const EdgeInsets.all(16),
-          width: double.infinity,
-          constraints: BoxConstraints(minHeight: constraints.maxHeight - 16),
-          decoration: BoxDecoration(
-            color: AppColors.greenLight,
-            border: Border.all(color: AppColors.greenDarker, width: 4),
-            borderRadius: BorderRadius.circular(24),
-          ),
-          child: child,
-        );
-      },
+    return Container(
+      width: double.infinity,
+      margin: const EdgeInsets.all(8),
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: AppColors.greenLight,
+        border: Border.all(color: AppColors.greenDarker, width: 4),
+        borderRadius: BorderRadius.circular(24),
+      ),
+      child: child,
     );
   }
 }
