@@ -73,7 +73,7 @@ class _PlayerChipWidgetState extends ConsumerState<PlayerChipWidget> {
     final color = AppColors.findColorByName(widget.colorString);
     final isDarkColor =
         widget.colorString == 'purple' || widget.colorString == 'black';
-    final circleSize = widget.isSelected ? 48.0 : 40.0;
+    const circleSize = 40.0;
 
     return Container(
       decoration: BoxDecoration(
@@ -88,9 +88,10 @@ class _PlayerChipWidgetState extends ConsumerState<PlayerChipWidget> {
         boxShadow: widget.isSelected
             ? [
                 BoxShadow(
-                  color: color.withValues(alpha: 0.3),
-                  blurRadius: 8,
-                  offset: const Offset(0, 2),
+                  color: Colors.black.withValues(alpha: 0.15),
+                  blurRadius: 10,
+                  spreadRadius: 1,
+                  offset: const Offset(0, 3),
                 ),
               ]
             : [],
