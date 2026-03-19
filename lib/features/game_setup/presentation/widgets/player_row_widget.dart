@@ -26,13 +26,17 @@ class _PlayerRowWidgetState extends ConsumerState<PlayerRowWidget> {
 
   @override
   Widget build(BuildContext context) {
-    final gameSetupState = ref.watch(gameSetupProvider);
+    final player =
+        ref.watch(
+          gameSetupProvider.select(
+            (s) => s.value?.players.firstWhere(
+              (p) => p.color == widget.colorString,
+              orElse: () => PlayerEntity(name: '', color: widget.colorString),
+            ),
+          ),
+        ) ??
+        PlayerEntity(name: '', color: widget.colorString);
     final gameSetupNotifier = ref.read(gameSetupProvider.notifier);
-
-    final player = gameSetupState.players.firstWhere(
-      (p) => p.color == widget.colorString,
-      orElse: () => PlayerEntity(name: '', color: widget.colorString),
-    );
 
     // Sync controller with state when they differ (e.g. navigating back)
     if (player.isSelected && controller.text != player.name) {
@@ -72,9 +76,11 @@ class _PlayerRowWidgetState extends ConsumerState<PlayerRowWidget> {
       children: [
         GestureDetector(
           onTap: onTogglePlayer,
-          child: Container(
-            width: 30,
-            height: 30,
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 300),
+            curve: Curves.easeInOut,
+            width: player.isSelected ? 36 : 30,
+            height: player.isSelected ? 36 : 30,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
               color: AppColors.findColorByName(widget.colorString),
@@ -82,31 +88,45 @@ class _PlayerRowWidgetState extends ConsumerState<PlayerRowWidget> {
                 color: player.isSelected
                     ? AppColors.brown
                     : AppColors.greenNormal,
-                width: 2,
+                width: player.isSelected ? 3 : 2,
               ),
+              boxShadow: player.isSelected
+                  ? [
+                      BoxShadow(
+                        color: AppColors.brown.withValues(alpha: 0.4),
+                        blurRadius: 6,
+                        spreadRadius: 1,
+                      ),
+                    ]
+                  : [],
             ),
           ),
         ),
         const SizedBox(width: 16),
-        Expanded(
-          child: Visibility(
-            visible: player.isSelected,
-            maintainSize: true,
-            maintainAnimation: true,
-            maintainState: true,
-            child: TextField(
-              decoration: InputDecoration(
-                labelText: 'Player Name',
-                suffixIcon: controller.text.isNotEmpty
-                    ? IconButton(
-                        onPressed: clearTextField,
-                        icon: const Icon(Icons.clear),
-                      )
-                    : null,
-              ),
-              controller: controller,
-              onChanged: onPlayerNameChanged,
-              focusNode: focusNode,
+        Flexible(
+          child: AnimatedOpacity(
+            opacity: player.isSelected ? 1.0 : 0.0,
+            duration: const Duration(milliseconds: 250),
+            curve: Curves.easeInOut,
+            child: AnimatedSize(
+              duration: const Duration(milliseconds: 300),
+              curve: Curves.easeInOut,
+              child: player.isSelected
+                  ? TextField(
+                      decoration: InputDecoration(
+                        labelText: 'Player Name',
+                        suffixIcon: controller.text.isNotEmpty
+                            ? IconButton(
+                                onPressed: clearTextField,
+                                icon: const Icon(Icons.clear),
+                              )
+                            : null,
+                      ),
+                      controller: controller,
+                      onChanged: onPlayerNameChanged,
+                      focusNode: focusNode,
+                    )
+                  : const SizedBox.shrink(),
             ),
           ),
         ),

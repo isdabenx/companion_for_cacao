@@ -11,9 +11,12 @@ class SelectModuleWidget extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final gameSetupState = ref.watch(gameSetupProvider);
+    final isSelected = ref.watch(
+      gameSetupProvider.select(
+        (s) => s.value?.modules.any((e) => e.id == module.id) ?? false,
+      ),
+    );
     final gameSetupNotifier = ref.read(gameSetupProvider.notifier);
-    final isSelected = gameSetupState.modules.any((e) => e.id == module.id);
 
     void onToggleModule() {
       gameSetupNotifier.toggleModule(module);
@@ -21,7 +24,7 @@ class SelectModuleWidget extends ConsumerWidget {
 
     return Row(
       children: [
-        Expanded(
+        Flexible(
           child: ElevatedButton(
             style: ElevatedButton.styleFrom(
               foregroundColor: AppColors.brown,

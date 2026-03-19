@@ -10,13 +10,16 @@ class StepModuleWidget extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final gameSetupState = ref.watch(gameSetupProvider);
-
-    final boardgames = gameSetupState.expansions;
-    final modules = boardgames
-        .map((e) => e.modules)
-        .expand((element) => element)
-        .toList();
+    final modules = ref.watch(
+      gameSetupProvider.select(
+        (s) =>
+            s.value?.expansions
+                .map((e) => e.modules)
+                .expand((element) => element)
+                .toList() ??
+            [],
+      ),
+    );
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,

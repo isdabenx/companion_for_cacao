@@ -1,8 +1,10 @@
 import 'package:companion_for_cacao/core/theme/app_colors.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/preparation_entity.dart';
+import 'package:companion_for_cacao/features/game_setup/presentation/providers/preparation_provider.dart';
 import 'package:companion_for_cacao/shared/widgets/container_full_style_widget.dart';
 import 'package:companion_for_cacao/shared/widgets/header_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class DetailedPreparationWidget extends StatelessWidget {
   const DetailedPreparationWidget({required this.preparation, super.key});
@@ -22,6 +24,7 @@ class DetailedPreparationWidget extends StatelessWidget {
                 return PreparationCard(
                   key: ValueKey(index),
                   preparation: preparation[index],
+                  index: index,
                 );
               },
             ),
@@ -32,56 +35,43 @@ class DetailedPreparationWidget extends StatelessWidget {
   }
 }
 
-class PreparationCard extends StatefulWidget {
-  const PreparationCard({required this.preparation, super.key});
+class PreparationCard extends ConsumerWidget {
+  const PreparationCard({
+    required this.preparation,
+    required this.index,
+    super.key,
+  });
 
   final PreparationEntity preparation;
+  final int index;
 
   @override
-  State<PreparationCard> createState() => _PreparationCardState();
-}
+  Widget build(BuildContext context, WidgetRef ref) {
+    final completionMap = ref.watch(preparationCompletionProvider);
+    final isCompleted = completionMap[index] ?? preparation.isCompleted;
 
-class _PreparationCardState extends State<PreparationCard> {
-  late bool _isCompleted;
-
-  @override
-  void initState() {
-    super.initState();
-    _isCompleted = widget.preparation.isCompleted;
-  }
-
-  @override
-  void didUpdateWidget(covariant PreparationCard oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    if (oldWidget.preparation.isCompleted != widget.preparation.isCompleted) {
-      _isCompleted = widget.preparation.isCompleted;
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
     return Card(
-      color: _isCompleted ? AppColors.greenNormal : AppColors.greenDark,
+      color: isCompleted ? AppColors.greenNormal : AppColors.greenDark,
       child: Padding(
         padding: const EdgeInsets.all(8),
         child: ListTile(
           title: Text(
-            widget.preparation.description,
+            preparation.description,
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
               fontWeight: FontWeight.bold,
-              decoration: _isCompleted ? TextDecoration.lineThrough : null,
-              color: (widget.preparation.color != null && !_isCompleted)
-                  ? AppColors.findColorByName(widget.preparation.color!)
+              decoration: isCompleted ? TextDecoration.lineThrough : null,
+              color: (preparation.color != null && !isCompleted)
+                  ? AppColors.findColorByName(preparation.color!)
                   : AppColors.brown,
             ),
           ),
-          leading: widget.preparation.imagePath != null
-              ? Image.asset(widget.preparation.imagePath!)
+          leading: preparation.imagePath != null
+              ? Image.asset(preparation.imagePath!)
               : null,
           onTap: () {
-            setState(() {
-              _isCompleted = !_isCompleted;
-            });
+            ref
+                .read(preparationCompletionProvider.notifier)
+                .toggleCompletion(index, isCompleted);
           },
         ),
       ),

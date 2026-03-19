@@ -11,45 +11,57 @@ part 'tile_settings_notifier.g.dart';
 @Riverpod(keepAlive: true)
 class TileSettingsNotifier extends _$TileSettingsNotifier {
   @override
-  TileSettingsEntity build() {
-    unawaited(_loadSettings());
-    return TileSettingsEntity();
+  Future<TileSettingsEntity> build() async {
+    return _loadSettings();
+  }
+
+  void _updateState(TileSettingsEntity updated) {
+    state = AsyncData(updated);
+    unawaited(_saveSettings(updated));
   }
 
   void togglePlayerColorInBorder() {
-    state = state.copyWith(playerColorInBorder: !state.playerColorInBorder);
-    unawaited(_saveSettings());
+    state.whenData(
+      (s) =>
+          _updateState(s.copyWith(playerColorInBorder: !s.playerColorInBorder)),
+    );
   }
 
   void togglePlayerColorInCircle() {
-    state = state.copyWith(playerColorInCircle: !state.playerColorInCircle);
-    unawaited(_saveSettings());
+    state.whenData(
+      (s) =>
+          _updateState(s.copyWith(playerColorInCircle: !s.playerColorInCircle)),
+    );
   }
 
   void toggleBadgeTypeInImage() {
-    state = state.copyWith(badgeTypeInImage: !state.badgeTypeInImage);
-    unawaited(_saveSettings());
+    state.whenData(
+      (s) => _updateState(s.copyWith(badgeTypeInImage: !s.badgeTypeInImage)),
+    );
   }
 
   void toggleBadgeTypeInText() {
-    state = state.copyWith(badgeTypeInText: !state.badgeTypeInText);
-    unawaited(_saveSettings());
+    state.whenData(
+      (s) => _updateState(s.copyWith(badgeTypeInText: !s.badgeTypeInText)),
+    );
   }
 
   void toggleBoardgameInTitle() {
-    state = state.copyWith(boardgameInTitle: !state.boardgameInTitle);
-    unawaited(_saveSettings());
+    state.whenData(
+      (s) => _updateState(s.copyWith(boardgameInTitle: !s.boardgameInTitle)),
+    );
   }
 
   void toggleShowQuantity() {
-    state = state.copyWith(showQuantity: !state.showQuantity);
-    unawaited(_saveSettings());
+    state.whenData(
+      (s) => _updateState(s.copyWith(showQuantity: !s.showQuantity)),
+    );
   }
 
-  Future<void> _loadSettings() async {
+  Future<TileSettingsEntity> _loadSettings() async {
     try {
       final prefs = await SharedPreferences.getInstance();
-      state = TileSettingsEntity(
+      return TileSettingsEntity(
         playerColorInBorder: prefs.getBool('playerColorInBorder') ?? true,
         playerColorInCircle: prefs.getBool('playerColorInCircle') ?? true,
         badgeTypeInImage: prefs.getBool('badgeTypeInImage') ?? true,
@@ -59,18 +71,19 @@ class TileSettingsNotifier extends _$TileSettingsNotifier {
       );
     } catch (e, stackTrace) {
       debugPrint('Error loading tile settings: $e\n$stackTrace');
+      return TileSettingsEntity();
     }
   }
 
-  Future<void> _saveSettings() async {
+  Future<void> _saveSettings(TileSettingsEntity current) async {
     try {
       final prefs = await SharedPreferences.getInstance();
-      await prefs.setBool('playerColorInBorder', state.playerColorInBorder);
-      await prefs.setBool('playerColorInCircle', state.playerColorInCircle);
-      await prefs.setBool('badgeTypeInImage', state.badgeTypeInImage);
-      await prefs.setBool('badgeTypeInText', state.badgeTypeInText);
-      await prefs.setBool('boardgameInTitle', state.boardgameInTitle);
-      await prefs.setBool('showQuantity', state.showQuantity);
+      await prefs.setBool('playerColorInBorder', current.playerColorInBorder);
+      await prefs.setBool('playerColorInCircle', current.playerColorInCircle);
+      await prefs.setBool('badgeTypeInImage', current.badgeTypeInImage);
+      await prefs.setBool('badgeTypeInText', current.badgeTypeInText);
+      await prefs.setBool('boardgameInTitle', current.boardgameInTitle);
+      await prefs.setBool('showQuantity', current.showQuantity);
     } catch (e, stackTrace) {
       debugPrint('Error saving tile settings: $e\n$stackTrace');
     }
