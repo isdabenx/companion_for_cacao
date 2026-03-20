@@ -64,6 +64,17 @@ class AppTextStyles {
     color: AppColors.greenDarker,
     fontSize: 18,
     fontFamily: AppFonts.headerFont,
+    shadows: [
+      Shadow(offset: Offset(-_offset, -_offset), color: AppColors.gold),
+      Shadow(offset: Offset(_offset, -_offset), color: AppColors.gold),
+      Shadow(offset: Offset(_offset, _offset), color: AppColors.gold),
+      Shadow(offset: Offset(-_offset, _offset), color: AppColors.gold),
+    ],
+  );
+  static TextStyle boardgameTitlePlain = const TextStyle(
+    color: AppColors.greenDarker,
+    fontSize: 18,
+    fontFamily: AppFonts.headerFont,
   );
 
   // ============================================

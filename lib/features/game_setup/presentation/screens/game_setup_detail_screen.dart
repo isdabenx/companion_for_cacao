@@ -13,39 +13,32 @@ class GameSetupDetailScreen extends StatelessWidget {
 
   final GameSetupStateEntity gameSetup;
 
+  static final _tabs = ['Summary', 'Preparation', 'Tiles'];
+
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 3,
+      length: _tabs.length,
       child: CustomScaffoldWidget(
         actions: const [SettingsIconWidget()],
         title: 'Game Setup',
         showBackButton: true,
         appBarBottom: TabBar(
           indicatorColor: AppColors.greenDarker,
-          tabs: [
-            Tab(
-              child: Text(
-                'Summary',
-                textAlign: TextAlign.center,
-                style: AppTextStyles.boardgameTitle.copyWith(fontSize: 16),
-              ),
-            ),
-            Tab(
-              child: Text(
-                'Preparation',
-                textAlign: TextAlign.center,
-                style: AppTextStyles.boardgameTitle.copyWith(fontSize: 16),
-              ),
-            ),
-            Tab(
-              child: Text(
-                'Tiles',
-                textAlign: TextAlign.center,
-                style: AppTextStyles.boardgameTitle.copyWith(fontSize: 16),
-              ),
-            ),
-          ],
+          tabs: _tabs
+              .map(
+                (label) => Tab(
+                  child: Text(
+                    label,
+                    textAlign: TextAlign.center,
+                    style: AppTextStyles.boardgameTitlePlain.copyWith(
+                      fontSize: 16,
+                      shadows: [],
+                    ),
+                  ),
+                ),
+              )
+              .toList(),
         ),
         body: TabBarView(
           children: [
