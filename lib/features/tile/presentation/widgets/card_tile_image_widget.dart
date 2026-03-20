@@ -41,10 +41,7 @@ class CardTileImageWidget extends StatelessWidget {
                 backgroundColor: AppColors.badgeTransparentBackground,
                 label: Padding(
                   padding: const EdgeInsets.all(1),
-                  child: Text(
-                    tileType,
-                    style: AppTextStyles.tileBadgeTextStyle,
-                  ),
+                  child: Text(tileType, style: AppTextStyles.tileBadge),
                 ),
               ),
             ),
@@ -53,10 +50,7 @@ class CardTileImageWidget extends StatelessWidget {
           Positioned(
             bottom: 4,
             right: 4,
-            child: Text(
-              'x$quantity',
-              style: AppTextStyles.tileQuantityTextStyle,
-            ),
+            child: Text('x$quantity', style: AppTextStyles.tileQuantity),
           ),
       ],
     );

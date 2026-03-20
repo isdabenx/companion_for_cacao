@@ -16,10 +16,7 @@ class CardTileBoardgameTitleWidget extends StatelessWidget {
     return Column(
       children: [
         Center(
-          child: Text(
-            title.toUpperCase(),
-            style: AppTextStyles.boardgameTitleTextStyle,
-          ),
+          child: Text(title.toUpperCase(), style: AppTextStyles.boardgameTitle),
         ),
         Divider(height: 1, color: color, thickness: 0.75),
       ],

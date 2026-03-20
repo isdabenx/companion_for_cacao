@@ -1,4 +1,5 @@
 import 'package:companion_for_cacao/core/theme/app_colors.dart';
+import 'package:companion_for_cacao/core/theme/app_text_styles.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/player_entity.dart';
 import 'package:companion_for_cacao/features/game_setup/presentation/providers/game_setup_notifier.dart';
 import 'package:flutter/material.dart';
@@ -124,9 +125,7 @@ class _PlayerChipWidgetState extends ConsumerState<PlayerChipWidget> {
                     child: widget.isSelected && widget.position != null
                         ? Text(
                             '${widget.position}',
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
+                            style: AppTextStyles.circlePosition.copyWith(
                               color: isDarkColor
                                   ? Colors.white
                                   : AppColors.brown,
@@ -149,9 +148,7 @@ class _PlayerChipWidgetState extends ConsumerState<PlayerChipWidget> {
                           focusNode: _focusNode,
                           onChanged: _onNameChanged,
                           textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontSize: 12,
-                            fontWeight: FontWeight.w500,
+                          style: AppTextStyles.playerName.copyWith(
                             color: isDarkColor ? Colors.white : AppColors.brown,
                           ),
                           decoration: InputDecoration(
@@ -167,8 +164,7 @@ class _PlayerChipWidgetState extends ConsumerState<PlayerChipWidget> {
                               borderSide: BorderSide.none,
                             ),
                             hintText: 'Name',
-                            hintStyle: TextStyle(
-                              fontSize: 11,
+                            hintStyle: AppTextStyles.hintText.copyWith(
                               color:
                                   (isDarkColor ? Colors.white : AppColors.brown)
                                       .withValues(alpha: 0.5),
@@ -178,10 +174,7 @@ class _PlayerChipWidgetState extends ConsumerState<PlayerChipWidget> {
                       : Text(
                           _capitalize(widget.colorString),
                           textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontSize: 11,
-                            color: Colors.grey.shade500,
-                          ),
+                          style: AppTextStyles.colorName,
                         ),
                 ),
               ],

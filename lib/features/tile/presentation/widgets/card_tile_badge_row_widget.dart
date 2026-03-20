@@ -28,7 +28,7 @@ class CardTileBadgeRowWidget extends StatelessWidget {
               backgroundColor: AppColors.badgeBackground,
               label: Padding(
                 padding: const EdgeInsets.only(left: 2, right: 2, bottom: 2),
-                child: Text(tileType, style: AppTextStyles.tileTypeTextStyle),
+                child: Text(tileType, style: AppTextStyles.tileType),
               ),
             ),
           if (color != null && playerColorInCircle)

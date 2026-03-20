@@ -2,6 +2,7 @@ import 'package:companion_for_cacao/config/constants/assets.dart';
 import 'package:companion_for_cacao/core/data/models/tile_model.dart';
 import 'package:companion_for_cacao/core/theme/app_breakpoints.dart';
 import 'package:companion_for_cacao/core/theme/app_colors.dart';
+import 'package:companion_for_cacao/core/theme/app_text_styles.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/game_setup_state_entity.dart';
 import 'package:companion_for_cacao/shared/widgets/container_full_style_widget.dart';
 import 'package:flutter/material.dart';
@@ -222,14 +223,7 @@ class DetailedSummaryWidget extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        'Workers',
-                        style: TextStyle(
-                          fontSize: 11,
-                          color: AppColors.brown.withValues(alpha: 0.6),
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
+                      Text('Workers', style: AppTextStyles.sectionSublabel),
                       const SizedBox(height: 8),
                       _buildTileGrid(workerTiles, showColorCircle: false),
                       const SizedBox(height: 8),
@@ -244,14 +238,7 @@ class DetailedSummaryWidget extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        'Jungle',
-                        style: TextStyle(
-                          fontSize: 11,
-                          color: AppColors.brown.withValues(alpha: 0.6),
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
+                      Text('Jungle', style: AppTextStyles.sectionSublabel),
                       const SizedBox(height: 8),
                       _buildTileGrid(jungleTiles),
                     ],
@@ -443,9 +430,7 @@ class _SmallChip extends StatelessWidget {
           const SizedBox(width: 5),
           Text(
             label,
-            style: const TextStyle(
-              fontSize: 12,
-              color: AppColors.brown,
+            style: AppTextStyles.bodySmall.copyWith(
               fontWeight: FontWeight.w500,
             ),
           ),
@@ -511,7 +496,7 @@ class _TileChip extends StatelessWidget {
         Flexible(
           child: Text(
             name,
-            style: const TextStyle(fontSize: 13, color: AppColors.brown),
+            style: AppTextStyles.tileNameSmall,
             overflow: TextOverflow.ellipsis,
             maxLines: 1,
           ),
@@ -524,14 +509,7 @@ class _TileChip extends StatelessWidget {
             color: AppColors.gold.withValues(alpha: 0.3),
             borderRadius: BorderRadius.circular(8),
           ),
-          child: Text(
-            '×$quantity',
-            style: const TextStyle(
-              fontSize: 11,
-              color: AppColors.brown,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
+          child: Text('×$quantity', style: AppTextStyles.badge),
         ),
       ],
     );

@@ -49,7 +49,7 @@ class GameSetupWidget extends ConsumerWidget {
                 Step(
                   title: Row(
                     children: [
-                      Text('Players', style: AppTextStyles.labelStep),
+                      Text('Players', style: AppTextStyles.sectionTitlePlain),
                       const SizedBox(width: 8),
                       // Player count badge
                       Container(
@@ -73,11 +73,7 @@ class GameSetupWidget extends ConsumerWidget {
                             const SizedBox(width: 4),
                             Text(
                               '$selectedCount/4',
-                              style: TextStyle(
-                                fontSize: 12,
-                                fontWeight: FontWeight.w600,
-                                color: AppColors.greenDarker,
-                              ),
+                              style: AppTextStyles.badgeCount,
                             ),
                           ],
                         ),
@@ -97,10 +93,7 @@ class GameSetupWidget extends ConsumerWidget {
                           child: Text(
                             'Need ${2 - selectedCount}+',
                             textAlign: TextAlign.center,
-                            style: const TextStyle(
-                              fontSize: 10,
-                              color: AppColors.brown,
-                            ),
+                            style: AppTextStyles.warningText,
                           ),
                         ),
                       ],
@@ -111,7 +104,7 @@ class GameSetupWidget extends ConsumerWidget {
                 Step(
                   title: Text(
                     'Expansions (work in progress)',
-                    style: AppTextStyles.labelStep,
+                    style: AppTextStyles.sectionTitlePlain,
                   ),
                   content: StepExpansionWidget(
                     heightAllExpansions: heightAllExpansions,
@@ -122,7 +115,7 @@ class GameSetupWidget extends ConsumerWidget {
                 Step(
                   title: Text(
                     'Modules (work in progress)',
-                    style: AppTextStyles.labelStep,
+                    style: AppTextStyles.sectionTitlePlain,
                   ),
                   content: const StepModuleWidget(),
                 ),

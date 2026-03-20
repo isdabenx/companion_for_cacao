@@ -10,7 +10,7 @@ class CardTileNameWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(6),
-      child: Text(name, style: AppTextStyles.tileNameTextStyle),
+      child: Text(name, style: AppTextStyles.tileName),
     );
   }
 }

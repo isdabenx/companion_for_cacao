@@ -28,14 +28,14 @@ class StepModuleWidget extends ConsumerWidget {
         Column(
           children: [
             if (modules.isEmpty)
-              const Row(
+              Row(
                 children: [
                   Expanded(
                     child: Padding(
-                      padding: EdgeInsets.only(top: 16),
+                      padding: const EdgeInsets.only(top: 16),
                       child: Text(
                         'No expansion with modules are selected',
-                        style: AppTextStyles.boardgameTitleTextStyle,
+                        style: AppTextStyles.boardgameTitle,
                         textAlign: TextAlign.center,
                       ),
                     ),

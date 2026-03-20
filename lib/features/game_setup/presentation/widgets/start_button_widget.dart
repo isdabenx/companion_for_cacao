@@ -43,9 +43,7 @@ class StartButtonWidget extends ConsumerWidget {
               : null,
           child: Text(
             'Start Game',
-            style: AppTextStyles.boardgameTitleTextStyle.copyWith(
-              color: Colors.white,
-            ),
+            style: AppTextStyles.boardgameTitle.copyWith(color: Colors.white),
           ),
         ),
       ),

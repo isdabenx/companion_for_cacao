@@ -3,8 +3,14 @@ import 'package:companion_for_cacao/core/theme/app_fonts.dart';
 import 'package:flutter/material.dart';
 
 class AppTextStyles {
+  // ============================================
+  // BASE STYLES
+  // ============================================
+
   static const double _offset = 0.7;
-  static const TextStyle _title = TextStyle(
+
+  // Title base (for decorative titles with gold shadow)
+  static const TextStyle _titleBase = TextStyle(
     letterSpacing: 2,
     fontFamily: AppFonts.headerFont,
     color: AppColors.brown,
@@ -16,64 +22,134 @@ class AppTextStyles {
     ],
   );
 
-  static TextStyle loadingTextStyle = _title.copyWith(fontSize: 54);
-  static TextStyle appBarTextStyle = _title.copyWith(fontSize: 36);
-  static TextStyle titleTextStyle = _title.copyWith(fontSize: 32);
+  // Section title base (simple, no shadow)
+  static const TextStyle _sectionTitleBase = TextStyle(
+    fontFamily: AppFonts.headerFont,
+    fontSize: 16,
+    fontWeight: FontWeight.bold,
+    color: AppColors.brown,
+  );
 
-  static const TextStyle boardgameTitleTextStyle = TextStyle(
+  // Body text base
+  static final TextStyle _bodyBase = const TextStyle(
+    fontFamily: AppFonts.bodyFont,
+    color: AppColors.brown,
+  );
+
+  // ============================================
+  // DECORATIVE TITLES (with gold shadow)
+  // ============================================
+
+  static TextStyle loadingTextStyle = _titleBase.copyWith(fontSize: 54);
+  static TextStyle appBarTextStyle = _titleBase.copyWith(fontSize: 36);
+  static TextStyle titleTextStyle = _titleBase.copyWith(fontSize: 32);
+  static TextStyle menuTitle = _titleBase.copyWith(fontSize: 54);
+  static TextStyle markdownH2 = _titleBase.copyWith(fontSize: 20);
+
+  // ============================================
+  // SECTION TITLES
+  // ============================================
+
+  static TextStyle sectionTitle = _sectionTitleBase.copyWith(
+    shadows: [
+      Shadow(offset: Offset(-_offset, -_offset), color: AppColors.gold),
+      Shadow(offset: Offset(_offset, -_offset), color: AppColors.gold),
+      Shadow(offset: Offset(_offset, _offset), color: AppColors.gold),
+      Shadow(offset: Offset(-_offset, _offset), color: AppColors.gold),
+    ],
+  );
+
+  static TextStyle sectionTitlePlain = _sectionTitleBase;
+  static TextStyle boardgameTitle = const TextStyle(
     color: AppColors.greenDarker,
     fontSize: 18,
     fontFamily: AppFonts.headerFont,
   );
 
-  static const TextStyle tileTypeTextStyle = TextStyle(
+  // ============================================
+  // MENU STYLES
+  // ============================================
+
+  static TextStyle menuItem = const TextStyle(
+    fontSize: 22,
+    fontFamily: AppFonts.headerFont,
+    color: AppColors.brown,
+  );
+
+  // ============================================
+  // BODY TEXT
+  // ============================================
+
+  static TextStyle bodyMedium = _bodyBase;
+  static TextStyle bodySmall = _bodyBase.copyWith(fontSize: 12);
+  static TextStyle sectionSubtitle = bodySmall; // = bodySmall
+
+  // Markdown styles
+  static TextStyle markdownBold = const TextStyle(
+    fontWeight: FontWeight.bold,
+    fontFamily: AppFonts.bodyFont,
+    fontSize: 18,
+  );
+  static TextStyle markdownBody = const TextStyle(
+    fontWeight: FontWeight.normal,
+    fontFamily: AppFonts.bodyFont,
+    fontSize: 18,
+  );
+
+  // ============================================
+  // LABELS & SMALL TEXT
+  // ============================================
+
+  static TextStyle sectionSublabel = _bodyBase.copyWith(
+    fontSize: 11,
+    fontWeight: FontWeight.w500,
+    color: AppColors.brown.withValues(alpha: 0.7),
+  );
+
+  static TextStyle instruction = _bodyBase.copyWith(
+    fontSize: 13,
+    fontStyle: FontStyle.italic,
+  );
+
+  static TextStyle badge = _bodyBase.copyWith(
+    fontSize: 11,
+    fontWeight: FontWeight.bold,
+  );
+
+  static TextStyle badgeCount = const TextStyle(
+    fontFamily: AppFonts.bodyFont,
+    fontSize: 12,
+    fontWeight: FontWeight.w600,
+    color: AppColors.greenDarker,
+  );
+
+  static TextStyle warningText = _bodyBase.copyWith(fontSize: 10);
+
+  // ============================================
+  // TILE STYLES
+  // ============================================
+
+  static TextStyle tileType = const TextStyle(
     fontSize: 12,
     fontFamily: AppFonts.bodyFont,
     fontWeight: FontWeight.w700,
     color: AppColors.badgeText,
   );
 
-  static const TextStyle tileNameTextStyle = TextStyle(
+  static TextStyle tileName = const TextStyle(
     fontSize: 16,
     fontFamily: AppFonts.bodyFont,
     fontWeight: FontWeight.w500,
   );
 
-  static const TextStyle tileBadgeTextStyle = TextStyle(
+  static TextStyle tileBadge = const TextStyle(
     fontSize: 12,
     fontFamily: AppFonts.bodyFont,
     fontWeight: FontWeight.w500,
     color: AppColors.badgeTransparentText,
   );
 
-  static const TextStyle markdownBold = TextStyle(
-    fontWeight: FontWeight.bold,
-    fontFamily: AppFonts.bodyFont,
-    fontSize: 18,
-  );
-
-  static const TextStyle markdownBody = TextStyle(
-    fontWeight: FontWeight.normal,
-    fontFamily: AppFonts.bodyFont,
-    fontSize: 18,
-  );
-
-  static const TextStyle menu = TextStyle(
-    fontSize: 22,
-    fontFamily: AppFonts.headerFont,
-    color: AppColors.brown,
-  );
-
-  static const TextStyle labelStep = TextStyle(
-    fontSize: 18,
-    fontWeight: FontWeight.w700,
-    fontFamily: AppFonts.bodyFont,
-    color: AppColors.brown,
-  );
-
-  static TextStyle markdownH2 = _title.copyWith(fontSize: 20);
-
-  static const TextStyle tileQuantityTextStyle = TextStyle(
+  static TextStyle tileQuantity = const TextStyle(
     fontSize: 16,
     fontFamily: AppFonts.bodyFont,
     fontWeight: FontWeight.bold,
@@ -84,34 +160,33 @@ class AppTextStyles {
     ],
   );
 
-  static const TextStyle bodyMedium = TextStyle(
-    fontFamily: AppFonts.bodyFont,
-    color: AppColors.brown,
-  );
+  static TextStyle tileNameSmall = _bodyBase.copyWith(fontSize: 13);
 
-  static const TextStyle bodySmall = TextStyle(
-    fontFamily: AppFonts.bodyFont,
+  // ============================================
+  // PLAYER STYLES
+  // ============================================
+
+  static TextStyle playerName = _bodyBase.copyWith(
     fontSize: 12,
-    color: AppColors.brown,
+    fontWeight: FontWeight.w500,
   );
 
-  // Summary widget styles
-  static const TextStyle summaryTitle = TextStyle(
-    fontFamily: AppFonts.headerFont,
-    fontSize: 16,
+  static TextStyle circlePosition = const TextStyle(
+    fontFamily: AppFonts.bodyFont,
+    fontSize: 18,
     fontWeight: FontWeight.bold,
     color: AppColors.brown,
-    shadows: [
-      Shadow(offset: Offset(-_offset, -_offset), color: AppColors.gold),
-      Shadow(offset: Offset(_offset, -_offset), color: AppColors.gold),
-      Shadow(offset: Offset(_offset, _offset), color: AppColors.gold),
-      Shadow(offset: Offset(-_offset, _offset), color: AppColors.gold),
-    ],
   );
 
-  static const TextStyle summarySubtitle = TextStyle(
+  static TextStyle colorName = const TextStyle(
     fontFamily: AppFonts.bodyFont,
-    fontSize: 12,
-    color: AppColors.brown,
+    fontSize: 11,
+    color: Colors.grey,
   );
+
+  // ============================================
+  // INPUT STYLES
+  // ============================================
+
+  static TextStyle hintText = _bodyBase.copyWith(fontSize: 11);
 }

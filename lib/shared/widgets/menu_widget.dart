@@ -28,7 +28,7 @@ class MenuWidget extends StatelessWidget {
   ) {
     return ListTile(
       leading: Icon(icon, color: AppColors.iconColor),
-      title: Text(title, style: AppTextStyles.menu),
+      title: Text(title, style: AppTextStyles.menuItem),
       onTap: () => _navigateTo(context, route),
     );
   }
