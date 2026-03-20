@@ -3,6 +3,7 @@ import 'package:companion_for_cacao/core/data/models/boardgame_model.dart';
 import 'package:companion_for_cacao/core/data/models/tile_model.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/player_entity.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/preparation_entity.dart';
+import 'package:companion_for_cacao/features/game_setup/domain/entities/preparation_phase.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/services/module_preparation_handler.dart';
 
 class BaseGameHandler implements ModulePreparationHandler {
@@ -106,6 +107,7 @@ class BaseGameHandler implements ModulePreparationHandler {
             variables: {'color': color},
             imagePath:
                 '${Assets.preparationVillagePrefix}$color${Assets.preparationVillageSufix}',
+            phase: PreparationPhase.playerSetup,
           ),
         )
         ..add(
@@ -117,25 +119,28 @@ class BaseGameHandler implements ModulePreparationHandler {
             variables: {'color': color},
             imagePath:
                 '${Assets.preparationCarrierPrefix}$color${Assets.preparationCarrierSufix}',
+            phase: PreparationPhase.playerSetup,
           ),
         )
         ..add(
           PreparationEntity(
             id: 'setup_water_field_$color',
             description:
-                'Player $color puts the water carrier on the water field with the value “-10”',
+                'Player $color puts the water carrier on the water field with the value "-10"',
             color: color,
             variables: {'color': color},
+            phase: PreparationPhase.playerSetup,
           ),
         )
         ..add(
           PreparationEntity(
             id: 'setup_tiles_$color',
-            description: 'Player $color get all tiles with color $color',
+            description: 'Player $color gets all tiles with color $color',
             color: color,
             variables: {'color': color},
             imagePath:
                 '${Assets.preparationTilePrefix}$color${Assets.preparationTileSufix}',
+            phase: PreparationPhase.playerSetup,
           ),
         );
     }
@@ -156,6 +161,7 @@ class BaseGameHandler implements ModulePreparationHandler {
               color: player.color,
               variables: {'color': player.color},
               imagePath: '${Assets.imagesTilePath}${workerTile.filenameImage}',
+              phase: PreparationPhase.playerSetup,
             ),
           );
         }
@@ -177,6 +183,7 @@ class BaseGameHandler implements ModulePreparationHandler {
                 variables: {'color': player.color},
                 imagePath:
                     '${Assets.imagesTilePath}${workerTile201.filenameImage}',
+                phase: PreparationPhase.playerSetup,
               ),
             );
           }
@@ -190,6 +197,7 @@ class BaseGameHandler implements ModulePreparationHandler {
           id: 'setup_shuffle_workers',
           description:
               'Each player mixes their worker tiles and puts them as a face-down worker draw pile next to their village board. After that, they draw the 3 top worker tiles from their worker draw pile and take them into their hand',
+          phase: PreparationPhase.playerSetup,
         ),
       )
       ..add(
@@ -198,6 +206,7 @@ class BaseGameHandler implements ModulePreparationHandler {
           description:
               'From the jungle tiles, get "single plantation" and "market, selling price 2" and place them face up in the middle of the table diagonally to one another; they form the starting tiles of the playing area',
           imagePath: Assets.preparationInitialTilesCacao,
+          phase: PreparationPhase.boardSetup,
         ),
       )
       ..add(
@@ -205,6 +214,7 @@ class BaseGameHandler implements ModulePreparationHandler {
           id: 'setup_jungle_draw_pile',
           description:
               'Mix the remaining jungle tiles and lay them out as a face-down jungle draw pile',
+          phase: PreparationPhase.boardSetup,
         ),
       )
       ..add(
@@ -212,6 +222,7 @@ class BaseGameHandler implements ModulePreparationHandler {
           id: 'setup_jungle_display',
           description:
               'Draw the 2 top jungle tiles from the jungle draw pile and place them next to the pile as a face-up jungle display',
+          phase: PreparationPhase.boardSetup,
         ),
       )
       ..add(
@@ -220,6 +231,7 @@ class BaseGameHandler implements ModulePreparationHandler {
           description:
               'Lay out the cacao fruits and the sun tokens as separate supply piles. Put the gold coins next to them to serve as the bank',
           imagePath: Assets.preparationResourcesCacao,
+          phase: PreparationPhase.supplies,
         ),
       );
 

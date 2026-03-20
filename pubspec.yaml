@@ -25,6 +25,7 @@ dependencies:
   upgrader: ^12.5.0
   url_launcher: ^6.3.2
   reorderable_grid: ^1.0.13
+  collection: ^1.19.1
 
 dev_dependencies:
   ansicolor: ^2.0.3
