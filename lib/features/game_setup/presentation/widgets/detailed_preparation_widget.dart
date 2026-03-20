@@ -5,7 +5,6 @@ import 'package:companion_for_cacao/features/game_setup/domain/entities/preparat
 import 'package:companion_for_cacao/features/game_setup/domain/entities/preparation_phase.dart';
 import 'package:companion_for_cacao/features/game_setup/presentation/providers/preparation_provider.dart';
 import 'package:companion_for_cacao/shared/widgets/container_full_style_widget.dart';
-import 'package:companion_for_cacao/shared/widgets/header_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -42,7 +41,6 @@ class DetailedPreparationWidget extends ConsumerWidget {
     return ContainerFullStyleWidget(
       child: Column(
         children: [
-          const HeaderWidget(text: 'Preparation'),
           Padding(
             padding: const EdgeInsets.symmetric(
               horizontal: 16.0,
@@ -154,7 +152,7 @@ class PreparationCard extends ConsumerWidget {
     return Opacity(
       opacity: isCompleted ? 0.6 : 1.0,
       child: Card(
-        color: AppColors.white,
+        color: AppColors.cream,
         elevation: isCompleted ? 0 : 2,
         margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
         shape: RoundedRectangleBorder(

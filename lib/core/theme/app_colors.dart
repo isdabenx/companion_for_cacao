@@ -20,7 +20,8 @@ class AppColors {
   static const Color brown = Color(0xFF2C0801);
   static const Color gold = Color(0xFFFFC20F);
 
-  static const Color white = Color(0xFFF8F3E6);
+  static const Color white = Color(0xFFFFFFFF);
+  static const Color cream = Color(0xFFF8F3E6);
   static const Color red = Color(0xFFEB1D2E);
   static const Color purple = Color(0xFF773C93);
   static const Color yellow = Color(0xFFFBC217);
@@ -34,7 +35,7 @@ class AppColors {
   };
 
   static Color findColorByName(String color) {
-    return colors[color] ?? Colors.transparent;
+    return colors[color.toLowerCase()] ?? Colors.transparent;
   }
 
   static String findColorName(Color color) {
