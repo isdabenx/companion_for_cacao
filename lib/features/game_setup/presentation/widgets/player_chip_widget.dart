@@ -2,6 +2,8 @@ import 'package:companion_for_cacao/core/theme/app_colors.dart';
 import 'package:companion_for_cacao/core/theme/app_text_styles.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/player_entity.dart';
 import 'package:companion_for_cacao/features/game_setup/presentation/providers/game_setup_notifier.dart';
+import 'package:companion_for_cacao/shared/widgets/circle_badge.dart';
+import 'package:companion_for_cacao/shared/widgets/selectable_chip.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -76,111 +78,75 @@ class _PlayerChipWidgetState extends ConsumerState<PlayerChipWidget> {
         widget.colorString == 'purple' || widget.colorString == 'black';
     const circleSize = 40.0;
 
-    return Container(
-      decoration: BoxDecoration(
-        color: widget.isSelected
-            ? color.withValues(alpha: 0.15)
-            : Colors.grey.shade100,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(
-          color: widget.isSelected ? color : Colors.grey.shade300,
-          width: widget.isSelected ? 2.5 : 1.5,
-        ),
-        boxShadow: widget.isSelected
-            ? [
-                BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.15),
-                  blurRadius: 10,
-                  spreadRadius: 1,
-                  offset: const Offset(0, 3),
-                ),
-              ]
-            : [],
-      ),
-      child: Material(
-        color: Colors.transparent,
-        child: InkWell(
-          onTap: _onTap,
-          borderRadius: BorderRadius.circular(16),
-          child: Padding(
-            padding: const EdgeInsets.all(12),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                // Color circle with number inside
-                Container(
-                  width: circleSize,
-                  height: circleSize,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: color,
-                    border: Border.all(
-                      color: widget.isSelected
-                          ? (isDarkColor ? Colors.white : AppColors.brown)
-                          : Colors.grey.shade400,
-                      width: widget.isSelected ? 3 : 2,
-                    ),
-                  ),
-                  child: Center(
-                    child: widget.isSelected && widget.position != null
-                        ? Text(
-                            '${widget.position}',
-                            style: AppTextStyles.circlePosition.copyWith(
-                              color: isDarkColor
-                                  ? Colors.white
-                                  : AppColors.brown,
-                            ),
-                          )
-                        : Icon(
-                            Icons.add,
-                            color: Colors.grey.shade600,
-                            size: 20,
-                          ),
-                  ),
-                ),
-                const SizedBox(height: 8),
-                // Name field or placeholder
-                SizedBox(
-                  width: 80,
-                  child: widget.isSelected
-                      ? TextField(
-                          controller: _controller,
-                          focusNode: _focusNode,
-                          onChanged: _onNameChanged,
-                          textAlign: TextAlign.center,
-                          style: AppTextStyles.playerName.copyWith(
-                            color: isDarkColor ? Colors.white : AppColors.brown,
-                          ),
-                          decoration: InputDecoration(
-                            isDense: true,
-                            contentPadding: const EdgeInsets.symmetric(
-                              horizontal: 4,
-                              vertical: 6,
-                            ),
-                            filled: true,
-                            fillColor: color.withValues(alpha: 0.2),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(8),
-                              borderSide: BorderSide.none,
-                            ),
-                            hintText: 'Name',
-                            hintStyle: AppTextStyles.hintText.copyWith(
-                              color:
-                                  (isDarkColor ? Colors.white : AppColors.brown)
-                                      .withValues(alpha: 0.5),
-                            ),
-                          ),
-                        )
-                      : Text(
-                          _capitalize(widget.colorString),
-                          textAlign: TextAlign.center,
-                          style: AppTextStyles.colorName,
-                        ),
-                ),
-              ],
+    return SelectableChip(
+      isSelected: widget.isSelected,
+      selectedColor: color.withValues(alpha: 0.15),
+      unselectedColor: Theme.of(context).colorScheme.surfaceContainerHighest,
+      selectedBorderColor: color,
+      unselectedBorderColor: Theme.of(context).colorScheme.outlineVariant,
+      onTap: _onTap,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          // Color circle with number inside
+          CircleBadge(
+            color: color,
+            size: circleSize,
+            borderColor: widget.isSelected
+                ? (isDarkColor ? Colors.white : AppColors.brown)
+                : Theme.of(context).colorScheme.outline,
+            borderWidth: widget.isSelected ? 3 : 2,
+            text: widget.isSelected && widget.position != null
+                ? '${widget.position}'
+                : null,
+            icon: !(widget.isSelected && widget.position != null)
+                ? Icons.add
+                : null,
+            iconColor: Theme.of(context).colorScheme.onSurfaceVariant,
+            iconSize: 20,
+            textStyle: AppTextStyles.circlePosition.copyWith(
+              color: isDarkColor ? Colors.white : AppColors.brown,
             ),
           ),
-        ),
+          const SizedBox(height: 8),
+          // Name field or placeholder
+          SizedBox(
+            width: 80,
+            child: widget.isSelected
+                ? TextField(
+                    controller: _controller,
+                    focusNode: _focusNode,
+                    onChanged: _onNameChanged,
+                    textAlign: TextAlign.center,
+                    style: AppTextStyles.playerName.copyWith(
+                      color: isDarkColor ? Colors.white : AppColors.brown,
+                    ),
+                    decoration: InputDecoration(
+                      isDense: true,
+                      contentPadding: const EdgeInsets.symmetric(
+                        horizontal: 4,
+                        vertical: 6,
+                      ),
+                      filled: true,
+                      fillColor: color.withValues(alpha: 0.2),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                        borderSide: BorderSide.none,
+                      ),
+                      hintText: 'Name',
+                      hintStyle: AppTextStyles.hintText.copyWith(
+                        color: (isDarkColor ? Colors.white : AppColors.brown)
+                            .withValues(alpha: 0.5),
+                      ),
+                    ),
+                  )
+                : Text(
+                    _capitalize(widget.colorString),
+                    textAlign: TextAlign.center,
+                    style: AppTextStyles.colorName,
+                  ),
+          ),
+        ],
       ),
     );
   }

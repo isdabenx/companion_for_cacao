@@ -2,6 +2,7 @@ import 'package:companion_for_cacao/core/theme/app_colors.dart';
 import 'package:companion_for_cacao/core/theme/app_text_styles.dart';
 import 'package:companion_for_cacao/features/game_setup/presentation/providers/game_setup_notifier.dart';
 import 'package:companion_for_cacao/features/game_setup/presentation/widgets/player_chip_widget.dart';
+import 'package:companion_for_cacao/shared/widgets/selectable_chip.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:reorderable_grid/reorderable_grid.dart';
@@ -49,12 +50,14 @@ class PlayersGridWidget extends ConsumerWidget {
               proxyDecorator: (child, index, animation) {
                 // Return a simple colored box during drag to avoid layer conflicts
                 final color = AppColors.findColorByName(colorOrder[index]);
-                return Container(
-                  decoration: BoxDecoration(
-                    color: color.withValues(alpha: 0.3),
-                    borderRadius: BorderRadius.circular(16),
-                    border: Border.all(color: color, width: 2),
-                  ),
+                return SelectableChip(
+                  isSelected: true,
+                  selectedColor: color.withValues(alpha: 0.3),
+                  selectedBorderColor: color,
+                  selectedBorderWidth: 2,
+                  borderRadius: 16,
+                  showShadow: false,
+                  child: const SizedBox.shrink(),
                 );
               },
               children: [

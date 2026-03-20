@@ -1,5 +1,5 @@
 import 'package:companion_for_cacao/core/data/models/boardgame_model.dart';
-import 'package:companion_for_cacao/core/providers/repository_providers.dart';
+import 'package:companion_for_cacao/shared/providers/boardgame_use_case_providers.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'boardgame_notifier.g.dart';
@@ -8,24 +8,8 @@ part 'boardgame_notifier.g.dart';
 class BoardgameNotifier extends _$BoardgameNotifier {
   @override
   Future<List<BoardgameModel>> build() async {
-    final repository = await ref.read(boardgameRepositoryProvider.future);
-    final boardgames = await repository.getAllBoardgames();
-    final modules = await repository.getAllModules();
-    final tiles = await repository.getAllTiles();
-
-    return boardgames
-        .map(
-          (boardgame) => boardgame.copyWith(
-            modules: modules
-                .where((module) => module.boardgameId == boardgame.id)
-                .toList(),
-            tiles: tiles
-                .where((tile) => tile.boardgameId == boardgame.id)
-                .map((tile) => tile.copyWith(boardgame: boardgame))
-                .toList(),
-          ),
-        )
-        .toList();
+    final useCase = await ref.watch(loadBoardgamesUseCaseProvider.future);
+    return useCase.execute();
   }
 
   BoardgameModel boardgameById(int id) {

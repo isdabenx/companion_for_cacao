@@ -1,10 +1,8 @@
 import 'package:companion_for_cacao/core/data/models/boardgame_model.dart';
 import 'package:companion_for_cacao/core/data/models/module_model.dart';
-import 'package:companion_for_cacao/core/theme/app_colors.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/game_setup_state_entity.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/player_entity.dart';
-import 'package:companion_for_cacao/features/game_setup/domain/services/base_game_handler.dart';
-import 'package:companion_for_cacao/features/game_setup/domain/services/preparation_pipeline.dart';
+import 'package:companion_for_cacao/features/game_setup/presentation/providers/game_setup_use_case_providers.dart';
 import 'package:companion_for_cacao/shared/providers/boardgame_notifier.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -138,41 +136,20 @@ class GameSetupNotifier extends _$GameSetupNotifier {
 
   void startGame() {
     if (state.value == null) return;
+    final useCase = ref.read(prepareGameUseCaseProvider);
+    state = AsyncData(useCase.execute(state.value!));
+  }
 
-    final currentSetup = state.value!;
-    final modules = currentSetup.modules
-        .where((m) => currentSetup.expansions.any((e) => e.id == m.boardgameId))
-        .toList();
-    final players = currentSetup.players
-        .where((p) => p.isSelected && p.name.isNotEmpty)
-        .toList();
-
-    final playerColors = players.map((p) => p.color).toSet();
-    final filteredColors = AppColors.colors.keys
-        .where(playerColors.contains)
-        .toList();
-
-    final baseGame = currentSetup.expansions.firstWhere((e) => e.id == 1);
-
-    final pipeline = PreparationPipeline(
-      baseHandler: BaseGameHandler(
-        baseGame: baseGame,
-        activeExpansions: currentSetup.expansions,
-        selectedColors: filteredColors,
-      ),
-      moduleHandlers: const {},
-    );
-
-    final result = pipeline.execute(
-      currentSetup.copyWith(players: players, modules: modules),
-    );
-
+  void updatePlayerName(String color, String newName) {
+    if (state.value == null) return;
     state = AsyncData(
-      currentSetup.copyWith(
-        players: players,
-        modules: modules,
-        tiles: result.tiles,
-        preparation: result.preparation,
+      state.value!.copyWith(
+        players: state.value!.players.map((p) {
+          if (p.color == color) {
+            return p.copyWith(name: newName);
+          }
+          return p;
+        }).toList(),
       ),
     );
   }

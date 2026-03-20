@@ -4,7 +4,10 @@ import 'package:companion_for_cacao/core/theme/app_breakpoints.dart';
 import 'package:companion_for_cacao/core/theme/app_colors.dart';
 import 'package:companion_for_cacao/core/theme/app_text_styles.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/game_setup_state_entity.dart';
+import 'package:companion_for_cacao/shared/widgets/circle_badge.dart';
 import 'package:companion_for_cacao/shared/widgets/container_full_style_widget.dart';
+import 'package:companion_for_cacao/shared/widgets/responsive_grid_builder.dart';
+import 'package:companion_for_cacao/shared/widgets/selectable_chip.dart';
 import 'package:flutter/material.dart';
 
 class DetailedSummaryWidget extends StatelessWidget {
@@ -81,40 +84,18 @@ class DetailedSummaryWidget extends StatelessWidget {
   }
 
   Widget _buildPlayersGrid() {
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        // Calculate columns based on width (~180px per player)
-        final columns = (constraints.maxWidth / 180).floor().clamp(1, 4);
-        final rows = (gameSetup.players.length / columns).ceil();
-
-        return Table(
-          columnWidths: {
-            for (int i = 0; i < columns; i++) i: const FlexColumnWidth(),
-          },
-          defaultVerticalAlignment: TableCellVerticalAlignment.top,
-          children: [
-            for (int row = 0; row < rows; row++)
-              TableRow(
-                children: [
-                  for (int col = 0; col < columns; col++)
-                    col < (gameSetup.players.length - row * columns)
-                        ? Padding(
-                            padding: EdgeInsets.only(
-                              right: col < columns - 1 ? 12 : 0,
-                              bottom: row < rows - 1 ? 8 : 0,
-                            ),
-                            child: _PlayerRow(
-                              color: AppColors.findColorByName(
-                                gameSetup.players[row * columns + col].color,
-                              ),
-                              name: gameSetup.players[row * columns + col].name,
-                              position: row * columns + col + 1,
-                            ),
-                          )
-                        : const SizedBox.shrink(),
-                ],
-              ),
-          ],
+    return ResponsiveGridBuilder(
+      itemCount: gameSetup.players.length,
+      minItemWidth: 180.0,
+      minColumns: 1,
+      maxColumns: 4,
+      horizontalSpacing: 12.0,
+      verticalSpacing: 8.0,
+      itemBuilder: (context, index) {
+        return _PlayerRow(
+          color: AppColors.findColorByName(gameSetup.players[index].color),
+          name: gameSetup.players[index].name,
+          position: index + 1,
         );
       },
     );
@@ -253,45 +234,22 @@ class DetailedSummaryWidget extends StatelessWidget {
   }
 
   Widget _buildTileGrid(List<TileModel> tiles, {bool showColorCircle = true}) {
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        // Calculate columns based on available width (min ~150px per column)
-        final columns = (constraints.maxWidth / 150).floor().clamp(2, 4);
-        final rows = (tiles.length / columns).ceil();
-
-        return Table(
-          columnWidths: {
-            for (int i = 0; i < columns; i++) i: const FlexColumnWidth(),
-          },
-          defaultVerticalAlignment: TableCellVerticalAlignment.top,
-          children: [
-            for (int row = 0; row < rows; row++)
-              TableRow(
-                children: [
-                  for (int col = 0; col < columns; col++)
-                    col < (tiles.length - row * columns)
-                        ? Padding(
-                            padding: EdgeInsets.only(
-                              right: col < columns - 1 ? 12 : 0,
-                              bottom: row < rows - 1 ? 8 : 0,
-                            ),
-                            child: _TileChip(
-                              name: tiles[row * columns + col].name,
-                              quantity: tiles[row * columns + col].quantity,
-                              imagePath:
-                                  tiles[row * columns + col].filenameImage,
-                              color: tiles[row * columns + col].color != null
-                                  ? AppColors.findColorByName(
-                                      tiles[row * columns + col].color!.name,
-                                    )
-                                  : null,
-                              showColorCircle: showColorCircle,
-                            ),
-                          )
-                        : const SizedBox.shrink(),
-                ],
-              ),
-          ],
+    return ResponsiveGridBuilder(
+      itemCount: tiles.length,
+      minItemWidth: 150.0,
+      minColumns: 2,
+      maxColumns: 4,
+      horizontalSpacing: 12.0,
+      verticalSpacing: 8.0,
+      itemBuilder: (context, index) {
+        return _TileChip(
+          name: tiles[index].name,
+          quantity: tiles[index].quantity,
+          imagePath: tiles[index].filenameImage,
+          color: tiles[index].color != null
+              ? AppColors.findColorByName(tiles[index].color!.name)
+              : null,
+          showColorCircle: showColorCircle,
         );
       },
     );
@@ -344,7 +302,20 @@ class _PlayerRow extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        _ColorCircle(color: color, size: 28, position: position),
+        CircleBadge(
+          color: color,
+          size: 28,
+          text: position.toString(),
+          borderColor: AppColors.brown,
+          borderWidth: 2,
+          boxShadow: [
+            BoxShadow(
+              color: AppColors.brown.withValues(alpha: 0.3),
+              blurRadius: 4,
+              offset: const Offset(0, 2),
+            ),
+          ],
+        ),
         const SizedBox(width: 10),
         Text(
           name.isNotEmpty ? name : 'Player $position',
@@ -358,56 +329,6 @@ class _PlayerRow extends StatelessWidget {
   }
 }
 
-class _ColorCircle extends StatelessWidget {
-  const _ColorCircle({
-    required this.color,
-    this.size = 32,
-    this.showInitial = true,
-    this.position = 0,
-  });
-
-  final Color color;
-  final double size;
-  final bool showInitial;
-  final int position;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: size,
-      height: size,
-      decoration: BoxDecoration(
-        shape: BoxShape.circle,
-        color: color,
-        border: Border.all(color: AppColors.brown, width: 2),
-        boxShadow: [
-          BoxShadow(
-            color: AppColors.brown.withValues(alpha: 0.3),
-            blurRadius: 4,
-            offset: const Offset(0, 2),
-          ),
-        ],
-      ),
-      child: showInitial
-          ? Center(
-              child: Text(
-                position.toString(),
-                style: TextStyle(
-                  color: _getContrastColor(color),
-                  fontWeight: FontWeight.bold,
-                  fontSize: size * 0.45,
-                ),
-              ),
-            )
-          : null,
-    );
-  }
-
-  Color _getContrastColor(Color color) {
-    return color.computeLuminance() > 0.5 ? AppColors.brown : AppColors.white;
-  }
-}
-
 class _SmallChip extends StatelessWidget {
   const _SmallChip({required this.icon, required this.label});
 
@@ -416,13 +337,14 @@ class _SmallChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SelectableChip(
+      isSelected: false,
+      unselectedColor: AppColors.greenLight,
+      unselectedBorderColor: AppColors.greenNormal,
+      unselectedBorderWidth: 1,
+      borderRadius: 16,
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-      decoration: BoxDecoration(
-        color: AppColors.greenLight,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppColors.greenNormal, width: 1),
-      ),
+      showShadow: false,
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -489,7 +411,19 @@ class _TileChip extends StatelessWidget {
         const SizedBox(width: 6),
         // Color circle if applicable and enabled
         if (showColorCircle && color != null) ...[
-          _ColorCircle(color: color!, size: 14, showInitial: false),
+          CircleBadge(
+            color: color!,
+            size: 14,
+            borderColor: AppColors.brown,
+            borderWidth: 2,
+            boxShadow: [
+              BoxShadow(
+                color: AppColors.brown.withValues(alpha: 0.3),
+                blurRadius: 4,
+                offset: const Offset(0, 2),
+              ),
+            ],
+          ),
           const SizedBox(width: 4),
         ],
         // Name (flexible to shrink)

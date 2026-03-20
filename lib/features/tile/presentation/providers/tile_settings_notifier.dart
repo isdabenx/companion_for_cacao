@@ -1,10 +1,10 @@
 import 'dart:async';
 
 import 'package:companion_for_cacao/config/constants/tile_settings.dart';
+import 'package:companion_for_cacao/core/providers/repository_providers.dart';
 import 'package:companion_for_cacao/features/tile/domain/entities/tile_settings_entity.dart';
 import 'package:flutter/foundation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 part 'tile_settings_notifier.g.dart';
 
@@ -60,15 +60,8 @@ class TileSettingsNotifier extends _$TileSettingsNotifier {
 
   Future<TileSettingsEntity> _loadSettings() async {
     try {
-      final prefs = await SharedPreferences.getInstance();
-      return TileSettingsEntity(
-        playerColorInBorder: prefs.getBool('playerColorInBorder') ?? true,
-        playerColorInCircle: prefs.getBool('playerColorInCircle') ?? true,
-        badgeTypeInImage: prefs.getBool('badgeTypeInImage') ?? true,
-        badgeTypeInText: prefs.getBool('badgeTypeInText') ?? true,
-        boardgameInTitle: prefs.getBool('boardgameInTitle') ?? true,
-        showQuantity: prefs.getBool('showQuantity') ?? true,
-      );
+      final repository = ref.read(settingsRepositoryProvider);
+      return await repository.getTileSettings();
     } catch (e, stackTrace) {
       debugPrint('Error loading tile settings: $e\n$stackTrace');
       return TileSettingsEntity();
@@ -77,13 +70,8 @@ class TileSettingsNotifier extends _$TileSettingsNotifier {
 
   Future<void> _saveSettings(TileSettingsEntity current) async {
     try {
-      final prefs = await SharedPreferences.getInstance();
-      await prefs.setBool('playerColorInBorder', current.playerColorInBorder);
-      await prefs.setBool('playerColorInCircle', current.playerColorInCircle);
-      await prefs.setBool('badgeTypeInImage', current.badgeTypeInImage);
-      await prefs.setBool('badgeTypeInText', current.badgeTypeInText);
-      await prefs.setBool('boardgameInTitle', current.boardgameInTitle);
-      await prefs.setBool('showQuantity', current.showQuantity);
+      final repository = ref.read(settingsRepositoryProvider);
+      await repository.saveTileSettings(current);
     } catch (e, stackTrace) {
       debugPrint('Error saving tile settings: $e\n$stackTrace');
     }
@@ -93,16 +81,22 @@ class TileSettingsNotifier extends _$TileSettingsNotifier {
     switch (action) {
       case TileSettings.playerColorInBorder:
         togglePlayerColorInBorder();
+        return;
       case TileSettings.playerColorInCircle:
         togglePlayerColorInCircle();
+        return;
       case TileSettings.badgeTypeInImage:
         toggleBadgeTypeInImage();
+        return;
       case TileSettings.badgeTypeInText:
         toggleBadgeTypeInText();
+        return;
       case TileSettings.boardgameInTitle:
         toggleBoardgameInTitle();
+        return;
       case TileSettings.showQuantity:
         toggleShowQuantity();
+        return;
     }
   }
 }

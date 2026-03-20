@@ -1,5 +1,5 @@
 import 'package:companion_for_cacao/core/data/database/app_database.dart';
-import 'package:companion_for_cacao/core/providers/repository_providers.dart';
+import 'package:companion_for_cacao/core/providers/initialization_provider.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'database_provider.g.dart';
