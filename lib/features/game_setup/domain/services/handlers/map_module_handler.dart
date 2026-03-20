@@ -22,11 +22,12 @@ class MapModuleHandler implements ModulePreparationHandler {
   }
 
   @override
-  List<PreparationEntity> generatePreparation(
+  List<PreparationEntity> modifyPreparationSteps(
     List<PlayerEntity> players,
     List<TileModel> tiles,
+    List<PreparationEntity> currentSteps,
   ) {
     // TODO: Implement map module preparation steps.
-    return [];
+    return currentSteps;
   }
 }

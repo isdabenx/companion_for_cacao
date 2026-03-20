@@ -5,15 +5,15 @@ part 'preparation_provider.g.dart';
 @riverpod
 class PreparationCompletion extends _$PreparationCompletion {
   @override
-  Map<int, bool> build() {
+  Map<String, bool> build() {
     return {};
   }
 
-  void toggleCompletion(int index, bool currentValue) {
-    state = {...state, index: !currentValue};
+  void toggleCompletion(String id) {
+    state = {...state, id: !(state[id] ?? false)};
   }
 
-  void setCompletion(int index, bool value) {
-    state = {...state, index: value};
+  void setCompletion(String id, bool value) {
+    state = {...state, id: value};
   }
 }

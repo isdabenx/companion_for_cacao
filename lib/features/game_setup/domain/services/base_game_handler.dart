@@ -86,11 +86,12 @@ class BaseGameHandler implements ModulePreparationHandler {
   }
 
   @override
-  List<PreparationEntity> generatePreparation(
+  List<PreparationEntity> modifyPreparationSteps(
     List<PlayerEntity> players,
     List<TileModel> tiles,
+    List<PreparationEntity> currentSteps,
   ) {
-    final preparation = <PreparationEntity>[];
+    final preparation = <PreparationEntity>[...currentSteps];
 
     for (final player in players) {
       final color = player.color;
@@ -98,33 +99,41 @@ class BaseGameHandler implements ModulePreparationHandler {
       preparation
         ..add(
           PreparationEntity(
+            id: 'setup_village_board_$color',
             description:
                 'Player $color takes the village board of color $color',
             color: color,
+            variables: {'color': color},
             imagePath:
                 '${Assets.preparationVillagePrefix}$color${Assets.preparationVillageSufix}',
           ),
         )
         ..add(
           PreparationEntity(
+            id: 'setup_water_carrier_$color',
             description:
                 'Player $color takes the water carrier of color $color',
             color: color,
+            variables: {'color': color},
             imagePath:
                 '${Assets.preparationCarrierPrefix}$color${Assets.preparationCarrierSufix}',
           ),
         )
         ..add(
           PreparationEntity(
+            id: 'setup_water_field_$color',
             description:
                 'Player $color puts the water carrier on the water field with the value “-10”',
             color: color,
+            variables: {'color': color},
           ),
         )
         ..add(
           PreparationEntity(
+            id: 'setup_tiles_$color',
             description: 'Player $color get all tiles with color $color',
             color: color,
+            variables: {'color': color},
             imagePath:
                 '${Assets.preparationTilePrefix}$color${Assets.preparationTileSufix}',
           ),
@@ -141,9 +150,11 @@ class BaseGameHandler implements ModulePreparationHandler {
         if (workerTile != null) {
           preparation.add(
             PreparationEntity(
+              id: 'setup_remove_worker_1_${player.color}',
               description:
                   'Player ${player.color} searches for one of the 1-1-1-1 worker tiles and returns it to the game box',
               color: player.color,
+              variables: {'color': player.color},
               imagePath: '${Assets.imagesTilePath}${workerTile.filenameImage}',
             ),
           );
@@ -159,9 +170,11 @@ class BaseGameHandler implements ModulePreparationHandler {
           if (workerTile201 != null) {
             preparation.add(
               PreparationEntity(
+                id: 'setup_remove_worker_2_${player.color}',
                 description:
                     'Player ${player.color} searches for one of the 2-1-0-1 worker tiles and returns it to the game box',
                 color: player.color,
+                variables: {'color': player.color},
                 imagePath:
                     '${Assets.imagesTilePath}${workerTile201.filenameImage}',
               ),
@@ -174,12 +187,14 @@ class BaseGameHandler implements ModulePreparationHandler {
     preparation
       ..add(
         const PreparationEntity(
+          id: 'setup_shuffle_workers',
           description:
               'Each player mixes their worker tiles and puts them as a face-down worker draw pile next to their village board. After that, they draw the 3 top worker tiles from their worker draw pile and take them into their hand',
         ),
       )
       ..add(
         const PreparationEntity(
+          id: 'setup_initial_tiles_plantation_market',
           description:
               'From the jungle tiles, get "single plantation" and "market, selling price 2" and place them face up in the middle of the table diagonally to one another; they form the starting tiles of the playing area',
           imagePath: Assets.preparationInitialTilesCacao,
@@ -187,18 +202,21 @@ class BaseGameHandler implements ModulePreparationHandler {
       )
       ..add(
         const PreparationEntity(
+          id: 'setup_jungle_draw_pile',
           description:
               'Mix the remaining jungle tiles and lay them out as a face-down jungle draw pile',
         ),
       )
       ..add(
         const PreparationEntity(
+          id: 'setup_jungle_display',
           description:
               'Draw the 2 top jungle tiles from the jungle draw pile and place them next to the pile as a face-up jungle display',
         ),
       )
       ..add(
         const PreparationEntity(
+          id: 'setup_resources_bank',
           description:
               'Lay out the cacao fruits and the sun tokens as separate supply piles. Put the gold coins next to them to serve as the bank',
           imagePath: Assets.preparationResourcesCacao,

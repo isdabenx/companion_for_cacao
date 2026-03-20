@@ -1,4 +1,3 @@
-import 'package:companion_for_cacao/core/theme/app_colors.dart';
 import 'package:companion_for_cacao/shared/widgets/circle_badge.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';

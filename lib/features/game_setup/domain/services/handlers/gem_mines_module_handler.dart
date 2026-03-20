@@ -22,11 +22,12 @@ class GemMinesModuleHandler implements ModulePreparationHandler {
   }
 
   @override
-  List<PreparationEntity> generatePreparation(
+  List<PreparationEntity> modifyPreparationSteps(
     List<PlayerEntity> players,
     List<TileModel> tiles,
+    List<PreparationEntity> currentSteps,
   ) {
     // TODO: Implement gem mines preparation steps.
-    return [];
+    return currentSteps;
   }
 }

@@ -21,11 +21,12 @@ class EmperorFavorModuleHandler implements ModulePreparationHandler {
   }
 
   @override
-  List<PreparationEntity> generatePreparation(
+  List<PreparationEntity> modifyPreparationSteps(
     List<PlayerEntity> players,
     List<TileModel> tiles,
+    List<PreparationEntity> currentSteps,
   ) {
     // TODO: Implement Emperor's Favor preparation steps.
-    return [];
+    return currentSteps;
   }
 }

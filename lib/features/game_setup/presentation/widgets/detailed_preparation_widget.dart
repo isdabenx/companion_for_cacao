@@ -18,15 +18,19 @@ class DetailedPreparationWidget extends StatelessWidget {
         children: [
           const HeaderWidget(text: 'Preparation'),
           Expanded(
-            child: ListView.builder(
-              itemCount: preparation.length,
-              itemBuilder: (context, index) {
-                return PreparationCard(
-                  key: ValueKey(index),
-                  preparation: preparation[index],
-                  index: index,
-                );
-              },
+            child: Center(
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 800),
+                child: ListView.builder(
+                  itemCount: preparation.length,
+                  itemBuilder: (context, index) {
+                    return PreparationCard(
+                      key: ValueKey(preparation[index].id),
+                      preparation: preparation[index],
+                    );
+                  },
+                ),
+              ),
             ),
           ),
         ],
@@ -36,22 +40,20 @@ class DetailedPreparationWidget extends StatelessWidget {
 }
 
 class PreparationCard extends ConsumerWidget {
-  const PreparationCard({
-    required this.preparation,
-    required this.index,
-    super.key,
-  });
+  const PreparationCard({required this.preparation, super.key});
 
   final PreparationEntity preparation;
-  final int index;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final completionMap = ref.watch(preparationCompletionProvider);
-    final isCompleted = completionMap[index] ?? preparation.isCompleted;
+    final isCompleted =
+        completionMap[preparation.id] ?? preparation.isCompleted;
 
     return Card(
-      color: isCompleted ? AppColors.greenNormal : AppColors.greenDark,
+      color: isCompleted
+          ? AppColors.greenNormal.withValues(alpha: 0.7)
+          : AppColors.greenDark,
       child: Padding(
         padding: const EdgeInsets.all(8),
         child: ListTile(
@@ -60,18 +62,33 @@ class PreparationCard extends ConsumerWidget {
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
               fontWeight: FontWeight.bold,
               decoration: isCompleted ? TextDecoration.lineThrough : null,
-              color: (preparation.color != null && !isCompleted)
-                  ? AppColors.findColorByName(preparation.color!)
-                  : AppColors.brown,
+              color: isCompleted
+                  ? AppColors.brown.withValues(alpha: 0.5)
+                  : (preparation.color != null
+                        ? AppColors.findColorByName(preparation.color!)
+                        : AppColors.brown),
             ),
           ),
           leading: preparation.imagePath != null
-              ? Image.asset(preparation.imagePath!)
+              ? SizedBox(
+                  width: 40,
+                  height: 40,
+                  child: Image.asset(preparation.imagePath!),
+                )
               : null,
+          trailing: Checkbox(
+            value: isCompleted,
+            onChanged: (_) {
+              ref
+                  .read(preparationCompletionProvider.notifier)
+                  .toggleCompletion(preparation.id);
+            },
+            activeColor: AppColors.brown,
+          ),
           onTap: () {
             ref
                 .read(preparationCompletionProvider.notifier)
-                .toggleCompletion(index, isCompleted);
+                .toggleCompletion(preparation.id);
           },
         ),
       ),

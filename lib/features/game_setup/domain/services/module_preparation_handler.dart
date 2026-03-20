@@ -12,12 +12,14 @@ abstract class ModulePreparationHandler {
   /// Returns the modified tile list.
   List<TileModel> adjustTiles(List<TileModel> tiles, int playerCount);
 
-  /// Generates preparation steps for this module.
+  /// Modifies preparation steps for this module.
   /// [players] is the list of selected players.
   /// [tiles] is the current tile list (after adjustments).
-  /// Returns the list of preparation steps to add.
-  List<PreparationEntity> generatePreparation(
+  /// [currentSteps] is the current list of preparation steps.
+  /// Returns the modified preparation steps list.
+  List<PreparationEntity> modifyPreparationSteps(
     List<PlayerEntity> players,
     List<TileModel> tiles,
+    List<PreparationEntity> currentSteps,
   );
 }

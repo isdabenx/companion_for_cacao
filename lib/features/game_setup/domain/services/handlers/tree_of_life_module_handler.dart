@@ -22,11 +22,12 @@ class TreeOfLifeModuleHandler implements ModulePreparationHandler {
   }
 
   @override
-  List<PreparationEntity> generatePreparation(
+  List<PreparationEntity> modifyPreparationSteps(
     List<PlayerEntity> players,
     List<TileModel> tiles,
+    List<PreparationEntity> currentSteps,
   ) {
     // TODO: Implement tree of life preparation steps.
-    return [];
+    return currentSteps;
   }
 }

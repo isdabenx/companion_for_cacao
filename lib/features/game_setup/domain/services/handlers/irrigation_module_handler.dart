@@ -25,11 +25,12 @@ class IrrigationModuleHandler implements ModulePreparationHandler {
   }
 
   @override
-  List<PreparationEntity> generatePreparation(
+  List<PreparationEntity> modifyPreparationSteps(
     List<PlayerEntity> players,
     List<TileModel> tiles,
+    List<PreparationEntity> currentSteps,
   ) {
     // TODO: Implement irrigation preparation steps.
-    return [];
+    return currentSteps;
   }
 }

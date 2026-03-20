@@ -21,9 +21,11 @@ class PreparationPipeline {
     GameSetupStateEntity state,
   ) {
     var tiles = baseHandler.adjustTiles([], state.players.length);
-    final preparation = <PreparationEntity>[
-      ...baseHandler.generatePreparation(state.players, tiles),
-    ];
+    var preparation = baseHandler.modifyPreparationSteps(
+      state.players,
+      tiles,
+      const [],
+    );
 
     for (final module in state.modules) {
       final handler = moduleHandlers[module.id];
@@ -32,7 +34,11 @@ class PreparationPipeline {
       }
 
       tiles = handler.adjustTiles(tiles, state.players.length);
-      preparation.addAll(handler.generatePreparation(state.players, tiles));
+      preparation = handler.modifyPreparationSteps(
+        state.players,
+        tiles,
+        preparation,
+      );
     }
 
     return (tiles: tiles, preparation: preparation);
