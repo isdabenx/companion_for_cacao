@@ -127,6 +127,7 @@ L'aplicacio segueix els principis de **Clean Architecture** amb una organitzacio
 ```
 
 **Patrons utilitzats:**
+
 - **MVVM** — Separacio clara entre vista i logica de negoci
 - **Repository Pattern** — Abstraccio de les fonts de dades
 - **UDF** (Unidirectional Data Flow) — Flux de dades predictible amb Riverpod
@@ -184,6 +185,7 @@ lib/
 ```
 
 Cada feature segueix l'estructura interna:
+
 ```
 feature/
 ├── presentation/           # Screens i widgets
@@ -196,13 +198,15 @@ feature/
 ## Full de Ruta
 
 ### Fase 1 — Funcionalitats Core
+
 - [ ] Calculadora de puntuacio final
-- [ ] Filtre i cerca de rajoles
-- [ ] Selector de primer jugador
+- [x] Filtre i cerca de rajoles
+- [x] Selector de primer jugador
 - [ ] Rajoles d'expansions completes (Chocolatl + Diamante)
 - [ ] Notificacio d'actualitzacio de l'app (upgrader)
 
 ### Fase 2 — Diferenciacio
+
 - [ ] Historial de partides
 - [ ] Perfils de jugador amb estadistiques
 - [ ] Comptador de probabilitats de rajoles
@@ -210,12 +214,14 @@ feature/
 - [ ] Gestor d'expansions millorat
 
 ### Fase 3 — Engagement
+
 - [ ] Sistema d'assoliments
 - [ ] Grups de joc amb classificacions
 - [ ] Analisi post-partida
 - [ ] Temporitzador de torns
 
 ### Fase 4 — Qualitat i Accessibilitat
+
 - [ ] Mode daltonic
 - [ ] Internacionalitzacio (catala, castella, angles)
 - [ ] Configuracio general de l'app
@@ -249,6 +255,7 @@ feature/
 Aquest projecte esta llicenciat sota la **Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International**.
 
 Pots copiar, redistribuir i adaptar el material sempre que:
+
 - Atribueixis l'autoria original
 - No el facis servir amb fins comercials
 - Distribueixis les teves contribucions sota la mateixa llicencia

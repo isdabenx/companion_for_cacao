@@ -12,6 +12,7 @@ class GameSetupStateEntity {
     this.tiles = const [],
     this.preparation = const [],
     this.colorOrder = const ['white', 'red', 'purple', 'yellow'],
+    this.isStarted = false,
   });
   final List<PlayerEntity> players;
   final List<BoardgameModel> expansions;
@@ -19,6 +20,7 @@ class GameSetupStateEntity {
   final List<TileModel> tiles;
   final List<PreparationEntity> preparation;
   final List<String> colorOrder;
+  final bool isStarted;
 
   GameSetupStateEntity copyWith({
     List<PlayerEntity>? players,
@@ -27,6 +29,7 @@ class GameSetupStateEntity {
     List<TileModel>? tiles,
     List<PreparationEntity>? preparation,
     List<String>? colorOrder,
+    bool? isStarted,
   }) {
     return GameSetupStateEntity(
       players: players ?? this.players,
@@ -35,6 +38,7 @@ class GameSetupStateEntity {
       tiles: tiles ?? this.tiles,
       preparation: preparation ?? this.preparation,
       colorOrder: colorOrder ?? this.colorOrder,
+      isStarted: isStarted ?? this.isStarted,
     );
   }
 }

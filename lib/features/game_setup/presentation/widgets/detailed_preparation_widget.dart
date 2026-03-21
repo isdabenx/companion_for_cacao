@@ -3,10 +3,30 @@ import 'package:companion_for_cacao/core/theme/app_colors.dart';
 import 'package:companion_for_cacao/core/theme/app_fonts.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/preparation_entity.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/preparation_phase.dart';
-import 'package:companion_for_cacao/features/game_setup/presentation/providers/preparation_provider.dart';
+import 'package:companion_for_cacao/features/game_setup/presentation/providers/game_setup_notifier.dart';
 import 'package:companion_for_cacao/shared/widgets/container_full_style_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_annotation/riverpod_annotation.dart';
+
+part 'detailed_preparation_widget.g.dart';
+
+// Local provider for phase expansion state
+@riverpod
+class PhaseExpansion extends _$PhaseExpansion {
+  @override
+  Map<PreparationPhase, bool> build() {
+    return {};
+  }
+
+  void toggle(PreparationPhase phase) {
+    state = {...state, phase: !(state[phase] ?? false)};
+  }
+
+  void clearAll() {
+    state = {};
+  }
+}
 
 class DetailedPreparationWidget extends ConsumerWidget {
   const DetailedPreparationWidget({required this.preparation, super.key});
@@ -28,7 +48,10 @@ class DetailedPreparationWidget extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final completionMap = ref.watch(preparationCompletionProvider);
+    final gameSetup = ref.watch(gameSetupProvider).value;
+    final completionMap = Map<String, bool>.fromEntries(
+      gameSetup?.preparation.map((p) => MapEntry(p.id, p.isCompleted)) ?? [],
+    );
     final expansionMap = ref.watch(phaseExpansionProvider);
     final groupedPreparation = groupBy(preparation, (p) => p.phase);
 
@@ -220,9 +243,12 @@ class PreparationCard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final completionMap = ref.watch(preparationCompletionProvider);
+    final gameSetup = ref.watch(gameSetupProvider).value;
     final isCompleted =
-        completionMap[preparation.id] ?? preparation.isCompleted;
+        gameSetup?.preparation
+            .firstWhere((p) => p.id == preparation.id)
+            .isCompleted ??
+        preparation.isCompleted;
 
     return Opacity(
       opacity: isCompleted ? 0.6 : 1.0,
@@ -241,8 +267,8 @@ class PreparationCard extends ConsumerWidget {
           borderRadius: BorderRadius.circular(12),
           onTap: () {
             ref
-                .read(preparationCompletionProvider.notifier)
-                .toggleCompletion(preparation.id);
+                .read(gameSetupProvider.notifier)
+                .togglePreparationCompletion(preparation.id);
             ref.read(phaseExpansionProvider.notifier).clearAll();
           },
           child: Padding(

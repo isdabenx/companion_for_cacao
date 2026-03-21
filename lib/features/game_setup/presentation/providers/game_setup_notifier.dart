@@ -137,7 +137,42 @@ class GameSetupNotifier extends _$GameSetupNotifier {
   void startGame() {
     if (state.value == null) return;
     final useCase = ref.read(prepareGameUseCaseProvider);
-    state = AsyncData(useCase.execute(state.value!));
+    state = AsyncData(useCase.execute(state.value!).copyWith(isStarted: true));
+  }
+
+  void resetGame() {
+    if (state.value == null) return;
+    state = AsyncData(
+      state.value!.copyWith(preparation: [], tiles: [], isStarted: false),
+    );
+  }
+
+  Future<void> clearAll() async {
+    final boardgames = await ref.read(boardgameProvider.future);
+    final baseGame = boardgames.firstWhere(
+      (b) => b.id == 1,
+      orElse: () => BoardgameModel(
+        id: 1,
+        name: 'Cacao',
+        description: '',
+        filenameImage: '',
+      ),
+    );
+    state = AsyncData(GameSetupStateEntity(expansions: [baseGame]));
+  }
+
+  void togglePreparationCompletion(String id) {
+    if (state.value == null) return;
+    state = AsyncData(
+      state.value!.copyWith(
+        preparation: state.value!.preparation.map((prep) {
+          if (prep.id == id) {
+            return prep.copyWith(isCompleted: !prep.isCompleted);
+          }
+          return prep;
+        }).toList(),
+      ),
+    );
   }
 
   void updatePlayerName(String color, String newName) {
