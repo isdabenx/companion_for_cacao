@@ -29,112 +29,187 @@ class DetailedPreparationWidget extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final completionMap = ref.watch(preparationCompletionProvider);
-    final completedCount = preparation
-        .where((p) => completionMap[p.id] ?? p.isCompleted)
-        .length;
-    final progress = preparation.isEmpty
-        ? 0.0
-        : completedCount / preparation.length;
-
+    final expansionMap = ref.watch(phaseExpansionProvider);
     final groupedPreparation = groupBy(preparation, (p) => p.phase);
 
-    return ContainerFullStyleWidget(
-      child: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 16.0,
-              vertical: 16.0,
-            ),
-            child: ConstrainedBox(
-              constraints: const BoxConstraints(maxWidth: 800),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Text(
-                        'Progress',
-                        style: Theme.of(context).textTheme.titleMedium
-                            ?.copyWith(
-                              fontFamily: AppFonts.headerFont,
-                              color: AppColors.brown,
-                            ),
-                      ),
-                      Text(
-                        '${(progress * 100).toInt()}%',
-                        style: Theme.of(context).textTheme.titleMedium
-                            ?.copyWith(
-                              fontFamily: AppFonts.headerFont,
-                              color: AppColors.brown,
-                            ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 8),
-                  LinearProgressIndicator(
-                    value: progress,
-                    backgroundColor: AppColors.brown.withValues(alpha: 0.15),
-                    color: AppColors.brown,
-                    minHeight: 12,
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                ],
-              ),
-            ),
-          ),
-          Expanded(
-            child: Center(
-              child: ConstrainedBox(
-                constraints: const BoxConstraints(maxWidth: 800),
-                child: ListView.builder(
-                  itemCount: groupedPreparation.length,
-                  itemBuilder: (context, index) {
-                    final phase = groupedPreparation.keys.elementAt(index);
-                    final items = groupedPreparation[phase]!;
+    PreparationPhase? firstIncompletePhase;
+    for (final entry in groupedPreparation.entries) {
+      final items = entry.value;
+      final completedCount = items
+          .where((p) => completionMap[p.id] ?? p.isCompleted)
+          .length;
+      if (items.isNotEmpty && completedCount < items.length) {
+        firstIncompletePhase = entry.key;
+        break;
+      }
+    }
 
-                    return Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(16, 24, 16, 8),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                _getPhaseName(phase),
-                                style: Theme.of(context).textTheme.headlineSmall
-                                    ?.copyWith(
-                                      fontFamily: AppFonts.headerFont,
-                                      color: AppColors.brown,
-                                    ),
-                              ),
-                              const SizedBox(height: 4),
-                              const Divider(
-                                color: AppColors.brown,
-                                thickness: 2,
-                              ),
-                            ],
-                          ),
-                        ),
-                        ...items.map(
-                          (item) => PreparationCard(
-                            key: ValueKey(item.id),
-                            preparation: item,
-                          ),
-                        ),
-                      ],
-                    );
-                  },
+    return ContainerFullStyleWidget(
+      child: Center(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 800),
+          child: CustomScrollView(
+            slivers: [
+              const SliverPadding(padding: EdgeInsets.only(top: 16.0)),
+              for (final entry in groupedPreparation.entries)
+                SliverMainAxisGroup(
+                  slivers: [
+                    SliverPersistentHeader(
+                      pinned: true,
+                      delegate: _PhaseHeaderDelegate(
+                        phase: entry.key,
+                        phaseName: _getPhaseName(entry.key),
+                        items: entry.value,
+                        completionMap: completionMap,
+                        isExpanded:
+                            expansionMap[entry.key] ??
+                            (entry.key == firstIncompletePhase),
+                        onTap: () {
+                          ref
+                              .read(phaseExpansionProvider.notifier)
+                              .toggle(entry.key);
+                        },
+                      ),
+                    ),
+                    Builder(
+                      builder: (context) {
+                        final items = entry.value;
+
+                        final isDefaultExpanded =
+                            entry.key == firstIncompletePhase;
+                        final isExpanded =
+                            expansionMap[entry.key] ?? isDefaultExpanded;
+
+                        if (!isExpanded) {
+                          return const SliverToBoxAdapter(
+                            child: SizedBox.shrink(),
+                          );
+                        }
+
+                        return SliverList(
+                          delegate: SliverChildBuilderDelegate((
+                            context,
+                            index,
+                          ) {
+                            final item = items[index];
+                            return PreparationCard(
+                              key: ValueKey(item.id),
+                              preparation: item,
+                            );
+                          }, childCount: items.length),
+                        );
+                      },
+                    ),
+                  ],
                 ),
-              ),
-            ),
+              const SliverPadding(padding: EdgeInsets.only(bottom: 16.0)),
+            ],
           ),
-        ],
+        ),
       ),
     );
+  }
+}
+
+class _PhaseHeaderDelegate extends SliverPersistentHeaderDelegate {
+  _PhaseHeaderDelegate({
+    required this.phase,
+    required this.phaseName,
+    required this.items,
+    required this.completionMap,
+    required this.isExpanded,
+    required this.onTap,
+  });
+
+  final PreparationPhase phase;
+  final String phaseName;
+  final List<PreparationEntity> items;
+  final Map<String, bool> completionMap;
+  final bool isExpanded;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(
+    BuildContext context,
+    double shrinkOffset,
+    bool overlapsContent,
+  ) {
+    final phaseCompletedCount = items
+        .where((p) => completionMap[p.id] ?? p.isCompleted)
+        .length;
+    final phaseTotalCount = items.length;
+    final isPhaseCompleted =
+        phaseTotalCount > 0 && phaseCompletedCount == phaseTotalCount;
+    final phaseProgress = phaseTotalCount == 0
+        ? 0.0
+        : phaseCompletedCount / phaseTotalCount;
+
+    return Material(
+      color: AppColors.greenLight,
+      child: InkWell(
+        onTap: onTap,
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 8.0),
+          alignment: Alignment.centerLeft,
+          child: Row(
+            children: [
+              Expanded(
+                child: Text(
+                  phaseName,
+                  style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                    fontFamily: AppFonts.headerFont,
+                    color: AppColors.brown,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+              if (isPhaseCompleted)
+                const Icon(Icons.check_circle, color: AppColors.brown, size: 24)
+              else ...[
+                Text(
+                  '$phaseCompletedCount / $phaseTotalCount',
+                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                    color: AppColors.brown,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(width: 12),
+                SizedBox(
+                  width: 24,
+                  height: 24,
+                  child: CircularProgressIndicator(
+                    value: phaseProgress,
+                    backgroundColor: AppColors.brown.withValues(alpha: 0.15),
+                    color: AppColors.brown,
+                    strokeWidth: 3,
+                  ),
+                ),
+              ],
+              const SizedBox(width: 12),
+              Icon(
+                isExpanded ? Icons.expand_less : Icons.expand_more,
+                color: AppColors.brown,
+                size: 28,
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  @override
+  double get maxExtent => 56.0;
+
+  @override
+  double get minExtent => 56.0;
+
+  @override
+  bool shouldRebuild(covariant _PhaseHeaderDelegate oldDelegate) {
+    return phaseName != oldDelegate.phaseName ||
+        items != oldDelegate.items ||
+        completionMap != oldDelegate.completionMap ||
+        isExpanded != oldDelegate.isExpanded;
   }
 }
 
@@ -168,6 +243,7 @@ class PreparationCard extends ConsumerWidget {
             ref
                 .read(preparationCompletionProvider.notifier)
                 .toggleCompletion(preparation.id);
+            ref.read(phaseExpansionProvider.notifier).clearAll();
           },
           child: Padding(
             padding: const EdgeInsets.all(12),
