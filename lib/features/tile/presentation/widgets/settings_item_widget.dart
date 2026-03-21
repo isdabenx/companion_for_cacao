@@ -1,3 +1,5 @@
+import 'package:companion_for_cacao/core/theme/app_colors.dart';
+import 'package:companion_for_cacao/core/theme/app_text_styles.dart';
 import 'package:companion_for_cacao/features/tile/presentation/providers/tile_settings_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -18,11 +20,14 @@ class SettingsItemWidget extends ConsumerWidget {
 
     return tileSettingsAsync.when(
       data: (tileSettings) => ListTile(
-        title: Text(title),
-        trailing: Icon(
-          tileSettings.settings(settingsName)
-              ? Icons.check_box
-              : Icons.check_box_outline_blank,
+        title: Text(title, style: AppTextStyles.bodyMedium),
+        trailing: Switch(
+          value: tileSettings.settings(settingsName),
+          activeTrackColor: AppColors.greenDark,
+          inactiveTrackColor: AppColors.greenLight,
+          onChanged: (_) => ref
+              .read(tileSettingsProvider.notifier)
+              .toggleSettings(settingsName),
         ),
         onTap: () => ref
             .read(tileSettingsProvider.notifier)

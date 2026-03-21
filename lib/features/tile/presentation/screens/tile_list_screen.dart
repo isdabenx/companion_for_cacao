@@ -1,3 +1,4 @@
+import 'package:companion_for_cacao/features/tile/presentation/widgets/filter_icon_widget.dart';
 import 'package:companion_for_cacao/features/tile/presentation/widgets/settings_icon_widget.dart';
 import 'package:companion_for_cacao/features/tile/presentation/widgets/tile_list_grill_widget.dart';
 import 'package:companion_for_cacao/shared/widgets/custom_scaffold_widget.dart';
@@ -10,7 +11,7 @@ class TileListScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return const CustomScaffoldWidget(
       title: 'Tiles',
-      actions: [SettingsIconWidget()],
+      actions: [FilterIconWidget(), SettingsIconWidget()],
       body: Padding(padding: EdgeInsets.all(8), child: TileListGrillWidget()),
     );
   }

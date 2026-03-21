@@ -1,6 +1,7 @@
 import 'package:companion_for_cacao/core/data/database/app_database.dart';
 import 'package:companion_for_cacao/core/data/models/boardgame_model.dart';
 import 'package:companion_for_cacao/core/data/models/module_model.dart';
+import 'package:companion_for_cacao/core/data/models/tile_type_extension.dart';
 
 enum TileType {
   player,
@@ -95,26 +96,7 @@ class TileModel {
   final int? boardgameId;
   final int? moduleId;
 
-  String get typeAsString {
-    switch (type) {
-      case null:
-        return '';
-      case TileType.player:
-        return 'Player';
-      case TileType.market:
-        return 'Market';
-      case TileType.plantation:
-        return 'Plantation';
-      case TileType.goldMine:
-        return 'Gold Mine';
-      case TileType.water:
-        return 'Water';
-      case TileType.temple:
-        return 'Temple';
-      case TileType.sunWorshipingSite:
-        return 'Sun-Worshiping Site';
-    }
-  }
+  String get typeAsString => type?.displayName ?? '';
 
   TileModel copyWith({
     int? id,

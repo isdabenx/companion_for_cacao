@@ -63,10 +63,10 @@ Decoration _cardTileDecoration(Color borderColor) {
   return BoxDecoration(
     boxShadow: [
       BoxShadow(
-        color: AppColors.tileShadow.withValues(alpha: 0.4),
-        blurRadius: 4,
-        spreadRadius: 2,
-        offset: const Offset(0, 2),
+        color: AppColors.tileShadow.withValues(alpha: 0.15),
+        blurRadius: 8,
+        spreadRadius: 1,
+        offset: const Offset(0, 4),
       ),
     ],
     color: AppColors.tileBackground,
