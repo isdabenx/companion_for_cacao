@@ -92,7 +92,9 @@ void main() {
       expect(button.onPressed, isNotNull);
     });
 
-    testWidgets('should display Start Game text', (tester) async {
+    testWidgets('should display Start Game text when not started', (
+      tester,
+    ) async {
       final container = ProviderContainer(
         overrides: [
           gameSetupProvider.overrideWith(
@@ -101,6 +103,7 @@ void main() {
                 FakePlayer(name: 'Player 1', color: 'red', isSelected: true),
                 FakePlayer(name: 'Player 2', color: 'yellow', isSelected: true),
               ],
+              isStarted: false,
             ),
           ),
         ],
@@ -116,6 +119,113 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(find.text('Start Game'), findsOneWidget);
+      expect(find.text('Resume Game'), findsNothing);
+    });
+
+    testWidgets('should display Resume Game text when started', (tester) async {
+      final container = ProviderContainer(
+        overrides: [
+          gameSetupProvider.overrideWith(
+            () => FakeGameSetupNotifier(
+              players: [
+                FakePlayer(name: 'Player 1', color: 'red', isSelected: true),
+                FakePlayer(name: 'Player 2', color: 'yellow', isSelected: true),
+              ],
+              isStarted: true,
+            ),
+          ),
+        ],
+      );
+
+      await tester.pumpWidget(
+        UncontrolledProviderScope(
+          container: container,
+          child: const MaterialApp(home: Scaffold(body: StartButtonWidget())),
+        ),
+      );
+
+      await tester.pumpAndSettle();
+
+      expect(find.text('Resume Game'), findsOneWidget);
+      expect(find.text('Start Game'), findsNothing);
+    });
+
+    testWidgets('should NOT show Clear Setup button when form is empty', (
+      tester,
+    ) async {
+      final container = ProviderContainer(
+        overrides: [
+          gameSetupProvider.overrideWith(
+            () => FakeGameSetupNotifier(players: []),
+          ),
+        ],
+      );
+
+      await tester.pumpWidget(
+        UncontrolledProviderScope(
+          container: container,
+          child: const MaterialApp(home: Scaffold(body: StartButtonWidget())),
+        ),
+      );
+
+      await tester.pumpAndSettle();
+
+      expect(find.text('Clear Setup'), findsNothing);
+    });
+
+    testWidgets('should show Clear Setup button when a player is entered', (
+      tester,
+    ) async {
+      final container = ProviderContainer(
+        overrides: [
+          gameSetupProvider.overrideWith(
+            () => FakeGameSetupNotifier(
+              players: [
+                FakePlayer(name: 'Player 1', color: 'red', isSelected: true),
+              ],
+            ),
+          ),
+        ],
+      );
+
+      await tester.pumpWidget(
+        UncontrolledProviderScope(
+          container: container,
+          child: const MaterialApp(home: Scaffold(body: StartButtonWidget())),
+        ),
+      );
+
+      await tester.pumpAndSettle();
+
+      expect(find.text('Clear Setup'), findsOneWidget);
+    });
+
+    testWidgets('should call clearAll when Clear Setup is tapped', (
+      tester,
+    ) async {
+      final notifier = FakeGameSetupNotifier(
+        players: [FakePlayer(name: 'Player 1', color: 'red', isSelected: true)],
+      );
+
+      final container = ProviderContainer(
+        overrides: [gameSetupProvider.overrideWith(() => notifier)],
+      );
+
+      await tester.pumpWidget(
+        UncontrolledProviderScope(
+          container: container,
+          child: const MaterialApp(home: Scaffold(body: StartButtonWidget())),
+        ),
+      );
+
+      await tester.pumpAndSettle();
+
+      // Tap the Clear Setup button
+      await tester.tap(find.text('Clear Setup'));
+      await tester.pumpAndSettle();
+
+      // Verify that clearAll was called
+      expect(notifier.clearAllCalled, isTrue);
     });
   });
 }
@@ -133,9 +243,11 @@ class FakePlayer {
 }
 
 class FakeGameSetupNotifier extends GameSetupNotifier {
-  FakeGameSetupNotifier({required this.players});
+  FakeGameSetupNotifier({required this.players, this.isStarted = false});
 
   final List<FakePlayer> players;
+  final bool isStarted;
+  bool clearAllCalled = false;
 
   @override
   Future<GameSetupStateEntity> build() async {
@@ -149,6 +261,12 @@ class FakeGameSetupNotifier extends GameSetupNotifier {
             ),
           )
           .toList(),
+      isStarted: isStarted,
     );
+  }
+
+  @override
+  Future<void> clearAll() async {
+    clearAllCalled = true;
   }
 }
