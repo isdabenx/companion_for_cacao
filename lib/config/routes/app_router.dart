@@ -2,7 +2,9 @@ import 'package:companion_for_cacao/config/routes/app_routes.dart';
 import 'package:companion_for_cacao/core/data/models/tile_model.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/game_setup_state_entity.dart';
 import 'package:companion_for_cacao/features/game_setup/presentation/screens/game_setup_detail_screen.dart';
+import 'package:companion_for_cacao/features/game_setup/presentation/screens/game_setup_preparation_screen.dart';
 import 'package:companion_for_cacao/features/game_setup/presentation/screens/game_setup_screen.dart';
+import 'package:companion_for_cacao/features/game_setup/presentation/screens/game_setup_tiles_screen.dart';
 import 'package:companion_for_cacao/features/home/presentation/screens/home_screen.dart';
 import 'package:companion_for_cacao/features/rule/presentation/rule_pdf_screen.dart';
 import 'package:companion_for_cacao/features/rule/presentation/rule_screen.dart';
@@ -101,6 +103,32 @@ GoRouter goRouter(Ref ref) {
             );
           }
           return GameSetupDetailScreen(gameSetup: gameSetup);
+        },
+      ),
+      GoRoute(
+        path: AppRoutes.gameSetupPreparation,
+        builder: (context, state) {
+          final gameSetup = state.extra;
+          if (gameSetup is! GameSetupStateEntity) {
+            return Scaffold(
+              appBar: AppBar(title: const Text('Error')),
+              body: const Center(child: Text('Invalid game setup data')),
+            );
+          }
+          return GameSetupPreparationScreen(gameSetup: gameSetup);
+        },
+      ),
+      GoRoute(
+        path: AppRoutes.gameSetupTiles,
+        builder: (context, state) {
+          final gameSetup = state.extra;
+          if (gameSetup is! GameSetupStateEntity) {
+            return Scaffold(
+              appBar: AppBar(title: const Text('Error')),
+              body: const Center(child: Text('Invalid game setup data')),
+            );
+          }
+          return GameSetupTilesScreen(gameSetup: gameSetup);
         },
       ),
     ],

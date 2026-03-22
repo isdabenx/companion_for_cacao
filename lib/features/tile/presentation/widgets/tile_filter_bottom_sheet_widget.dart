@@ -161,11 +161,10 @@ class _TileFilterBottomSheetWidgetState
     String label,
   ) {
     final isSelected = filterState.selectedBoardgameIds.contains(id);
-    return ChoiceChip(
+    return FilterChip(
       label: Text(
         label,
         style: AppTextStyles.bodyMedium.copyWith(
-          fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
           color: isSelected ? AppColors.white : AppColors.brown,
         ),
       ),
@@ -178,6 +177,8 @@ class _TileFilterBottomSheetWidgetState
       side: const BorderSide(color: AppColors.greenNormal),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
       showCheckmark: false,
+      visualDensity: VisualDensity.compact,
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
     );
   }
 
@@ -187,11 +188,10 @@ class _TileFilterBottomSheetWidgetState
     String type,
   ) {
     final isSelected = filterState.selectedTileTypes.contains(type);
-    return ChoiceChip(
+    return FilterChip(
       label: Text(
         type,
         style: AppTextStyles.bodyMedium.copyWith(
-          fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
           color: isSelected ? AppColors.white : AppColors.brown,
         ),
       ),
@@ -204,6 +204,8 @@ class _TileFilterBottomSheetWidgetState
       side: const BorderSide(color: AppColors.greenNormal),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
       showCheckmark: false,
+      visualDensity: VisualDensity.compact,
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
     );
   }
 }

@@ -17,12 +17,15 @@ class HomeScreen extends StatelessWidget {
     final completedFeatures = <String>[
       '🏠 Main Menu: Quick access to all functionalities.',
       '🗂 Tile Database: Access a complete database of tiles.',
-      '🎲 Game Setup: Select players, expansions, and modules.',
+      '🔍 Tile Filtering: Filter tiles based on various criteria.',
+      '🎲 Game Setup: Select players, expansions, and modules (base game).',
+      '📖 Integrated Manuals: Access manuals for the base game.',
+      '📊 UI Adaptativa: Optimitzed layout for different screen sizes.',
+      '🔄 Auto-Updater: Automatic detection of new versions.',
     ];
 
     final inProgressFeatures = <String>[
-      '📖 Integrated Manuals: Access manuals for the base game and expansions.',
-      '📊 In-Game Assistance: Quick reference for rules and tile details.',
+      '📊 In-Game Assistance: Quick reference for rules and tile details (base game).',
     ];
 
     final pendingFeatures = <String>[
@@ -30,8 +33,7 @@ class HomeScreen extends StatelessWidget {
       '🏆 Final Score Calculation: Automatic score calculator.',
       '⚙️ Customizable Settings: Personalize the game experience.',
       '🌐 Multilingual Support: Interface available in multiple languages.',
-      '🚀 Future Updates: Support for new expansions and more.',
-      '🔍 Tile Filtering: Filter tiles based on various criteria.',
+      '🚀 Expansions: Support for Chocolatl and Diamante expansions.',
     ];
 
     return UpgradeAlert(

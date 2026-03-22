@@ -3,7 +3,7 @@ description: "A companion app for the Cacao board game and its expansions,
   providing digital tools for score tracking, rule consultation,
   and game management."
 publish_to: 'none'
-version: 2.0.0+1
+version: 2.1.0+2
 
 environment:
   sdk: ^3.9.0

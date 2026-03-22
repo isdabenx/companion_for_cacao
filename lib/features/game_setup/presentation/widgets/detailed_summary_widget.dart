@@ -10,10 +10,17 @@ import 'package:companion_for_cacao/shared/widgets/responsive_grid_builder.dart'
 import 'package:companion_for_cacao/shared/widgets/selectable_chip.dart';
 import 'package:flutter/material.dart';
 
-class DetailedSummaryWidget extends StatelessWidget {
+class DetailedSummaryWidget extends StatefulWidget {
   const DetailedSummaryWidget({required this.gameSetup, super.key});
 
   final GameSetupStateEntity gameSetup;
+
+  @override
+  State<DetailedSummaryWidget> createState() => _DetailedSummaryWidgetState();
+}
+
+class _DetailedSummaryWidgetState extends State<DetailedSummaryWidget> {
+  bool _isExpanded = false;
 
   @override
   Widget build(BuildContext context) {
@@ -35,57 +42,77 @@ class DetailedSummaryWidget extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         _buildPlayersSection(),
-        _sectionDivider(),
+        _sectionDivider,
         _buildExpansionsSection(),
-        _sectionDivider(),
+        _sectionDivider,
         _buildModulesSection(),
-        _sectionDivider(),
-        _buildTilesSection(),
+        AnimatedSize(
+          duration: const Duration(milliseconds: 300),
+          curve: Curves.easeInOut,
+          child: _isExpanded
+              ? Column(children: [_sectionDivider, _buildTilesSection()])
+              : const SizedBox.shrink(),
+        ),
+        const SizedBox(height: 8),
+        Center(
+          child: TextButton.icon(
+            onPressed: () {
+              setState(() {
+                _isExpanded = !_isExpanded;
+              });
+            },
+            icon: Icon(
+              _isExpanded ? Icons.expand_less : Icons.expand_more,
+              color: AppColors.brown,
+            ),
+            label: Text(
+              _isExpanded ? 'Hide Tiles' : 'Show All Tiles',
+              style: AppTextStyles.boardgameTitlePlain.copyWith(
+                color: AppColors.brown,
+                fontSize: 16,
+              ),
+            ),
+          ),
+        ),
       ],
     );
   }
 
-  Widget _sectionDivider() {
-    return Container(
-      height: 1,
-      margin: const EdgeInsets.symmetric(vertical: 8),
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [
-            AppColors.greenNormal.withValues(alpha: 0),
-            AppColors.greenNormal.withValues(alpha: 0.5),
-            AppColors.greenNormal.withValues(alpha: 0),
-          ],
-        ),
+  Widget get _sectionDivider => Container(
+    height: 1,
+    margin: const EdgeInsets.symmetric(vertical: 8),
+    decoration: BoxDecoration(
+      gradient: LinearGradient(
+        colors: [
+          AppColors.greenNormal.withValues(alpha: 0),
+          AppColors.greenNormal.withValues(alpha: 0.5),
+          AppColors.greenNormal.withValues(alpha: 0),
+        ],
       ),
-    );
-  }
+    ),
+  );
 
   // ===== SECTIONS =====
 
   Widget _buildPlayersSection() {
-    return Builder(
-      builder: (context) {
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _sectionHeader(context, Icons.people_outline, 'Players'),
-            const SizedBox(height: 8),
-            Padding(
-              padding: const EdgeInsets.only(left: 8),
-              child: gameSetup.players.isEmpty
-                  ? _emptyText(context, 'No players selected')
-                  : _buildPlayersGrid(),
-            ),
-          ],
-        );
-      },
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _sectionHeader(context, Icons.people_outline, 'Players'),
+        const SizedBox(height: 8),
+        Padding(
+          padding: const EdgeInsets.only(left: 8),
+          child: widget.gameSetup.players.isEmpty
+              ? _emptyText(context, 'No players selected')
+              : _buildPlayersGrid(),
+        ),
+      ],
     );
   }
 
   Widget _buildPlayersGrid() {
     return ResponsiveGridBuilder(
-      itemCount: gameSetup.players.length,
+      itemCount: widget.gameSetup.players.length,
       minItemWidth: 180.0,
       minColumns: 1,
       maxColumns: 4,
@@ -93,8 +120,10 @@ class DetailedSummaryWidget extends StatelessWidget {
       verticalSpacing: 8.0,
       itemBuilder: (context, index) {
         return _PlayerRow(
-          color: AppColors.findColorByName(gameSetup.players[index].color),
-          name: gameSetup.players[index].name,
+          color: AppColors.findColorByName(
+            widget.gameSetup.players[index].color,
+          ),
+          name: widget.gameSetup.players[index].name,
           position: index + 1,
         );
       },
@@ -102,134 +131,120 @@ class DetailedSummaryWidget extends StatelessWidget {
   }
 
   Widget _buildExpansionsSection() {
-    return Builder(
-      builder: (context) {
-        // Filter out base game (id=1) - only show actual expansions
-        final expansions = gameSetup.expansions
-            .where((e) => e.id != 1)
-            .toList();
+    // Filter out base game (id=1) - only show actual expansions
+    final expansions = widget.gameSetup.expansions
+        .where((e) => e.id != 1)
+        .toList();
 
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _sectionHeader(context, Icons.extension_outlined, 'Expansions'),
-            const SizedBox(height: 8),
-            Padding(
-              padding: const EdgeInsets.only(left: 8),
-              child: expansions.isEmpty
-                  ? _emptyText(context, 'Base game only')
-                  : Wrap(
-                      spacing: 8,
-                      runSpacing: 6,
-                      children: expansions
-                          .map(
-                            (e) => _SmallChip(
-                              icon: Icons.add_circle_outline,
-                              label: e.name,
-                            ),
-                          )
-                          .toList(),
-                    ),
-            ),
-          ],
-        );
-      },
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _sectionHeader(context, Icons.extension_outlined, 'Expansions'),
+        const SizedBox(height: 8),
+        Padding(
+          padding: const EdgeInsets.only(left: 8),
+          child: expansions.isEmpty
+              ? _emptyText(context, 'Base game only')
+              : Wrap(
+                  spacing: 8,
+                  runSpacing: 6,
+                  children: expansions
+                      .map(
+                        (e) => _SmallChip(
+                          icon: Icons.add_circle_outline,
+                          label: e.name,
+                        ),
+                      )
+                      .toList(),
+                ),
+        ),
+      ],
     );
   }
 
   Widget _buildModulesSection() {
-    return Builder(
-      builder: (context) {
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _sectionHeader(context, Icons.widgets_outlined, 'Modules'),
-            const SizedBox(height: 8),
-            Padding(
-              padding: const EdgeInsets.only(left: 8),
-              child: gameSetup.modules.isEmpty
-                  ? _emptyText(context, 'No modules')
-                  : Wrap(
-                      spacing: 8,
-                      runSpacing: 6,
-                      children: gameSetup.modules
-                          .map(
-                            (m) => _SmallChip(
-                              icon: Icons.check_circle_outline,
-                              label: m.name,
-                            ),
-                          )
-                          .toList(),
-                    ),
-            ),
-          ],
-        );
-      },
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _sectionHeader(context, Icons.widgets_outlined, 'Modules'),
+        const SizedBox(height: 8),
+        Padding(
+          padding: const EdgeInsets.only(left: 8),
+          child: widget.gameSetup.modules.isEmpty
+              ? _emptyText(context, 'No modules')
+              : Wrap(
+                  spacing: 8,
+                  runSpacing: 6,
+                  children: widget.gameSetup.modules
+                      .map(
+                        (m) => _SmallChip(
+                          icon: Icons.check_circle_outline,
+                          label: m.name,
+                        ),
+                      )
+                      .toList(),
+                ),
+        ),
+      ],
     );
   }
 
   Widget _buildTilesSection() {
-    return Builder(
-      builder: (context) {
-        // Separate worker tiles (colored) from jungle tiles
-        final workerTiles = gameSetup.tiles
-            .where((t) => t.color != null)
-            .toList();
-        final jungleTiles = gameSetup.tiles
-            .where((t) => t.color == null)
-            .toList();
-        final totalTiles = gameSetup.tiles.fold(
-          0,
-          (sum, t) => sum + t.quantity,
-        );
+    // Separate worker tiles (colored) from jungle tiles
+    final workerTiles = widget.gameSetup.tiles
+        .where((t) => t.color != null)
+        .toList();
+    final jungleTiles = widget.gameSetup.tiles
+        .where((t) => t.color == null)
+        .toList();
+    final totalTiles = widget.gameSetup.tiles.fold(
+      0,
+      (sum, t) => sum + t.quantity,
+    );
 
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            _sectionHeader(
-              context,
-              Icons.grid_view_rounded,
-              'Tiles',
-              subtitle: '($totalTiles)',
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        _sectionHeader(
+          context,
+          Icons.grid_view_rounded,
+          'Tiles',
+          subtitle: '($totalTiles)',
+        ),
+        const SizedBox(height: 8),
+        if (widget.gameSetup.tiles.isEmpty)
+          _emptyText(context, 'No tiles')
+        else ...[
+          if (workerTiles.isNotEmpty) ...[
+            Padding(
+              padding: const EdgeInsets.only(left: 8),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('Workers', style: AppTextStyles.sectionSublabel),
+                  const SizedBox(height: 8),
+                  _buildTileGrid(workerTiles, showColorCircle: false),
+                  const SizedBox(height: 8),
+                ],
+              ),
             ),
-            const SizedBox(height: 8),
-            if (gameSetup.tiles.isEmpty)
-              _emptyText(context, 'No tiles')
-            else ...[
-              // Workers section
-              if (workerTiles.isNotEmpty) ...[
-                Padding(
-                  padding: const EdgeInsets.only(left: 8),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text('Workers', style: AppTextStyles.sectionSublabel),
-                      const SizedBox(height: 8),
-                      _buildTileGrid(workerTiles, showColorCircle: false),
-                      const SizedBox(height: 8),
-                    ],
-                  ),
-                ),
-              ],
-              // Jungle section
-              if (jungleTiles.isNotEmpty) ...[
-                Padding(
-                  padding: const EdgeInsets.only(left: 8),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text('Jungle', style: AppTextStyles.sectionSublabel),
-                      const SizedBox(height: 8),
-                      _buildTileGrid(jungleTiles),
-                    ],
-                  ),
-                ),
-              ],
-            ],
           ],
-        );
-      },
+          if (jungleTiles.isNotEmpty) ...[
+            Padding(
+              padding: const EdgeInsets.only(left: 8),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('Jungle', style: AppTextStyles.sectionSublabel),
+                  const SizedBox(height: 8),
+                  _buildTileGrid(jungleTiles),
+                ],
+              ),
+            ),
+          ],
+        ],
+      ],
     );
   }
 

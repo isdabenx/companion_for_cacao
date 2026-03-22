@@ -53,7 +53,10 @@ class _CustomScaffoldWidgetState extends State<CustomScaffoldWidget> {
         appBar: AppBar(
           bottom: widget.appBarBottom,
           actions: widget.actions,
-          title: Text(widget.title ?? ''),
+          title: FittedBox(
+            fit: BoxFit.scaleDown,
+            child: Text(widget.title ?? ''),
+          ),
           centerTitle: true,
           leading: widget.showBackButton
               ? null

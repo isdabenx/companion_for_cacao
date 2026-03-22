@@ -10,7 +10,7 @@
 [![Dart](https://img.shields.io/badge/Dart-3.11+-0175C2?logo=dart&logoColor=white)](https://dart.dev)
 [![License](https://img.shields.io/badge/License-CC%20BY--NC--SA%204.0-lightgrey)](LICENSE)
 [![Platform](https://img.shields.io/badge/Platform-Android-3DDC84?logo=android&logoColor=white)](https://play.google.com/store)
-[![Version](https://img.shields.io/badge/Version-2.0.0-blue)]()
+[![Version](https://img.shields.io/badge/Version-2.1.0-blue)]()
 
 *Eines digitals per millorar l'experiencia de joc: preparacio de partides, consulta de regles i calcul de puntuacions.*
 
@@ -66,26 +66,19 @@ L'objectiu es proporcionar eines digitals que complementin l'experiencia de joc 
 
 ## Funcionalitats
 
-### Disponibles (v2.0.0)
+### Disponibles (v2.1.0)
 
 | Funcionalitat | Descripcio |
 |---|---|
 | **Menu Principal** | Navegacio rapida amb menu lateral tematic |
 | **Base de Dades de Rajoles** | Cataleg complet amb imatges, descripcions i filtres de visualitzacio |
-| **Configuracio de Partida** | Stepper de 3 passos: jugadors, expansions i moduls |
-| **Preparacio Automatica** | Generacio pas a pas de la preparacio segons la configuracio triada |
+| **Filtrat de Rajoles** | Cerca i filtra rajoles per tipus, color i expansio |
+| **Configuracio de Partida** | Stepper de 3 passos: jugadors, expansions i moduls (joc base) |
+| **Reordenacio de Jugadors** | Arrossega per canviar l'ordre dels jugadors |
+| **Preparacio Automatica** | Generacio pas a pas de la preparacio (joc base) |
 | **Manual de Regles** | Visor PDF integrat del manual del joc base |
-
-### En Desenvolupament
-
-| Funcionalitat | Fase | Descripcio |
-|---|---|---|
-| Calculadora de Puntuacio | 1 | Formulari pas a pas amb suport per expansions, empats i desempats |
-| Filtre i Cerca de Rajoles | 1 | Filtrar per tipus, color, expansio i modul |
-| Selector de Primer Jugador | 1 | Aleatori tematic, rotacio per historial o manual |
-| Rajoles d'Expansions | 1 | Fitxes completes de Chocolatl i Diamante |
-| Historial de Partides | 2 | Registre de sessions amb puntuacions i estadistiques |
-| Perfils de Jugador | 2 | Estadistiques personals i rendiment per expansio |
+| **UI Adaptativa** | Layout optimitzat per a diferents mides de pantalla |
+| **Notificador d'Actualitzacions** | Detecta automaticament noves versions al Play Store |
 
 > Consulta el [Full de Ruta](#full-de-ruta) complet per a totes les fases.
 
@@ -202,8 +195,8 @@ feature/
 - [ ] Calculadora de puntuacio final
 - [x] Filtre i cerca de rajoles
 - [x] Selector de primer jugador
+- [x] Notificacio d'actualitzacio de l'app (upgrader)
 - [ ] Rajoles d'expansions completes (Chocolatl + Diamante)
-- [ ] Notificacio d'actualitzacio de l'app (upgrader)
 
 ### Fase 2 — Diferenciacio
 
