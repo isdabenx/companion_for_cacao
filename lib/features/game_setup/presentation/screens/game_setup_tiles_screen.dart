@@ -4,6 +4,7 @@ import 'package:companion_for_cacao/features/tile/presentation/widgets/filter_ic
 import 'package:companion_for_cacao/features/tile/presentation/widgets/settings_icon_widget.dart';
 import 'package:companion_for_cacao/features/tile/presentation/widgets/tile_list_grill_widget.dart';
 import 'package:companion_for_cacao/shared/widgets/custom_scaffold_widget.dart';
+import 'package:companion_for_cacao/shared/widgets/filter_active_chip.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -23,9 +24,16 @@ class GameSetupTilesScreen extends ConsumerWidget {
       title: 'Tiles in Play',
       showBackButton: true,
       actions: const [FilterIconWidget(), SettingsIconWidget()],
-      body: Padding(
-        padding: const EdgeInsets.all(8),
-        child: TileListGrillWidget(customTiles: filteredTiles),
+      body: Column(
+        children: [
+          const FilterActiveChip(),
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.all(8),
+              child: TileListGrillWidget(customTiles: filteredTiles),
+            ),
+          ),
+        ],
       ),
     );
   }

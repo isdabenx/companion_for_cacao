@@ -13,6 +13,21 @@ class TileFilterStateEntity {
   final Set<int> selectedBoardgameIds;
   final Set<String> selectedTileTypes;
 
+  /// Returns true if any filter is currently active
+  bool get hasActiveFilters =>
+      searchQuery.isNotEmpty ||
+      selectedBoardgameIds.isNotEmpty ||
+      selectedTileTypes.isNotEmpty;
+
+  /// Returns the count of active filters
+  int get activeFilterCount {
+    int count = 0;
+    if (searchQuery.isNotEmpty) count++;
+    count += selectedBoardgameIds.length;
+    count += selectedTileTypes.length;
+    return count;
+  }
+
   bool matches(TileModel tile) {
     if (searchQuery.isNotEmpty) {
       if (!tile.name.toLowerCase().contains(searchQuery.toLowerCase())) {
