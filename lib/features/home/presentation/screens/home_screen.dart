@@ -18,14 +18,10 @@ class HomeScreen extends StatelessWidget {
       '🏠 Main Menu: Quick access to all functionalities.',
       '🗂 Tile Database: Access a complete database of tiles.',
       '🔍 Tile Filtering: Filter tiles based on various criteria.',
-      '🎲 Game Setup: Select players, expansions, and modules (base game).',
+      '🎲 Game Setup Dashboard: Summary, preparation, and tiles in play (base game).',
       '📖 Integrated Manuals: Access manuals for the base game.',
       '📊 UI Adaptativa: Optimitzed layout for different screen sizes.',
       '🔄 Auto-Updater: Automatic detection of new versions.',
-    ];
-
-    final inProgressFeatures = <String>[
-      '📊 In-Game Assistance: Quick reference for rules and tile details (base game).',
     ];
 
     final pendingFeatures = <String>[
@@ -64,13 +60,6 @@ class HomeScreen extends StatelessWidget {
                 const SizedBox(height: 20),
                 const HeaderWidget(text: 'Completed Features'),
                 for (final String feature in completedFeatures)
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 4),
-                    child: Text(feature),
-                  ),
-                const SizedBox(height: 20),
-                const HeaderWidget(text: 'In-Progress Features'),
-                for (final String feature in inProgressFeatures)
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 4),
                     child: Text(feature),

@@ -73,9 +73,9 @@ L'objectiu es proporcionar eines digitals que complementin l'experiencia de joc 
 | **Menu Principal** | Navegacio rapida amb menu lateral tematic |
 | **Base de Dades de Rajoles** | Cataleg complet amb imatges, descripcions i filtres de visualitzacio |
 | **Filtrat de Rajoles** | Cerca i filtra rajoles per tipus, color i expansio |
-| **Configuracio de Partida** | Stepper de 3 passos: jugadors, expansions i moduls (joc base) |
+| **Configuracio de Partida** | Dashboard amb resum, preparacio i rajoles en joc (joc base) |
 | **Reordenacio de Jugadors** | Arrossega per canviar l'ordre dels jugadors |
-| **Preparacio Automatica** | Generacio pas a pas de la preparacio (joc base) |
+| **Preparacio Automatica** | Visualitzacio pas a pas de la preparacio (joc base) |
 | **Manual de Regles** | Visor PDF integrat del manual del joc base |
 | **UI Adaptativa** | Layout optimitzat per a diferents mides de pantalla |
 | **Notificador d'Actualitzacions** | Detecta automaticament noves versions al Play Store |
