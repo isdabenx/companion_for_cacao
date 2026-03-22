@@ -68,7 +68,7 @@ class InitializationRepositoryImpl implements InitializationRepository {
           _db.tiles,
           tilesData.map(
             (t) => TilesCompanion.insert(
-              id: Value((t as Map<String, dynamic>)['id'] as int),
+              id: (t as Map<String, dynamic>)['id'] as String,
               name: t['name'] as String,
               description: t['description'] as String,
               filenameImage: t['filenameImage'] as String,

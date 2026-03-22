@@ -14,7 +14,7 @@ class TileRepositoryImpl implements TileRepository {
   }
 
   @override
-  Future<List<TileModel>> getTilesByIds(List<int> ids) async {
+  Future<List<TileModel>> getTilesByIds(List<String> ids) async {
     final rows = await _database.getTilesByIds(ids);
     return rows.map(TileModel.fromDrift).toList();
   }

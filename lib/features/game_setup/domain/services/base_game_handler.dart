@@ -6,6 +6,28 @@ import 'package:companion_for_cacao/features/game_setup/domain/entities/preparat
 import 'package:companion_for_cacao/features/game_setup/domain/entities/preparation_phase.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/services/module_preparation_handler.dart';
 
+/// Constants for tile IDs used in game preparation.
+/// These IDs are stable identifiers that don't change with translations.
+class TileIds {
+  TileIds._();
+
+  // Worker tiles - format: base.worker_{color}_{value}
+  static String workerTile(String color, String value) =>
+      'base.worker_${color}_$value';
+
+  // Jungle tiles - format: base.jungle_{type}_{subtype}
+  static const String singlePlantation = 'base.jungle_single_plantation';
+  static const String doublePlantation = 'base.jungle_double_plantation';
+  static const String marketSelling2 = 'base.jungle_market_selling_2';
+  static const String marketSelling3 = 'base.jungle_market_selling_3';
+  static const String marketSelling4 = 'base.jungle_market_selling_4';
+  static const String goldMineValue1 = 'base.jungle_gold_mine_value_1';
+  static const String goldMineValue2 = 'base.jungle_gold_mine_value_2';
+  static const String water = 'base.jungle_water';
+  static const String sunWorshipingSite = 'base.jungle_sun_worshiping_site';
+  static const String temple = 'base.jungle_temple';
+}
+
 class BaseGameHandler implements ModulePreparationHandler {
   BaseGameHandler({
     required this.baseGame,
@@ -36,11 +58,14 @@ class BaseGameHandler implements ModulePreparationHandler {
 
     if (playerCount > 2) {
       adjustedTiles = adjustedTiles.map((tile) {
-        if (tile.name == '1-1-1-1') {
+        // Remove one 1-1-1-1 worker tile per player (for >2 players)
+        if (tile.id == TileIds.workerTile(tile.color?.name ?? '', '1-1-1-1')) {
           return tile.copyWith(quantity: tile.quantity - 1);
         }
 
-        if (playerCount > 3 && tile.name == '2-1-0-1') {
+        // Remove one 2-1-0-1 worker tile per player (for >3 players)
+        if (playerCount > 3 &&
+            tile.id == TileIds.workerTile(tile.color?.name ?? '', '2-1-0-1')) {
           return tile.copyWith(quantity: tile.quantity - 1);
         }
 
@@ -51,34 +76,35 @@ class BaseGameHandler implements ModulePreparationHandler {
     adjustedTiles.addAll(baseGame.tiles.where((tile) => tile.color == null));
 
     if (playerCount == 2) {
-      adjustedTiles = _reduceJungleTileByName(
+      // 2-player game: reduce specific jungle tiles
+      adjustedTiles = _reduceJungleTileById(
         adjustedTiles,
-        name: 'Single Plantation',
+        id: TileIds.singlePlantation,
         amount: 2,
       );
-      adjustedTiles = _reduceJungleTileByName(
+      adjustedTiles = _reduceJungleTileById(
         adjustedTiles,
-        name: 'Selling price 3',
+        id: TileIds.marketSelling3,
         amount: 1,
       );
-      adjustedTiles = _reduceJungleTileByName(
+      adjustedTiles = _reduceJungleTileById(
         adjustedTiles,
-        name: 'Value 1',
+        id: TileIds.goldMineValue1,
         amount: 1,
       );
-      adjustedTiles = _reduceJungleTileByName(
+      adjustedTiles = _reduceJungleTileById(
         adjustedTiles,
-        name: 'Water',
+        id: TileIds.water,
         amount: 1,
       );
-      adjustedTiles = _reduceJungleTileByName(
+      adjustedTiles = _reduceJungleTileById(
         adjustedTiles,
-        name: 'Sun-Worshiping Site',
+        id: TileIds.sunWorshipingSite,
         amount: 1,
       );
-      adjustedTiles = _reduceJungleTileByName(
+      adjustedTiles = _reduceJungleTileById(
         adjustedTiles,
-        name: 'Temple',
+        id: TileIds.temple,
         amount: 1,
       );
     }
@@ -147,10 +173,10 @@ class BaseGameHandler implements ModulePreparationHandler {
 
     if (players.length > 2) {
       for (final player in players) {
-        final workerTile = _findTileByNameAndColor(
+        final workerTile = _findWorkerTileByColorAndValue(
           tiles,
-          name: '1-1-1-1',
           color: player.color,
+          value: '1-1-1-1',
         );
         if (workerTile != null) {
           preparation.add(
@@ -167,10 +193,10 @@ class BaseGameHandler implements ModulePreparationHandler {
         }
 
         if (players.length > 3) {
-          final workerTile201 = _findTileByNameAndColor(
+          final workerTile201 = _findWorkerTileByColorAndValue(
             tiles,
-            name: '2-1-0-1',
             color: player.color,
+            value: '2-1-0-1',
           );
 
           if (workerTile201 != null) {
@@ -247,18 +273,19 @@ class BaseGameHandler implements ModulePreparationHandler {
     return null;
   }
 
-  TileModel? _findTileByNameAndColor(
+  TileModel? _findWorkerTileByColorAndValue(
     List<TileModel> tiles, {
-    required String name,
     required String color,
+    required String value,
   }) {
     final tileColor = _tileColorFromString(color);
     if (tileColor == null) {
       return null;
     }
 
+    final targetId = TileIds.workerTile(color, value);
     for (final tile in tiles) {
-      if (tile.name == name && tile.color == tileColor) {
+      if (tile.id == targetId && tile.color == tileColor) {
         return tile;
       }
     }
@@ -266,15 +293,15 @@ class BaseGameHandler implements ModulePreparationHandler {
     return null;
   }
 
-  List<TileModel> _reduceJungleTileByName(
+  List<TileModel> _reduceJungleTileById(
     List<TileModel> tiles, {
-    required String name,
+    required String id,
     required int amount,
   }) {
     var remaining = amount;
 
     return tiles.map((tile) {
-      if (remaining == 0 || tile.color != null || tile.name != name) {
+      if (remaining == 0 || tile.id != id) {
         return tile;
       }
 

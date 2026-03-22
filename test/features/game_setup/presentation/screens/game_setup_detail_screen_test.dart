@@ -37,7 +37,7 @@ void main() {
         ],
         tiles: [
           TileModel(
-            id: 1,
+            id: 'base.jungle_single_plantation',
             name: '1-1-1-1',
             description: '',
             quantity: 4,

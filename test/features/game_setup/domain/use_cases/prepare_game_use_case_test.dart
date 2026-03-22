@@ -2,6 +2,7 @@ import 'package:companion_for_cacao/core/data/models/boardgame_model.dart';
 import 'package:companion_for_cacao/core/data/models/tile_model.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/game_setup_state_entity.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/player_entity.dart';
+import 'package:companion_for_cacao/features/game_setup/domain/services/base_game_handler.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/use_cases/prepare_game_use_case.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -20,7 +21,7 @@ void main() {
       filenameImage: 'cacao.png',
       tiles: [
         TileModel(
-          id: 1,
+          id: TileIds.workerTile('red', '1-1-1-1'),
           boardgameId: 1,
           name: '1-1-1-1',
           description: 'Worker',
@@ -29,7 +30,7 @@ void main() {
           color: TileColor.red,
         ),
         TileModel(
-          id: 2,
+          id: TileIds.workerTile('white', '1-1-1-1'),
           boardgameId: 1,
           name: '1-1-1-1',
           description: 'Worker',
@@ -38,7 +39,7 @@ void main() {
           color: TileColor.white,
         ),
         TileModel(
-          id: 3,
+          id: TileIds.singlePlantation,
           boardgameId: 1,
           name: 'Single Plantation',
           description: 'Jungle',
@@ -67,7 +68,7 @@ void main() {
 
     // BaseGameHandler logic for 2 players reduces 'Single Plantation' by 2
     final singlePlantationTiles = result.tiles
-        .where((t) => t.name == 'Single Plantation')
+        .where((t) => t.id == TileIds.singlePlantation)
         .toList();
     expect(singlePlantationTiles.length, 1);
     expect(singlePlantationTiles.first.quantity, 2); // 4 - 2 = 2

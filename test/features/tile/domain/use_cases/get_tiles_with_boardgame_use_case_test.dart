@@ -44,7 +44,7 @@ void main() {
 
       final tiles = [
         TileModel(
-          id: 1,
+          id: 'test_tile_1',
           name: 'Tile 1',
           description: 'Desc 1',
           filenameImage: 't1.png',
@@ -52,7 +52,7 @@ void main() {
           boardgameId: 1,
         ),
         TileModel(
-          id: 2,
+          id: 'test_tile_2',
           name: 'Tile 2',
           description: 'Desc 2',
           filenameImage: 't2.png',
@@ -60,7 +60,7 @@ void main() {
           boardgameId: 2,
         ),
         TileModel(
-          id: 3,
+          id: 'test_tile_3',
           name: 'Tile 3',
           description: 'Desc 3',
           filenameImage: 't3.png',
@@ -103,7 +103,7 @@ void main() {
 
       final tiles = [
         TileModel(
-          id: 1,
+          id: 'test_tile_1',
           name: 'Tile 1',
           description: 'Desc 1',
           filenameImage: 't1.png',
@@ -113,18 +113,18 @@ void main() {
       ];
 
       when(
-        () => mockTileRepository.getTilesByIds([1]),
+        () => mockTileRepository.getTilesByIds(['test_tile_1']),
       ).thenAnswer((_) async => tiles);
       when(
         () => mockBoardgameRepository.getAllBoardgames(),
       ).thenAnswer((_) async => boardgames);
 
-      final result = await useCase.execute(idsList: [1]);
+      final result = await useCase.execute(idsList: ['test_tile_1']);
 
       expect(result.length, 1);
       expect(result[0].boardgame.value?.name, 'Cacao');
 
-      verify(() => mockTileRepository.getTilesByIds([1])).called(1);
+      verify(() => mockTileRepository.getTilesByIds(['test_tile_1'])).called(1);
       verify(() => mockBoardgameRepository.getAllBoardgames()).called(1);
       verifyNever(() => mockTileRepository.getAllTiles());
     },

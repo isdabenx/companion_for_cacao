@@ -34,7 +34,7 @@ class TileNotifier extends _$TileNotifier {
     return tiles.where((tile) => filter.matches(tile)).toList();
   }
 
-  Future<void> filterByIds(List<int> idsList) async {
+  Future<void> filterByIds(List<String> idsList) async {
     state = const AsyncLoading();
     state = await AsyncValue.guard(() async {
       final useCase = await ref.read(

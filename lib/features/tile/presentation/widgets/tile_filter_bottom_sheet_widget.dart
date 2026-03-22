@@ -133,7 +133,7 @@ class _TileFilterBottomSheetWidgetState
                 // To get the string representation we create a dummy model just to use the getter,
                 // or we could extract it to an extension. Since the app is small, let's use a dummy.
                 final dummyModel = TileModel(
-                  id: 0,
+                  id: 'dummy',
                   name: '',
                   description: '',
                   filenameImage: '',

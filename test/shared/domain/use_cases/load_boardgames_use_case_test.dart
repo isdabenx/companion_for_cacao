@@ -50,7 +50,7 @@ void main() {
 
     final tiles = [
       TileModel(
-        id: 1,
+        id: 'test_tile_1',
         name: 'Tile 1',
         description: 'Desc 1',
         filenameImage: 't1.png',
@@ -58,7 +58,7 @@ void main() {
         boardgameId: 1,
       ),
       TileModel(
-        id: 2,
+        id: 'test_tile_2',
         name: 'Tile 2',
         description: 'Desc 2',
         filenameImage: 't2.png',

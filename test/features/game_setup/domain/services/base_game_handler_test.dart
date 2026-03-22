@@ -10,15 +10,40 @@ void main() {
     late List<TileModel> allTiles;
 
     setUp(() {
-      // Mock Data
+      // Mock Data using string IDs
       allTiles = [
         // Jungle Tiles
-        _createTile(name: 'Single Plantation', quantity: 8, isJungle: true),
-        _createTile(name: 'Selling price 3', quantity: 2, isJungle: true),
-        _createTile(name: 'Water', quantity: 3, isJungle: true),
+        _createTile(
+          id: 'base.jungle_single_plantation',
+          name: 'Single Plantation',
+          quantity: 8,
+          isJungle: true,
+        ),
+        _createTile(
+          id: 'base.jungle_market_selling_3',
+          name: 'Selling price 3',
+          quantity: 2,
+          isJungle: true,
+        ),
+        _createTile(
+          id: 'base.jungle_water',
+          name: 'Water',
+          quantity: 3,
+          isJungle: true,
+        ),
         // Player Tiles (Red)
-        _createTile(name: '1-1-1-1', quantity: 4, color: 'red'),
-        _createTile(name: '2-1-0-1', quantity: 5, color: 'red'),
+        _createTile(
+          id: 'base.worker_red_1-1-1-1',
+          name: '1-1-1-1',
+          quantity: 4,
+          color: 'red',
+        ),
+        _createTile(
+          id: 'base.worker_red_2-1-0-1',
+          name: '2-1-0-1',
+          quantity: 5,
+          color: 'red',
+        ),
       ];
 
       baseGame = BoardgameModel(
@@ -61,12 +86,12 @@ void main() {
 
       // 'Single Plantation' starts with 8. 2-player rule reduces by 2. Expect 6.
       final plantation = result.firstWhere(
-        (t) => t.name == 'Single Plantation',
+        (t) => t.id == TileIds.singlePlantation,
       );
       expect(plantation.quantity, 6);
 
       // 'Selling price 3' starts with 2. 2-player rule reduces by 1. Expect 1.
-      final market = result.firstWhere((t) => t.name == 'Selling price 3');
+      final market = result.firstWhere((t) => t.id == TileIds.marketSelling3);
       expect(market.quantity, 1);
     });
 
@@ -81,7 +106,7 @@ void main() {
       final result = handler.adjustTiles(allTiles, 3);
 
       final tile1111 = result.firstWhere(
-        (t) => t.name == '1-1-1-1' && t.color.toString().contains('red'),
+        (t) => t.id == TileIds.workerTile('red', '1-1-1-1'),
       );
       // Original 4. Reduced by 1 -> 3.
       expect(tile1111.quantity, 3);
@@ -90,13 +115,14 @@ void main() {
 }
 
 TileModel _createTile({
+  required String id,
   required String name,
   required int quantity,
   bool isJungle = false,
   String? color,
 }) {
   return TileModel(
-    id: name.hashCode,
+    id: id,
     name: name,
     description: 'desc',
     filenameImage: 'img.png',

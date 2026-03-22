@@ -26,7 +26,7 @@ class Modules extends Table {
 }
 
 class Tiles extends Table {
-  IntColumn get id => integer().named('id')();
+  TextColumn get id => text().named('id')();
   TextColumn get name => text()();
   TextColumn get description => text()();
   TextColumn get filenameImage => text()();
@@ -61,7 +61,7 @@ class AppDatabase extends _$AppDatabase {
 
   Future<List<Tile>> getAllTiles() => select(tiles).get();
 
-  Future<List<Tile>> getTilesByIds(List<int> ids) {
+  Future<List<Tile>> getTilesByIds(List<String> ids) {
     return (select(tiles)..where((t) => t.id.isIn(ids))).get();
   }
 

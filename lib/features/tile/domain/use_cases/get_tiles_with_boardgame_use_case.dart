@@ -9,7 +9,7 @@ class GetTilesWithBoardgameUseCase {
 
   GetTilesWithBoardgameUseCase(this._tileRepository, this._boardgameRepository);
 
-  Future<List<TileModel>> execute({List<int>? idsList}) async {
+  Future<List<TileModel>> execute({List<String>? idsList}) async {
     final tiles = idsList != null
         ? await _tileRepository.getTilesByIds(idsList)
         : await _tileRepository.getAllTiles();

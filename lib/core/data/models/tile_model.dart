@@ -39,7 +39,7 @@ class TileModel {
 
   factory TileModel.fromJson(Map<String, dynamic> json) {
     return TileModel(
-      id: json['id'] as int,
+      id: json['id'] as String,
       name: json['name'] as String,
       description: json['description'] as String,
       filenameImage: json['filenameImage'] as String,
@@ -61,7 +61,7 @@ class TileModel {
 
   factory TileModel.fromDrift(Tile row) {
     return TileModel(
-      id: row.id,
+      id: row.id, // row.id is now String after regeneration
       name: row.name,
       description: row.description,
       filenameImage: row.filenameImage,
@@ -81,7 +81,7 @@ class TileModel {
     );
   }
 
-  final int id;
+  final String id;
   final String name;
   final String description;
   final String filenameImage;
@@ -99,7 +99,7 @@ class TileModel {
   String get typeAsString => type?.displayName ?? '';
 
   TileModel copyWith({
-    int? id,
+    String? id,
     String? name,
     String? description,
     String? filenameImage,

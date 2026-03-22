@@ -6,7 +6,7 @@ void main() {
   group('TileFilterStateEntity.matches', () {
     // Helper function to create dummy tiles
     TileModel createTile({
-      int id = 1,
+      String id = 'test_tile_1',
       String name = 'Test Tile',
       int? boardgameId,
       TileType? type,
