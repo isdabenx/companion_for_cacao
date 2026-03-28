@@ -61,7 +61,7 @@ class AppTextStyles {
 
   static TextStyle sectionTitlePlain = _sectionTitleBase;
   static TextStyle boardgameTitle = const TextStyle(
-    color: AppColors.greenDarker,
+    color: AppColors.brown,
     fontSize: 18,
     fontFamily: AppFonts.headerFont,
     shadows: [
@@ -72,7 +72,7 @@ class AppTextStyles {
     ],
   );
   static TextStyle boardgameTitlePlain = const TextStyle(
-    color: AppColors.greenDarker,
+    color: AppColors.brown,
     fontSize: 18,
     fontFamily: AppFonts.headerFont,
   );
