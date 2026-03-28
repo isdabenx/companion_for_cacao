@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:companion_for_cacao/core/data/models/tile_model.dart';
 import 'package:companion_for_cacao/core/theme/app_colors.dart';
 import 'package:companion_for_cacao/core/theme/app_text_styles.dart';
-import 'package:companion_for_cacao/features/tile/domain/entities/tile_filter_state_entity.dart';
 import 'package:companion_for_cacao/features/tile/presentation/providers/tile_filter_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

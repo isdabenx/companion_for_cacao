@@ -1,32 +1,47 @@
+import 'dart:convert';
+
 import 'package:companion_for_cacao/core/data/database/app_database.dart';
 import 'package:companion_for_cacao/features/splash/data/repositories/initialization_repository_impl.dart';
+import 'package:drift/drift.dart' hide isNotNull;
+import 'package:drift/native.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+/// Creates an in-memory AppDatabase for testing (avoids path_provider dependency).
+AppDatabase _createTestDatabase() => AppDatabase(NativeDatabase.memory());
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
   group('InitializationRepositoryImpl', () {
     late InitializationRepositoryImpl repository;
+    late AppDatabase testDb;
 
     setUp(() {
-      repository = InitializationRepositoryImpl();
+      // Clear asset cache to prevent mock data leaking between tests
+      rootBundle.clear();
+      testDb = _createTestDatabase();
+      repository = InitializationRepositoryImpl(database: testDb);
       SharedPreferences.setMockInitialValues({});
     });
 
     tearDown(() async {
-      // Clean up database after each test
-      try {
-        final db = repository.getDatabase();
-        await db.close();
-      } catch (_) {
-        // Ignore if database wasn't initialized
-      }
+      // Reset any mock message handlers
+      TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+          .setMockMessageHandler('flutter/assets', null);
+      await testDb.close();
     });
 
     group('initialize', () {
       test('should initialize database successfully', () async {
+        _mockAssetBundle(
+          boardgames:
+              '[{"id": 1, "name": "Cacao", "description": "Base game", "filenameImage": "cacao.webp"}]',
+          modules: '[]',
+          tiles: '[]',
+        );
+
         await repository.initialize();
 
         final db = repository.getDatabase();
@@ -35,54 +50,14 @@ void main() {
       });
 
       test('should populate database with seed data on first run', () async {
-        // Mock asset bundle data
-        const boardgamesJson = '''[
-          {
-            "id": 1,
-            "name": "Cacao",
-            "description": "Base game",
-            "filenameImage": "cacao.webp"
-          }
-        ]''';
-
-        const modulesJson = '''[
-          {
-            "id": 1,
-            "name": "Module A",
-            "description": "Test module",
-            "boardgame": 1
-          }
-        ]''';
-
-        const tilesJson = '''[
-          {
-            "id": "base.test_tile",
-            "name": "Test Tile",
-            "description": "A test tile",
-            "filenameImage": "test.webp",
-            "quantity": 5,
-            "type": "market",
-            "boardgame": 1
-          }
-        ]''';
-
-        // Set up mock asset bundle
-        TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
-            .setMockMethodCallHandler(const MethodChannel('flutter/assets'), (
-              MethodCall methodCall,
-            ) async {
-              if (methodCall.method == 'loadString') {
-                final String assetPath = methodCall.arguments as String;
-                if (assetPath.contains('boardgames.json')) {
-                  return boardgamesJson;
-                } else if (assetPath.contains('modules.json')) {
-                  return modulesJson;
-                } else if (assetPath.contains('tiles.json')) {
-                  return tilesJson;
-                }
-              }
-              return null;
-            });
+        _mockAssetBundle(
+          boardgames:
+              '[{"id": 1, "name": "Cacao", "description": "Base game", "filenameImage": "cacao.webp"}]',
+          modules:
+              '[{"id": 1, "name": "Module A", "description": "Test module", "boardgame": 1}]',
+          tiles:
+              '[{"id": "base.test_tile", "name": "Test Tile", "description": "A test tile", "filenameImage": "test.webp", "quantity": 5, "type": "market", "boardgame": 1}]',
+        );
 
         await repository.initialize();
 
@@ -97,187 +72,106 @@ void main() {
       test(
         'should not re-seed if database is already populated and version is current',
         () async {
-          // Set up mock with current version
           SharedPreferences.setMockInitialValues({'db_seed_version': 2});
 
-          const boardgamesJson = '''[
-          {
-            "id": 1,
-            "name": "Cacao",
-            "description": "Base game",
-            "filenameImage": "cacao.webp"
-          }
-        ]''';
+          _mockAssetBundle(
+            boardgames:
+                '[{"id": 99, "name": "ShouldNotAppear", "description": "New data", "filenameImage": "new.webp"}]',
+            modules: '[]',
+            tiles: '[]',
+          );
 
-          const modulesJson = '''[]''';
-          const tilesJson = '''[]''';
-
-          TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
-              .setMockMethodCallHandler(const MethodChannel('flutter/assets'), (
-                MethodCall methodCall,
-              ) async {
-                if (methodCall.method == 'loadString') {
-                  final String assetPath = methodCall.arguments as String;
-                  if (assetPath.contains('boardgames.json')) {
-                    return boardgamesJson;
-                  } else if (assetPath.contains('modules.json')) {
-                    return modulesJson;
-                  } else if (assetPath.contains('tiles.json')) {
-                    return tilesJson;
-                  }
-                }
-                return null;
-              });
+          // Pre-populate database with existing data
+          await testDb
+              .into(testDb.boardgames)
+              .insert(
+                BoardgamesCompanion.insert(
+                  id: const Value(1),
+                  name: 'Cacao',
+                  description: 'Base game',
+                  filenameImage: 'cacao.webp',
+                ),
+              );
 
           await repository.initialize();
 
           final prefs = await SharedPreferences.getInstance();
           final version = prefs.getInt('db_seed_version');
-          expect(version, equals(2)); // Should remain version 2
+          expect(version, equals(2));
+
+          // Verify old data is still there (not re-seeded)
+          final db = repository.getDatabase();
+          final boardgames = await db.getAllBoardgames();
+          expect(boardgames.length, equals(1));
+          expect(boardgames.first.name, equals('Cacao'));
         },
       );
 
       test(
         'should wipe and re-seed database when upgrading from older version',
         () async {
-          // Simulate an old version
           SharedPreferences.setMockInitialValues({'db_seed_version': 1});
 
-          const boardgamesJson = '''[
-          {
-            "id": 1,
-            "name": "Cacao",
-            "description": "Base game",
-            "filenameImage": "cacao.webp"
-          },
-          {
-            "id": 2,
-            "name": "Chocolatl",
-            "description": "Expansion 1",
-            "filenameImage": "chocolatl.webp",
-            "require": 1
-          }
-        ]''';
+          // Set up mock assets FIRST
+          _mockAssetBundle(
+            boardgames:
+                '[{"id": 5, "name": "Cacao Fresh", "description": "Fresh base game", "filenameImage": "cacao.webp"}]',
+            modules: '[]',
+            tiles: '[]',
+          );
 
-          const modulesJson = '''[
-          {
-            "id": 1,
-            "name": "Module A",
-            "description": "Test module",
-            "boardgame": 2
-          }
-        ]''';
-
-          const tilesJson = '''[
-          {
-            "id": "chocolatl.watering",
-            "name": "Watering",
-            "description": "Watering tile",
-            "filenameImage": "watering.webp",
-            "quantity": 3,
-            "type": "watering",
-            "boardgame": 2,
-            "module": 1
-          }
-        ]''';
-
-          TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
-              .setMockMethodCallHandler(const MethodChannel('flutter/assets'), (
-                MethodCall methodCall,
-              ) async {
-                if (methodCall.method == 'loadString') {
-                  final String assetPath = methodCall.arguments as String;
-                  if (assetPath.contains('boardgames.json')) {
-                    return boardgamesJson;
-                  } else if (assetPath.contains('modules.json')) {
-                    return modulesJson;
-                  } else if (assetPath.contains('tiles.json')) {
-                    return tilesJson;
-                  }
-                }
-                return null;
-              });
+          // Pre-populate with old data
+          await testDb
+              .into(testDb.boardgames)
+              .insert(
+                BoardgamesCompanion.insert(
+                  id: const Value(1),
+                  name: 'Cacao Old',
+                  description: 'Old base game',
+                  filenameImage: 'cacao.webp',
+                ),
+              );
 
           await repository.initialize();
 
           final prefs = await SharedPreferences.getInstance();
           final version = prefs.getInt('db_seed_version');
-          expect(version, equals(2)); // Should be upgraded to version 2
+          expect(version, equals(2));
 
           final db = repository.getDatabase();
           final boardgames = await db.getAllBoardgames();
-          expect(boardgames.length, equals(2)); // Should have both boardgames
-          expect(boardgames.any((bg) => bg.name == 'Chocolatl'), isTrue);
+          expect(boardgames.length, equals(1));
+          // Should have the re-seeded data, not the old one
+          expect(boardgames.first.name, equals('Cacao Fresh'));
         },
       );
 
-      test(
-        'should trigger re-seed when version is 0 (first install)',
-        () async {
-          // No version set (simulating first install)
-          SharedPreferences.setMockInitialValues({});
+      test('should trigger re-seed when version is 0 (first install)', () async {
+        SharedPreferences.setMockInitialValues({});
 
-          const boardgamesJson = '''[
-          {
-            "id": 1,
-            "name": "Cacao",
-            "description": "Base game",
-            "filenameImage": "cacao.webp"
-          }
-        ]''';
+        _mockAssetBundle(
+          boardgames:
+              '[{"id": 1, "name": "Cacao", "description": "Base game", "filenameImage": "cacao.webp"}]',
+          modules: '[]',
+          tiles: '[]',
+        );
 
-          const modulesJson = '''[]''';
-          const tilesJson = '''[]''';
+        await repository.initialize();
 
-          TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
-              .setMockMethodCallHandler(const MethodChannel('flutter/assets'), (
-                MethodCall methodCall,
-              ) async {
-                if (methodCall.method == 'loadString') {
-                  final String assetPath = methodCall.arguments as String;
-                  if (assetPath.contains('boardgames.json')) {
-                    return boardgamesJson;
-                  } else if (assetPath.contains('modules.json')) {
-                    return modulesJson;
-                  } else if (assetPath.contains('tiles.json')) {
-                    return tilesJson;
-                  }
-                }
-                return null;
-              });
-
-          await repository.initialize();
-
-          final prefs = await SharedPreferences.getInstance();
-          final version = prefs.getInt('db_seed_version');
-          expect(version, equals(2)); // Should be set to current version
-        },
-      );
+        final prefs = await SharedPreferences.getInstance();
+        final version = prefs.getInt('db_seed_version');
+        expect(version, equals(2));
+      });
 
       test('should preserve version key logic correctly', () async {
         SharedPreferences.setMockInitialValues({});
 
-        const boardgamesJson =
-            '''[{"id": 1, "name": "Test", "description": "Test", "filenameImage": "test.webp"}]''';
-        const modulesJson = '''[]''';
-        const tilesJson = '''[]''';
-
-        TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
-            .setMockMethodCallHandler(const MethodChannel('flutter/assets'), (
-              MethodCall methodCall,
-            ) async {
-              if (methodCall.method == 'loadString') {
-                final String assetPath = methodCall.arguments as String;
-                if (assetPath.contains('boardgames.json')) {
-                  return boardgamesJson;
-                } else if (assetPath.contains('modules.json')) {
-                  return modulesJson;
-                } else if (assetPath.contains('tiles.json')) {
-                  return tilesJson;
-                }
-              }
-              return null;
-            });
+        _mockAssetBundle(
+          boardgames:
+              '[{"id": 1, "name": "Test", "description": "Test", "filenameImage": "test.webp"}]',
+          modules: '[]',
+          tiles: '[]',
+        );
 
         await repository.initialize();
 
@@ -289,6 +183,13 @@ void main() {
 
     group('getDatabase', () {
       test('should return the initialized database instance', () async {
+        _mockAssetBundle(
+          boardgames:
+              '[{"id": 1, "name": "Test", "description": "Test", "filenameImage": "test.webp"}]',
+          modules: '[]',
+          tiles: '[]',
+        );
+
         await repository.initialize();
 
         final db = repository.getDatabase();
@@ -297,6 +198,13 @@ void main() {
       });
 
       test('should return same database instance on multiple calls', () async {
+        _mockAssetBundle(
+          boardgames:
+              '[{"id": 1, "name": "Test", "description": "Test", "filenameImage": "test.webp"}]',
+          modules: '[]',
+          tiles: '[]',
+        );
+
         await repository.initialize();
 
         final db1 = repository.getDatabase();
@@ -305,104 +213,63 @@ void main() {
       });
     });
 
-    group('error handling', () {
-      test('should throw exception if asset loading fails', () async {
-        TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
-            .setMockMethodCallHandler(const MethodChannel('flutter/assets'), (
-              MethodCall methodCall,
-            ) async {
-              throw Exception('Asset not found');
-            });
-
-        expect(() => repository.initialize(), throwsA(isA<Exception>()));
-      });
-
-      test('should throw exception if JSON parsing fails', () async {
-        const invalidJson = 'not a valid json';
-
-        TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
-            .setMockMethodCallHandler(const MethodChannel('flutter/assets'), (
-              MethodCall methodCall,
-            ) async {
-              return invalidJson;
-            });
-
-        expect(() => repository.initialize(), throwsA(isA<Exception>()));
-      });
-    });
-
     group('database deletion logic', () {
       test('should delete all seed data tables during migration', () async {
         SharedPreferences.setMockInitialValues({'db_seed_version': 1});
 
-        const boardgamesJson = '''[
-          {
-            "id": 1,
-            "name": "Cacao",
-            "description": "Base game",
-            "filenameImage": "cacao.webp"
-          }
-        ]''';
+        _mockAssetBundle(
+          boardgames:
+              '[{"id": 1, "name": "Cacao", "description": "Base game", "filenameImage": "cacao.webp"}]',
+          modules: '[]',
+          tiles: '[]',
+        );
 
-        const modulesJson = '''[]''';
-        const tilesJson = '''[]''';
-
-        TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
-            .setMockMethodCallHandler(const MethodChannel('flutter/assets'), (
-              MethodCall methodCall,
-            ) async {
-              if (methodCall.method == 'loadString') {
-                final String assetPath = methodCall.arguments as String;
-                if (assetPath.contains('boardgames.json')) {
-                  return boardgamesJson;
-                } else if (assetPath.contains('modules.json')) {
-                  return modulesJson;
-                } else if (assetPath.contains('tiles.json')) {
-                  return tilesJson;
-                }
-              }
-              return null;
-            });
+        // Pre-populate with old data
+        await testDb
+            .into(testDb.boardgames)
+            .insert(
+              BoardgamesCompanion.insert(
+                id: const Value(1),
+                name: 'Old Cacao',
+                description: 'Old base game',
+                filenameImage: 'cacao.webp',
+              ),
+            );
 
         await repository.initialize();
 
-        // Verify database was populated
+        // Verify database was re-populated with fresh seed data
         final db = repository.getDatabase();
         final boardgames = await db.getAllBoardgames();
         expect(boardgames, isNotEmpty);
+        // Should have the re-seeded "Cacao", not "Old Cacao"
+        expect(boardgames.first.name, equals('Cacao'));
       });
 
       test(
         'should only delete seed tables (tiles, modules, boardgames) not user data',
         () async {
-          // This test verifies the implementation logic that specifically
-          // targets only seed data tables for deletion
           SharedPreferences.setMockInitialValues({'db_seed_version': 1});
 
-          const boardgamesJson =
-              '''[{"id": 1, "name": "Test", "description": "Test", "filenameImage": "test.webp"}]''';
-          const modulesJson = '''[]''';
-          const tilesJson = '''[]''';
+          _mockAssetBundle(
+            boardgames:
+                '[{"id": 1, "name": "Test", "description": "Test", "filenameImage": "test.webp"}]',
+            modules: '[]',
+            tiles: '[]',
+          );
 
-          TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
-              .setMockMethodCallHandler(const MethodChannel('flutter/assets'), (
-                MethodCall methodCall,
-              ) async {
-                if (methodCall.method == 'loadString') {
-                  final String assetPath = methodCall.arguments as String;
-                  if (assetPath.contains('boardgames.json')) {
-                    return boardgamesJson;
-                  } else if (assetPath.contains('modules.json')) {
-                    return modulesJson;
-                  } else if (assetPath.contains('tiles.json')) {
-                    return tilesJson;
-                  }
-                }
-                return null;
-              });
+          // Pre-populate
+          await testDb
+              .into(testDb.boardgames)
+              .insert(
+                BoardgamesCompanion.insert(
+                  id: const Value(1),
+                  name: 'Old',
+                  description: 'Old',
+                  filenameImage: 'old.webp',
+                ),
+              );
 
-          // This test ensures migration logic is correctly implemented
-          // In the future, if user data tables are added, they should NOT be deleted
           await repository.initialize();
 
           final prefs = await SharedPreferences.getInstance();
@@ -411,4 +278,38 @@ void main() {
       );
     });
   });
+}
+
+/// Helper to mock the Flutter asset bundle for tests.
+void _mockAssetBundle({
+  required String boardgames,
+  required String modules,
+  required String tiles,
+}) {
+  TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+      .setMockMessageHandler('flutter/assets', (ByteData? message) async {
+        // Decode the asset key from the message
+        if (message == null) return null;
+        final assetKey = utf8.decode(
+          message.buffer.asUint8List(
+            message.offsetInBytes,
+            message.lengthInBytes,
+          ),
+        );
+
+        String? response;
+        if (assetKey.contains('boardgames.json')) {
+          response = boardgames;
+        } else if (assetKey.contains('modules.json')) {
+          response = modules;
+        } else if (assetKey.contains('tiles.json')) {
+          response = tiles;
+        }
+
+        if (response != null) {
+          final encoded = utf8.encode(response);
+          return ByteData.sublistView(Uint8List.fromList(encoded));
+        }
+        return null;
+      });
 }

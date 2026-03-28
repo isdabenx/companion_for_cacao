@@ -8,7 +8,7 @@ import 'package:companion_for_cacao/features/tile/presentation/providers/tile_no
 import 'package:companion_for_cacao/features/tile/presentation/providers/tile_use_case_providers.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:riverpod/riverpod.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class MockTileRepository extends Mock implements TileRepository {}
 

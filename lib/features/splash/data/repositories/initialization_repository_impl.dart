@@ -8,31 +8,34 @@ import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class InitializationRepositoryImpl implements InitializationRepository {
-  late final AppDatabase _db;
+  InitializationRepositoryImpl({AppDatabase? database}) : _db = database;
+
+  AppDatabase? _db;
   static const String _dbVersionKey = 'db_seed_version';
   static const int _currentDbVersion = 2; // Bumped to 2 for Chocolatl
 
   @override
   Future<void> initialize() async {
-    await _initializeDatabase();
+    _initializeDatabase();
     await _populateDatabase();
   }
 
   @override
   AppDatabase getDatabase() {
-    return _db;
+    return _db!;
   }
 
-  Future<void> _initializeDatabase() async {
-    _db = AppDatabase();
+  void _initializeDatabase() {
+    _db ??= AppDatabase();
   }
 
   Future<void> _populateDatabase() async {
+    final db = _db!;
     try {
       final prefs = await SharedPreferences.getInstance();
       final seededVersion = prefs.getInt(_dbVersionKey) ?? 0;
 
-      final existing = await _db.getAllBoardgames();
+      final existing = await db.getAllBoardgames();
 
       // If we have data and we're at the current version, do nothing
       if (existing.isNotEmpty && seededVersion >= _currentDbVersion) {
@@ -46,10 +49,10 @@ class InitializationRepositoryImpl implements InitializationRepository {
         // ⚠️ MUST NOT be deleted here. Create separate cleanup if needed for those tables.
         // ⚠️ Deleting user data will break game history and cause data loss.
         try {
-          await _db.batch((batch) {
-            batch.deleteAll(_db.tiles);
-            batch.deleteAll(_db.modules);
-            batch.deleteAll(_db.boardgames);
+          await db.batch((batch) {
+            batch.deleteAll(db.tiles);
+            batch.deleteAll(db.modules);
+            batch.deleteAll(db.boardgames);
           });
         } catch (e) {
           throw Exception('Error deleting old database data: $e');
@@ -66,10 +69,10 @@ class InitializationRepositoryImpl implements InitializationRepository {
       final tilesData = json.decode(tilesJson) as List<dynamic>;
 
       try {
-        await _db.batch((batch) {
+        await db.batch((batch) {
           batch
             ..insertAll(
-              _db.boardgames,
+              db.boardgames,
               boardgamesData.map(
                 (b) => BoardgamesCompanion.insert(
                   id: Value((b as Map<String, dynamic>)['id'] as int),
@@ -81,7 +84,7 @@ class InitializationRepositoryImpl implements InitializationRepository {
               ),
             )
             ..insertAll(
-              _db.modules,
+              db.modules,
               modulesData.map(
                 (m) => ModulesCompanion.insert(
                   id: Value((m as Map<String, dynamic>)['id'] as int),
@@ -92,7 +95,7 @@ class InitializationRepositoryImpl implements InitializationRepository {
               ),
             )
             ..insertAll(
-              _db.tiles,
+              db.tiles,
               tilesData.map(
                 (t) => TilesCompanion.insert(
                   id: (t as Map<String, dynamic>)['id'] as String,

@@ -44,7 +44,7 @@ class _TileListGrillWidgetState extends ConsumerState<TileListGrillWidget>
       return _buildGrid(widget.customTiles!);
     }
 
-    final tilesAsync = ref.watch(tileProvider);
+    final tilesAsync = ref.watch(filteredTilesProvider);
 
     return tilesAsync.when(
       data: _buildGrid,
