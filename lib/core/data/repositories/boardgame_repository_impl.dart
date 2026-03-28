@@ -11,19 +11,31 @@ class BoardgameRepositoryImpl implements BoardgameRepository {
 
   @override
   Future<List<BoardgameModel>> getAllBoardgames() async {
-    final rows = await _database.getAllBoardgames();
-    return rows.map(BoardgameModel.fromDrift).toList();
+    try {
+      final rows = await _database.getAllBoardgames();
+      return rows.map(BoardgameModel.fromDrift).toList();
+    } catch (e) {
+      throw Exception('Error fetching boardgames: $e');
+    }
   }
 
   @override
   Future<List<ModuleModel>> getAllModules() async {
-    final rows = await _database.getAllModules();
-    return rows.map(ModuleModel.fromDrift).toList();
+    try {
+      final rows = await _database.getAllModules();
+      return rows.map(ModuleModel.fromDrift).toList();
+    } catch (e) {
+      throw Exception('Error fetching modules: $e');
+    }
   }
 
   @override
   Future<List<TileModel>> getAllTiles() async {
-    final rows = await _database.getAllTiles();
-    return rows.map(TileModel.fromDrift).toList();
+    try {
+      final rows = await _database.getAllTiles();
+      return rows.map(TileModel.fromDrift).toList();
+    } catch (e) {
+      throw Exception('Error fetching tiles: $e');
+    }
   }
 }

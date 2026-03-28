@@ -35,7 +35,14 @@ class _TileFilterBottomSheetWidgetState
 
   @override
   Widget build(BuildContext context) {
-    final filterState = ref.watch(tileFilterProvider);
+    // Use ref.select to only rebuild when selectedBoardgameIds changes
+    final selectedBoardgameIds = ref.watch(
+      tileFilterProvider.select((state) => state.selectedBoardgameIds),
+    );
+    // Use ref.select to only rebuild when selectedTileTypes changes
+    final selectedTileTypes = ref.watch(
+      tileFilterProvider.select((state) => state.selectedTileTypes),
+    );
 
     return Padding(
       padding: EdgeInsets.only(
@@ -110,9 +117,9 @@ class _TileFilterBottomSheetWidgetState
               spacing: 8,
               runSpacing: 8,
               children: [
-                _buildBoardgameChip(ref, filterState, 1, 'Cacao'),
-                _buildBoardgameChip(ref, filterState, 2, 'Chocolatl'),
-                _buildBoardgameChip(ref, filterState, 3, 'Diamante'),
+                _buildBoardgameChip(ref, selectedBoardgameIds, 1, 'Cacao'),
+                _buildBoardgameChip(ref, selectedBoardgameIds, 2, 'Chocolatl'),
+                _buildBoardgameChip(ref, selectedBoardgameIds, 3, 'Diamante'),
               ],
             ),
             const SizedBox(height: 24),
@@ -142,7 +149,7 @@ class _TileFilterBottomSheetWidgetState
                 );
                 return _buildTypeChip(
                   ref,
-                  filterState,
+                  selectedTileTypes,
                   dummyModel.typeAsString,
                 );
               }).toList(),
@@ -156,11 +163,11 @@ class _TileFilterBottomSheetWidgetState
 
   Widget _buildBoardgameChip(
     WidgetRef ref,
-    TileFilterStateEntity filterState,
+    Set<int> selectedBoardgameIds,
     int id,
     String label,
   ) {
-    final isSelected = filterState.selectedBoardgameIds.contains(id);
+    final isSelected = selectedBoardgameIds.contains(id);
     return FilterChip(
       label: Text(
         label,
@@ -184,10 +191,10 @@ class _TileFilterBottomSheetWidgetState
 
   Widget _buildTypeChip(
     WidgetRef ref,
-    TileFilterStateEntity filterState,
+    Set<String> selectedTileTypes,
     String type,
   ) {
-    final isSelected = filterState.selectedTileTypes.contains(type);
+    final isSelected = selectedTileTypes.contains(type);
     return FilterChip(
       label: Text(
         type,

@@ -66,8 +66,8 @@ Inclou 4 mòduls independents que es poden combinar lliurement.
 - Permeten triar rajoles d'un tauler de mapa específic en lloc de la pila de jungla.
 - Les fitxes de mapa no utilitzades valen 0 or al final.
 
-### Mòdul B - La Irrigació
-- Substitueix 3 rajoles de plantació per rajoles d'irrigació.
+### Mòdul B - El Reg
+- Substitueix 3 rajoles de plantació per rajoles de reg.
 - Acció: Moure el portador d'aigua 1 casella enrere per obtenir 4 fruits de cacao per cada espai retrocedit.
 - No es pot utilitzar si el portador ja està a la posició -10.
 
@@ -171,7 +171,7 @@ Aquesta secció documenta el que li FALTA a l'aplicació en comparació amb les 
 
 ### Fitxes d'Expansions absents al JSON
 - tiles.json només conté fitxes del joc base (26 fitxes). Falten:
-  - Chocolatl: 3 fitxes irrigació, 3 cuines xocolata, 3 mercats xocolata (9 fitxes)
+  - Chocolatl: 3 fitxes reg, 3 cuines xocolata, 3 mercats xocolata (9 fitxes)
   - Diamante: 5 mines de gemmes, 3 arbres de la vida (8 fitxes)
   - Diamante Nous Treballadors: 16 fitxes noves (4 per color), incloent 0-0-0-4
   - Total faltant: ~33 fitxes
@@ -179,7 +179,7 @@ Aquesta secció documenta el que li FALTA a l'aplicació en comparació amb les 
 ### TileType enum incomplet
 Tipus actuals: player, market, plantation, goldMine, water, temple, sunWorshipingSite
 Tipus que falten per les expansions:
-- irrigation (Irrigació - Chocolatl)
+- watering (Reg - Chocolatl)
 - chocolateKitchen (Cuina de xocolata - Chocolatl)
 - chocolateMarket (Mercat de xocolata - Chocolatl)
 - gemMine (Mina de gemmes - Diamante)
@@ -187,7 +187,7 @@ Tipus que falten per les expansions:
 
 ### Lògica de substitució de fitxes per mòdul
 El setup actual NO gestiona la substitució de fitxes quan s'activa un mòdul:
-- Irrigació: substitueix 1 plantació simple + 2 dobles (4J), o 2 dobles (2J)
+- Reg: substitueix 1 plantació simple + 2 dobles (4J), o 2 dobles (2J)
 - Xocolata: substitueix 3 mines d'or + 3 mercats preu 3 (4J), o 1 mina valor 2 + 1 mina valor 1 + 2 mercats preu 3 (2J)
 - Mines Gemmes: substitueix 5 temples (4J) o 4 temples (2J)
 - Arbre Vida: substitueix 3 mines d'or (4J) o 2 mines d'or (2J)
@@ -202,8 +202,8 @@ El codi elimina fitxes treballador per 3J/4J, però NO gestiona l'eliminació de
 - -1 lloc d'adoració sol
 - -1 temple
 
-### Fitxa inicial diferent amb Irrigació
-Amb irrigació activa, la fitxa inicial canvia: es posa 1 fitxa d'aigua en lloc del mercat preu 2.
+### Fitxa inicial diferent amb Reg
+Amb reg activa, la fitxa inicial canvia: es posa 1 fitxa d'aigua en lloc del mercat preu 2.
 
 ### Mòdul Mapa — mecànica no contemplada
 - 2 tokens per jugador, tauler de mapa amb 4 fitxes (en lloc de 2)
@@ -223,7 +223,7 @@ Les 14 cabanes no tenen model de dades (ni JSON ni Drift). Caldria un HutModel o
 - Intercanvi: 4 gemmes (1 cada color) → màscara més baixa disponible
 
 ### Mòdul Emperador — preparació absent
-- Figura emperador sobre mercat preu 2 (o irrigació si activa)
+- Figura emperador sobre mercat preu 2 (o reg si activa)
 - +1 or al moure, +1 or a l'inici del torn si està a la teva rajola
 
 ### Mòdul Nous Treballadors — fitxes noves absents
@@ -248,7 +248,7 @@ Les 14 cabanes no tenen model de dades (ni JSON ni Drift). Caldria un HutModel o
 | Alta | Eliminació fitxes selva per 2J | Setup incorrecte per partides de 2 |
 | Mitjana | Model de cabanes | Necessari per calculadora de puntuació |
 | Mitjana | Gemmes i màscares | Necessari per calculadora de puntuació |
-| Mitjana | Fitxa inicial dinàmica (irrigació) | Preparació incorrecta amb irrigació |
+| Mitjana | Fitxa inicial dinàmica (reg) | Preparació incorrecta amb reg |
 | Mitjana | Nous treballadors al JSON | Catàleg incomplet |
 | Baixa | Mòdul Mapa (tokens) | Preparació incompleta |
 | Baixa | Emperador (preparació) | Preparació incompleta |

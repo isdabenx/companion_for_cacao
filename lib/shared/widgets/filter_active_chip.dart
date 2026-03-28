@@ -9,12 +9,19 @@ class FilterActiveChip extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final filter = ref.watch(tileFilterProvider);
-    final hasFilters = filter.hasActiveFilters;
+    // Use ref.select to only rebuild when hasActiveFilters changes
+    final hasFilters = ref.watch(
+      tileFilterProvider.select((state) => state.hasActiveFilters),
+    );
 
     if (!hasFilters) {
       return const SizedBox.shrink();
     }
+
+    // Use ref.select to only rebuild when activeFilterCount changes
+    final filterCount = ref.watch(
+      tileFilterProvider.select((state) => state.activeFilterCount),
+    );
 
     return Padding(
       padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
@@ -24,7 +31,7 @@ class FilterActiveChip extends ConsumerWidget {
             child: Chip(
               avatar: const Icon(Icons.filter_list, size: 18),
               label: Text(
-                '${filter.activeFilterCount} filter${filter.activeFilterCount > 1 ? 's' : ''} active',
+                '$filterCount filter${filterCount > 1 ? 's' : ''} active',
               ),
               deleteIcon: const Icon(Icons.close, size: 18),
               onDeleted: () {

@@ -8,8 +8,14 @@ class FilterIconWidget extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final filterState = ref.watch(tileFilterProvider);
-    final hasFilters = filterState.hasActiveFilters;
+    // Use ref.select to only rebuild when hasActiveFilters changes
+    final hasFilters = ref.watch(
+      tileFilterProvider.select((state) => state.hasActiveFilters),
+    );
+    // Use ref.select to only rebuild when activeFilterCount changes
+    final filterCount = ref.watch(
+      tileFilterProvider.select((state) => state.activeFilterCount),
+    );
 
     return IconButton(
       icon: Stack(
@@ -31,7 +37,7 @@ class FilterIconWidget extends ConsumerWidget {
                 ),
                 constraints: const BoxConstraints(minWidth: 16, minHeight: 16),
                 child: Text(
-                  filterState.activeFilterCount.toString(),
+                  filterCount.toString(),
                   style: TextStyle(
                     color: Theme.of(context).colorScheme.onPrimary,
                     fontSize: 10,

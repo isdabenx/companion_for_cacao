@@ -9,13 +9,21 @@ class TileRepositoryImpl implements TileRepository {
 
   @override
   Future<List<TileModel>> getAllTiles() async {
-    final rows = await _database.getAllTiles();
-    return rows.map(TileModel.fromDrift).toList();
+    try {
+      final rows = await _database.getAllTiles();
+      return rows.map(TileModel.fromDrift).toList();
+    } catch (e) {
+      throw Exception('Error fetching tiles: $e');
+    }
   }
 
   @override
   Future<List<TileModel>> getTilesByIds(List<String> ids) async {
-    final rows = await _database.getTilesByIds(ids);
-    return rows.map(TileModel.fromDrift).toList();
+    try {
+      final rows = await _database.getTilesByIds(ids);
+      return rows.map(TileModel.fromDrift).toList();
+    } catch (e) {
+      throw Exception('Error fetching tiles by IDs: $e');
+    }
   }
 }
