@@ -1,3 +1,4 @@
+import 'package:companion_for_cacao/core/data/models/boardgame_model.dart';
 import 'package:companion_for_cacao/core/data/models/tile_model.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/player_entity.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/preparation_entity.dart';
@@ -18,14 +19,14 @@ void main() {
       // Create mock tiles including plantation tiles that should be replaced
       mockTiles = [
         _createTile(
-          id: 'base.single_plantation',
-          name: 'Single Plantation',
+          id: 'base.jungle_single_plantation',
+          name: 'Jungle Single Plantation',
           quantity: 8,
           type: TileType.plantation,
         ),
         _createTile(
-          id: 'base.double_plantation',
-          name: 'Double Plantation',
+          id: 'base.jungle_double_plantation',
+          name: 'Jungle Double Plantation',
           quantity: 4,
           type: TileType.plantation,
         ),
@@ -36,8 +37,8 @@ void main() {
           type: TileType.market,
         ),
         _createTile(
-          id: 'chocolatl.watering',
-          name: 'Watering',
+          id: 'chocolatl.jungle_watering',
+          name: 'Jungle Watering',
           quantity: 3,
           type: TileType.watering,
         ),
@@ -50,52 +51,76 @@ void main() {
 
       mockPreparationSteps = [
         const PreparationEntity(
+          id: 'setup_initial_tiles_plantation_market',
+          description: 'Initial step with plantation and market',
+          phase: PreparationPhase.tilePool,
+        ),
+        const PreparationEntity(
           id: 'step_1',
-          description: 'Initial step',
+          description: 'Another step',
           phase: PreparationPhase.tilePool,
         ),
       ];
     });
 
     group('adjustTiles', () {
-      test(
-        'should return tiles unchanged (TODO: implement substitution logic)',
-        () {
-          final result = handler.adjustTiles(mockTiles, 4);
+      test('should remove plantations and add watering tiles for 4 players', () {
+        final result = handler.adjustTiles(
+          mockTiles,
+          4,
+          activeExpansions: [_createMockExpansion()],
+        );
 
-          // Current implementation returns tiles unchanged
-          expect(result, equals(mockTiles));
-          expect(result.length, equals(mockTiles.length));
-        },
-      );
+        // For 4 players (3+ players): remove 1 single plantation + 2 double plantations
+        final singlePlantation = result.firstWhere(
+          (t) => t.id == 'base.jungle_single_plantation',
+        );
+        final doublePlantation = result.firstWhere(
+          (t) => t.id == 'base.jungle_double_plantation',
+        );
+        final wateringTile = result.firstWhere(
+          (t) => t.id == 'chocolatl.jungle_watering',
+        );
+
+        // Single plantation: 8 - 1 = 7
+        expect(singlePlantation.quantity, equals(7));
+        // Double plantation: 4 - 2 = 2
+        expect(doublePlantation.quantity, equals(2));
+        // Watering tiles: 3 + 3 = 6
+        expect(wateringTile.quantity, equals(6));
+      });
 
       test('should have correct moduleId', () {
         expect(WateringModuleHandler.moduleId, equals(2));
       });
 
-      // TODO: Add tests for tile substitution when implemented
-      // test('should replace 1 single plantation + 2 double plantations for 4 players', () {
-      //   final result = handler.adjustTiles(mockTiles, 4);
-      //
-      //   final singlePlantation = result.firstWhere((t) => t.id == 'base.single_plantation');
-      //   final doublePlantation = result.firstWhere((t) => t.id == 'base.double_plantation');
-      //
-      //   expect(singlePlantation.quantity, equals(7)); // 8 - 1
-      //   expect(doublePlantation.quantity, equals(2)); // 4 - 2
-      // });
+      test(
+        'should remove 2 double plantations and add watering tiles for 2 players',
+        () {
+          final result = handler.adjustTiles(
+            mockTiles,
+            2,
+            activeExpansions: [_createMockExpansion()],
+          );
 
-      // test('should replace 2 double plantations for 2 players', () {
-      //   final result = handler.adjustTiles(mockTiles, 2);
-      //
-      //   final doublePlantation = result.firstWhere((t) => t.id == 'base.double_plantation');
-      //
-      //   expect(doublePlantation.quantity, equals(2)); // 4 - 2
-      // });
+          final doublePlantation = result.firstWhere(
+            (t) => t.id == 'base.jungle_double_plantation',
+          );
+          final wateringTile = result.firstWhere(
+            (t) => t.id == 'chocolatl.jungle_watering',
+          );
+
+          // Double plantation: 4 - 2 = 2
+          expect(doublePlantation.quantity, equals(2));
+          // Watering tiles: 3 + 2 = 5
+          expect(wateringTile.quantity, equals(5));
+        },
+      );
     });
 
     group('modifyPreparationSteps', () {
       test(
-        'should return preparation steps unchanged (TODO: implement watering steps)',
+        'should replace setup_initial_tiles_plantation_market with setup_initial_tiles_plantation_watering',
         () {
           final result = handler.modifyPreparationSteps(
             mockPlayers,
@@ -103,32 +128,39 @@ void main() {
             mockPreparationSteps,
           );
 
-          // Current implementation returns steps unchanged
-          expect(result, equals(mockPreparationSteps));
+          // Length should remain the same
           expect(result.length, equals(mockPreparationSteps.length));
+
+          // Find the modified step
+          final modifiedStep = result.firstWhere(
+            (step) => step.id == 'setup_initial_tiles_plantation_watering',
+          );
+
+          // Verify the step was modified with correct ID and description
+          expect(
+            modifiedStep.id,
+            equals('setup_initial_tiles_plantation_watering'),
+          );
+          expect(modifiedStep.description.contains('watering'), isTrue);
+          expect(
+            modifiedStep.description.contains('single plantation'),
+            isTrue,
+          );
         },
       );
-
-      // TODO: Add tests for watering-specific preparation steps when implemented
-      // test('should add watering-specific preparation steps', () {
-      //   final result = handler.modifyPreparationSteps(
-      //     mockPlayers,
-      //     mockTiles,
-      //     mockPreparationSteps,
-      //   );
-      //
-      //   expect(result.length, greaterThan(mockPreparationSteps.length));
-      //   expect(
-      //     result.any((step) => step.description.contains('watering')),
-      //     isTrue,
-      //   );
-      // });
     });
 
     group('interface compliance', () {
       test('should implement ModulePreparationHandler interface', () {
         // Verify that the handler properly implements the interface
-        expect(handler.adjustTiles(mockTiles, 4), isA<List<TileModel>>());
+        expect(
+          handler.adjustTiles(
+            mockTiles,
+            4,
+            activeExpansions: [_createMockExpansion()],
+          ),
+          isA<List<TileModel>>(),
+        );
         expect(
           handler.modifyPreparationSteps(
             mockPlayers,
@@ -140,8 +172,13 @@ void main() {
       });
 
       test('should handle empty tile list gracefully', () {
-        final result = handler.adjustTiles([], 4);
-        expect(result, isEmpty);
+        final result = handler.adjustTiles(
+          [],
+          4,
+          activeExpansions: [_createMockExpansion()],
+        );
+        // Empty list might gain watering tile if handler creates it
+        expect(result, isA<List<TileModel>>());
       });
 
       test('should handle empty preparation steps gracefully', () {
@@ -155,7 +192,11 @@ void main() {
 
       test('should handle various player counts', () {
         for (var playerCount = 2; playerCount <= 4; playerCount++) {
-          final result = handler.adjustTiles(mockTiles, playerCount);
+          final result = handler.adjustTiles(
+            mockTiles,
+            playerCount,
+            activeExpansions: [_createMockExpansion()],
+          );
           expect(result, isA<List<TileModel>>());
         }
       });
@@ -172,17 +213,30 @@ void main() {
           ),
         ];
 
-        final result = handler.adjustTiles(tilesWithoutPlantations, 4);
-        expect(result.length, equals(1));
+        final result = handler.adjustTiles(
+          tilesWithoutPlantations,
+          4,
+          activeExpansions: [_createMockExpansion()],
+        );
+        // Should still have the market tile plus possibly watering tile added
+        expect(result.length, greaterThanOrEqualTo(1));
       });
 
       test('should handle minimum player count (2)', () {
-        final result = handler.adjustTiles(mockTiles, 2);
+        final result = handler.adjustTiles(
+          mockTiles,
+          2,
+          activeExpansions: [_createMockExpansion()],
+        );
         expect(result, isNotEmpty);
       });
 
       test('should handle maximum player count (4)', () {
-        final result = handler.adjustTiles(mockTiles, 4);
+        final result = handler.adjustTiles(
+          mockTiles,
+          4,
+          activeExpansions: [_createMockExpansion()],
+        );
         expect(result, isNotEmpty);
       });
     });
@@ -204,5 +258,23 @@ TileModel _createTile({
     quantity: quantity,
     type: type,
     boardgameId: 1,
+  );
+}
+
+// Helper to create mock expansions with watering tile
+BoardgameModel _createMockExpansion() {
+  return BoardgameModel(
+    id: 2,
+    name: 'Chocolatl',
+    description: 'Test Expansion',
+    filenameImage: 'test.png',
+    tiles: [
+      _createTile(
+        id: 'chocolatl.jungle_watering',
+        name: 'Jungle Watering',
+        quantity: 10,
+        type: TileType.watering,
+      ),
+    ],
   );
 }

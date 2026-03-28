@@ -40,7 +40,11 @@ class BaseGameHandler implements ModulePreparationHandler {
   final List<String> selectedColors;
 
   @override
-  List<TileModel> adjustTiles(List<TileModel> tiles, int playerCount) {
+  List<TileModel> adjustTiles(
+    List<TileModel> tiles,
+    int playerCount, {
+    required List<BoardgameModel> activeExpansions,
+  }) {
     var adjustedTiles = <TileModel>[...tiles];
 
     for (final color in selectedColors) {

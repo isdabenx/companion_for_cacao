@@ -1,3 +1,4 @@
+import 'package:companion_for_cacao/core/data/models/boardgame_model.dart';
 import 'package:companion_for_cacao/core/data/models/tile_model.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/player_entity.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/preparation_entity.dart';
@@ -16,7 +17,11 @@ class GemMinesModuleHandler implements ModulePreparationHandler {
   static const int moduleId = 5;
 
   @override
-  List<TileModel> adjustTiles(List<TileModel> tiles, int playerCount) {
+  List<TileModel> adjustTiles(
+    List<TileModel> tiles,
+    int playerCount, {
+    required List<BoardgameModel> activeExpansions,
+  }) {
     // TODO: Implement gem mines tile substitutions.
     return tiles;
   }

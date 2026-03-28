@@ -66,7 +66,11 @@ void main() {
           selectedColors: ['red'],
         );
 
-        final result = handler.adjustTiles(allTiles, 4);
+        final result = handler.adjustTiles(
+          allTiles,
+          4,
+          activeExpansions: [baseGame],
+        );
 
         // Should contain Red tiles and Jungle tiles
         expect(result.any((t) => t.color.toString().contains('red')), isTrue);
@@ -82,7 +86,11 @@ void main() {
       );
 
       // 2 Players -> reduce specific tiles
-      final result = handler.adjustTiles(allTiles, 2);
+      final result = handler.adjustTiles(
+        allTiles,
+        2,
+        activeExpansions: [baseGame],
+      );
 
       // 'Single Plantation' starts with 8. 2-player rule reduces by 2. Expect 6.
       final plantation = result.firstWhere(
@@ -103,7 +111,11 @@ void main() {
       );
 
       // 3 Players -> '1-1-1-1' reduced by 1
-      final result = handler.adjustTiles(allTiles, 3);
+      final result = handler.adjustTiles(
+        allTiles,
+        3,
+        activeExpansions: [baseGame],
+      );
 
       final tile1111 = result.firstWhere(
         (t) => t.id == TileIds.workerTile('red', '1-1-1-1'),

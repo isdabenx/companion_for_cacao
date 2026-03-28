@@ -1,6 +1,10 @@
 import 'package:companion_for_cacao/core/theme/app_colors.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/game_setup_state_entity.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/services/base_game_handler.dart';
+import 'package:companion_for_cacao/features/game_setup/domain/services/handlers/chocolate_module_handler.dart';
+import 'package:companion_for_cacao/features/game_setup/domain/services/handlers/huts_module_handler.dart';
+import 'package:companion_for_cacao/features/game_setup/domain/services/handlers/map_module_handler.dart';
+import 'package:companion_for_cacao/features/game_setup/domain/services/handlers/watering_module_handler.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/services/preparation_pipeline.dart';
 
 class PrepareGameUseCase {
@@ -25,7 +29,12 @@ class PrepareGameUseCase {
         activeExpansions: currentSetup.expansions,
         selectedColors: filteredColors,
       ),
-      moduleHandlers: const {},
+      moduleHandlers: {
+        MapModuleHandler.moduleId: MapModuleHandler(),
+        WateringModuleHandler.moduleId: WateringModuleHandler(),
+        ChocolateModuleHandler.moduleId: ChocolateModuleHandler(),
+        HutsModuleHandler.moduleId: HutsModuleHandler(),
+      },
     );
 
     final result = pipeline.execute(

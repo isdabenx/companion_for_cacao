@@ -1,3 +1,4 @@
+import 'package:companion_for_cacao/core/data/models/boardgame_model.dart';
 import 'package:companion_for_cacao/core/data/models/tile_model.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/player_entity.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/preparation_entity.dart';
@@ -9,8 +10,13 @@ abstract class ModulePreparationHandler {
   /// Adjusts the tile pool based on module rules.
   /// [tiles] is the current mutable list of tiles.
   /// [playerCount] is the number of selected players.
+  /// [activeExpansions] provides access to expansion tile definitions.
   /// Returns the modified tile list.
-  List<TileModel> adjustTiles(List<TileModel> tiles, int playerCount);
+  List<TileModel> adjustTiles(
+    List<TileModel> tiles,
+    int playerCount, {
+    required List<BoardgameModel> activeExpansions,
+  });
 
   /// Modifies preparation steps for this module.
   /// [players] is the list of selected players.

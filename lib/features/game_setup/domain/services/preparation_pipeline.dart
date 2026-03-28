@@ -20,7 +20,11 @@ class PreparationPipeline {
   ({List<TileModel> tiles, List<PreparationEntity> preparation}) execute(
     GameSetupStateEntity state,
   ) {
-    var tiles = baseHandler.adjustTiles([], state.players.length);
+    var tiles = baseHandler.adjustTiles(
+      [],
+      state.players.length,
+      activeExpansions: state.expansions,
+    );
     var preparation = baseHandler.modifyPreparationSteps(
       state.players,
       tiles,
@@ -33,7 +37,11 @@ class PreparationPipeline {
         continue;
       }
 
-      tiles = handler.adjustTiles(tiles, state.players.length);
+      tiles = handler.adjustTiles(
+        tiles,
+        state.players.length,
+        activeExpansions: state.expansions,
+      );
       preparation = handler.modifyPreparationSteps(
         state.players,
         tiles,
@@ -41,6 +49,9 @@ class PreparationPipeline {
       );
     }
 
-    return (tiles: tiles, preparation: preparation);
+    // Filter out tiles with quantity == 0
+    final filteredTiles = tiles.where((t) => t.quantity > 0).toList();
+
+    return (tiles: filteredTiles, preparation: preparation);
   }
 }
