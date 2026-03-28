@@ -13,10 +13,16 @@ class Assets {
   static const String boardgamesJson = 'assets/initial_data/boardgames.json';
 
   static const String boardgameCacao = '${imagesBoardgamePath}cacao.webp';
+  static const String boardgameChocolatl =
+      '${imagesBoardgamePath}cacao_chocolatl.webp';
+  static const String boardgameDiamante =
+      '${imagesBoardgamePath}cacao_diamante.webp';
 
   static const String ruleCacaoPdf = 'assets/rules/cacao_rules_en.pdf';
   static const String ruleCacaoOverviewPdf =
       'assets/rules/cacao_overview_en.pdf';
+  static const String ruleCacaoChocolatlPdf =
+      'assets/rules/cacao_chocolatl_rules_en.pdf';
 
   static const String preparationVillagePrefix =
       'assets/images/preparation/village_board_';

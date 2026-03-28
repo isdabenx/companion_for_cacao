@@ -17,86 +17,88 @@ class RuleScreen extends StatelessWidget {
     return CustomScaffoldWidget(
       title: 'Rules',
       body: ContainerFullStyleWidget(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            GestureDetector(
-              onTap: () {
-                unawaited(
-                  context.push(
-                    AppRoutes.rulePdf,
-                    extra: const <String, String>{
-                      'title': 'Instructions',
-                      'pdfPath': Assets.ruleCacaoPdf,
-                    },
-                  ),
-                );
-              },
-              child: Card(
-                color: AppColors.greenNormal,
-                elevation: 4,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: Row(
-                    children: [
-                      const CircleAvatar(
-                        backgroundImage: AssetImage(Assets.boardgameCacao),
-                        radius: 30,
-                      ),
-                      const SizedBox(width: 16),
-                      Text(
-                        'Instructions',
-                        style: AppTextStyles.titleTextStyle.copyWith(
-                          fontSize: 24,
-                        ),
-                      ),
-                    ],
-                  ),
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _buildSectionHeader('Base Game'),
+              _buildRuleCard(
+                context,
+                title: 'Instructions',
+                pdfPath: Assets.ruleCacaoPdf,
+                imagePath: Assets.boardgameCacao,
+              ),
+              const SizedBox(height: 12),
+              _buildRuleCard(
+                context,
+                title: 'Overview',
+                pdfPath: Assets.ruleCacaoOverviewPdf,
+                imagePath: Assets.boardgameCacao,
+              ),
+              const SizedBox(height: 24),
+              _buildSectionHeader('Expansion: Chocolatl'),
+              _buildRuleCard(
+                context,
+                title: 'Chocolatl Rules',
+                pdfPath: Assets.ruleCacaoChocolatlPdf,
+                imagePath: Assets.boardgameChocolatl,
+              ),
+              const SizedBox(height: 16),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildSectionHeader(String title) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 4),
+      child: Text(
+        title.toUpperCase(),
+        style: AppTextStyles.titleTextStyle.copyWith(
+          fontSize: 18,
+          color: AppColors.brown,
+          letterSpacing: 1.2,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildRuleCard(
+    BuildContext context, {
+    required String title,
+    required String pdfPath,
+    required String imagePath,
+  }) {
+    return GestureDetector(
+      onTap: () {
+        unawaited(
+          context.push(
+            AppRoutes.rulePdf,
+            extra: <String, String>{'title': title, 'pdfPath': pdfPath},
+          ),
+        );
+      },
+      child: Card(
+        color: AppColors.greenNormal,
+        elevation: 4,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Row(
+            children: [
+              CircleAvatar(backgroundImage: AssetImage(imagePath), radius: 30),
+              const SizedBox(width: 16),
+              Expanded(
+                child: Text(
+                  title,
+                  style: AppTextStyles.titleTextStyle.copyWith(fontSize: 22),
                 ),
               ),
-            ),
-            GestureDetector(
-              onTap: () {
-                unawaited(
-                  context.push(
-                    AppRoutes.rulePdf,
-                    extra: const <String, String>{
-                      'title': 'Overview',
-                      'pdfPath': Assets.ruleCacaoOverviewPdf,
-                    },
-                  ),
-                );
-              },
-              child: Card(
-                color: AppColors.greenNormal,
-                elevation: 4,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: Row(
-                    children: [
-                      const CircleAvatar(
-                        backgroundImage: AssetImage(Assets.boardgameCacao),
-                        radius: 30,
-                      ),
-                      const SizedBox(width: 16),
-                      Text(
-                        'Overview',
-                        style: AppTextStyles.titleTextStyle.copyWith(
-                          fontSize: 24,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-          ],
+              const Icon(Icons.picture_as_pdf, color: Colors.white70),
+            ],
+          ),
         ),
       ),
     );
