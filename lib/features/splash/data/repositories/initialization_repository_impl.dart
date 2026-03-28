@@ -5,9 +5,12 @@ import 'package:companion_for_cacao/core/data/database/app_database.dart';
 import 'package:companion_for_cacao/features/splash/domain/repositories/initialization_repository.dart';
 import 'package:drift/drift.dart';
 import 'package:flutter/services.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class InitializationRepositoryImpl implements InitializationRepository {
   late final AppDatabase _db;
+  static const String _dbVersionKey = 'db_seed_version';
+  static const int _currentDbVersion = 2; // Bumped to 2 for Chocolatl
 
   @override
   Future<void> initialize() async {
@@ -25,9 +28,23 @@ class InitializationRepositoryImpl implements InitializationRepository {
   }
 
   Future<void> _populateDatabase() async {
+    final prefs = await SharedPreferences.getInstance();
+    final seededVersion = prefs.getInt(_dbVersionKey) ?? 0;
+
     final existing = await _db.getAllBoardgames();
-    if (existing.isNotEmpty) {
+
+    // If we have data and we're at the current version, do nothing
+    if (existing.isNotEmpty && seededVersion >= _currentDbVersion) {
       return;
+    }
+
+    // If upgrading from an older version, wipe the tables to re-seed fresh data
+    if (existing.isNotEmpty && seededVersion < _currentDbVersion) {
+      await _db.batch((batch) {
+        batch.deleteAll(_db.tiles);
+        batch.deleteAll(_db.modules);
+        batch.deleteAll(_db.boardgames);
+      });
     }
 
     final boardgamesJson = await rootBundle.loadString(Assets.boardgamesJson);
@@ -77,9 +94,12 @@ class InitializationRepositoryImpl implements InitializationRepository {
               color: Value(t['color'] as String?),
               boardgameId: t['boardgame'] as int,
               moduleId: Value(t['module'] as int?),
+              hutCost: Value(t['hutCost'] as int?),
             ),
           ),
         );
     });
+
+    await prefs.setInt(_dbVersionKey, _currentDbVersion);
   }
 }

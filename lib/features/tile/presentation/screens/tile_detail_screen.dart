@@ -38,8 +38,12 @@ class TileDetailScreen extends ConsumerWidget {
                   tag: 'tile-image-${tile.filenameImage}',
                   child: Material(
                     color: Colors.transparent,
-                    child: Image.asset(
-                      '${Assets.imagesTilePath}${tile.filenameImage}',
+                    child: AspectRatio(
+                      aspectRatio: 1,
+                      child: Image.asset(
+                        '${Assets.imagesTilePath}${tile.filenameImage}',
+                        fit: BoxFit.contain,
+                      ),
                     ),
                   ),
                 ),

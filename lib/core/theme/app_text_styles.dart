@@ -166,8 +166,10 @@ class AppTextStyles {
     fontWeight: FontWeight.bold,
     color: AppColors.greenNormal,
     shadows: [
-      Shadow(offset: Offset(1, 1), color: AppColors.black, blurRadius: 4),
-      Shadow(offset: Offset(-1, -1), color: AppColors.black, blurRadius: 4),
+      Shadow(offset: Offset(0, 0), color: AppColors.black, blurRadius: 4),
+      Shadow(offset: Offset(0, 0), color: AppColors.black, blurRadius: 4),
+      Shadow(offset: Offset(0, 0), color: AppColors.black, blurRadius: 8),
+      Shadow(offset: Offset(0, 0), color: AppColors.black, blurRadius: 8),
     ],
   );
 

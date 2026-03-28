@@ -35,6 +35,7 @@ class Tiles extends Table {
   TextColumn get color => text().nullable()();
   IntColumn get boardgameId => integer().references(Boardgames, #id)();
   IntColumn get moduleId => integer().nullable().references(Modules, #id)();
+  IntColumn get hutCost => integer().nullable()();
 
   @override
   Set<Column<Object>> get primaryKey => {id};
@@ -45,7 +46,22 @@ class AppDatabase extends _$AppDatabase {
   AppDatabase([QueryExecutor? executor]) : super(executor ?? _openConnection());
 
   @override
-  int get schemaVersion => 1;
+  int get schemaVersion => 2;
+
+  @override
+  MigrationStrategy get migration {
+    return MigrationStrategy(
+      onCreate: (Migrator m) async {
+        await m.createAll();
+      },
+      onUpgrade: (Migrator m, int from, int to) async {
+        if (from < 2) {
+          // Add the hutCost column to the Tiles table
+          await m.addColumn(tiles, tiles.hutCost);
+        }
+      },
+    );
+  }
 
   static QueryExecutor _openConnection() {
     return driftDatabase(name: 'companion_for_cacao');

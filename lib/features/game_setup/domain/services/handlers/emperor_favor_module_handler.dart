@@ -6,11 +6,11 @@ import 'package:companion_for_cacao/features/game_setup/domain/services/module_p
 /// Handler for the Emperor's Favor Module (Diamante expansion, Module C).
 ///
 /// Rules:
-/// - Adds the Emperor figure to the initial market tile (or irrigation tile).
+/// - Adds the Emperor figure to the initial market tile (or watering tile).
 /// - Grants gold when Emperor moves or starts a turn on a player's tile.
 ///
 /// TODO: Implement preparation step to place Emperor on correct initial tile.
-/// TODO: Implement any module-specific setup dependencies with Irrigation.
+/// TODO: Implement any module-specific setup dependencies with Watering.
 class EmperorFavorModuleHandler implements ModulePreparationHandler {
   static const int moduleId = 7;
 

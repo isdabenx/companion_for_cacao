@@ -17,6 +17,16 @@ extension TileTypeExtension on TileType {
         return 'Temple';
       case TileType.sunWorshipingSite:
         return 'Sun-Worshiping Site';
+      case TileType.watering:
+        return 'Watering';
+      case TileType.chocolateKitchen:
+        return 'Chocolate Kitchen';
+      case TileType.chocolateMarket:
+        return 'Chocolate Market';
+      case TileType.mapTile:
+        return 'Map Tile';
+      case TileType.hut:
+        return 'Hut';
     }
   }
 }

@@ -11,6 +11,12 @@ enum TileType {
   water,
   temple,
   sunWorshipingSite,
+  // Chocolatl expansion
+  watering,
+  chocolateKitchen,
+  chocolateMarket,
+  mapTile,
+  hut,
 }
 
 enum TileColor { red, purple, white, yellow }
@@ -32,6 +38,7 @@ class TileModel {
     this.color,
     this.boardgameId,
     this.moduleId,
+    this.hutCost,
     BoardgameModel? boardgame,
     ModuleModel? module,
   }) : boardgame = ModelLink<BoardgameModel>(boardgame),
@@ -56,6 +63,7 @@ class TileModel {
           : null,
       boardgameId: json['boardgame'] as int,
       moduleId: json['module'] as int?,
+      hutCost: json['hutCost'] as int?,
     );
   }
 
@@ -78,6 +86,7 @@ class TileModel {
           : null,
       boardgameId: row.boardgameId,
       moduleId: row.moduleId,
+      hutCost: row.hutCost,
     );
   }
 
@@ -95,6 +104,7 @@ class TileModel {
 
   final int? boardgameId;
   final int? moduleId;
+  final int? hutCost;
 
   String get typeAsString => type?.displayName ?? '';
 
@@ -108,6 +118,7 @@ class TileModel {
     TileColor? color,
     int? boardgameId,
     int? moduleId,
+    int? hutCost,
     BoardgameModel? boardgame,
     ModuleModel? module,
     bool clearBoardgame = false,
@@ -123,6 +134,7 @@ class TileModel {
       color: color ?? this.color,
       boardgameId: boardgameId ?? this.boardgameId,
       moduleId: moduleId ?? this.moduleId,
+      hutCost: hutCost ?? this.hutCost,
       boardgame: clearBoardgame ? null : (boardgame ?? this.boardgame.value),
       module: clearModule ? null : (module ?? this.module.value),
     );

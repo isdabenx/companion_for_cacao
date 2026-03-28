@@ -25,10 +25,13 @@ class CardTileImageWidget extends StatelessWidget {
       children: [
         Hero(
           tag: 'tile-image-$filenameImage',
-          child: Image.asset(
-            '${Assets.imagesTilePath}$filenameImage',
-            fit: BoxFit.cover,
-            width: double.infinity,
+          child: AspectRatio(
+            aspectRatio: 1,
+            child: Image.asset(
+              '${Assets.imagesTilePath}$filenameImage',
+              fit: BoxFit.contain,
+              width: double.infinity,
+            ),
           ),
         ),
         if (badgeTypeInImage)
