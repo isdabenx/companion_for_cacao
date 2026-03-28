@@ -15,6 +15,7 @@ class SettingsRepositoryImpl implements SettingsRepository {
         badgeTypeInText: prefs.getBool('badgeTypeInText') ?? true,
         boardgameInTitle: prefs.getBool('boardgameInTitle') ?? true,
         showQuantity: prefs.getBool('showQuantity') ?? true,
+        compactTileLayout: prefs.getBool('compactTileLayout') ?? false,
       );
     } catch (e, stackTrace) {
       debugPrint('Error loading tile settings: $e\n$stackTrace');
@@ -32,6 +33,7 @@ class SettingsRepositoryImpl implements SettingsRepository {
       await prefs.setBool('badgeTypeInText', current.badgeTypeInText);
       await prefs.setBool('boardgameInTitle', current.boardgameInTitle);
       await prefs.setBool('showQuantity', current.showQuantity);
+      await prefs.setBool('compactTileLayout', current.compactTileLayout);
     } catch (e, stackTrace) {
       debugPrint('Error saving tile settings: $e\n$stackTrace');
     }

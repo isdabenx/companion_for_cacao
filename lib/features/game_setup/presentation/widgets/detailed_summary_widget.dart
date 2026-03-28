@@ -4,22 +4,25 @@ import 'package:companion_for_cacao/core/theme/app_breakpoints.dart';
 import 'package:companion_for_cacao/core/theme/app_colors.dart';
 import 'package:companion_for_cacao/core/theme/app_text_styles.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/game_setup_state_entity.dart';
+import 'package:companion_for_cacao/features/tile/presentation/providers/tile_settings_notifier.dart';
 import 'package:companion_for_cacao/shared/widgets/circle_badge.dart';
 import 'package:companion_for_cacao/shared/widgets/container_full_style_widget.dart';
 import 'package:companion_for_cacao/shared/widgets/responsive_grid_builder.dart';
 import 'package:companion_for_cacao/shared/widgets/selectable_chip.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class DetailedSummaryWidget extends StatefulWidget {
+class DetailedSummaryWidget extends ConsumerStatefulWidget {
   const DetailedSummaryWidget({required this.gameSetup, super.key});
 
   final GameSetupStateEntity gameSetup;
 
   @override
-  State<DetailedSummaryWidget> createState() => _DetailedSummaryWidgetState();
+  ConsumerState<DetailedSummaryWidget> createState() =>
+      _DetailedSummaryWidgetState();
 }
 
-class _DetailedSummaryWidgetState extends State<DetailedSummaryWidget> {
+class _DetailedSummaryWidgetState extends ConsumerState<DetailedSummaryWidget> {
   bool _isExpanded = false;
 
   @override
@@ -249,10 +252,13 @@ class _DetailedSummaryWidgetState extends State<DetailedSummaryWidget> {
   }
 
   Widget _buildTileGrid(List<TileModel> tiles, {bool showColorCircle = true}) {
+    final tileSettings = ref.watch(tileSettingsProvider.select((s) => s.value));
+    final useCompact = tileSettings?.compactTileLayout ?? true;
+
     return ResponsiveGridBuilder(
       itemCount: tiles.length,
-      minItemWidth: 150.0,
-      minColumns: 2,
+      minItemWidth: useCompact ? 120.0 : 150.0,
+      minColumns: useCompact ? 3 : 2,
       maxColumns: 4,
       horizontalSpacing: 12.0,
       verticalSpacing: 8.0,
@@ -394,73 +400,87 @@ class _TileChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        // Small tile image
-        Container(
-          width: 32,
-          height: 32,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(4),
-            border: Border.all(color: AppColors.brown.withValues(alpha: 0.3)),
-          ),
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(3),
-            child: Image.asset(
-              '${Assets.imagesTilePath}$imagePath',
-              fit: BoxFit.cover,
-              errorBuilder: (context, error, stackTrace) {
-                return Container(
-                  color: AppColors.greenLight,
-                  child: Icon(
-                    Icons.image_outlined,
-                    size: 16,
-                    color: AppColors.brown.withValues(alpha: 0.5),
-                  ),
-                );
-              },
-            ),
-          ),
-        ),
-        const SizedBox(width: 6),
-        // Color circle if applicable and enabled
-        if (showColorCircle && color != null) ...[
-          CircleBadge(
-            color: color!,
-            size: 14,
-            borderColor: AppColors.brown,
-            borderWidth: 2,
-            boxShadow: [
-              BoxShadow(
-                color: AppColors.brown.withValues(alpha: 0.3),
-                blurRadius: 4,
-                offset: const Offset(0, 2),
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final isCompact = constraints.maxWidth < 130;
+        return Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            // Small tile image
+            Container(
+              width: isCompact ? 28 : 32,
+              height: isCompact ? 28 : 32,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(4),
+                border: Border.all(
+                  color: AppColors.brown.withValues(alpha: 0.3),
+                ),
               ),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(3),
+                child: Image.asset(
+                  '${Assets.imagesTilePath}$imagePath',
+                  fit: BoxFit.cover,
+                  errorBuilder: (context, error, stackTrace) {
+                    return Container(
+                      color: AppColors.greenLight,
+                      child: Icon(
+                        Icons.image_outlined,
+                        size: 16,
+                        color: AppColors.brown.withValues(alpha: 0.5),
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ),
+            const SizedBox(width: 6),
+            // Color circle if applicable and enabled
+            if (showColorCircle && color != null) ...[
+              CircleBadge(
+                color: color!,
+                size: isCompact ? 12 : 14,
+                borderColor: AppColors.brown,
+                borderWidth: 2,
+                boxShadow: [
+                  BoxShadow(
+                    color: AppColors.brown.withValues(alpha: 0.3),
+                    blurRadius: 4,
+                    offset: const Offset(0, 2),
+                  ),
+                ],
+              ),
+              const SizedBox(width: 4),
             ],
-          ),
-          const SizedBox(width: 4),
-        ],
-        // Name (flexible to shrink)
-        Flexible(
-          child: Text(
-            name,
-            style: AppTextStyles.tileNameSmall,
-            overflow: TextOverflow.ellipsis,
-            maxLines: 1,
-          ),
-        ),
-        const SizedBox(width: 4),
-        // Quantity badge
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 1),
-          decoration: BoxDecoration(
-            color: AppColors.gold.withValues(alpha: 0.3),
-            borderRadius: BorderRadius.circular(8),
-          ),
-          child: Text('×$quantity', style: AppTextStyles.badge),
-        ),
-      ],
+            // Name (flexible to shrink)
+            Flexible(
+              child: Text(
+                name,
+                style: isCompact
+                    ? AppTextStyles.tileNameSmall.copyWith(fontSize: 11)
+                    : AppTextStyles.tileNameSmall,
+                overflow: TextOverflow.ellipsis,
+                maxLines: 1,
+              ),
+            ),
+            const SizedBox(width: 4),
+            // Quantity badge
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 1),
+              decoration: BoxDecoration(
+                color: AppColors.gold.withValues(alpha: 0.3),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Text(
+                '×$quantity',
+                style: isCompact
+                    ? AppTextStyles.badge.copyWith(fontSize: 10)
+                    : AppTextStyles.badge,
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 }

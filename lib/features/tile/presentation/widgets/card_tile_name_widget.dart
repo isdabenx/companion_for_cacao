@@ -8,9 +8,19 @@ class CardTileNameWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(6),
-      child: Text(name, style: AppTextStyles.tileName),
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final isCompact = constraints.maxWidth < 130;
+        return Padding(
+          padding: const EdgeInsets.all(6),
+          child: Text(
+            name,
+            style: isCompact
+                ? AppTextStyles.tileNameSmall
+                : AppTextStyles.tileName,
+          ),
+        );
+      },
     );
   }
 }

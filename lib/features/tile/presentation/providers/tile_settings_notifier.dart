@@ -58,6 +58,12 @@ class TileSettingsNotifier extends _$TileSettingsNotifier {
     );
   }
 
+  void toggleCompactTileLayout() {
+    state.whenData(
+      (s) => _updateState(s.copyWith(compactTileLayout: !s.compactTileLayout)),
+    );
+  }
+
   Future<TileSettingsEntity> _loadSettings() async {
     try {
       final repository = ref.read(settingsRepositoryProvider);
@@ -96,6 +102,9 @@ class TileSettingsNotifier extends _$TileSettingsNotifier {
         return;
       case TileSettings.showQuantity:
         toggleShowQuantity();
+        return;
+      case TileSettings.compactTileLayout:
+        toggleCompactTileLayout();
         return;
     }
   }

@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:companion_for_cacao/config/routes/app_routes.dart';
 import 'package:companion_for_cacao/core/data/models/tile_model.dart';
 import 'package:companion_for_cacao/features/tile/presentation/providers/tile_notifier.dart';
+import 'package:companion_for_cacao/features/tile/presentation/providers/tile_settings_notifier.dart';
 import 'package:companion_for_cacao/features/tile/presentation/widgets/card_tile_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -55,10 +56,17 @@ class _TileListGrillWidgetState extends ConsumerState<TileListGrillWidget>
 
   Widget _buildGrid(List<TileModel> tiles) {
     _initController(tiles.length);
+    final tileSettings = ref.watch(tileSettingsProvider.select((s) => s.value));
+
     return LayoutBuilder(
       builder: (context, constraints) {
-        final crossAxisCount = (constraints.maxWidth / 150).floor().clamp(2, 6);
-        return MasonryGridView.count(
+        final useCompact = tileSettings?.compactTileLayout ?? true;
+        final targetWidth = useCompact ? 120.0 : 150.0;
+        final crossAxisCount = (constraints.maxWidth / targetWidth)
+            .floor()
+            .clamp(2, 8);
+
+        return AlignedGridView.count(
           crossAxisCount: crossAxisCount,
           crossAxisSpacing: 6,
           mainAxisSpacing: 6,

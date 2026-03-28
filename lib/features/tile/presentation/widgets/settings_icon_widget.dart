@@ -62,6 +62,10 @@ class SettingsIconWidget extends StatelessWidget {
                         title: 'Show quantity',
                         settingsName: TileSettings.showQuantity,
                       ),
+                      const SettingsItemWidget(
+                        title: 'Compact layout',
+                        settingsName: TileSettings.compactTileLayout,
+                      ),
                       const Divider(height: 32),
                       Padding(
                         padding: const EdgeInsets.symmetric(vertical: 8),

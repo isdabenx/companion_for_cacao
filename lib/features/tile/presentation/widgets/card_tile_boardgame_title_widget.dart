@@ -13,13 +13,30 @@ class CardTileBoardgameTitleWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Center(
-          child: Text(title.toUpperCase(), style: AppTextStyles.boardgameTitle),
-        ),
-        Divider(height: 1, color: color, thickness: 0.75),
-      ],
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final isCompact = constraints.maxWidth < 130;
+        return Column(
+          children: [
+            Center(
+              child: FittedBox(
+                fit: BoxFit.scaleDown,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 4),
+                  child: Text(
+                    title.toUpperCase(),
+                    style: isCompact
+                        ? AppTextStyles.boardgameTitle.copyWith(fontSize: 11.5)
+                        : AppTextStyles.boardgameTitle,
+                    maxLines: 1,
+                  ),
+                ),
+              ),
+            ),
+            Divider(height: 1, color: color, thickness: 0.75),
+          ],
+        );
+      },
     );
   }
 }

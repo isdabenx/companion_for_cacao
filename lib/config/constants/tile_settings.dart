@@ -5,4 +5,5 @@ class TileSettings {
   static const String badgeTypeInText = 'badgeTypeInText';
   static const String boardgameInTitle = 'boardgameInTitle';
   static const String showQuantity = 'showQuantity';
+  static const String compactTileLayout = 'compactTileLayout';
 }
