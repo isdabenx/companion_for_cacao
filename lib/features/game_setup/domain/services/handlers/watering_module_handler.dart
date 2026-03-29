@@ -97,10 +97,10 @@ class WateringModuleHandler implements ModulePreparationHandler {
       final modifiedStep = PreparationEntity(
         id: 'setup_initial_tiles_plantation_watering',
         description:
-            'From the jungle tiles, get "single plantation" and "watering tile" and place them face up in the middle of the table diagonally to one another; they form the starting tiles of the playing area',
+            'From the jungle tiles, get "single plantation" and "watering" tiles and place them face up in the middle of the table diagonally to one another; they form the starting tiles of the playing area',
         color: originalStep.color,
         variables: originalStep.variables,
-        imagePath: 'assets/images/preparation/initial_tiles_watering.webp',
+        imageKey: 'initial_tiles_watering',
         phase: originalStep.phase,
       );
       preparation[initialTilesIndex] = modifiedStep;

@@ -1,4 +1,3 @@
-import 'package:companion_for_cacao/config/constants/assets.dart';
 import 'package:companion_for_cacao/core/data/models/boardgame_model.dart';
 import 'package:companion_for_cacao/core/data/models/tile_model.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/player_entity.dart';
@@ -135,8 +134,7 @@ class BaseGameHandler implements ModulePreparationHandler {
                 'Player $color takes the village board of color $color',
             color: color,
             variables: {'color': color},
-            imagePath:
-                '${Assets.preparationVillagePrefix}$color${Assets.preparationVillageSufix}',
+            imageKey: 'village_board_$color',
             phase: PreparationPhase.playerSetup,
           ),
         )
@@ -147,8 +145,7 @@ class BaseGameHandler implements ModulePreparationHandler {
                 'Player $color takes the water carrier of color $color',
             color: color,
             variables: {'color': color},
-            imagePath:
-                '${Assets.preparationCarrierPrefix}$color${Assets.preparationCarrierSufix}',
+            imageKey: 'carrier_$color',
             phase: PreparationPhase.playerSetup,
           ),
         )
@@ -168,8 +165,7 @@ class BaseGameHandler implements ModulePreparationHandler {
             description: 'Player $color gets all tiles with color $color',
             color: color,
             variables: {'color': color},
-            imagePath:
-                '${Assets.preparationTilePrefix}$color${Assets.preparationTileSufix}',
+            imageKey: 'tile_back_$color',
             phase: PreparationPhase.playerSetup,
           ),
         );
@@ -190,7 +186,7 @@ class BaseGameHandler implements ModulePreparationHandler {
                   'Player ${player.color} searches for one of the 1-1-1-1 worker tiles and returns it to the game box',
               color: player.color,
               variables: {'color': player.color},
-              imagePath: '${Assets.imagesTilePath}${workerTile.filenameImage}',
+              imageKey: 'tile_${workerTile.filenameImage}',
               phase: PreparationPhase.playerSetup,
             ),
           );
@@ -211,8 +207,7 @@ class BaseGameHandler implements ModulePreparationHandler {
                     'Player ${player.color} searches for one of the 2-1-0-1 worker tiles and returns it to the game box',
                 color: player.color,
                 variables: {'color': player.color},
-                imagePath:
-                    '${Assets.imagesTilePath}${workerTile201.filenameImage}',
+                imageKey: 'tile_${workerTile201.filenameImage}',
                 phase: PreparationPhase.playerSetup,
               ),
             );
@@ -235,7 +230,7 @@ class BaseGameHandler implements ModulePreparationHandler {
           id: 'setup_initial_tiles_plantation_market',
           description:
               'From the jungle tiles, get "single plantation" and "market, selling price 2" and place them face up in the middle of the table diagonally to one another; they form the starting tiles of the playing area',
-          imagePath: Assets.preparationInitialTilesCacao,
+          imageKey: 'initial_tiles_cacao',
           phase: PreparationPhase.boardSetup,
         ),
       )
@@ -260,7 +255,7 @@ class BaseGameHandler implements ModulePreparationHandler {
           id: 'setup_resources_bank',
           description:
               'Lay out the cacao fruits and the sun tokens as separate supply piles. Put the gold coins next to them to serve as the bank',
-          imagePath: Assets.preparationResourcesCacao,
+          imageKey: 'resources_cacao',
           phase: PreparationPhase.supplies,
         ),
       );

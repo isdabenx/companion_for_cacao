@@ -53,7 +53,7 @@ class MapModuleHandler implements ModulePreparationHandler {
                 'Player $color gets 2 map tiles. The surplus map tiles are put back into the box.',
             phase: PreparationPhase.playerSetup,
             color: color,
-            imagePath: 'assets/images/preparation/map_token.webp',
+            imageKey: 'map_token',
           ),
         );
       }
@@ -71,6 +71,7 @@ class MapModuleHandler implements ModulePreparationHandler {
             description:
                 'Place the map board directly next to the jungle draw pile.',
             phase: PreparationPhase.boardSetup,
+            imageKey: 'map_board',
           ),
         );
         finalSteps.add(

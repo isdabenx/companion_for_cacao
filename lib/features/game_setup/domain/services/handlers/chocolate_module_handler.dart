@@ -123,7 +123,7 @@ class ChocolateModuleHandler implements ModulePreparationHandler {
           description:
               'Lay out the 20 chocolate bars as a separate supply pile next to the cacao fruits.',
           phase: PreparationPhase.supplies,
-          imagePath: 'assets/images/preparation/chocolate_bar.webp',
+          imageKey: 'resources_chocolate',
         ),
       );
     }

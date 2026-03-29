@@ -5,7 +5,7 @@ class PreparationEntity {
     required this.id,
     required this.description,
     required this.phase,
-    this.imagePath,
+    this.imageKey,
     this.isCompleted = false,
     this.color,
     this.variables,
@@ -13,7 +13,7 @@ class PreparationEntity {
   final String id;
   final String description;
   final PreparationPhase phase;
-  final String? imagePath;
+  final String? imageKey;
   final bool isCompleted;
   final String? color;
   final Map<String, String>? variables;
@@ -22,7 +22,7 @@ class PreparationEntity {
     String? id,
     String? description,
     PreparationPhase? phase,
-    String? imagePath,
+    String? imageKey,
     bool? isCompleted,
     String? color,
     Map<String, String>? variables,
@@ -31,7 +31,7 @@ class PreparationEntity {
       id: id ?? this.id,
       description: description ?? this.description,
       phase: phase ?? this.phase,
-      imagePath: imagePath ?? this.imagePath,
+      imageKey: imageKey ?? this.imageKey,
       isCompleted: isCompleted ?? this.isCompleted,
       color: color ?? this.color,
       variables: variables ?? this.variables,
