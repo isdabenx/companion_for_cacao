@@ -10,7 +10,7 @@
 [![Dart](https://img.shields.io/badge/Dart-3.11+-0175C2?logo=dart&logoColor=white)](https://dart.dev)
 [![License](https://img.shields.io/badge/License-CC%20BY--NC--SA%204.0-lightgrey)](LICENSE)
 [![Platform](https://img.shields.io/badge/Platform-Android-3DDC84?logo=android&logoColor=white)](https://play.google.com/store)
-[![Version](https://img.shields.io/badge/Version-2.1.0-blue)]()
+[![Version](https://img.shields.io/badge/Version-2.2.0-blue)]()
 
 *Eines digitals per millorar l'experiencia de joc: preparacio de partides, consulta de regles i calcul de puntuacions.*
 
@@ -66,7 +66,7 @@ L'objectiu es proporcionar eines digitals que complementin l'experiencia de joc 
 
 ## Funcionalitats
 
-### Disponibles (v2.1.0)
+### Disponibles (v2.2.0)
 
 | Funcionalitat | Descripcio |
 |---|---|
@@ -196,7 +196,8 @@ feature/
 - [x] Filtre i cerca de rajoles
 - [x] Selector de primer jugador
 - [x] Notificacio d'actualitzacio de l'app (upgrader)
-- [ ] Rajoles d'expansions completes (Chocolatl + Diamante)
+- [x] Rajoles d'expansió Chocolatl
+- [ ] Rajoles d'expansió Diamante
 
 ### Fase 2 — Diferenciacio
 
