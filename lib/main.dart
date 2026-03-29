@@ -74,6 +74,7 @@ class MainApp extends ConsumerWidget {
         textTheme: TextTheme(
           headlineLarge: AppTextStyles.titleTextStyle,
           headlineMedium: AppTextStyles.markdownH2,
+          headlineSmall: AppTextStyles.sectionTitle,
           titleLarge: AppTextStyles.boardgameTitle,
           titleMedium: AppTextStyles.sectionTitlePlain,
           titleSmall: AppTextStyles.sectionTitle,

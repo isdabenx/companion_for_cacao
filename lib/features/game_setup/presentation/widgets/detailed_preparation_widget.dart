@@ -181,8 +181,6 @@ class _PhaseHeaderDelegate extends SliverPersistentHeaderDelegate {
                 child: Text(
                   phaseName,
                   style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                    fontFamily: AppFonts.headerFont,
-                    color: AppColors.brown,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
