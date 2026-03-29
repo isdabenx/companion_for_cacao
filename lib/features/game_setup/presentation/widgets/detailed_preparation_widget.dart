@@ -4,6 +4,7 @@ import 'package:companion_for_cacao/core/theme/app_fonts.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/preparation_entity.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/preparation_phase.dart';
 import 'package:companion_for_cacao/features/game_setup/presentation/providers/game_setup_notifier.dart';
+import 'package:companion_for_cacao/features/game_setup/presentation/utils/preparation_image_resolver.dart';
 import 'package:companion_for_cacao/shared/widgets/container_full_style_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -286,7 +287,7 @@ class PreparationCard extends ConsumerWidget {
                       border: Border.all(color: Colors.grey.shade400, width: 1),
                     ),
                   ),
-                if (preparation.imagePath != null)
+                if (preparation.imageKey != null)
                   Container(
                     width: 48,
                     height: 48,
@@ -306,7 +307,7 @@ class PreparationCard extends ConsumerWidget {
                       child: Padding(
                         padding: const EdgeInsets.all(6.0),
                         child: Image.asset(
-                          preparation.imagePath!,
+                          preparation.imageKey!.toAssetPath(),
                           fit: BoxFit.contain,
                         ),
                       ),
