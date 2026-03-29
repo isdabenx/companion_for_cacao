@@ -5,6 +5,7 @@ import 'package:companion_for_cacao/features/game_setup/domain/entities/game_set
 import 'package:companion_for_cacao/features/game_setup/domain/entities/player_entity.dart';
 import 'package:companion_for_cacao/features/game_setup/presentation/widgets/detailed_summary_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
@@ -53,9 +54,11 @@ void main() {
       tester,
     ) async {
       await tester.pumpWidget(
-        MaterialApp(
-          home: Scaffold(
-            body: DetailedSummaryWidget(gameSetup: dummyGameSetup),
+        ProviderScope(
+          child: MaterialApp(
+            home: Scaffold(
+              body: DetailedSummaryWidget(gameSetup: dummyGameSetup),
+            ),
           ),
         ),
       );
@@ -81,9 +84,11 @@ void main() {
       tester,
     ) async {
       await tester.pumpWidget(
-        MaterialApp(
-          home: Scaffold(
-            body: DetailedSummaryWidget(gameSetup: dummyGameSetup),
+        ProviderScope(
+          child: MaterialApp(
+            home: Scaffold(
+              body: DetailedSummaryWidget(gameSetup: dummyGameSetup),
+            ),
           ),
         ),
       );
