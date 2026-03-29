@@ -37,4 +37,12 @@ class Assets {
       'assets/images/preparation/initial_single_plantation_selling_price_2.webp';
   static const String preparationResourcesCacao =
       'assets/images/preparation/resources_cacao.webp';
+  static const String preparationMapToken =
+      'assets/images/preparation/map_token.webp';
+  static const String preparationMapBoard =
+      'assets/images/preparation/map_board.webp';
+  static const String preparationChocolateBar =
+      'assets/images/preparation/chocolate_bar.webp';
+  static const String preparationInitialTilesWatering =
+      'assets/images/preparation/initial_tiles_watering.webp';
 }
