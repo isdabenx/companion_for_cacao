@@ -50,10 +50,37 @@ void main() {
     });
 
     group('adjustTiles', () {
-      test('should not modify tiles', () {
-        final result = handler.adjustTiles(mockTiles, 4, activeExpansions: []);
+      test('should add hut tiles from expansions', () {
+        final mockHut = _createTile(
+          id: 'chocolatl.hut_test',
+          name: 'Hut Test',
+          quantity: 1,
+          type: TileType.hut,
+        );
+        final mockOther = _createTile(
+          id: 'chocolatl.other',
+          name: 'Other',
+          quantity: 1,
+          type: TileType.market,
+        );
 
-        expect(result, equals(mockTiles));
+        final expansion = BoardgameModel(
+          id: 2,
+          name: 'Chocolatl',
+          description: '',
+          filenameImage: 'chocolatl.png',
+          tiles: [mockHut, mockOther],
+        );
+
+        final result = handler.adjustTiles(
+          mockTiles,
+          4,
+          activeExpansions: [expansion],
+        );
+
+        expect(result.length, equals(mockTiles.length + 1));
+        expect(result.contains(mockHut), isTrue);
+        expect(result.contains(mockOther), isFalse);
       });
 
       test('should have correct moduleId', () {

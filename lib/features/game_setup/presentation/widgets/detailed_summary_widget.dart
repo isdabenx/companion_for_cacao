@@ -197,8 +197,11 @@ class _DetailedSummaryWidgetState extends ConsumerState<DetailedSummaryWidget> {
     final workerTiles = widget.gameSetup.tiles
         .where((t) => t.color != null)
         .toList();
+    final hutTiles = widget.gameSetup.tiles
+        .where((t) => t.color == null && t.type == TileType.hut)
+        .toList();
     final jungleTiles = widget.gameSetup.tiles
-        .where((t) => t.color == null)
+        .where((t) => t.color == null && t.type != TileType.hut)
         .toList();
     final totalTiles = widget.gameSetup.tiles.fold(
       0,
@@ -242,6 +245,20 @@ class _DetailedSummaryWidgetState extends ConsumerState<DetailedSummaryWidget> {
                   Text('Jungle', style: AppTextStyles.sectionSublabel),
                   const SizedBox(height: 8),
                   _buildTileGrid(jungleTiles),
+                  const SizedBox(height: 8),
+                ],
+              ),
+            ),
+          ],
+          if (hutTiles.isNotEmpty) ...[
+            Padding(
+              padding: const EdgeInsets.only(left: 8),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('Huts', style: AppTextStyles.sectionSublabel),
+                  const SizedBox(height: 8),
+                  _buildTileGrid(hutTiles),
                 ],
               ),
             ),

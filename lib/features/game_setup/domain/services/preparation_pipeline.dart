@@ -52,6 +52,13 @@ class PreparationPipeline {
     // Filter out tiles with quantity == 0
     final filteredTiles = tiles.where((t) => t.quantity > 0).toList();
 
+    // Sort tiles by type (huts at the end) and then by name alphabetically
+    filteredTiles.sort((a, b) {
+      if (a.type == TileType.hut && b.type != TileType.hut) return 1;
+      if (a.type != TileType.hut && b.type == TileType.hut) return -1;
+      return a.name.compareTo(b.name);
+    });
+
     return (tiles: filteredTiles, preparation: preparation);
   }
 }

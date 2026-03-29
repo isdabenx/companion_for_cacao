@@ -240,6 +240,65 @@ class PreparationCard extends ConsumerWidget {
 
   final PreparationEntity preparation;
 
+  void _showImageDialog(BuildContext context, String imagePath) {
+    showDialog<void>(
+      context: context,
+      barrierColor: Colors.black.withValues(alpha: 0.7),
+      builder: (BuildContext context) {
+        return Dialog(
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          insetPadding: const EdgeInsets.all(24),
+          child: GestureDetector(
+            onTap: () => Navigator.of(context).pop(),
+            child: Stack(
+              clipBehavior: Clip.none,
+              alignment: Alignment.center,
+              children: [
+                Hero(
+                  tag: 'prep_image_${preparation.id}',
+                  child: InteractiveViewer(
+                    maxScale: 4.0,
+                    minScale: 0.5,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(16),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withValues(alpha: 0.2),
+                            blurRadius: 10,
+                            spreadRadius: 2,
+                          ),
+                        ],
+                      ),
+                      padding: const EdgeInsets.all(16),
+                      child: Image.asset(imagePath, fit: BoxFit.contain),
+                    ),
+                  ),
+                ),
+                Positioned(
+                  top: -16,
+                  right: -16,
+                  child: Material(
+                    color: AppColors.cream,
+                    shape: const CircleBorder(),
+                    elevation: 4,
+                    child: IconButton(
+                      icon: const Icon(Icons.close, color: AppColors.brown),
+                      onPressed: () => Navigator.of(context).pop(),
+                      tooltip: 'Close',
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final gameSetup = ref.watch(gameSetupProvider).value;
@@ -270,6 +329,12 @@ class PreparationCard extends ConsumerWidget {
                 .togglePreparationCompletion(preparation.id);
             ref.read(phaseExpansionProvider.notifier).clearAll();
           },
+          onLongPress: preparation.imageKey != null
+              ? () => _showImageDialog(
+                  context,
+                  preparation.imageKey!.toAssetPath(),
+                )
+              : null,
           child: Padding(
             padding: const EdgeInsets.all(12),
             child: Row(
@@ -286,27 +351,36 @@ class PreparationCard extends ConsumerWidget {
                     ),
                   ),
                 if (preparation.imageKey != null)
-                  Container(
-                    width: 48,
-                    height: 48,
-                    margin: const EdgeInsets.only(right: 12),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      shape: BoxShape.circle,
-                      boxShadow: [
-                        BoxShadow(
-                          color: AppColors.brown.withValues(alpha: 0.15),
-                          blurRadius: 4,
-                          offset: const Offset(0, 2),
-                        ),
-                      ],
+                  GestureDetector(
+                    onTap: () => _showImageDialog(
+                      context,
+                      preparation.imageKey!.toAssetPath(),
                     ),
-                    child: ClipOval(
-                      child: Padding(
-                        padding: const EdgeInsets.all(6.0),
-                        child: Image.asset(
-                          preparation.imageKey!.toAssetPath(),
-                          fit: BoxFit.contain,
+                    child: Hero(
+                      tag: 'prep_image_${preparation.id}',
+                      child: Container(
+                        width: 48,
+                        height: 48,
+                        margin: const EdgeInsets.only(right: 12),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          shape: BoxShape.circle,
+                          boxShadow: [
+                            BoxShadow(
+                              color: AppColors.brown.withValues(alpha: 0.15),
+                              blurRadius: 4,
+                              offset: const Offset(0, 2),
+                            ),
+                          ],
+                        ),
+                        child: ClipOval(
+                          child: Padding(
+                            padding: const EdgeInsets.all(6.0),
+                            child: Image.asset(
+                              preparation.imageKey!.toAssetPath(),
+                              fit: BoxFit.contain,
+                            ),
+                          ),
                         ),
                       ),
                     ),

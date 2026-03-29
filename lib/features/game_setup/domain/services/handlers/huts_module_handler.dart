@@ -20,8 +20,18 @@ class HutsModuleHandler implements ModulePreparationHandler {
     int playerCount, {
     required List<BoardgameModel> activeExpansions,
   }) {
-    // The huts module doesn't modify the tiles of the jungle pile.
-    return tiles;
+    final result = <TileModel>[...tiles];
+
+    // Add all hut tiles from the expansions
+    for (final expansion in activeExpansions) {
+      for (final tile in expansion.tiles) {
+        if (tile.type == TileType.hut) {
+          result.add(tile);
+        }
+      }
+    }
+
+    return result;
   }
 
   @override
