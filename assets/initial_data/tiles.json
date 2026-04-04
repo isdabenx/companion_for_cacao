@@ -252,7 +252,7 @@
     {
         "id": "chocolatl.jungle_watering",
         "name": "Watering",
-        "description": "For each of your activated workers on the adjacent edge of the tile, you may move back the water carrier on your village board 1 water field in an anti-clockwise direction. For each water field that you move your water carrier back, you take 4 cacao fruits from the supply and put them on unoccupied storage spaces on your village board. If your water carrier is standing on the water field with the value “-10”, you can't get any fruit.\n\n**Attention:** Any additional cacao fruit that you would get goes to waste, as usual. Therefore, it doesn’t make sense to connect tile edges that have more than 1 worker to a watering tile.",
+        "description": "For each of your activated workers on the adjacent edge of the tile, you may move back the water carrier on your village board 1 water field in an anti-clockwise direction. For each water field that you move your water carrier back, you take 4 cacao fruits from the supply and put them on unoccupied storage spaces on your village board. If your water carrier is standing on the water field with the value \u201c-10\u201d, you can't get any fruit.\n\n**Attention:** Any additional cacao fruit that you would get goes to waste, as usual. Therefore, it doesn\u2019t make sense to connect tile edges that have more than 1 worker to a watering tile.",
         "filenameImage": "chocolatl/watering.webp",
         "type": "watering",
         "quantity": 3,
@@ -369,7 +369,7 @@
     {
         "id": "chocolatl.hut_fountain_master",
         "name": "Fountain Master",
-        "description": "**Building Cost:** 12 gold\n\n**Function:** 4 gold at the end of the game if your own water carrier is standing on the water field with the value “16”.\n\n**End of Game:** Add the building cost (12 gold) plus the bonus (if applicable) to your total gold.",
+        "description": "**Building Cost:** 12 gold\n\n**Function:** 4 gold at the end of the game if your own water carrier is standing on the water field with the value \u201c16\u201d.\n\n**End of Game:** Add the building cost (12 gold) plus the bonus (if applicable) to your total gold.",
         "filenameImage": "chocolatl/hut_fountain_master.webp",
         "type": "hut",
         "quantity": 1,
