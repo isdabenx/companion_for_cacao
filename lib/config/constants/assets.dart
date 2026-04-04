@@ -23,6 +23,8 @@ class Assets {
       'assets/rules/cacao_overview_en.pdf';
   static const String ruleCacaoChocolatlPdf =
       'assets/rules/cacao_chocolatl_rules_en.pdf';
+  static const String ruleCacaoDiamantePdf =
+      'assets/rules/cacao_diamante_en.pdf';
 
   static const String preparationVillagePrefix =
       'assets/images/preparation/village_board_';
