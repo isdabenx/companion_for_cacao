@@ -1,6 +1,5 @@
 import 'package:collection/collection.dart';
 import 'package:companion_for_cacao/core/theme/app_colors.dart';
-import 'package:companion_for_cacao/core/theme/app_fonts.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/preparation_entity.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/preparation_phase.dart';
 import 'package:companion_for_cacao/features/game_setup/presentation/providers/game_setup_notifier.dart';
@@ -273,7 +272,20 @@ class PreparationCard extends ConsumerWidget {
                         ],
                       ),
                       padding: const EdgeInsets.all(16),
-                      child: Image.asset(imagePath, fit: BoxFit.contain),
+                      child: Image.asset(
+                        imagePath,
+                        fit: BoxFit.contain,
+                        errorBuilder: (context, error, stackTrace) {
+                          return const Padding(
+                            padding: EdgeInsets.all(40.0),
+                            child: Icon(
+                              Icons.image_not_supported_outlined,
+                              color: AppColors.brown,
+                              size: 100,
+                            ),
+                          );
+                        },
+                      ),
                     ),
                   ),
                 ),
@@ -379,6 +391,13 @@ class PreparationCard extends ConsumerWidget {
                             child: Image.asset(
                               preparation.imageKey!.toAssetPath(),
                               fit: BoxFit.contain,
+                              errorBuilder: (context, error, stackTrace) {
+                                return const Icon(
+                                  Icons.image_not_supported_outlined,
+                                  color: AppColors.brown,
+                                  size: 24,
+                                );
+                              },
                             ),
                           ),
                         ),

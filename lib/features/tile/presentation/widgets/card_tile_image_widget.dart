@@ -31,6 +31,18 @@ class CardTileImageWidget extends StatelessWidget {
               '${Assets.imagesTilePath}$filenameImage',
               fit: BoxFit.contain,
               width: double.infinity,
+              errorBuilder: (context, error, stackTrace) {
+                return Container(
+                  color: AppColors.greenLight,
+                  child: Center(
+                    child: Icon(
+                      Icons.image_not_supported_outlined,
+                      color: AppColors.brown.withValues(alpha: 0.5),
+                      size: 32,
+                    ),
+                  ),
+                );
+              },
             ),
           ),
         ),
