@@ -263,12 +263,13 @@ Les 14 cabanes no tenen model de dades (ni JSON ni Drift). Caldria un HutModel o
 - **Base de dades de rajoles:** Llistat amb graella, detall amb imatge i descripció en Markdown, i configuració de visualització.
 - **Configuració de partida:** Stepper de 3 passos (jugadors, expansions, mòduls) i generació de la preparació pas a pas.
 - **Regles:** Visor de PDF integrat per al manual del joc base.
+- **Rajoles d'expansió Chocolatl:** Models, JSON, i handlers per als mòduls de Chocolatl creats.
 
 ### Fase 1 — Funcionalitats Core (Prioritat alta)
 1. **Calculadora de puntuació final:** Formulari pas a pas amb suport per expansions (temples/gemmes, cabanes, track d'aigua). Gestió automàtica d'empats i desempats.
 2. **Filtre i cerca de rajoles:** Filtrar per tipus, color, expansió i mòdul. Cerca per nom.
 3. **Selector de primer jugador:** Aleatori temàtic ("qui ha menjat xocolata més recentment?"), rotació basada en historial, o manual.
-4. **Rajoles d'expansions completes:** Afegir totes les fitxes de Chocolatl i Diamante al JSON i ampliar TileType.
+4. **Rajoles d'expansions completes:** Afegir totes les fitxes de Diamante al JSON i ampliar TileType (Chocolatl ja afegit).
 
 ### Fase 2 — Diferenciació (Prioritat mitjana)
 5. **Historial de partides:** Registre de cada sessió amb jugadors, puntuacions, guanyador, durada, expansions utilitzades i notes opcionals.
