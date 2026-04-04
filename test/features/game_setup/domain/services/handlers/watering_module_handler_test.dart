@@ -269,11 +269,15 @@ BoardgameModel _createMockExpansion() {
     description: 'Test Expansion',
     filenameImage: 'test.png',
     tiles: [
-      _createTile(
+      TileModel(
         id: 'chocolatl.jungle_watering',
         name: 'Jungle Watering',
+        description: 'Test description',
+        filenameImage: 'test.png',
         quantity: 10,
         type: TileType.watering,
+        boardgameId: 2,
+        moduleId: WateringModuleHandler.moduleId,
       ),
     ],
   );

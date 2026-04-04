@@ -256,7 +256,8 @@
         "filenameImage": "chocolatl/watering.webp",
         "type": "watering",
         "quantity": 3,
-        "boardgame": 2
+        "boardgame": 2,
+        "module": 2
     },
     {
         "id": "chocolatl.jungle_chocolate_kitchen",
@@ -265,7 +266,8 @@
         "filenameImage": "chocolatl/chocolate_kitchen.webp",
         "type": "chocolateKitchen",
         "quantity": 3,
-        "boardgame": 2
+        "boardgame": 2,
+        "module": 3
     },
     {
         "id": "chocolatl.jungle_chocolate_market",
@@ -274,7 +276,8 @@
         "filenameImage": "chocolatl/chocolate_market.webp",
         "type": "chocolateMarket",
         "quantity": 3,
-        "boardgame": 2
+        "boardgame": 2,
+        "module": 3
     },
     {
         "id": "chocolatl.hut_market_crier",
@@ -284,7 +287,8 @@
         "type": "hut",
         "quantity": 1,
         "boardgame": 2,
-        "hutCost": 4
+        "hutCost": 4,
+        "module": 4
     },
     {
         "id": "chocolatl.hut_hermit",
@@ -294,7 +298,8 @@
         "type": "hut",
         "quantity": 1,
         "boardgame": 2,
-        "hutCost": 6
+        "hutCost": 6,
+        "module": 4
     },
     {
         "id": "chocolatl.hut_road_worker",
@@ -304,7 +309,8 @@
         "type": "hut",
         "quantity": 1,
         "boardgame": 2,
-        "hutCost": 6
+        "hutCost": 6,
+        "module": 4
     },
     {
         "id": "chocolatl.hut_trader",
@@ -314,7 +320,8 @@
         "type": "hut",
         "quantity": 1,
         "boardgame": 2,
-        "hutCost": 6
+        "hutCost": 6,
+        "module": 4
     },
     {
         "id": "chocolatl.hut_farmer",
@@ -324,7 +331,8 @@
         "type": "hut",
         "quantity": 1,
         "boardgame": 2,
-        "hutCost": 8
+        "hutCost": 8,
+        "module": 4
     },
     {
         "id": "chocolatl.hut_shaman",
@@ -334,7 +342,8 @@
         "type": "hut",
         "quantity": 1,
         "boardgame": 2,
-        "hutCost": 8
+        "hutCost": 8,
+        "module": 4
     },
     {
         "id": "chocolatl.hut_monk",
@@ -344,7 +353,8 @@
         "type": "hut",
         "quantity": 1,
         "boardgame": 2,
-        "hutCost": 10
+        "hutCost": 10,
+        "module": 4
     },
     {
         "id": "chocolatl.hut_master_builder",
@@ -354,7 +364,8 @@
         "type": "hut",
         "quantity": 1,
         "boardgame": 2,
-        "hutCost": 10
+        "hutCost": 10,
+        "module": 4
     },
     {
         "id": "chocolatl.hut_foreman",
@@ -364,7 +375,8 @@
         "type": "hut",
         "quantity": 1,
         "boardgame": 2,
-        "hutCost": 12
+        "hutCost": 12,
+        "module": 4
     },
     {
         "id": "chocolatl.hut_fountain_master",
@@ -374,7 +386,8 @@
         "type": "hut",
         "quantity": 1,
         "boardgame": 2,
-        "hutCost": 12
+        "hutCost": 12,
+        "module": 4
     },
     {
         "id": "chocolatl.hut_chiefs_daughter",
@@ -384,7 +397,8 @@
         "type": "hut",
         "quantity": 1,
         "boardgame": 2,
-        "hutCost": 14
+        "hutCost": 14,
+        "module": 4
     },
     {
         "id": "chocolatl.hut_chiefs_son",
@@ -394,7 +408,8 @@
         "type": "hut",
         "quantity": 1,
         "boardgame": 2,
-        "hutCost": 16
+        "hutCost": 16,
+        "module": 4
     },
     {
         "id": "chocolatl.hut_chiefs_wife",
@@ -404,7 +419,8 @@
         "type": "hut",
         "quantity": 1,
         "boardgame": 2,
-        "hutCost": 20
+        "hutCost": 20,
+        "module": 4
     },
     {
         "id": "chocolatl.hut_chief",
@@ -414,6 +430,7 @@
         "type": "hut",
         "quantity": 1,
         "boardgame": 2,
-        "hutCost": 24
+        "hutCost": 24,
+        "module": 4
     }
 ]

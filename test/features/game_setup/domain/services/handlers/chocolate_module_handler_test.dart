@@ -225,17 +225,25 @@ BoardgameModel _createMockExpansion() {
     description: 'Test Expansion',
     filenameImage: 'test.png',
     tiles: [
-      _createTile(
+      TileModel(
         id: 'chocolatl.jungle_chocolate_kitchen',
         name: 'Chocolate Kitchen',
+        description: 'Test description',
+        filenameImage: 'test.png',
         quantity: 3,
         type: TileType.chocolateKitchen,
+        boardgameId: 2,
+        moduleId: ChocolateModuleHandler.moduleId,
       ),
-      _createTile(
+      TileModel(
         id: 'chocolatl.jungle_chocolate_market',
         name: 'Chocolate Market',
+        description: 'Test description',
+        filenameImage: 'test.png',
         quantity: 3,
         type: TileType.chocolateMarket,
+        boardgameId: 2,
+        moduleId: ChocolateModuleHandler.moduleId,
       ),
     ],
   );

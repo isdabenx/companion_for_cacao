@@ -15,8 +15,6 @@ class _ChocolateTileIds {
   static const String marketSelling3 = 'base.jungle_market_selling_3';
 
   // Chocolate tiles to be added
-  static const String chocolateKitchen = 'chocolatl.jungle_chocolate_kitchen';
-  static const String chocolateMarket = 'chocolatl.jungle_chocolate_market';
 }
 
 /// Handler for the Chocolate Module (Chocolatl expansion, Module C).
@@ -59,11 +57,10 @@ class ChocolateModuleHandler implements ModulePreparationHandler {
         amount: 2,
       );
 
-      // Add 2 chocolate kitchens and 2 chocolate markets
+      // Add 2 of each chocolate module tile
       adjustedTiles = _addChocolateTiles(
         adjustedTiles,
-        chocolateKitchens: 2,
-        chocolateMarkets: 2,
+        quantityToAdd: 2,
         activeExpansions: activeExpansions,
       );
     } else if (playerCount >= 3) {
@@ -86,11 +83,10 @@ class ChocolateModuleHandler implements ModulePreparationHandler {
         amount: 3,
       );
 
-      // Add 3 chocolate kitchens and 3 chocolate markets
+      // Add 3 of each chocolate module tile
       adjustedTiles = _addChocolateTiles(
         adjustedTiles,
-        chocolateKitchens: 3,
-        chocolateMarkets: 3,
+        quantityToAdd: 3,
         activeExpansions: activeExpansions,
       );
     }
@@ -155,54 +151,37 @@ class ChocolateModuleHandler implements ModulePreparationHandler {
   /// If tiles don't exist in the list, creates them from expansion definitions.
   List<TileModel> _addChocolateTiles(
     List<TileModel> tiles, {
-    required int chocolateKitchens,
-    required int chocolateMarkets,
+    required int quantityToAdd,
     required List<BoardgameModel> activeExpansions,
   }) {
     final result = <TileModel>[...tiles];
 
-    // Find chocolate kitchen tile from expansion definitions
-    TileModel? chocolateKitchenTile;
-    TileModel? chocolateMarketTile;
-
+    // Find all chocolate module tiles from expansion definitions
+    final chocolateTilesDefs = <TileModel>[];
     for (final expansion in activeExpansions) {
       for (final tile in expansion.tiles) {
-        if (tile.id == _ChocolateTileIds.chocolateKitchen) {
-          chocolateKitchenTile = tile;
-        } else if (tile.id == _ChocolateTileIds.chocolateMarket) {
-          chocolateMarketTile = tile;
+        if (tile.moduleId == moduleId) {
+          chocolateTilesDefs.add(tile);
         }
       }
     }
 
-    // Update kitchen tiles: increment if exists, add if doesn't
-    bool kitchenFound = false;
-    for (int i = 0; i < result.length; i++) {
-      if (result[i].id == _ChocolateTileIds.chocolateKitchen) {
-        result[i] = result[i].copyWith(
-          quantity: result[i].quantity + chocolateKitchens,
-        );
-        kitchenFound = true;
-        break;
+    // Update quantities for each tile found
+    for (final tileDef in chocolateTilesDefs) {
+      bool found = false;
+      for (int i = 0; i < result.length; i++) {
+        if (result[i].id == tileDef.id) {
+          result[i] = result[i].copyWith(
+            quantity: result[i].quantity + quantityToAdd,
+          );
+          found = true;
+          break;
+        }
       }
-    }
-    if (!kitchenFound && chocolateKitchenTile != null) {
-      result.add(chocolateKitchenTile.copyWith(quantity: chocolateKitchens));
-    }
 
-    // Update market tiles: increment if exists, add if doesn't
-    bool marketFound = false;
-    for (int i = 0; i < result.length; i++) {
-      if (result[i].id == _ChocolateTileIds.chocolateMarket) {
-        result[i] = result[i].copyWith(
-          quantity: result[i].quantity + chocolateMarkets,
-        );
-        marketFound = true;
-        break;
+      if (!found) {
+        result.add(tileDef.copyWith(quantity: quantityToAdd));
       }
-    }
-    if (!marketFound && chocolateMarketTile != null) {
-      result.add(chocolateMarketTile.copyWith(quantity: chocolateMarkets));
     }
 
     return result;

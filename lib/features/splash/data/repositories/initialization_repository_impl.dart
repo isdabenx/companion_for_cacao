@@ -12,7 +12,7 @@ class InitializationRepositoryImpl implements InitializationRepository {
 
   AppDatabase? _db;
   static const String _dbVersionKey = 'db_seed_version';
-  static const int _currentDbVersion = 2; // Bumped to 2 for Chocolatl
+  static const int _currentDbVersion = 3; // Bumped to 3 for Diamante & modules
 
   @override
   Future<void> initialize() async {

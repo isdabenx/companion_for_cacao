@@ -25,7 +25,7 @@ class HutsModuleHandler implements ModulePreparationHandler {
     // Add all hut tiles from the expansions
     for (final expansion in activeExpansions) {
       for (final tile in expansion.tiles) {
-        if (tile.type == TileType.hut) {
+        if (tile.moduleId == moduleId) {
           result.add(tile);
         }
       }

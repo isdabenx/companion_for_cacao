@@ -17,10 +17,20 @@ class LoadBoardgamesUseCase {
             modules: modules
                 .where((module) => module.boardgameId == boardgame.id)
                 .toList(),
-            tiles: tiles
-                .where((tile) => tile.boardgameId == boardgame.id)
-                .map((tile) => tile.copyWith(boardgame: boardgame))
-                .toList(),
+            tiles: tiles.where((tile) => tile.boardgameId == boardgame.id).map((
+              tile,
+            ) {
+              final matchedModule = modules.firstWhere(
+                (m) => m.id == tile.moduleId,
+                orElse: () => modules
+                    .first, // Dummy value, but ignored due to the check below
+              );
+              return tile.copyWith(
+                boardgame: boardgame,
+                module: tile.moduleId != null ? matchedModule : null,
+                clearModule: tile.moduleId == null,
+              );
+            }).toList(),
           ),
         )
         .toList();

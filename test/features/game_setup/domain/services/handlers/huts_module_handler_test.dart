@@ -51,11 +51,15 @@ void main() {
 
     group('adjustTiles', () {
       test('should add hut tiles from expansions', () {
-        final mockHut = _createTile(
+        final mockHut = TileModel(
           id: 'chocolatl.hut_test',
           name: 'Hut Test',
+          description: 'Test description',
+          filenameImage: 'test.png',
           quantity: 1,
           type: TileType.hut,
+          boardgameId: 2,
+          moduleId: HutsModuleHandler.moduleId,
         );
         final mockOther = _createTile(
           id: 'chocolatl.other',

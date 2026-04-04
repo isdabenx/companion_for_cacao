@@ -13,7 +13,6 @@ class _WateringTileIds {
   static const String doublePlantation = 'base.jungle_double_plantation';
 
   // Watering tiles to be added
-  static const String wateringTile = 'chocolatl.jungle_watering';
 }
 
 /// Handler for the Watering Module (Chocolatl expansion, Module B).
@@ -143,7 +142,7 @@ class WateringModuleHandler implements ModulePreparationHandler {
 
     for (final expansion in activeExpansions) {
       for (final tile in expansion.tiles) {
-        if (tile.id == _WateringTileIds.wateringTile) {
+        if (tile.moduleId == moduleId) {
           wateringTileDef = tile;
           break;
         }
@@ -154,7 +153,7 @@ class WateringModuleHandler implements ModulePreparationHandler {
     // Find watering tile in the list and increase its quantity
     bool wateringFound = false;
     for (int i = 0; i < result.length; i++) {
-      if (result[i].id == _WateringTileIds.wateringTile) {
+      if (result[i].id == wateringTileDef?.id) {
         result[i] = result[i].copyWith(
           quantity: result[i].quantity + wateringTiles,
         );
