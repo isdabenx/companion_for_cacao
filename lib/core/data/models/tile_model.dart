@@ -17,6 +17,9 @@ enum TileType {
   chocolateMarket,
   mapTile,
   hut,
+  // Diamante expansion
+  gemMine,
+  treeOfLife,
 }
 
 enum TileColor { red, purple, white, yellow }

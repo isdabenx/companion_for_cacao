@@ -27,6 +27,10 @@ extension TileTypeExtension on TileType {
         return 'Map Tile';
       case TileType.hut:
         return 'Hut';
+      case TileType.gemMine:
+        return 'Gem Mine';
+      case TileType.treeOfLife:
+        return 'Tree of Life';
     }
   }
 }

@@ -2,7 +2,7 @@
     {
         "id": "base.worker_red_1-1-1-1",
         "name": "1-1-1-1",
-        "description": "Worker tiles 1-1-1-1 for player red",
+        "description": "Worker tile 1-1-1-1 for player red",
         "filenameImage": "base/player_red_1_1_1_1.webp",
         "type": "player",
         "color": "red",
@@ -12,7 +12,7 @@
     {
         "id": "base.worker_red_2-1-0-1",
         "name": "2-1-0-1",
-        "description": "Worker tiles 2-1-0-1 for player red",
+        "description": "Worker tile 2-1-0-1 for player red",
         "filenameImage": "base/player_red_2_1_0_1.webp",
         "type": "player",
         "color": "red",
@@ -22,7 +22,7 @@
     {
         "id": "base.worker_red_3-0-0-1",
         "name": "3-0-0-1",
-        "description": "Worker tiles 3-0-0-1 for player red",
+        "description": "Worker tile 3-0-0-1 for player red",
         "filenameImage": "base/player_red_3_0_0_1.webp",
         "type": "player",
         "color": "red",
@@ -32,7 +32,7 @@
     {
         "id": "base.worker_red_3-1-0-0",
         "name": "3-1-0-0",
-        "description": "Worker tiles 3-1-0-0 for player red",
+        "description": "Worker tile 3-1-0-0 for player red",
         "filenameImage": "base/player_red_3_1_0_0.webp",
         "type": "player",
         "color": "red",
@@ -42,7 +42,7 @@
     {
         "id": "base.worker_purple_1-1-1-1",
         "name": "1-1-1-1",
-        "description": "Worker tiles 1-1-1-1 for player purple",
+        "description": "Worker tile 1-1-1-1 for player purple",
         "filenameImage": "base/player_purple_1_1_1_1.webp",
         "type": "player",
         "color": "purple",
@@ -52,7 +52,7 @@
     {
         "id": "base.worker_purple_2-1-0-1",
         "name": "2-1-0-1",
-        "description": "Worker tiles 2-1-0-1 for player purple",
+        "description": "Worker tile 2-1-0-1 for player purple",
         "filenameImage": "base/player_purple_2_1_0_1.webp",
         "type": "player",
         "color": "purple",
@@ -62,7 +62,7 @@
     {
         "id": "base.worker_purple_3-0-0-1",
         "name": "3-0-0-1",
-        "description": "Worker tiles 3-0-0-1 for player purple",
+        "description": "Worker tile 3-0-0-1 for player purple",
         "filenameImage": "base/player_purple_3_0_0_1.webp",
         "type": "player",
         "color": "purple",
@@ -72,7 +72,7 @@
     {
         "id": "base.worker_purple_3-1-0-0",
         "name": "3-1-0-0",
-        "description": "Worker tiles 3-1-0-0 for player purple",
+        "description": "Worker tile 3-1-0-0 for player purple",
         "filenameImage": "base/player_purple_3_1_0_0.webp",
         "type": "player",
         "color": "purple",
@@ -82,7 +82,7 @@
     {
         "id": "base.worker_white_1-1-1-1",
         "name": "1-1-1-1",
-        "description": "Worker tiles 1-1-1-1 for player white",
+        "description": "Worker tile 1-1-1-1 for player white",
         "filenameImage": "base/player_white_1_1_1_1.webp",
         "type": "player",
         "color": "white",
@@ -92,7 +92,7 @@
     {
         "id": "base.worker_white_2-1-0-1",
         "name": "2-1-0-1",
-        "description": "Worker tiles 2-1-0-1 for player white",
+        "description": "Worker tile 2-1-0-1 for player white",
         "filenameImage": "base/player_white_2_1_0_1.webp",
         "type": "player",
         "color": "white",
@@ -102,7 +102,7 @@
     {
         "id": "base.worker_white_3-0-0-1",
         "name": "3-0-0-1",
-        "description": "Worker tiles 3-0-0-1 for player white",
+        "description": "Worker tile 3-0-0-1 for player white",
         "filenameImage": "base/player_white_3_0_0_1.webp",
         "type": "player",
         "color": "white",
@@ -112,7 +112,7 @@
     {
         "id": "base.worker_white_3-1-0-0",
         "name": "3-1-0-0",
-        "description": "Worker tiles 3-1-0-0 for player white",
+        "description": "Worker tile 3-1-0-0 for player white",
         "filenameImage": "base/player_white_3_1_0_0.webp",
         "type": "player",
         "color": "white",
@@ -122,7 +122,7 @@
     {
         "id": "base.worker_yellow_1-1-1-1",
         "name": "1-1-1-1",
-        "description": "Worker tiles 1-1-1-1 for player yellow",
+        "description": "Worker tile 1-1-1-1 for player yellow",
         "filenameImage": "base/player_yellow_1_1_1_1.webp",
         "type": "player",
         "color": "yellow",
@@ -132,7 +132,7 @@
     {
         "id": "base.worker_yellow_2-1-0-1",
         "name": "2-1-0-1",
-        "description": "Worker tiles 2-1-0-1 for player yellow",
+        "description": "Worker tile 2-1-0-1 for player yellow",
         "filenameImage": "base/player_yellow_2_1_0_1.webp",
         "type": "player",
         "color": "yellow",
@@ -142,7 +142,7 @@
     {
         "id": "base.worker_yellow_3-0-0-1",
         "name": "3-0-0-1",
-        "description": "Worker tiles 3-0-0-1 for player yellow",
+        "description": "Worker tile 3-0-0-1 for player yellow",
         "filenameImage": "base/player_yellow_3_0_0_1.webp",
         "type": "player",
         "color": "yellow",
@@ -152,7 +152,7 @@
     {
         "id": "base.worker_yellow_3-1-0-0",
         "name": "3-1-0-0",
-        "description": "Worker tiles 3-1-0-0 for player yellow",
+        "description": "Worker tile 3-1-0-0 for player yellow",
         "filenameImage": "base/player_yellow_3_1_0_0.webp",
         "type": "player",
         "color": "yellow",
@@ -432,5 +432,201 @@
         "boardgame": 2,
         "hutCost": 24,
         "module": 4
+    },
+    {
+        "id": "diamante.jungle_gem_mine",
+        "name": "Gem Mine",
+        "description": "For each of your activated workers on the adjacent edge of the tile, you may take 1 gem of your choice from this gem mine. Place the gems next to your village board.\n\nAs soon as you have at least 1 gem in each of the 4 colours, you **must immediately** exchange this set of 4 gems for the mask with the lowest value available from the supply. Remove the exchanged gems from the game and put them back into the box.",
+        "filenameImage": "diamante/gem_mine.webp",
+        "type": "gemMine",
+        "quantity": 5,
+        "boardgame": 3,
+        "module": 5
+    },
+    {
+        "id": "diamante.jungle_tree_of_life",
+        "name": "Tree of Life",
+        "description": "For each of your activated workers on the adjacent edge of the tile, you may take 1 gold from the bank.\n\nBut strength lies in serenity: If there are no workers depicted on the adjacent edge of the tile, you may even take 3 gold from the bank.",
+        "filenameImage": "diamante/tree_of_life.webp",
+        "type": "treeOfLife",
+        "quantity": 3,
+        "boardgame": 3,
+        "module": 6
+    },
+    {
+        "id": "diamante.worker_red_0-0-0-4",
+        "name": "0-0-0-4",
+        "description": "Worker tile 0-0-0-4 for player red",
+        "filenameImage": "diamante/player_red_0_0_0_4.webp",
+        "type": "player",
+        "color": "red",
+        "quantity": 1,
+        "boardgame": 3,
+        "module": 8
+    },
+    {
+        "id": "diamante.worker_red_0-0-2-2",
+        "name": "0-0-2-2",
+        "description": "Worker tile 0-0-2-2 for player red",
+        "filenameImage": "diamante/player_red_0_0_2_2.webp",
+        "type": "player",
+        "color": "red",
+        "quantity": 1,
+        "boardgame": 3,
+        "module": 8
+    },
+    {
+        "id": "diamante.worker_red_0-2-0-2",
+        "name": "0-2-0-2",
+        "description": "Worker tile 0-2-0-2 for player red",
+        "filenameImage": "diamante/player_red_0_2_0_2.webp",
+        "type": "player",
+        "color": "red",
+        "quantity": 1,
+        "boardgame": 3,
+        "module": 8
+    },
+    {
+        "id": "diamante.worker_red_0-1-0-3",
+        "name": "0-1-0-3",
+        "description": "Worker tile 0-1-0-3 for player red",
+        "filenameImage": "diamante/player_red_0_1_0_3.webp",
+        "type": "player",
+        "color": "red",
+        "quantity": 1,
+        "boardgame": 3,
+        "module": 8
+    },
+    {
+        "id": "diamante.worker_purple_0-0-0-4",
+        "name": "0-0-0-4",
+        "description": "Worker tile 0-0-0-4 for player purple",
+        "filenameImage": "diamante/player_purple_0_0_0_4.webp",
+        "type": "player",
+        "color": "purple",
+        "quantity": 1,
+        "boardgame": 3,
+        "module": 8
+    },
+    {
+        "id": "diamante.worker_purple_0-0-2-2",
+        "name": "0-0-2-2",
+        "description": "Worker tile 0-0-2-2 for player purple",
+        "filenameImage": "diamante/player_purple_0_0_2_2.webp",
+        "type": "player",
+        "color": "purple",
+        "quantity": 1,
+        "boardgame": 3,
+        "module": 8
+    },
+    {
+        "id": "diamante.worker_purple_0-2-0-2",
+        "name": "0-2-0-2",
+        "description": "Worker tile 0-2-0-2 for player purple",
+        "filenameImage": "diamante/player_purple_0_2_0_2.webp",
+        "type": "player",
+        "color": "purple",
+        "quantity": 1,
+        "boardgame": 3,
+        "module": 8
+    },
+    {
+        "id": "diamante.worker_purple_0-1-0-3",
+        "name": "0-1-0-3",
+        "description": "Worker tile 0-1-0-3 for player purple",
+        "filenameImage": "diamante/player_purple_0_1_0_3.webp",
+        "type": "player",
+        "color": "purple",
+        "quantity": 1,
+        "boardgame": 3,
+        "module": 8
+    },
+    {
+        "id": "diamante.worker_white_0-0-0-4",
+        "name": "0-0-0-4",
+        "description": "Worker tile 0-0-0-4 for player white",
+        "filenameImage": "diamante/player_white_0_0_0_4.webp",
+        "type": "player",
+        "color": "white",
+        "quantity": 1,
+        "boardgame": 3,
+        "module": 8
+    },
+    {
+        "id": "diamante.worker_white_0-0-2-2",
+        "name": "0-0-2-2",
+        "description": "Worker tile 0-0-2-2 for player white",
+        "filenameImage": "diamante/player_white_0_0_2_2.webp",
+        "type": "player",
+        "color": "white",
+        "quantity": 1,
+        "boardgame": 3,
+        "module": 8
+    },
+    {
+        "id": "diamante.worker_white_0-2-0-2",
+        "name": "0-2-0-2",
+        "description": "Worker tile 0-2-0-2 for player white",
+        "filenameImage": "diamante/player_white_0_2_0_2.webp",
+        "type": "player",
+        "color": "white",
+        "quantity": 1,
+        "boardgame": 3,
+        "module": 8
+    },
+    {
+        "id": "diamante.worker_white_0-1-0-3",
+        "name": "0-1-0-3",
+        "description": "Worker tile 0-1-0-3 for player white",
+        "filenameImage": "diamante/player_white_0_1_0_3.webp",
+        "type": "player",
+        "color": "white",
+        "quantity": 1,
+        "boardgame": 3,
+        "module": 8
+    },
+    {
+        "id": "diamante.worker_yellow_0-0-0-4",
+        "name": "0-0-0-4",
+        "description": "Worker tile 0-0-0-4 for player yellow",
+        "filenameImage": "diamante/player_yellow_0_0_0_4.webp",
+        "type": "player",
+        "color": "yellow",
+        "quantity": 1,
+        "boardgame": 3,
+        "module": 8
+    },
+    {
+        "id": "diamante.worker_yellow_0-0-2-2",
+        "name": "0-0-2-2",
+        "description": "Worker tile 0-0-2-2 for player yellow",
+        "filenameImage": "diamante/player_yellow_0_0_2_2.webp",
+        "type": "player",
+        "color": "yellow",
+        "quantity": 1,
+        "boardgame": 3,
+        "module": 8
+    },
+    {
+        "id": "diamante.worker_yellow_0-2-0-2",
+        "name": "0-2-0-2",
+        "description": "Worker tile 0-2-0-2 for player yellow",
+        "filenameImage": "diamante/player_yellow_0_2_0_2.webp",
+        "type": "player",
+        "color": "yellow",
+        "quantity": 1,
+        "boardgame": 3,
+        "module": 8
+    },
+    {
+        "id": "diamante.worker_yellow_0-1-0-3",
+        "name": "0-1-0-3",
+        "description": "Worker tile 0-1-0-3 for player yellow",
+        "filenameImage": "diamante/player_yellow_0_1_0_3.webp",
+        "type": "player",
+        "color": "yellow",
+        "quantity": 1,
+        "boardgame": 3,
+        "module": 8
     }
 ]
