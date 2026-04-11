@@ -18,7 +18,7 @@ dependencies:
   flutter_riverpod: ^3.3.1
   riverpod_annotation: ^4.0.2
   flutter_staggered_grid_view: ^0.7.0
-  go_router: ^17.1.0
+  go_router: ^17.2.0
   path_provider: ^2.1.5
   shared_preferences: ^2.5.5
   syncfusion_flutter_pdfviewer: ^32.2.9
@@ -39,7 +39,7 @@ dev_dependencies:
   flutter_lints: ^6.0.0
   riverpod_generator: ^4.0.3
   riverpod_lint: ^3.1.3
-  mocktail: ^1.0.4
+  mocktail: ^1.0.5
   freezed: ^3.2.5
 
 flutter:
@@ -49,6 +49,7 @@ flutter:
     - assets/images/tiles/
     - assets/images/tiles/base/
     - assets/images/tiles/chocolatl/
+    - assets/images/tiles/diamante/
     - assets/images/tiles/description/
     - assets/images/boardgames/
     - assets/images/preparation/
