@@ -46,5 +46,11 @@ class Assets {
   static const String preparationChocolateBar =
       'assets/images/preparation/chocolate_bar.webp';
   static const String preparationInitialTilesWatering =
-      'assets/images/preparation/initial_tiles_watering.webp';
+      'assets/images/preparation/initial_single_plantation_water.webp';
+  static const String preparationGems =
+      'assets/images/preparation/resources_gems.webp';
+  static const String preparationEmperor =
+      'assets/images/preparation/emperor_figure.webp';
+  static const String preparationNewWorkersDeck =
+      'assets/images/preparation/new_workers_deck.webp';
 }

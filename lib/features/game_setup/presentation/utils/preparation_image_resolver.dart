@@ -15,7 +15,7 @@ extension PreparationImageResolver on String {
   /// - 'resources_chocolate' -> chocolate bars asset
   /// - 'map_token' -> map token asset
   /// - 'map_board' -> map board asset
-  /// - 'initial_tiles_watering' -> initial tiles watering asset
+  /// - 'initial_single_plantation_water' -> initial single plantation water asset
   String toAssetPath() => switch (this) {
     final s when s.startsWith('village_board_') =>
       '${Assets.preparationVillagePrefix}${s.replaceFirst('village_board_', '')}${Assets.preparationVillageSufix}',
@@ -30,7 +30,10 @@ extension PreparationImageResolver on String {
     'resources_chocolate' => Assets.preparationChocolateBar,
     'map_token' => Assets.preparationMapToken,
     'map_board' => Assets.preparationMapBoard,
-    'initial_tiles_watering' => Assets.preparationInitialTilesWatering,
+    'initial_single_plantation_water' => Assets.preparationInitialTilesWatering,
+    'resources_gems' => Assets.preparationGems,
+    'emperor_figure' => Assets.preparationEmperor,
+    'new_workers_deck' => Assets.preparationNewWorkersDeck,
     _ => this,
   };
 }
