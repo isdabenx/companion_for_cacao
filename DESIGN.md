@@ -120,6 +120,25 @@ Inclou 4 mòduls independents combinables amb tota la resta.
 ### Mòdul D - Nous Treballadors
 - 16 rajoles noves (4 per color) amb distribucions inèdites, incloent la 0-0-0-4.
 - No afecten la puntuació directament, però canvien les opcions estratègiques.
+- Abans de començar, els jugadors acorden quines rajoles de treballador usar, de dues maneres:
+  1. **Substituir:** Canviar rajoles del joc base per les noves, mantenint el mateix nombre total per jugador.
+  2. **Afegir:** Incorporar les noves rajoles a les del joc base per a una partida més llarga amb més opcions de sobreposició.
+- Tots els jugadors han d'usar exactament la mateixa combinació de rajoles.
+- **Regla d'equilibri:** Hi ha d'haver més rajoles de treballador que de jungla en total:
+  - 2 jugadors: 1-8 més rajoles de treballador que de jungla.
+  - 3 jugadors: 2-12 més rajoles de treballador que de jungla.
+  - 4 jugadors: 3-16 més rajoles de treballador que de jungla.
+
+**Implementació actual:** L'app afegeix totes les 16 noves tiles al pool (opció "afegir") perquè apareguin a "Tiles in Play". El pas informatiu mostra les instruccions i opcions als jugadors.
+
+**Implementació futura (Selecció interactiva amb presets):**
+- **Presets predefinits:** Configuracions ràpides sense pensar — "Només base", "Substituir totes per noves", "Totes (partida llarga)".
+- **Presets personalitzats:** L'usuari crea la seva combinació favorita, la guarda amb un nom i la reutilitza en futures partides.
+- **Selecció manual:** Pantalla amb totes les worker tiles (base + noves) mostrant la imatge de cada una, per triar tile per tile.
+- **Validació en temps real:** L'app avisa si la combinació trenca la regla d'equilibri.
+- **Botó "Reset to default"** per tornar a la configuració base ràpidament.
+- Tres nivells d'experiència: ràpid (presets) → personalitzat (presets guardats) → total control (selecció manual).
+- Objectiu: eliminar la càrrega mental del jugador delegant els càlculs d'equilibri a l'app.
 
 **Variant "Gran Partida":** Es juguen tots els mòduls d'ambdues expansions simultàniament.
 
@@ -226,10 +245,12 @@ Les 14 cabanes no tenen model de dades (ni JSON ni Drift). Caldria un HutModel o
 - Figura emperador sobre mercat preu 2 (o reg si activa)
 - +1 or al moure, +1 or a l'inici del torn si està a la teva rajola
 
-### Mòdul Nous Treballadors — fitxes noves absents
+### Mòdul Nous Treballadors — selecció interactiva pendent
 - 16 noves (4 per color) amb distribucions inèdites (incloent 0-0-0-4)
 - Dues opcions: reemplaçar o afegir a les existents
 - Regles d'equilibri: treballadors han de superar selva per 1-16 segons nombre jugadors
+- **Estat actual:** S'afegeixen totes les 16 tiles noves al pool (opció "afegir") perquè apareguin a "Tiles in Play". Text informatiu amb instruccions.
+- **Pendent:** Selecció interactiva amb presets — presets predefinits, presets personalitzats guardables, i selecció manual tile per tile amb validació d'equilibri en temps real.
 
 ### Variant "Gran Partida" no contemplada
 - Combinar TOT: base + Chocolatl + Diamante
@@ -250,6 +271,7 @@ Les 14 cabanes no tenen model de dades (ni JSON ni Drift). Caldria un HutModel o
 | Mitjana | Gemmes i màscares | Necessari per calculadora de puntuació |
 | Mitjana | Fitxa inicial dinàmica (reg) | Preparació incorrecta amb reg |
 | Mitjana | Nous treballadors al JSON | Catàleg incomplet |
+| Mitjana | Selecció interactiva nous treballadors | UI amb validació d'equilibri (Opció B) |
 | Baixa | Mòdul Mapa (tokens) | Preparació incompleta |
 | Baixa | Emperador (preparació) | Preparació incompleta |
 | Baixa | Mini-expansions | Contingut extra opcional |

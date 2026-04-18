@@ -206,6 +206,7 @@ feature/
 - [ ] Comptador de probabilitats de rajoles
 - [ ] Foto de partida
 - [ ] Gestor d'expansions millorat
+- [ ] Selector interactiu de nous treballadors (presets predefinits, presets personalitzats i seleccio manual amb validacio d'equilibri)
 
 ### Fase 3 — Engagement
 
