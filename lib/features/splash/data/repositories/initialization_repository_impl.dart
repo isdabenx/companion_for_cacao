@@ -13,7 +13,7 @@ class InitializationRepositoryImpl implements InitializationRepository {
   AppDatabase? _db;
   static const String _dbVersionKey = 'db_seed_version';
   static const int _currentDbVersion =
-      4; // Bumped to 4 for New Workers distributions
+      5; // Bumped to 5 to refresh assets from tiles.json
 
   @override
   Future<void> initialize() async {
