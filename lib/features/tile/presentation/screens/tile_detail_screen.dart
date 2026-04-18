@@ -60,18 +60,127 @@ class TileDetailScreen extends ConsumerWidget {
                   ),
                 ),
               ),
-              const SizedBox(height: 8),
-              SelectableText(tile.name, style: AppTextStyles.titleTextStyle),
-              const SizedBox(height: 8),
+              const SizedBox(height: 16),
+              SelectableText(
+                tile.name,
+                style: AppTextStyles.titleTextStyle,
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 16),
+
+              // Metadata Section
+              Wrap(
+                alignment: WrapAlignment.center,
+                spacing: 8,
+                runSpacing: 8,
+                children: [
+                  _buildChip(
+                    context,
+                    Icons.layers_outlined,
+                    'x${tile.quantity}',
+                    AppColors.brown,
+                  ),
+                  if (tile.boardgame.value != null)
+                    _buildChip(
+                      context,
+                      Icons.extension_outlined,
+                      tile.boardgame.value!.name,
+                      AppColors.primary,
+                    ),
+                  if (tile.module.value != null)
+                    _buildChip(
+                      context,
+                      Icons.view_module_outlined,
+                      tile.module.value!.name,
+                      AppColors.secondary,
+                    ),
+                  if (tile.hutCost != null && tile.hutCost! > 0)
+                    _buildChip(
+                      context,
+                      Icons.monetization_on,
+                      'Cost: ${tile.hutCost}',
+                      AppColors.gold,
+                      textColor: AppColors.brown,
+                    ),
+                  if (tile.color != null)
+                    _buildChip(
+                      context,
+                      Icons.person_outline,
+                      _getColorName(tile.color!),
+                      AppColors.findColorByName(
+                        tile.color.toString().split('.').last,
+                      ),
+                      textColor:
+                          tile.color == TileColor.white ||
+                              tile.color == TileColor.yellow
+                          ? AppColors.brown
+                          : Colors.white,
+                    ),
+                ],
+              ),
+
+              const SizedBox(height: 24),
+              const Divider(color: AppColors.brownLight),
+              const SizedBox(height: 16),
+
               MarkdownBody(
                 data: tile.description,
                 selectable: true,
                 styleSheet: AppMarkdownStyleSheet.styleSheet,
               ),
+              const SizedBox(height: 24),
             ],
           ),
         ),
       ),
     );
+  }
+
+  Widget _buildChip(
+    BuildContext context,
+    IconData icon,
+    String label,
+    Color backgroundColor, {
+    Color textColor = Colors.white,
+  }) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+      decoration: BoxDecoration(
+        color: backgroundColor,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(
+          color: backgroundColor == Colors.transparent
+              ? AppColors.brown
+              : backgroundColor,
+        ),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(icon, size: 16, color: textColor),
+          const SizedBox(width: 6),
+          Text(
+            label,
+            style: Theme.of(context).textTheme.bodySmall?.copyWith(
+              color: textColor,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  String _getColorName(TileColor color) {
+    switch (color) {
+      case TileColor.red:
+        return 'Vermell';
+      case TileColor.purple:
+        return 'Lila';
+      case TileColor.white:
+        return 'Blanc';
+      case TileColor.yellow:
+        return 'Groc';
+    }
   }
 }
