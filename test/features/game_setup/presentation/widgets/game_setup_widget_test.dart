@@ -30,8 +30,8 @@ void main() {
 
       expect(find.byType(Stepper), findsOneWidget);
       expect(find.text('Players'), findsOneWidget);
-      expect(find.text('Expansions (work in progress)'), findsOneWidget);
-      expect(find.text('Modules (work in progress)'), findsOneWidget);
+      expect(find.text('Expansions'), findsOneWidget);
+      expect(find.text('Modules'), findsOneWidget);
     });
 
     testWidgets('should display Start Game button', (tester) async {
@@ -77,11 +77,11 @@ void main() {
       await tester.pumpAndSettle();
 
       // Tap on Expansions step header
-      await tester.tap(find.text('Expansions (work in progress)'));
+      await tester.tap(find.text('Expansions'));
       await tester.pumpAndSettle();
 
       // Tap on Modules step header
-      await tester.tap(find.text('Modules (work in progress)'));
+      await tester.tap(find.text('Modules'));
       await tester.pumpAndSettle();
 
       // Tap on Players step header
@@ -90,8 +90,8 @@ void main() {
 
       // All steps should still be visible
       expect(find.text('Players'), findsOneWidget);
-      expect(find.text('Expansions (work in progress)'), findsOneWidget);
-      expect(find.text('Modules (work in progress)'), findsOneWidget);
+      expect(find.text('Expansions'), findsOneWidget);
+      expect(find.text('Modules'), findsOneWidget);
     });
 
     testWidgets('Stepper should be interactive when isStarted is false', (

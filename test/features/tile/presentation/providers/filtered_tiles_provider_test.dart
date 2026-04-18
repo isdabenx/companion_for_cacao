@@ -69,6 +69,9 @@ void main() {
       when(
         () => mockTileRepository.getAllTiles(),
       ).thenAnswer((_) async => mockTiles);
+      when(
+        () => mockBoardgameRepository.getAllModules(),
+      ).thenAnswer((_) async => []);
       when(() => mockBoardgameRepository.getAllBoardgames()).thenAnswer(
         (_) async => [
           BoardgameModel(
