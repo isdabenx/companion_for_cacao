@@ -174,13 +174,13 @@ class TileDetailScreen extends ConsumerWidget {
   String _getColorName(TileColor color) {
     switch (color) {
       case TileColor.red:
-        return 'Vermell';
+        return 'Red';
       case TileColor.purple:
-        return 'Lila';
+        return 'Purple';
       case TileColor.white:
-        return 'Blanc';
+        return 'White';
       case TileColor.yellow:
-        return 'Groc';
+        return 'Yellow';
     }
   }
 }
