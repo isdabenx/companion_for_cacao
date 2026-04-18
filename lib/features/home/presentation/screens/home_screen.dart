@@ -18,11 +18,14 @@ class HomeScreen extends StatelessWidget {
       '🏠 Main Menu: Quick access to all functionalities.',
       '🗂 Tile Database: Comprehensive catalog of tiles.',
       '🔍 Tile Filtering: Search and filter by multiple criteria.',
-      '🎲 Game Dashboard: Summary, preparation, and tiles in play (Base game, Expansions & Big Game).',
+      '🌴 Cacao Base Game: Full support and game setup.',
+      '🍫 Chocolatl Expansion: Full support including all 4 modules.',
+      '🚀 Diamante Expansion: Full support including all 4 modules.',
+      '🎲 Game Dashboard: Summary, preparation, and tiles in play.',
+      '🌟 Big Game Variant: Integration of all modules and expansions.',
       '📖 Integrated Manuals: Read the game rules.',
       '📊 Adaptive UI: Optimized design for different screen sizes.',
       '🔄 Auto-Updater: Automatic detection of new versions.',
-      '🚀 Diamante Expansion: Full support for Diamante expansion.',
     ];
 
     final pendingFeatures = <String>[
