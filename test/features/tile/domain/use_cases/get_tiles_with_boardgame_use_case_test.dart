@@ -1,4 +1,5 @@
 import 'package:companion_for_cacao/core/data/models/boardgame_model.dart';
+import 'package:companion_for_cacao/core/data/models/module_model.dart';
 import 'package:companion_for_cacao/core/data/models/tile_model.dart';
 import 'package:companion_for_cacao/core/data/repositories/boardgame_repository.dart';
 import 'package:companion_for_cacao/features/tile/data/repositories/tile_repository.dart';
@@ -25,7 +26,7 @@ void main() {
   });
 
   test(
-    'execute should return all tiles with their boardgames when idsList is null',
+    'execute should return all tiles with their boardgames and modules when idsList is null',
     () async {
       final boardgames = [
         BoardgameModel(
@@ -39,6 +40,15 @@ void main() {
           name: 'Chocolatl',
           description: 'Exp 1',
           filenameImage: 'chocolatl.png',
+        ),
+      ];
+
+      final modules = [
+        ModuleModel(
+          id: 1,
+          name: 'Map Module',
+          description: 'Map',
+          boardgameId: 2,
         ),
       ];
 
@@ -58,6 +68,7 @@ void main() {
           filenameImage: 't2.png',
           quantity: 1,
           boardgameId: 2,
+          moduleId: 1,
         ),
         TileModel(
           id: 'test_tile_3',
@@ -66,7 +77,8 @@ void main() {
           filenameImage: 't3.png',
           quantity: 1,
           boardgameId: 99,
-        ), // Unknown boardgame
+          moduleId: 99,
+        ), // Unknown boardgame and module
       ];
 
       when(
@@ -75,22 +87,31 @@ void main() {
       when(
         () => mockBoardgameRepository.getAllBoardgames(),
       ).thenAnswer((_) async => boardgames);
+      when(
+        () => mockBoardgameRepository.getAllModules(),
+      ).thenAnswer((_) async => modules);
 
       final result = await useCase.execute();
 
       expect(result.length, 3);
       expect(result[0].boardgame.value?.name, 'Cacao');
+      expect(result[0].module.value, isNull);
+
       expect(result[1].boardgame.value?.name, 'Chocolatl');
+      expect(result[1].module.value?.name, 'Map Module');
+
       expect(result[2].boardgame.value, isNull);
+      expect(result[2].module.value, isNull);
 
       verify(() => mockTileRepository.getAllTiles()).called(1);
       verify(() => mockBoardgameRepository.getAllBoardgames()).called(1);
+      verify(() => mockBoardgameRepository.getAllModules()).called(1);
       verifyNever(() => mockTileRepository.getTilesByIds(any()));
     },
   );
 
   test(
-    'execute should return specific tiles with their boardgames when idsList is provided',
+    'execute should return specific tiles with their boardgames and modules when idsList is provided',
     () async {
       final boardgames = [
         BoardgameModel(
@@ -100,6 +121,8 @@ void main() {
           filenameImage: 'cacao.png',
         ),
       ];
+
+      final modules = <ModuleModel>[];
 
       final tiles = [
         TileModel(
@@ -118,14 +141,19 @@ void main() {
       when(
         () => mockBoardgameRepository.getAllBoardgames(),
       ).thenAnswer((_) async => boardgames);
+      when(
+        () => mockBoardgameRepository.getAllModules(),
+      ).thenAnswer((_) async => modules);
 
       final result = await useCase.execute(idsList: ['test_tile_1']);
 
       expect(result.length, 1);
       expect(result[0].boardgame.value?.name, 'Cacao');
+      expect(result[0].module.value, isNull);
 
       verify(() => mockTileRepository.getTilesByIds(['test_tile_1'])).called(1);
       verify(() => mockBoardgameRepository.getAllBoardgames()).called(1);
+      verify(() => mockBoardgameRepository.getAllModules()).called(1);
       verifyNever(() => mockTileRepository.getAllTiles());
     },
   );

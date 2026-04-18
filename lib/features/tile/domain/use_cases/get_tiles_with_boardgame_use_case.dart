@@ -1,4 +1,5 @@
 import 'package:companion_for_cacao/core/data/models/boardgame_model.dart';
+import 'package:companion_for_cacao/core/data/models/module_model.dart';
 import 'package:companion_for_cacao/core/data/models/tile_model.dart';
 import 'package:companion_for_cacao/core/data/repositories/boardgame_repository.dart';
 import 'package:companion_for_cacao/features/tile/data/repositories/tile_repository.dart';
@@ -14,13 +15,15 @@ class GetTilesWithBoardgameUseCase {
         ? await _tileRepository.getTilesByIds(idsList)
         : await _tileRepository.getAllTiles();
     final boardgames = await _boardgameRepository.getAllBoardgames();
+    final modules = await _boardgameRepository.getAllModules();
 
-    return _mapTiles(tiles, boardgames);
+    return _mapTiles(tiles, boardgames, modules);
   }
 
   List<TileModel> _mapTiles(
     List<TileModel> tiles,
     List<BoardgameModel> boardgames,
+    List<ModuleModel> modules,
   ) {
     return tiles.map((tile) {
       final boardgameRow = boardgames.firstWhere(
@@ -33,10 +36,27 @@ class GetTilesWithBoardgameUseCase {
         ),
       );
 
-      final isUnknown = boardgameRow.id == 0;
+      final isUnknownBoardgame = boardgameRow.id == 0;
+
+      final moduleRow = tile.moduleId != null
+          ? modules.firstWhere(
+              (m) => m.id == tile.moduleId,
+              orElse: () => ModuleModel(
+                id: 0,
+                name: 'Unknown',
+                description: 'Unknown',
+                boardgameId: 0,
+              ),
+            )
+          : null;
+
+      final isUnknownModule = moduleRow?.id == 0;
+
       return tile.copyWith(
-        boardgame: isUnknown ? null : boardgameRow,
-        clearBoardgame: isUnknown,
+        boardgame: isUnknownBoardgame ? null : boardgameRow,
+        clearBoardgame: isUnknownBoardgame,
+        module: isUnknownModule ? null : moduleRow,
+        clearModule: isUnknownModule,
       );
     }).toList();
   }
