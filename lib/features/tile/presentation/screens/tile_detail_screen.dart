@@ -85,14 +85,14 @@ class TileDetailScreen extends ConsumerWidget {
                       context,
                       Icons.extension_outlined,
                       tile.boardgame.value!.name,
-                      AppColors.primary,
+                      AppColors.greenDark,
                     ),
                   if (tile.module.value != null)
                     _buildChip(
                       context,
                       Icons.view_module_outlined,
                       tile.module.value!.name,
-                      AppColors.secondary,
+                      AppColors.greenDarker,
                     ),
                   if (tile.hutCost != null && tile.hutCost! > 0)
                     _buildChip(
@@ -120,7 +120,7 @@ class TileDetailScreen extends ConsumerWidget {
               ),
 
               const SizedBox(height: 24),
-              const Divider(color: AppColors.brownLight),
+              Divider(color: AppColors.brown.withValues(alpha: 0.5)),
               const SizedBox(height: 16),
 
               MarkdownBody(
