@@ -263,19 +263,12 @@ Les 14 cabanes no tenen model de dades (ni JSON ni Drift). Caldria un HutModel o
 
 | Prioritat | Element | Impacte |
 |---|---|---|
-| Alta | Fitxes expansions al JSON | Catàleg incomplet sense elles |
-| Alta | TileType enum ampliat | Necessari per classificar fitxes d'expansions |
-| Alta | Substitució de fitxes per mòdul al setup | Setup no reflecteix regles reals |
-| Alta | Eliminació fitxes selva per 2J | Setup incorrecte per partides de 2 |
 | Mitjana | Model de cabanes | Necessari per calculadora de puntuació |
 | Mitjana | Gemmes i màscares | Necessari per calculadora de puntuació |
-| Mitjana | Fitxa inicial dinàmica (reg) | Preparació incorrecta amb reg |
-| Mitjana | Nous treballadors al JSON | Catàleg incomplet |
 | Mitjana | Selecció interactiva nous treballadors | UI amb validació d'equilibri (Opció B) |
 | Baixa | Mòdul Mapa (tokens) | Preparació incompleta |
 | Baixa | Emperador (preparació) | Preparació incompleta |
 | Baixa | Mini-expansions | Contingut extra opcional |
-| Baixa | Variant Gran Partida | Mode avançat |
 
 ## 7. Features de l'Aplicació
 
@@ -283,22 +276,22 @@ Les 14 cabanes no tenen model de dades (ni JSON ni Drift). Caldria un HutModel o
 - **Splash:** Pantalla de càrrega inicial.
 - **Home:** Menú principal de navegació.
 - **Base de dades de rajoles:** Llistat amb graella, detall amb imatge i descripció en Markdown, i configuració de visualització.
-- **Configuració de partida:** Stepper de 3 passos (jugadors, expansions, mòduls) i generació de la preparació pas a pas.
-- **Regles:** Visor de PDF integrat per al manual del joc base.
-- **Rajoles d'expansió Chocolatl:** Models, JSON, i handlers per als mòduls de Chocolatl creats.
+- **Configuració de partida:** Stepper de 3 passos (jugadors, expansions, mòduls) i generació de la preparació pas a pas. S'han integrat completament tots els mòduls de Chocolatl, Diamante i la Variant Gran Partida.
+- **Regles:** Visor de PDF integrat per als manuals de joc base, Chocolatl i Diamante.
+- **Rajoles d'expansions:** Models, JSON i handlers per a totes les expansions implementats.
 
 ### Fase 1 — Funcionalitats Core (Prioritat alta)
 1. **Calculadora de puntuació final:** Formulari pas a pas amb suport per expansions (temples/gemmes, cabanes, track d'aigua). Gestió automàtica d'empats i desempats.
-2. **Filtre i cerca de rajoles:** Filtrar per tipus, color, expansió i mòdul. Cerca per nom.
-3. **Selector de primer jugador:** Aleatori temàtic ("qui ha menjat xocolata més recentment?"), rotació basada en historial, o manual.
-4. **Rajoles d'expansions completes:** Afegir totes les fitxes de Diamante al JSON i ampliar TileType (Chocolatl ja afegit).
+2. **Filtre i cerca de rajoles:** Filtrar per tipus, color, expansió i mòdul. Cerca per nom. (COMPLETAT)
+3. **Selector de primer jugador:** Aleatori temàtic ("qui ha menjat xocolata més recentment?"), rotació basada en historial, o manual. (COMPLETAT)
+4. **Rajoles d'expansions completes:** Afegir totes les fitxes de Diamante al JSON i ampliar TileType (Chocolatl ja afegit). (COMPLETAT)
 
 ### Fase 2 — Diferenciació (Prioritat mitjana)
 5. **Historial de partides:** Registre de cada sessió amb jugadors, puntuacions, guanyador, durada, expansions utilitzades i notes opcionals.
 6. **Perfils de jugador:** Estadístiques personals — partides jugades, percentatge de victòries, millor ratxa, posició mitjana, rendiment per expansió.
 7. **Comptador de probabilitats de rajoles:** Mostra rajoles restants a la pila de selva. Probabilitat de treure cada tipus. Essencial per a joc competitiu.
 8. **Foto de partida:** Captura foto del taulell finalitzat, emmagatzemada a l'historial. Galeria visual de partides.
-9. **Gestor d'expansions millorat:** Lògica completa de substitució de fitxes per mòdul, ajustos per 2J, i fitxes inicials dinàmiques.
+9. **Gestor d'expansions millorat:** Lògica completa de substitució de fitxes per mòdul, ajustos per 2J, i fitxes inicials dinàmiques. (COMPLETAT)
 
 ### Fase 3 — Engagement (Prioritat baixa)
 10. **Sistema d'assoliments:** Desbloquejables temàtics — "Baró del Xocolata" (50+ cacau en una partida), "Mestre del Temple" (guanyar per temples), "Supervivent de la Sequera" (guanyar amb aigua mínima), etc.

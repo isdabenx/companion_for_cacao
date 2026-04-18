@@ -10,7 +10,7 @@
 [![Dart](https://img.shields.io/badge/Dart-3.11+-0175C2?logo=dart&logoColor=white)](https://dart.dev)
 [![License](https://img.shields.io/badge/License-CC%20BY--NC--SA%204.0-lightgrey)](LICENSE)
 [![Platform](https://img.shields.io/badge/Platform-Android-3DDC84?logo=android&logoColor=white)](https://play.google.com/store)
-[![Version](https://img.shields.io/badge/Version-2.2.0-blue)]()
+[![Version](https://img.shields.io/badge/Version-2.3.0-blue)]()
 
 *Eines digitals per millorar l'experiencia de joc: preparacio de partides, consulta de regles i calcul de puntuacions.*
 
@@ -66,14 +66,14 @@ L'objectiu es proporcionar eines digitals que complementin l'experiencia de joc 
 
 ## Funcionalitats
 
-### Disponibles (v2.2.0)
+### Disponibles (v2.3.0)
 
 | Funcionalitat | Descripcio |
 |---|---|
 | **Menu Principal** | Navegacio rapida amb menu lateral tematic |
 | **Base de Dades de Rajoles** | Cataleg complet amb imatges, descripcions i filtres de visualitzacio |
 | **Filtrat de Rajoles** | Cerca i filtra rajoles per tipus, color i expansio |
-| **Configuracio de Partida** | Dashboard amb resum, preparacio i rajoles en joc (joc base) |
+| **Configuracio de Partida** | Dashboard amb resum, preparacio i rajoles en joc (joc base, expansions i Big Game) |
 | **Reordenacio de Jugadors** | Arrossega per canviar l'ordre dels jugadors |
 | **Preparacio Automatica** | Visualitzacio pas a pas de la preparacio (joc base) |
 | **Manual de Regles** | Visor PDF integrat del manual del joc base |
@@ -197,7 +197,7 @@ feature/
 - [x] Selector de primer jugador
 - [x] Notificacio d'actualitzacio de l'app (upgrader)
 - [x] Rajoles d'expansió Chocolatl
-- [ ] Rajoles d'expansió Diamante
+- [x] Rajoles d'expansió Diamante
 
 ### Fase 2 — Diferenciacio
 

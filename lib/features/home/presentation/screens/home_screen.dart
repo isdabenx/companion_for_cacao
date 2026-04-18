@@ -18,10 +18,11 @@ class HomeScreen extends StatelessWidget {
       '🏠 Menú Principal: Accés ràpid a totes les funcionalitats.',
       '🗂 Base de Dades de Rajoles: Catàleg complet de rajoles.',
       '🔍 Filtrat de Rajoles: Cerca i filtra per diversos criteris.',
-      '🎲 Dashboard de Partida: Resum, preparació i rajoles en joc (joc base i Chocolatl).',
+      '🎲 Dashboard de Partida: Resum, preparació i rajoles en joc (joc base, expansions i Big Game).',
       '📖 Manuals Integrats: Consulta les regles del joc.',
       '📊 UI Adaptativa: Disseny optimitzat per a diferents pantalles.',
       '🔄 Auto-Updater: Detecció automàtica de noves versions.',
+      '🚀 Expansió Diamante: Suport complet per a l\'expansió Diamante.',
     ];
 
     final pendingFeatures = <String>[
@@ -29,7 +30,6 @@ class HomeScreen extends StatelessWidget {
       '🏆 Càlcul de Puntuació Final: Calculadora automàtica de punts.',
       '⚙️ Configuració Personalitzada: Ajusta l\'experiència de joc.',
       '🌐 Suport Multiidioma: Interfície en diversos idiomes.',
-      '🚀 Expansió Diamante: Suport complet per a l\'expansió Diamante.',
     ];
 
     return UpgradeAlert(
