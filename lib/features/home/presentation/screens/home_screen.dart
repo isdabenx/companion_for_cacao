@@ -15,21 +15,21 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final completedFeatures = <String>[
-      '🏠 Menú Principal: Accés ràpid a totes les funcionalitats.',
-      '🗂 Base de Dades de Rajoles: Catàleg complet de rajoles.',
-      '🔍 Filtrat de Rajoles: Cerca i filtra per diversos criteris.',
-      '🎲 Dashboard de Partida: Resum, preparació i rajoles en joc (joc base, expansions i Big Game).',
-      '📖 Manuals Integrats: Consulta les regles del joc.',
-      '📊 UI Adaptativa: Disseny optimitzat per a diferents pantalles.',
-      '🔄 Auto-Updater: Detecció automàtica de noves versions.',
-      '🚀 Expansió Diamante: Suport complet per a l\'expansió Diamante.',
+      '🏠 Main Menu: Quick access to all functionalities.',
+      '🗂 Tile Database: Comprehensive catalog of tiles.',
+      '🔍 Tile Filtering: Search and filter by multiple criteria.',
+      '🎲 Game Dashboard: Summary, preparation, and tiles in play (Base game, Expansions & Big Game).',
+      '📖 Integrated Manuals: Read the game rules.',
+      '📊 Adaptive UI: Optimized design for different screen sizes.',
+      '🔄 Auto-Updater: Automatic detection of new versions.',
+      '🚀 Diamante Expansion: Full support for Diamante expansion.',
     ];
 
     final pendingFeatures = <String>[
-      '🕒 Temporitzador de Torns: Controla la durada de cada torn.',
-      '🏆 Càlcul de Puntuació Final: Calculadora automàtica de punts.',
-      '⚙️ Configuració Personalitzada: Ajusta l\'experiència de joc.',
-      '🌐 Suport Multiidioma: Interfície en diversos idiomes.',
+      '🕒 Turn Timer: Control the duration of each turn.',
+      '🏆 Final Score Calculation: Automatic points calculator.',
+      '⚙️ Custom Settings: Adjust the game experience.',
+      '🌐 Multi-language Support: Interface in multiple languages.',
     ];
 
     return UpgradeAlert(
@@ -53,38 +53,38 @@ class HomeScreen extends StatelessWidget {
                 const Padding(
                   padding: EdgeInsets.symmetric(vertical: 4),
                   child: Text(
-                    'Companion for Cacao és una aplicació mòbil desenvolupada amb Flutter dissenyada per a ajudar els jugadors del joc de taula Cacao i les seves expansions. '
-                    'L\'objectiu és proporcionar eines digitals que millorin l\'experiència de joc facilitant el seguiment de puntuacions, la consulta de regles i la gestió de partides.',
+                    'Companion for Cacao is a mobile application developed with Flutter designed to assist players of the Cacao board game and its expansions. '
+                    'The goal is to provide digital tools that enhance the gaming experience by facilitating score tracking, rule consultation, and game management.',
                   ),
                 ),
                 const SizedBox(height: 20),
-                const HeaderWidget(text: 'Funcionalitats Completades'),
+                const HeaderWidget(text: 'Completed Features'),
                 for (final String feature in completedFeatures)
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 4),
                     child: Text(feature),
                   ),
                 const SizedBox(height: 20),
-                const HeaderWidget(text: 'Funcionalitats Pendents'),
+                const HeaderWidget(text: 'Pending Features'),
                 for (final String feature in pendingFeatures)
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 4),
                     child: Text(feature),
                   ),
                 const SizedBox(height: 20),
-                const HeaderWidget(text: 'Contacta amb mi'),
+                const HeaderWidget(text: 'Contact Me'),
                 const Padding(
                   padding: EdgeInsets.symmetric(vertical: 4),
                   child: Text(
-                    'Per a suggeriments, millores, errors o qualsevol altra consulta, '
-                    'pots visitar el nostre repositori de GitHub. L\'aplicació és de codi obert '
-                    'i sempre busquem col·laboradors per ajudar a millorar-la.',
+                    'For suggestions, improvements, bug reports, or any other inquiries, '
+                    'you can visit our GitHub repository. The application is open-source '
+                    'and we are always looking for contributors to help improve it.',
                   ),
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 4),
                   child: Text(
-                    'Visita el nostre repositori de GitHub:',
+                    'Visit our GitHub repository:',
 
                     style: AppTextStyles.markdownBody.copyWith(
                       fontWeight: FontWeight.bold,
@@ -113,9 +113,9 @@ class HomeScreen extends StatelessWidget {
                 const Padding(
                   padding: EdgeInsets.symmetric(vertical: 4),
                   child: Text(
-                    'A GitHub, pots obrir "issues" per a informar d\'errors, suggerir noves funcionalitats '
-                    'o fins i tot enviar "pull requests" amb les teves pròpies contribucions. '
-                    'Ens esforcem per millorar constantment l\'aplicació i agraïm qualsevol ajuda!',
+                    'On GitHub, you can open "issues" to report bugs, suggest new features, '
+                    'or even submit "pull requests" with your own contributions. '
+                    'We strive to constantly improve the app and appreciate any help!',
                   ),
                 ),
               ],
