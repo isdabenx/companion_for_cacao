@@ -49,6 +49,10 @@ class _DetailedSummaryWidgetState extends ConsumerState<DetailedSummaryWidget> {
         _buildExpansionsSection(),
         _sectionDivider,
         _buildModulesSection(),
+        if (widget.gameSetup.isBigGame) ...[
+          _sectionDivider,
+          _buildGameVariantSection(),
+        ],
         AnimatedSize(
           duration: const Duration(milliseconds: 300),
           curve: Curves.easeInOut,
@@ -188,6 +192,17 @@ class _DetailedSummaryWidgetState extends ConsumerState<DetailedSummaryWidget> {
                       .toList(),
                 ),
         ),
+      ],
+    );
+  }
+
+  Widget _buildGameVariantSection() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _sectionHeader(context, Icons.star_outline, 'Game Variant'),
+        const SizedBox(height: 8),
+        Padding(padding: const EdgeInsets.only(left: 8), child: _BigGameChip()),
       ],
     );
   }
@@ -498,6 +513,34 @@ class _TileChip extends StatelessWidget {
           ],
         );
       },
+    );
+  }
+}
+
+class _BigGameChip extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+      decoration: BoxDecoration(
+        color: AppColors.gold.withValues(alpha: 0.2),
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: AppColors.gold, width: 1.5),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(Icons.star, size: 16, color: AppColors.gold),
+          const SizedBox(width: 6),
+          Text(
+            'Big Game',
+            style: AppTextStyles.bodySmall.copyWith(
+              fontWeight: FontWeight.w600,
+              color: AppColors.brown,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

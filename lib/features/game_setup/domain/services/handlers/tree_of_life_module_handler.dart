@@ -13,7 +13,11 @@ class TreeOfLifeModuleHandler implements ModulePreparationHandler {
     List<TileModel> tiles,
     int playerCount, {
     required List<BoardgameModel> activeExpansions,
+    bool isBigGame = false,
   }) {
+    // Big Game: all tiles already loaded by base handler, no worker adjustments needed
+    if (isBigGame) return tiles;
+
     var result = <TileModel>[...tiles];
 
     final isChocolateActive = activeExpansions.any(
@@ -113,8 +117,13 @@ class TreeOfLifeModuleHandler implements ModulePreparationHandler {
   List<PreparationEntity> modifyPreparationSteps(
     List<PlayerEntity> players,
     List<TileModel> tiles,
-    List<PreparationEntity> currentSteps,
-  ) {
+    List<PreparationEntity> currentSteps, {
+    bool isBigGame = false,
+  }) {
+    // Big Game: no tile substitutions, no worker adjustments needed
+    // (all tiles and workers already in the pool)
+    if (isBigGame) return currentSteps;
+
     final preparation = <PreparationEntity>[...currentSteps];
 
     // Detect if Chocolate module is active by checking for chocolate-specific

@@ -34,7 +34,11 @@ class WateringModuleHandler implements ModulePreparationHandler {
     List<TileModel> tiles,
     int playerCount, {
     required List<BoardgameModel> activeExpansions,
+    bool isBigGame = false,
   }) {
+    // Big Game: all tiles already loaded by base handler
+    if (isBigGame) return tiles;
+
     var adjustedTiles = <TileModel>[...tiles];
 
     if (playerCount == 2) {
@@ -79,11 +83,13 @@ class WateringModuleHandler implements ModulePreparationHandler {
   List<PreparationEntity> modifyPreparationSteps(
     List<PlayerEntity> players,
     List<TileModel> tiles,
-    List<PreparationEntity> currentSteps,
-  ) {
+    List<PreparationEntity> currentSteps, {
+    bool isBigGame = false,
+  }) {
     final preparation = <PreparationEntity>[...currentSteps];
 
     // Find and modify the setup_initial_tiles_plantation_market step
+    // (applies to both normal and Big Game — starting tile always changes)
     int initialTilesIndex = -1;
     for (int i = 0; i < preparation.length; i++) {
       if (preparation[i].id == 'setup_initial_tiles_plantation_market') {
@@ -105,6 +111,9 @@ class WateringModuleHandler implements ModulePreparationHandler {
       );
       preparation[initialTilesIndex] = modifiedStep;
     }
+
+    // Big Game: skip tile substitution steps (all tiles already in the pool)
+    if (isBigGame) return preparation;
 
     // Insert visible tile substitution steps before 'setup_jungle_draw_pile'
     final substitutionSteps = _tileSubstitutionSteps(players.length);

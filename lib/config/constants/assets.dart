@@ -63,6 +63,8 @@ class Assets {
       '${imagesTilePath}base/single_plantation.webp';
   static const String jungleDoublePlantation =
       '${imagesTilePath}base/double_plantation.webp';
+  static const String jungleMarketSelling2 =
+      '${imagesTilePath}base/selling_price_2.webp';
   static const String jungleMarketSelling3 =
       '${imagesTilePath}base/selling_price_3.webp';
   static const String jungleGoldMineV1 = '${imagesTilePath}base/value_1.webp';

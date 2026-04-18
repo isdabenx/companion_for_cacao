@@ -1,4 +1,5 @@
 import 'package:companion_for_cacao/core/data/models/module_model.dart';
+import 'package:companion_for_cacao/core/theme/app_colors.dart';
 import 'package:companion_for_cacao/core/theme/app_text_styles.dart';
 import 'package:companion_for_cacao/features/game_setup/presentation/providers/game_setup_notifier.dart';
 import 'package:companion_for_cacao/features/game_setup/presentation/widgets/select_module_widget.dart';
@@ -7,6 +8,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class StepModuleWidget extends ConsumerWidget {
   const StepModuleWidget({super.key});
+
+  /// Total number of modules available across all expansions.
+  static const int _totalModuleCount = 8;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -20,6 +24,23 @@ class StepModuleWidget extends ConsumerWidget {
             [],
       ),
     );
+
+    final selectedModuleCount = ref.watch(
+      gameSetupProvider.select((s) => s.value?.modules.length ?? 0),
+    );
+
+    final playerCount = ref.watch(
+      gameSetupProvider.select((s) => s.value?.players.length ?? 0),
+    );
+
+    final isBigGame = ref.watch(
+      gameSetupProvider.select((s) => s.value?.isBigGame ?? false),
+    );
+
+    final showBigGameToggle =
+        selectedModuleCount >= _totalModuleCount &&
+        playerCount >= 3 &&
+        playerCount <= 4;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -46,6 +67,27 @@ class StepModuleWidget extends ConsumerWidget {
               SelectModuleWidget(module: module),
           ],
         ),
+        if (showBigGameToggle)
+          Padding(
+            padding: const EdgeInsets.only(top: 12),
+            child: ListTile(
+              contentPadding: EdgeInsets.zero,
+              title: Text('Big Game', style: AppTextStyles.bodyMedium),
+              subtitle: Text(
+                'Use all tiles from all modules without substitutions',
+                style: AppTextStyles.sectionSublabel,
+              ),
+              trailing: Switch(
+                value: isBigGame,
+                activeTrackColor: AppColors.greenDark,
+                inactiveTrackColor: AppColors.greenLight,
+                onChanged: (value) =>
+                    ref.read(gameSetupProvider.notifier).setBigGame(value),
+              ),
+              onTap: () =>
+                  ref.read(gameSetupProvider.notifier).setBigGame(!isBigGame),
+            ),
+          ),
       ],
     );
   }

@@ -13,7 +13,11 @@ class GemMinesModuleHandler implements ModulePreparationHandler {
     List<TileModel> tiles,
     int playerCount, {
     required List<BoardgameModel> activeExpansions,
+    bool isBigGame = false,
   }) {
+    // Big Game: all tiles already loaded by base handler
+    if (isBigGame) return tiles;
+
     final result = <TileModel>[...tiles];
 
     // Remove all temples
@@ -39,9 +43,44 @@ class GemMinesModuleHandler implements ModulePreparationHandler {
   List<PreparationEntity> modifyPreparationSteps(
     List<PlayerEntity> players,
     List<TileModel> tiles,
-    List<PreparationEntity> currentSteps,
-  ) {
+    List<PreparationEntity> currentSteps, {
+    bool isBigGame = false,
+  }) {
     final preparation = <PreparationEntity>[...currentSteps];
+
+    // Big Game: skip tile substitution steps, only add supplies
+    if (isBigGame) {
+      preparation.add(
+        PreparationEntity(
+          id: 'setup_gem_mines_mine_car',
+          description:
+              'Fill all 32 gems into the mine car and mix them by shaking. Place the mine car next to the playing area.',
+          phase: PreparationPhase.supplies,
+          imageKey: 'resources_mine_car',
+        ),
+      );
+
+      preparation.add(
+        PreparationEntity(
+          id: 'setup_gem_mines_masks',
+          description:
+              'Sort the 7 masks by their values in an ascending, overlapping row as a supply.',
+          phase: PreparationPhase.supplies,
+          imageKey: 'resources_masks',
+        ),
+      );
+
+      preparation.add(
+        const PreparationEntity(
+          id: 'setup_gem_mines_rule_reminder',
+          description:
+              'Rule reminder: As soon as a gem mine tile is placed in the jungle display or onto the map board, shake out 6 gems from the mine car and put them on the gem mine tile.',
+          phase: PreparationPhase.supplies,
+        ),
+      );
+
+      return preparation;
+    }
 
     // For 2 players: remove the base game temple removal step (it only
     // removes 1 temple, but gem mines removes ALL temples).

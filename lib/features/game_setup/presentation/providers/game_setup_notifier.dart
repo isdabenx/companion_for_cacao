@@ -44,6 +44,7 @@ class GameSetupNotifier extends _$GameSetupNotifier {
         ],
       ),
     );
+    _resetBigGameIfInvalid();
   }
 
   void removePlayer(String color) {
@@ -53,6 +54,7 @@ class GameSetupNotifier extends _$GameSetupNotifier {
         players: state.value!.players.where((p) => p.color != color).toList(),
       ),
     );
+    _resetBigGameIfInvalid();
   }
 
   void reorderPlayers(int oldIndex, int newIndex) {
@@ -98,6 +100,7 @@ class GameSetupNotifier extends _$GameSetupNotifier {
             .toList(),
       ),
     );
+    _resetBigGameIfInvalid();
   }
 
   void toggleExpansion(BoardgameModel expansion) {
@@ -131,6 +134,26 @@ class GameSetupNotifier extends _$GameSetupNotifier {
       removeModule(module);
     } else {
       addModule(module);
+    }
+    _resetBigGameIfInvalid();
+  }
+
+  void setBigGame(bool value) {
+    if (state.value == null) return;
+    state = AsyncData(state.value!.copyWith(isBigGame: value));
+  }
+
+  /// Total number of modules available across all selected expansions.
+  static const int _totalModuleCount = 8;
+
+  /// Resets isBigGame to false if conditions are no longer met
+  /// (requires all 8 modules + 3-4 players).
+  void _resetBigGameIfInvalid() {
+    if (state.value == null || !state.value!.isBigGame) return;
+    final playerCount = state.value!.players.length;
+    final moduleCount = state.value!.modules.length;
+    if (moduleCount < _totalModuleCount || playerCount < 3 || playerCount > 4) {
+      state = AsyncData(state.value!.copyWith(isBigGame: false));
     }
   }
 

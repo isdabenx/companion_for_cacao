@@ -24,6 +24,7 @@ class MapModuleHandler implements ModulePreparationHandler {
     List<TileModel> tiles,
     int playerCount, {
     required List<BoardgameModel> activeExpansions,
+    bool isBigGame = false,
   }) {
     // The map module doesn't modify the tiles of the jungle pile.
     return tiles;
@@ -33,8 +34,9 @@ class MapModuleHandler implements ModulePreparationHandler {
   List<PreparationEntity> modifyPreparationSteps(
     List<PlayerEntity> players,
     List<TileModel> tiles,
-    List<PreparationEntity> currentSteps,
-  ) {
+    List<PreparationEntity> currentSteps, {
+    bool isBigGame = false,
+  }) {
     final preparation = <PreparationEntity>[...currentSteps];
     final modifiedSteps = <PreparationEntity>[];
 

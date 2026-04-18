@@ -19,7 +19,11 @@ class HutsModuleHandler implements ModulePreparationHandler {
     List<TileModel> tiles,
     int playerCount, {
     required List<BoardgameModel> activeExpansions,
+    bool isBigGame = false,
   }) {
+    // Big Game: all tiles already loaded by base handler
+    if (isBigGame) return tiles;
+
     final result = <TileModel>[...tiles];
 
     // Add all hut tiles from the expansions
@@ -38,8 +42,9 @@ class HutsModuleHandler implements ModulePreparationHandler {
   List<PreparationEntity> modifyPreparationSteps(
     List<PlayerEntity> players,
     List<TileModel> tiles,
-    List<PreparationEntity> currentSteps,
-  ) {
+    List<PreparationEntity> currentSteps, {
+    bool isBigGame = false,
+  }) {
     final preparation = <PreparationEntity>[...currentSteps];
 
     // Find the last step of the boardSetup phase

@@ -166,9 +166,9 @@ For each test, configure the app with the specified players and modules, then ve
 
 - **Config**: 2 jugadors, Hut Module
 - **Board Setup**:
-  - [x] Pas al final de boardSetup: "12 hut tiles, drop, sort by cost"
+  - [x] Pas al final de boardSetup: "12 hut tiles, drop, sort by cost" (⚠️ el pas diu 12 però `tiles.json` en conté 14)
 - **Tiles en joc**:
-  - [x] 12 hut tiles afegides al pool
+  - [x] 14 hut tiles afegides al pool
 
 ---
 
@@ -186,7 +186,7 @@ For each test, configure the app with the specified players and modules, then ve
 - **Supplies**:
   - [x] Pas: "Remove 8 gems (2 of each color) and put them back into the box" (amb imatge gems)
   - [x] Pas: "Fill the remaining gems into the mine car..." (amb imatge gems)
-  - [x] Pas: "Sort the masks (without the value 12 mask)..." (sense imatge de moment)
+  - [x] Pas: "Sort the masks (without the value 12 mask)..." (amb imatge)
   - [x] Pas: "Rule reminder: shake out 6 gems..."
 
 ---
@@ -420,40 +420,40 @@ For each test, configure the app with the specified players and modules, then ve
 
 - **Config**: 2 jugadors, tots 8 mòduls actius
 - **Player Setup**:
-  - [ ] Pas New Workers al principi (selecció worker tiles)
-  - [ ] Cada jugador: village board, water carrier, "-10", worker tiles
-  - [ ] Cada jugador rep 2 map tiles + surplus back in box
-  - [ ] Cada jugador agafa 0-0-0-4 (Tree of Life)
-  - [ ] Les 0-0-0-4 worker tiles tenen qty 1 per jugador (NO duplicades)
-  - [ ] NO "remove worker" steps
-  - [ ] Shuffle workers + draw 3
+  - [x] Pas New Workers al principi (selecció worker tiles)
+  - [x] Cada jugador: village board, water carrier, "-10", worker tiles
+  - [x] Cada jugador rep 2 map tiles + surplus back in box
+  - [x] Cada jugador agafa 0-0-0-4 (Tree of Life)
+  - [x] Les 0-0-0-4 worker tiles tenen qty 1 per jugador (NO duplicades)
+  - [x] NO "remove worker" steps
+  - [x] Shuffle workers + draw 3
 - **Board Setup**:
-  - [ ] Starting tiles: "single plantation" + "**water**"
-  - [ ] Emperor: "on the **water tile**"
-  - [ ] 6 passos base sort out jungle tiles:
-    - [ ] 2x Single Plantation (base 2p)
-    - [ ] **3x** Market, selling price 3 (base 1 + chocolate 2, pas modificat)
-    - [ ] **2x** Gold Mine, value 1 (base 1 + chocolate 1, pas modificat)
-    - [ ] 1x Water (base 2p)
-    - [ ] 1x Sun-Worshiping Site (base 2p)
-    - [ ] Temple: **ELIMINAT** (reemplaçat per Gem Mines "Sort out all Temples")
-  - [ ] Watering: "Sort out 2x Double Plantation" + "Add 2x Watering tiles"
-  - [ ] Chocolate: "Sort out 1x Gold Mine, value 2" + "Add 2x Choc Kitchen" + "Add 2x Choc Market"
-  - [ ] Gem Mines: "Sort out all Temple tiles" + "Add 4x Gem Mine tiles"
-  - [ ] Tree of Life: "Add 2x Tree of Life tiles" (NO gold mine removal — Chocolate actiu)
-  - [ ] Map board + 4 jungle tiles
-  - [ ] 12 hut tiles (drop, sort by cost)
+  - [x] Starting tiles: "single plantation" + "**water**"
+  - [x] Emperor: "on the **water tile**"
+  - [x] 6 passos base sort out jungle tiles:
+    - [x] 2x Single Plantation (base 2p)
+    - [x] **3x** Market, selling price 3 (base 1 + chocolate 2, pas modificat)
+    - [x] **2x** Gold Mine, value 1 (base 1 + chocolate 1, pas modificat)
+    - [x] 1x Water (base 2p)
+    - [x] 1x Sun-Worshiping Site (base 2p)
+    - [x] Temple: **ELIMINAT** (reemplaçat per Gem Mines "Sort out all Temples")
+  - [x] Watering: "Sort out 2x Double Plantation" + "Add 2x Watering tiles"
+  - [x] Chocolate: "Sort out 1x Gold Mine, value 2" + "Add 2x Choc Kitchen" + "Add 2x Choc Market"
+  - [x] Gem Mines: "Sort out all Temple tiles" + "Add 4x Gem Mine tiles"
+  - [x] Tree of Life: "Add 2x Tree of Life tiles" (NO gold mine removal — Chocolate actiu)
+  - [x] Map board + 4 jungle tiles
+  - [x] 14 hut tiles (el pas diu "12", però `tiles.json` en conté 14)
 - **Tiles en joc**:
-  - [ ] Plantations reduïdes (Watering) + 2 watering
-  - [ ] Gold mines trets (Chocolate) + 2 choc kitchen + 2 choc market
-  - [ ] Tree of Life NO treu gold mines (Chocolate actiu)
-  - [ ] 2 tree of life
-  - [ ] Temples eliminats (Gem Mines) + 4 gem mines
-  - [ ] 12 hut tiles
+  - [x] Plantations reduïdes (Watering) + 2 watering
+  - [x] Gold mines trets (Chocolate) + 2 choc kitchen + 2 choc market
+  - [x] Tree of Life NO treu gold mines (Chocolate actiu)
+  - [x] 2 tree of life
+  - [x] Temples eliminats (Gem Mines) + 4 gem mines
+  - [x] 14 hut tiles
 - **Supplies**:
-  - [ ] Cacao fruits + sun tokens + gold coins
-  - [ ] 20 chocolate bars
-  - [ ] Gems 2p: "Remove 8 gems..." + "Fill remaining into mine car..." + "Masks (sense value 12)..." + "Rule reminder"
+  - [x] Cacao fruits + sun tokens + gold coins
+  - [x] 20 chocolate bars
+  - [x] Gems 2p: "Remove 8 gems..." + "Fill remaining into mine car..." + "Masks (sense value 12)..." + "Rule reminder"
 
 ---
 
@@ -476,13 +476,13 @@ For each test, configure the app with the specified players and modules, then ve
   - [x] Gem Mines: "Sort out all Temple tiles" + "Add 5x Gem Mine tiles"
   - [x] Tree of Life: "Add 3x Tree of Life tiles" (NO gold mine removal — Chocolate actiu)
   - [x] Map board + 4 jungle tiles
-  - [x] 12 hut tiles
+  - [x] 14 hut tiles
 - **Tiles en joc**:
   - [x] 1 single + 2 double plantations tretes (Watering) + 3 watering
   - [x] Gold mines trets (Chocolate) + 3 choc kitchen + 3 choc market
   - [x] 3 tree of life (Tree of Life NO treu gold mines, Chocolate actiu)
   - [x] Temples eliminats (Gem Mines) + 5 gem mines
-  - [x] 12 hut tiles
+  - [x] 14 hut tiles
 - **Supplies**:
   - [x] Cacao + sun tokens + gold coins
   - [x] 20 chocolate bars
@@ -507,11 +507,137 @@ For each test, configure the app with the specified players and modules, then ve
   - [x] NO passos base sort out jungle tiles (només per 2p)
   - [x] Mateixos passos de substitució que 3 jugadors (Watering 3+p, Chocolate 3+p, Gem Mines 3+p, Tree of Life 3+p)
   - [x] Map board + 4 jungle tiles
-  - [x] 12 hut tiles
+  - [x] 14 hut tiles
 - **Tiles en joc**:
   - [x] Mateixos que 3 jugadors (same quantities per 3+ players)
 - **Supplies**:
   - [x] Same que 3 jugadors
+
+---
+
+## 🟣 GRUP 5: Big Game variant (`isBigGame = true`)
+
+> La variant Big Game s'activa quan els 8 mòduls estan actius, hi ha 3 o 4 jugadors, i l'usuari activa el toggle "Big Game".
+> En Big Game: s'utilitzen TOTES les tiles sense substitucions. Només 3 jugadors aplica removals específics.
+
+### Test 30 — Big Game, 3 jugadors
+
+- **Config**: 3 jugadors, tots 8 mòduls actius, toggle Big Game activat
+- **Player Setup**:
+  - [x] Cada jugador: village board, water carrier, "-10", worker tiles
+  - [x] Cada jugador rep 2 map tiles
+  - [x] Surplus map tiles back in box (3 jugadors × 2 = 6 usades, 8 total → 2 sobrants)
+  - [x] NO apareix pas "New Workers selection" (totes les worker tiles ja estan al pool)
+  - [x] NO apareix pas "Tree of Life 0-0-0-4" (totes ja al pool)
+  - [x] NO apareix cap pas "remove worker tile" (Big Game = sense removals)
+  - [x] Shuffle workers + draw 3
+- **Board Setup**:
+  - [x] Starting tiles: "single plantation" + "**water**" (Watering encara modifica)
+  - [x] Emperor: "on the **water tile**"
+  - [x] NO passos base sort out jungle tiles (2p)
+  - [x] NO passos de substitució de cap mòdul:
+    - [x] NO watering remove/add steps
+    - [x] NO chocolate remove/add steps
+    - [x] NO gem mines remove/add steps
+    - [x] NO tree of life remove/add steps
+  - [x] Big Game 3p removal steps SÍ apareixen (5 passos, cadascun amb imatge):
+    - [x] "Sort out 2x Single Plantation" (amb imatge)
+    - [x] "Sort out 2x Gold Mine, value 1" (amb imatge)
+    - [x] "Sort out 1x Market, selling price 2" (amb imatge)
+    - [x] "Sort out 1x Market, selling price 3" (amb imatge)
+    - [x] "Sort out 1x Watering" (amb imatge)
+  - [x] Jungle draw pile + jungle display
+  - [x] Map board + jungle display map
+  - [x] 14 hut tiles
+- **Tiles en joc** (TOTES les tiles, només amb removals 3p):
+  - [x] Single plantation: 4 (6-2)
+  - [x] Double plantation: 2 (sense removal)
+  - [x] Market selling 2: 1 (2-1)
+  - [x] Market selling 3: 3 (4-1)
+  - [x] Market selling 4: 1
+  - [x] Gold mine value 1: 0 (2-2, filtrada)
+  - [x] Gold mine value 2: 2
+  - [x] Water: 3
+  - [x] Sun-Worshiping Site: 2
+  - [x] Temple: 5 (sense removal!)
+  - [x] Watering: 2 (3-1)
+  - [x] Chocolate kitchen: 3
+  - [x] Chocolate market: 3
+  - [x] Gem mine: 5
+  - [x] Tree of life: 3
+  - [x] 14 hut tiles
+- **Workers** (tots a full quantity, sense removals):
+  - [x] Per cada jugador (red, purple, white):
+    - [x] 1-1-1-1: qty 4
+    - [x] 2-1-0-1: qty 5
+    - [x] 3-0-0-1: qty 1
+    - [x] 3-1-0-0: qty 1
+    - [x] 0-0-0-4: qty 1
+    - [x] 0-0-2-2: qty 1
+    - [x] 0-2-0-2: qty 1
+    - [x] 0-1-0-3: qty 1
+    - [x] Total per jugador: 15 worker tiles
+  - [x] NO hi ha worker tiles de yellow (només 3 jugadors)
+- **Supplies**:
+  - [x] Cacao fruits + sun tokens + gold coins
+  - [x] 20 chocolate bars
+  - [x] Gems: "Fill all 32 gems into mine car..." + "7 masks..." + "Rule reminder"
+  - [x] NO apareix "Remove 8 gems..." (només per 2 jugadors normal mode)
+
+---
+
+### Test 31 — Big Game, 4 jugadors
+
+- **Config**: 4 jugadors, tots 8 mòduls actius, toggle Big Game activat
+- **Player Setup**:
+  - [x] Cada jugador: village board, water carrier, "-10", worker tiles
+  - [x] Cada jugador rep 2 map tiles
+  - [x] NO surplus map tiles (4 jugadors = 0 sobrants)
+  - [x] NO apareix pas "New Workers selection"
+  - [x] NO apareix pas "Tree of Life 0-0-0-4"
+  - [x] NO apareix cap pas "remove worker tile"
+  - [x] Shuffle workers + draw 3
+- **Board Setup**:
+  - [x] Starting tiles: "single plantation" + "**water**"
+  - [x] Emperor: "on the **water tile**"
+  - [x] NO passos base sort out jungle tiles
+  - [x] NO passos de substitució de cap mòdul
+  - [x] NO Big Game 3p removal steps (4 jugadors = TOTES les tiles)
+  - [x] Jungle draw pile + jungle display
+  - [x] Map board + jungle display map
+  - [x] 14 hut tiles
+- **Tiles en joc** (TOTES les tiles, sense cap removal):
+  - [x] Single plantation: 6
+  - [x] Double plantation: 2
+  - [x] Market selling 2: 2
+  - [x] Market selling 3: 4
+  - [x] Market selling 4: 1
+  - [x] Gold mine value 1: 2
+  - [x] Gold mine value 2: 2
+  - [x] Water: 3
+  - [x] Sun-Worshiping Site: 2
+  - [x] Temple: 5
+  - [x] Watering: 3
+  - [x] Chocolate kitchen: 3
+  - [x] Chocolate market: 3
+  - [x] Gem mine: 5
+  - [x] Tree of life: 3
+  - [x] 14 hut tiles
+- **Workers** (tots a full quantity, sense removals):
+  - [x] Per cada jugador (red, purple, white, yellow):
+    - [x] 1-1-1-1: qty 4
+    - [x] 2-1-0-1: qty 5
+    - [x] 3-0-0-1: qty 1
+    - [x] 3-1-0-0: qty 1
+    - [x] 0-0-0-4: qty 1
+    - [x] 0-0-2-2: qty 1
+    - [x] 0-2-0-2: qty 1
+    - [x] 0-1-0-3: qty 1
+    - [x] Total per jugador: 15 worker tiles
+- **Supplies**:
+  - [x] Cacao fruits + sun tokens + gold coins
+  - [x] 20 chocolate bars
+  - [x] Gems: "Fill all 32 gems into mine car..." + "7 masks..." + "Rule reminder"
 
 ---
 
@@ -520,7 +646,8 @@ For each test, configure the app with the specified players and modules, then ve
 - L'ordre dels mòduls al pipeline és: Map → Watering → Chocolate → Hut → Gem Mines → Tree of Life → Emperor Favour → New Workers (per id de mòdul: 1-8).
 - Les interaccions crítiques són: Watering↔Emperor (starting tile), Chocolate↔Tree of Life (gold mines), Tree of Life↔Base (worker removals), Gem Mines↔Base (temples), **Tree of Life↔New Workers (0-0-0-4 dedup)**.
 - Cada test hauria de verificar tant els **passos de preparació** (instruccions) com les **tiles en joc** (pool resultant).
+- **Big Game**: Quan `isBigGame = true`, el pipeline carrega TOTES les tiles al base handler i salta els `adjustTiles` dels mòduls. Watering encara modifica la starting tile. TreeOfLife i NewWorkers retornen early en `modifyPreparationSteps`. Chocolate i GemMines afegeixen supplies però salten substitucions.
 
 ### Qüestions pendents
 
-- **Hut tiles 12 vs 14**: El checklist indica 12 hut tiles (regles) però `tiles.json` en conté 14. Pendent de verificar amb el rulebook oficial.
+- **Hut tiles 12 vs 14**: El handler diu "12 hut tiles" a la descripció (text del rulebook Chocolatl), però `tiles.json` en conté 14 i els integration tests esperen 14. Pendent de verificar amb el rulebook oficial si els 2 extres (Chief's Wife i Chief) provenen de Diamante.

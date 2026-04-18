@@ -35,7 +35,11 @@ class ChocolateModuleHandler implements ModulePreparationHandler {
     List<TileModel> tiles,
     int playerCount, {
     required List<BoardgameModel> activeExpansions,
+    bool isBigGame = false,
   }) {
+    // Big Game: all tiles already loaded by base handler
+    if (isBigGame) return tiles;
+
     var adjustedTiles = <TileModel>[...tiles];
 
     if (playerCount == 2) {
@@ -98,11 +102,13 @@ class ChocolateModuleHandler implements ModulePreparationHandler {
   List<PreparationEntity> modifyPreparationSteps(
     List<PlayerEntity> players,
     List<TileModel> tiles,
-    List<PreparationEntity> currentSteps,
-  ) {
+    List<PreparationEntity> currentSteps, {
+    bool isBigGame = false,
+  }) {
     final preparation = <PreparationEntity>[...currentSteps];
 
     // Find and modify the setup_resources_bank step to add chocolate bars
+    // (applies to both normal and Big Game — always need chocolate supplies)
     int resourceBankIndex = -1;
     for (int i = 0; i < preparation.length; i++) {
       if (preparation[i].id == 'setup_resources_bank') {
@@ -123,6 +129,9 @@ class ChocolateModuleHandler implements ModulePreparationHandler {
         ),
       );
     }
+
+    // Big Game: skip tile substitution steps (all tiles already in the pool)
+    if (isBigGame) return preparation;
 
     // For 2 players: modify existing base game removal steps to reflect
     // the combined total (base + chocolate module removals).

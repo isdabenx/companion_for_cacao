@@ -13,7 +13,11 @@ class NewWorkersModuleHandler implements ModulePreparationHandler {
     List<TileModel> tiles,
     int playerCount, {
     required List<BoardgameModel> activeExpansions,
+    bool isBigGame = false,
   }) {
+    // Big Game: all tiles already loaded by base handler
+    if (isBigGame) return tiles;
+
     // TODO(future): When the interactive worker selection feature is implemented
     // (see DESIGN.md "Mòdul D - Nous Treballadors"), this method should
     // dynamically add/remove tiles based on user selection (presets or manual)
@@ -50,8 +54,12 @@ class NewWorkersModuleHandler implements ModulePreparationHandler {
   List<PreparationEntity> modifyPreparationSteps(
     List<PlayerEntity> players,
     List<TileModel> tiles,
-    List<PreparationEntity> currentSteps,
-  ) {
+    List<PreparationEntity> currentSteps, {
+    bool isBigGame = false,
+  }) {
+    // Big Game: all workers are used, no selection needed
+    if (isBigGame) return currentSteps;
+
     final preparation = <PreparationEntity>[...currentSteps];
 
     // Insert before 'setup_shuffle_workers' so players decide about new

@@ -39,6 +39,7 @@ extension PreparationImageResolver on String {
     // Jungle tile logical keys
     'jungle_single_plantation' => Assets.jungleSinglePlantation,
     'jungle_double_plantation' => Assets.jungleDoublePlantation,
+    'jungle_market_selling_2' => Assets.jungleMarketSelling2,
     'jungle_market_selling_3' => Assets.jungleMarketSelling3,
     'jungle_gold_mine_v1' => Assets.jungleGoldMineV1,
     'jungle_gold_mine_v2' => Assets.jungleGoldMineV2,

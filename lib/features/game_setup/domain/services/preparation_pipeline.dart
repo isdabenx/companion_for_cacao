@@ -20,15 +20,19 @@ class PreparationPipeline {
   ({List<TileModel> tiles, List<PreparationEntity> preparation}) execute(
     GameSetupStateEntity state,
   ) {
+    final isBigGame = state.isBigGame;
+
     var tiles = baseHandler.adjustTiles(
       [],
       state.players.length,
       activeExpansions: state.expansions,
+      isBigGame: isBigGame,
     );
     var preparation = baseHandler.modifyPreparationSteps(
       state.players,
       tiles,
       const [],
+      isBigGame: isBigGame,
     );
 
     for (final module in state.modules) {
@@ -37,15 +41,19 @@ class PreparationPipeline {
         continue;
       }
 
-      tiles = handler.adjustTiles(
-        tiles,
-        state.players.length,
-        activeExpansions: state.expansions,
-      );
+      // Big Game: base handler already loaded ALL tiles, skip module tile adjustments
+      if (!isBigGame) {
+        tiles = handler.adjustTiles(
+          tiles,
+          state.players.length,
+          activeExpansions: state.expansions,
+        );
+      }
       preparation = handler.modifyPreparationSteps(
         state.players,
         tiles,
         preparation,
+        isBigGame: isBigGame,
       );
     }
 

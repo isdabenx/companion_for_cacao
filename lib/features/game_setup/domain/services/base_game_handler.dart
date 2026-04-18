@@ -27,6 +27,9 @@ class TileIds {
   static const String temple = 'base.jungle_temple';
 }
 
+/// Watering tile ID for Big Game 3-player removal.
+const String _WateringTileId = 'chocolatl.jungle_watering';
+
 class BaseGameHandler implements ModulePreparationHandler {
   BaseGameHandler({
     required this.baseGame,
@@ -43,6 +46,7 @@ class BaseGameHandler implements ModulePreparationHandler {
     List<TileModel> tiles,
     int playerCount, {
     required List<BoardgameModel> activeExpansions,
+    bool isBigGame = false,
   }) {
     var adjustedTiles = <TileModel>[...tiles];
 
@@ -55,13 +59,14 @@ class BaseGameHandler implements ModulePreparationHandler {
       adjustedTiles.addAll(
         activeExpansions.expand((boardgame) {
           return boardgame.tiles.where(
-            (tile) => tile.color == tileColor && tile.moduleId == null,
+            (tile) =>
+                tile.color == tileColor && (isBigGame || tile.moduleId == null),
           );
         }),
       );
     }
 
-    if (playerCount > 2) {
+    if (!isBigGame && playerCount > 2) {
       adjustedTiles = adjustedTiles.map((tile) {
         // Remove one 1-1-1-1 worker tile per player (for >2 players)
         if (tile.id == TileIds.workerTile(tile.color?.name ?? '', '1-1-1-1')) {
@@ -78,40 +83,79 @@ class BaseGameHandler implements ModulePreparationHandler {
       }).toList();
     }
 
-    adjustedTiles.addAll(baseGame.tiles.where((tile) => tile.color == null));
+    if (isBigGame) {
+      // Big Game: load ALL jungle tiles from ALL expansions (no moduleId filter)
+      adjustedTiles.addAll(
+        activeExpansions.expand(
+          (boardgame) => boardgame.tiles.where((tile) => tile.color == null),
+        ),
+      );
 
-    if (playerCount == 2) {
-      // 2-player game: reduce specific jungle tiles
-      adjustedTiles = _reduceJungleTileById(
-        adjustedTiles,
-        id: TileIds.singlePlantation,
-        amount: 2,
-      );
-      adjustedTiles = _reduceJungleTileById(
-        adjustedTiles,
-        id: TileIds.marketSelling3,
-        amount: 1,
-      );
-      adjustedTiles = _reduceJungleTileById(
-        adjustedTiles,
-        id: TileIds.goldMineValue1,
-        amount: 1,
-      );
-      adjustedTiles = _reduceJungleTileById(
-        adjustedTiles,
-        id: TileIds.water,
-        amount: 1,
-      );
-      adjustedTiles = _reduceJungleTileById(
-        adjustedTiles,
-        id: TileIds.sunWorshipingSite,
-        amount: 1,
-      );
-      adjustedTiles = _reduceJungleTileById(
-        adjustedTiles,
-        id: TileIds.temple,
-        amount: 1,
-      );
+      // 3-player Big Game: remove specific tiles
+      if (playerCount == 3) {
+        adjustedTiles = _reduceJungleTileById(
+          adjustedTiles,
+          id: TileIds.singlePlantation,
+          amount: 2,
+        );
+        adjustedTiles = _reduceJungleTileById(
+          adjustedTiles,
+          id: TileIds.goldMineValue1,
+          amount: 2,
+        );
+        adjustedTiles = _reduceJungleTileById(
+          adjustedTiles,
+          id: TileIds.marketSelling2,
+          amount: 1,
+        );
+        adjustedTiles = _reduceJungleTileById(
+          adjustedTiles,
+          id: TileIds.marketSelling3,
+          amount: 1,
+        );
+        adjustedTiles = _reduceJungleTileById(
+          adjustedTiles,
+          id: _WateringTileId,
+          amount: 1,
+        );
+      }
+    } else {
+      // Normal game: load only base jungle tiles (moduleId == null)
+      adjustedTiles.addAll(baseGame.tiles.where((tile) => tile.color == null));
+
+      if (playerCount == 2) {
+        // 2-player game: reduce specific jungle tiles
+        adjustedTiles = _reduceJungleTileById(
+          adjustedTiles,
+          id: TileIds.singlePlantation,
+          amount: 2,
+        );
+        adjustedTiles = _reduceJungleTileById(
+          adjustedTiles,
+          id: TileIds.marketSelling3,
+          amount: 1,
+        );
+        adjustedTiles = _reduceJungleTileById(
+          adjustedTiles,
+          id: TileIds.goldMineValue1,
+          amount: 1,
+        );
+        adjustedTiles = _reduceJungleTileById(
+          adjustedTiles,
+          id: TileIds.water,
+          amount: 1,
+        );
+        adjustedTiles = _reduceJungleTileById(
+          adjustedTiles,
+          id: TileIds.sunWorshipingSite,
+          amount: 1,
+        );
+        adjustedTiles = _reduceJungleTileById(
+          adjustedTiles,
+          id: TileIds.temple,
+          amount: 1,
+        );
+      }
     }
 
     return adjustedTiles;
@@ -121,8 +165,9 @@ class BaseGameHandler implements ModulePreparationHandler {
   List<PreparationEntity> modifyPreparationSteps(
     List<PlayerEntity> players,
     List<TileModel> tiles,
-    List<PreparationEntity> currentSteps,
-  ) {
+    List<PreparationEntity> currentSteps, {
+    bool isBigGame = false,
+  }) {
     final preparation = <PreparationEntity>[...currentSteps];
 
     for (final player in players) {
@@ -173,7 +218,8 @@ class BaseGameHandler implements ModulePreparationHandler {
         );
     }
 
-    if (players.length > 2) {
+    // Worker tile removals only in normal mode (Big Game uses all workers)
+    if (!isBigGame && players.length > 2) {
       for (final player in players) {
         final workerTile = _findWorkerTileByColorAndValue(
           tiles,
@@ -237,8 +283,12 @@ class BaseGameHandler implements ModulePreparationHandler {
         ),
       );
 
-    if (players.length == 2) {
+    if (!isBigGame && players.length == 2) {
       preparation.addAll(_twoPlayerJungleTileRemovals());
+    }
+
+    if (isBigGame && players.length == 3) {
+      preparation.addAll(_bigGame3pJungleTileRemovals());
     }
 
     preparation
@@ -359,6 +409,45 @@ class BaseGameHandler implements ModulePreparationHandler {
         id: 'setup_jungle_tiles_2p_removal_temple',
         description: 'Sort out 1x Temple and put it back in the box',
         imageKey: 'jungle_temple',
+        phase: PreparationPhase.boardSetup,
+      ),
+    ];
+  }
+
+  List<PreparationEntity> _bigGame3pJungleTileRemovals() {
+    return const [
+      PreparationEntity(
+        id: 'setup_big_game_3p_removal_single_plantation',
+        description:
+            'Sort out 2x Single Plantation and put them back in the box',
+        imageKey: 'jungle_single_plantation',
+        phase: PreparationPhase.boardSetup,
+      ),
+      PreparationEntity(
+        id: 'setup_big_game_3p_removal_gold_mine_v1',
+        description:
+            'Sort out 2x Gold Mine, value 1 and put them back in the box',
+        imageKey: 'jungle_gold_mine_v1',
+        phase: PreparationPhase.boardSetup,
+      ),
+      PreparationEntity(
+        id: 'setup_big_game_3p_removal_market_selling_2',
+        description:
+            'Sort out 1x Market, selling price 2 and put it back in the box',
+        imageKey: 'jungle_market_selling_2',
+        phase: PreparationPhase.boardSetup,
+      ),
+      PreparationEntity(
+        id: 'setup_big_game_3p_removal_market_selling_3',
+        description:
+            'Sort out 1x Market, selling price 3 and put it back in the box',
+        imageKey: 'jungle_market_selling_3',
+        phase: PreparationPhase.boardSetup,
+      ),
+      PreparationEntity(
+        id: 'setup_big_game_3p_removal_watering',
+        description: 'Sort out 1x Watering and put it back in the box',
+        imageKey: 'jungle_watering',
         phase: PreparationPhase.boardSetup,
       ),
     ];

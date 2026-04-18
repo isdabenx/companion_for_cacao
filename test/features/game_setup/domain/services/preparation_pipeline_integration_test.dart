@@ -554,6 +554,7 @@ BoardgameModel _createDiamanteExpansion({
   required List<String> selectedColors,
   required List<ModuleModel> activeModules,
   List<BoardgameModel>? expansions,
+  bool isBigGame = false,
 }) {
   final baseGame = _createBaseGame(selectedColors);
 
@@ -628,6 +629,7 @@ BoardgameModel _createDiamanteExpansion({
     players: players,
     expansions: activeExpansions,
     modules: activeModules,
+    isBigGame: isBigGame,
   );
 
   final result = pipeline.execute(state);
@@ -2171,6 +2173,403 @@ void main() {
       expect(_tileQty(r.tiles, 'diamante.worker_yellow_0-0-2-2'), 1);
       expect(_tileQty(r.tiles, 'diamante.worker_yellow_0-2-0-2'), 1);
       expect(_tileQty(r.tiles, 'diamante.worker_yellow_0-1-0-3'), 1);
+    });
+  });
+
+  // ---------------------------------------------------------------------------
+  // GRUP 5: Big Game variant (isBigGame = true)
+  // ---------------------------------------------------------------------------
+  group('GRUP 5: Big Game variant', () {
+    final allChocolatlModules = [
+      _mapModule,
+      _wateringModule,
+      _chocolateModule,
+      _hutModule,
+      _emperorModule,
+    ];
+    final allDiamanteModules = [
+      _gemMinesModule,
+      _treeOfLifeModule,
+      _newWorkersModule,
+    ];
+    final allModules = [...allChocolatlModules, ...allDiamanteModules];
+
+    test('Test 30 — Big Game, 3 players', () {
+      final r = _runPipeline(
+        players: _makePlayers(3),
+        selectedColors: _selectedColors(3),
+        activeModules: allModules,
+        isBigGame: true,
+      );
+
+      // ---- Player Setup ----
+      // Village board, carrier, field, tiles for each player
+      expect(_hasStep(r.stepIds, 'setup_village_board_red'), isTrue);
+      expect(_hasStep(r.stepIds, 'setup_village_board_purple'), isTrue);
+      expect(_hasStep(r.stepIds, 'setup_village_board_white'), isTrue);
+      expect(_hasStep(r.stepIds, 'setup_tiles_red'), isTrue);
+      expect(_hasStep(r.stepIds, 'setup_tiles_purple'), isTrue);
+      expect(_hasStep(r.stepIds, 'setup_tiles_white'), isTrue);
+
+      // Map tokens (3p → surplus exists)
+      expect(_hasStep(r.stepIds, 'setup_map_tokens_red'), isTrue);
+      expect(_hasStep(r.stepIds, 'setup_map_tokens_purple'), isTrue);
+      expect(_hasStep(r.stepIds, 'setup_map_tokens_white'), isTrue);
+      expect(_hasStep(r.stepIds, 'setup_map_tokens_surplus'), isTrue);
+
+      // NO worker removal steps at all (Big Game = no removals)
+      expect(
+        _hasAnyStepMatching(
+          r.stepIds,
+          (id) => id.startsWith('setup_remove_worker_'),
+        ),
+        isFalse,
+      );
+
+      // NO new workers selection step (Big Game: returns early)
+      expect(_hasStep(r.stepIds, 'setup_new_workers_selection'), isFalse);
+
+      // NO tree of life 0-0-0-4 steps (Big Game: returns early)
+      expect(
+        _hasAnyStepMatching(
+          r.stepIds,
+          (id) => id.startsWith('setup_tree_of_life_add_0004_'),
+        ),
+        isFalse,
+      );
+
+      // Shuffle workers
+      expect(_hasStep(r.stepIds, 'setup_shuffle_workers'), isTrue);
+
+      // ---- Board Setup ----
+      // Starting tiles: plantation + water (watering modifies this in Big Game too)
+      expect(
+        _hasStep(r.stepIds, 'setup_initial_tiles_plantation_water'),
+        isTrue,
+      );
+      expect(
+        _hasStep(r.stepIds, 'setup_initial_tiles_plantation_market'),
+        isFalse,
+      );
+
+      // Emperor after initial tiles
+      expect(_hasStep(r.stepIds, 'setup_emperor'), isTrue);
+      final initialIdx30 = _stepIndex(
+        r.stepIds,
+        'setup_initial_tiles_plantation_water',
+      );
+      final emperorIdx30 = _stepIndex(r.stepIds, 'setup_emperor');
+      expect(emperorIdx30, initialIdx30 + 1);
+
+      // NO 2p sort out steps
+      expect(
+        _hasAnyStepMatching(
+          r.stepIds,
+          (id) => id.startsWith('setup_jungle_tiles_2p_'),
+        ),
+        isFalse,
+      );
+
+      // Big Game 3p removal steps ARE present
+      expect(
+        _hasStep(r.stepIds, 'setup_big_game_3p_removal_single_plantation'),
+        isTrue,
+      );
+      expect(
+        _hasStep(r.stepIds, 'setup_big_game_3p_removal_gold_mine_v1'),
+        isTrue,
+      );
+      expect(
+        _hasStep(r.stepIds, 'setup_big_game_3p_removal_market_selling_2'),
+        isTrue,
+      );
+      expect(
+        _hasStep(r.stepIds, 'setup_big_game_3p_removal_market_selling_3'),
+        isTrue,
+      );
+      expect(_hasStep(r.stepIds, 'setup_big_game_3p_removal_watering'), isTrue);
+
+      // NO module substitution steps (Big Game skips all substitutions)
+      expect(
+        _hasStep(r.stepIds, 'setup_watering_remove_single_plantation'),
+        isFalse,
+      );
+      expect(
+        _hasStep(r.stepIds, 'setup_watering_remove_double_plantation'),
+        isFalse,
+      );
+      expect(_hasStep(r.stepIds, 'setup_watering_add_watering_tiles'), isFalse);
+      expect(
+        _hasStep(r.stepIds, 'setup_chocolate_remove_gold_mine_v1'),
+        isFalse,
+      );
+      expect(
+        _hasStep(r.stepIds, 'setup_chocolate_remove_gold_mine_v2'),
+        isFalse,
+      );
+      expect(
+        _hasStep(r.stepIds, 'setup_chocolate_remove_market_selling_3'),
+        isFalse,
+      );
+      expect(_hasStep(r.stepIds, 'setup_chocolate_add_kitchen'), isFalse);
+      expect(_hasStep(r.stepIds, 'setup_chocolate_add_market'), isFalse);
+      expect(_hasStep(r.stepIds, 'setup_gem_mines_remove_temples'), isFalse);
+      expect(_hasStep(r.stepIds, 'setup_gem_mines_add_gem_mines'), isFalse);
+      expect(_hasStep(r.stepIds, 'setup_tree_of_life_add_tiles'), isFalse);
+      expect(
+        _hasStep(r.stepIds, 'setup_tree_of_life_remove_gold_mine_v1'),
+        isFalse,
+      );
+
+      // Map board + jungle display map
+      expect(_hasStep(r.stepIds, 'setup_map_board'), isTrue);
+      expect(_hasStep(r.stepIds, 'setup_jungle_display_map'), isTrue);
+
+      // Huts market
+      expect(_hasStep(r.stepIds, 'setup_huts_market'), isTrue);
+
+      // ---- Supplies ----
+      expect(_hasStep(r.stepIds, 'setup_resources_bank'), isTrue);
+      expect(_hasStep(r.stepIds, 'setup_chocolate_bars'), isTrue);
+      expect(_hasStep(r.stepIds, 'setup_gem_mines_mine_car'), isTrue);
+      expect(_hasStep(r.stepIds, 'setup_gem_mines_masks'), isTrue);
+      expect(_hasStep(r.stepIds, 'setup_gem_mines_rule_reminder'), isTrue);
+      // No remove_gems step in Big Game (only in normal mode)
+      expect(_hasStep(r.stepIds, 'setup_gem_mines_remove_gems'), isFalse);
+
+      // ---- Jungle tile quantities (Big Game 3p removals applied) ----
+      expect(_tileQty(r.tiles, 'base.jungle_single_plantation'), 4); // 6-2
+      expect(
+        _tileQty(r.tiles, 'base.jungle_double_plantation'),
+        2,
+      ); // no removal
+      expect(_tileQty(r.tiles, 'base.jungle_market_selling_2'), 1); // 2-1
+      expect(_tileQty(r.tiles, 'base.jungle_market_selling_3'), 3); // 4-1
+      expect(_tileQty(r.tiles, 'base.jungle_market_selling_4'), 1);
+      expect(_tileQty(r.tiles, 'base.jungle_gold_mine_value_1'), 0); // 2-2
+      expect(_tileQty(r.tiles, 'base.jungle_gold_mine_value_2'), 2);
+      expect(_tileQty(r.tiles, 'base.jungle_water'), 3);
+      expect(_tileQty(r.tiles, 'base.jungle_sun_worshiping_site'), 2);
+      expect(_tileQty(r.tiles, 'base.jungle_temple'), 5);
+      expect(_tileQty(r.tiles, 'chocolatl.jungle_watering'), 2); // 3-1
+      expect(_tileQty(r.tiles, 'chocolatl.jungle_chocolate_kitchen'), 3);
+      expect(_tileQty(r.tiles, 'chocolatl.jungle_chocolate_market'), 3);
+      expect(_tileQty(r.tiles, 'diamante.jungle_gem_mine'), 5);
+      expect(_tileQty(r.tiles, 'diamante.jungle_tree_of_life'), 3);
+
+      // ---- Worker quantities (NO removals in Big Game) ----
+      // Base workers at full quantity for 3 colors
+      expect(_tileQty(r.tiles, 'base.worker_red_1-1-1-1'), 4);
+      expect(_tileQty(r.tiles, 'base.worker_red_2-1-0-1'), 5);
+      expect(_tileQty(r.tiles, 'base.worker_red_3-0-0-1'), 1);
+      expect(_tileQty(r.tiles, 'base.worker_red_3-1-0-0'), 1);
+      expect(_tileQty(r.tiles, 'base.worker_purple_1-1-1-1'), 4);
+      expect(_tileQty(r.tiles, 'base.worker_purple_2-1-0-1'), 5);
+      expect(_tileQty(r.tiles, 'base.worker_white_1-1-1-1'), 4);
+      expect(_tileQty(r.tiles, 'base.worker_white_2-1-0-1'), 5);
+
+      // New worker tiles loaded by base handler (isBigGame || moduleId == null)
+      expect(_tileQty(r.tiles, 'diamante.worker_red_0-0-0-4'), 1);
+      expect(_tileQty(r.tiles, 'diamante.worker_red_0-0-2-2'), 1);
+      expect(_tileQty(r.tiles, 'diamante.worker_red_0-2-0-2'), 1);
+      expect(_tileQty(r.tiles, 'diamante.worker_red_0-1-0-3'), 1);
+      expect(_tileQty(r.tiles, 'diamante.worker_purple_0-0-0-4'), 1);
+      expect(_tileQty(r.tiles, 'diamante.worker_purple_0-0-2-2'), 1);
+      expect(_tileQty(r.tiles, 'diamante.worker_purple_0-2-0-2'), 1);
+      expect(_tileQty(r.tiles, 'diamante.worker_purple_0-1-0-3'), 1);
+      expect(_tileQty(r.tiles, 'diamante.worker_white_0-0-0-4'), 1);
+      expect(_tileQty(r.tiles, 'diamante.worker_white_0-0-2-2'), 1);
+      expect(_tileQty(r.tiles, 'diamante.worker_white_0-2-0-2'), 1);
+      expect(_tileQty(r.tiles, 'diamante.worker_white_0-1-0-3'), 1);
+
+      // No yellow workers (only 3 players)
+      expect(_tileQty(r.tiles, 'base.worker_yellow_1-1-1-1'), 0);
+      expect(_tileQty(r.tiles, 'diamante.worker_yellow_0-0-0-4'), 0);
+
+      // Hut tiles present (loaded by base handler color == null filter)
+      final hutTiles30 = r.tiles.where((t) => t.type == TileType.hut);
+      final totalHuts30 = hutTiles30.fold(0, (sum, t) => sum + t.quantity);
+      expect(totalHuts30, 14);
+    });
+
+    test('Test 31 — Big Game, 4 players', () {
+      final r = _runPipeline(
+        players: _makePlayers(4),
+        selectedColors: _selectedColors(4),
+        activeModules: allModules,
+        isBigGame: true,
+      );
+
+      // ---- Player Setup ----
+      // Village board, carrier, field, tiles for each player
+      expect(_hasStep(r.stepIds, 'setup_village_board_red'), isTrue);
+      expect(_hasStep(r.stepIds, 'setup_village_board_purple'), isTrue);
+      expect(_hasStep(r.stepIds, 'setup_village_board_white'), isTrue);
+      expect(_hasStep(r.stepIds, 'setup_village_board_yellow'), isTrue);
+      expect(_hasStep(r.stepIds, 'setup_tiles_red'), isTrue);
+      expect(_hasStep(r.stepIds, 'setup_tiles_yellow'), isTrue);
+
+      // Map tokens, NO surplus (4 players)
+      expect(_hasStep(r.stepIds, 'setup_map_tokens_red'), isTrue);
+      expect(_hasStep(r.stepIds, 'setup_map_tokens_yellow'), isTrue);
+      expect(_hasStep(r.stepIds, 'setup_map_tokens_surplus'), isFalse);
+
+      // NO worker removal steps at all
+      expect(
+        _hasAnyStepMatching(
+          r.stepIds,
+          (id) => id.startsWith('setup_remove_worker_'),
+        ),
+        isFalse,
+      );
+
+      // NO new workers selection step
+      expect(_hasStep(r.stepIds, 'setup_new_workers_selection'), isFalse);
+
+      // NO tree of life 0-0-0-4 steps
+      expect(
+        _hasAnyStepMatching(
+          r.stepIds,
+          (id) => id.startsWith('setup_tree_of_life_add_0004_'),
+        ),
+        isFalse,
+      );
+
+      // Shuffle workers
+      expect(_hasStep(r.stepIds, 'setup_shuffle_workers'), isTrue);
+
+      // ---- Board Setup ----
+      // Starting tiles: plantation + water (watering modifies)
+      expect(
+        _hasStep(r.stepIds, 'setup_initial_tiles_plantation_water'),
+        isTrue,
+      );
+      expect(
+        _hasStep(r.stepIds, 'setup_initial_tiles_plantation_market'),
+        isFalse,
+      );
+
+      // Emperor after initial tiles
+      expect(_hasStep(r.stepIds, 'setup_emperor'), isTrue);
+      final initialIdx31 = _stepIndex(
+        r.stepIds,
+        'setup_initial_tiles_plantation_water',
+      );
+      final emperorIdx31 = _stepIndex(r.stepIds, 'setup_emperor');
+      expect(emperorIdx31, initialIdx31 + 1);
+
+      // NO 2p sort out steps
+      expect(
+        _hasAnyStepMatching(
+          r.stepIds,
+          (id) => id.startsWith('setup_jungle_tiles_2p_'),
+        ),
+        isFalse,
+      );
+
+      // NO Big Game 3p removal steps (4 players = ALL tiles)
+      expect(
+        _hasAnyStepMatching(
+          r.stepIds,
+          (id) => id.startsWith('setup_big_game_3p_'),
+        ),
+        isFalse,
+      );
+
+      // NO module substitution steps
+      expect(
+        _hasStep(r.stepIds, 'setup_watering_remove_single_plantation'),
+        isFalse,
+      );
+      expect(
+        _hasStep(r.stepIds, 'setup_watering_remove_double_plantation'),
+        isFalse,
+      );
+      expect(_hasStep(r.stepIds, 'setup_watering_add_watering_tiles'), isFalse);
+      expect(
+        _hasStep(r.stepIds, 'setup_chocolate_remove_gold_mine_v1'),
+        isFalse,
+      );
+      expect(
+        _hasStep(r.stepIds, 'setup_chocolate_remove_gold_mine_v2'),
+        isFalse,
+      );
+      expect(
+        _hasStep(r.stepIds, 'setup_chocolate_remove_market_selling_3'),
+        isFalse,
+      );
+      expect(_hasStep(r.stepIds, 'setup_chocolate_add_kitchen'), isFalse);
+      expect(_hasStep(r.stepIds, 'setup_chocolate_add_market'), isFalse);
+      expect(_hasStep(r.stepIds, 'setup_gem_mines_remove_temples'), isFalse);
+      expect(_hasStep(r.stepIds, 'setup_gem_mines_add_gem_mines'), isFalse);
+      expect(_hasStep(r.stepIds, 'setup_tree_of_life_add_tiles'), isFalse);
+
+      // Map board + jungle display map
+      expect(_hasStep(r.stepIds, 'setup_map_board'), isTrue);
+      expect(_hasStep(r.stepIds, 'setup_jungle_display_map'), isTrue);
+
+      // Huts market
+      expect(_hasStep(r.stepIds, 'setup_huts_market'), isTrue);
+
+      // ---- Supplies ----
+      expect(_hasStep(r.stepIds, 'setup_resources_bank'), isTrue);
+      expect(_hasStep(r.stepIds, 'setup_chocolate_bars'), isTrue);
+      expect(_hasStep(r.stepIds, 'setup_gem_mines_mine_car'), isTrue);
+      expect(_hasStep(r.stepIds, 'setup_gem_mines_masks'), isTrue);
+      expect(_hasStep(r.stepIds, 'setup_gem_mines_rule_reminder'), isTrue);
+      expect(_hasStep(r.stepIds, 'setup_gem_mines_remove_gems'), isFalse);
+
+      // ---- Jungle tile quantities (NO removals for 4p Big Game) ----
+      expect(_tileQty(r.tiles, 'base.jungle_single_plantation'), 6);
+      expect(_tileQty(r.tiles, 'base.jungle_double_plantation'), 2);
+      expect(_tileQty(r.tiles, 'base.jungle_market_selling_2'), 2);
+      expect(_tileQty(r.tiles, 'base.jungle_market_selling_3'), 4);
+      expect(_tileQty(r.tiles, 'base.jungle_market_selling_4'), 1);
+      expect(_tileQty(r.tiles, 'base.jungle_gold_mine_value_1'), 2);
+      expect(_tileQty(r.tiles, 'base.jungle_gold_mine_value_2'), 2);
+      expect(_tileQty(r.tiles, 'base.jungle_water'), 3);
+      expect(_tileQty(r.tiles, 'base.jungle_sun_worshiping_site'), 2);
+      expect(_tileQty(r.tiles, 'base.jungle_temple'), 5);
+      expect(_tileQty(r.tiles, 'chocolatl.jungle_watering'), 3);
+      expect(_tileQty(r.tiles, 'chocolatl.jungle_chocolate_kitchen'), 3);
+      expect(_tileQty(r.tiles, 'chocolatl.jungle_chocolate_market'), 3);
+      expect(_tileQty(r.tiles, 'diamante.jungle_gem_mine'), 5);
+      expect(_tileQty(r.tiles, 'diamante.jungle_tree_of_life'), 3);
+
+      // ---- Worker quantities (NO removals, all 4 colors) ----
+      expect(_tileQty(r.tiles, 'base.worker_red_1-1-1-1'), 4);
+      expect(_tileQty(r.tiles, 'base.worker_red_2-1-0-1'), 5);
+      expect(_tileQty(r.tiles, 'base.worker_red_3-0-0-1'), 1);
+      expect(_tileQty(r.tiles, 'base.worker_red_3-1-0-0'), 1);
+      expect(_tileQty(r.tiles, 'base.worker_purple_1-1-1-1'), 4);
+      expect(_tileQty(r.tiles, 'base.worker_purple_2-1-0-1'), 5);
+      expect(_tileQty(r.tiles, 'base.worker_white_1-1-1-1'), 4);
+      expect(_tileQty(r.tiles, 'base.worker_white_2-1-0-1'), 5);
+      expect(_tileQty(r.tiles, 'base.worker_yellow_1-1-1-1'), 4);
+      expect(_tileQty(r.tiles, 'base.worker_yellow_2-1-0-1'), 5);
+
+      // New worker tiles for all 4 colors
+      expect(_tileQty(r.tiles, 'diamante.worker_red_0-0-0-4'), 1);
+      expect(_tileQty(r.tiles, 'diamante.worker_red_0-0-2-2'), 1);
+      expect(_tileQty(r.tiles, 'diamante.worker_red_0-2-0-2'), 1);
+      expect(_tileQty(r.tiles, 'diamante.worker_red_0-1-0-3'), 1);
+      expect(_tileQty(r.tiles, 'diamante.worker_purple_0-0-0-4'), 1);
+      expect(_tileQty(r.tiles, 'diamante.worker_purple_0-0-2-2'), 1);
+      expect(_tileQty(r.tiles, 'diamante.worker_purple_0-2-0-2'), 1);
+      expect(_tileQty(r.tiles, 'diamante.worker_purple_0-1-0-3'), 1);
+      expect(_tileQty(r.tiles, 'diamante.worker_white_0-0-0-4'), 1);
+      expect(_tileQty(r.tiles, 'diamante.worker_white_0-0-2-2'), 1);
+      expect(_tileQty(r.tiles, 'diamante.worker_white_0-2-0-2'), 1);
+      expect(_tileQty(r.tiles, 'diamante.worker_white_0-1-0-3'), 1);
+      expect(_tileQty(r.tiles, 'diamante.worker_yellow_0-0-0-4'), 1);
+      expect(_tileQty(r.tiles, 'diamante.worker_yellow_0-0-2-2'), 1);
+      expect(_tileQty(r.tiles, 'diamante.worker_yellow_0-2-0-2'), 1);
+      expect(_tileQty(r.tiles, 'diamante.worker_yellow_0-1-0-3'), 1);
+
+      // Hut tiles present
+      final hutTiles31 = r.tiles.where((t) => t.type == TileType.hut);
+      final totalHuts31 = hutTiles31.fold(0, (sum, t) => sum + t.quantity);
+      expect(totalHuts31, 14);
     });
   });
 }

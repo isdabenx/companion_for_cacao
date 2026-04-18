@@ -113,7 +113,7 @@ class GameSetupWidget extends ConsumerWidget {
                     ),
                     Step(
                       title: Text(
-                        'Expansions (work in progress)',
+                        'Expansions',
                         style: AppTextStyles.sectionTitlePlain,
                       ),
                       content: StepExpansionWidget(
@@ -124,7 +124,7 @@ class GameSetupWidget extends ConsumerWidget {
                     ),
                     Step(
                       title: Text(
-                        'Modules (work in progress)',
+                        'Modules',
                         style: AppTextStyles.sectionTitlePlain,
                       ),
                       content: const StepModuleWidget(),

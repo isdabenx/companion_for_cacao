@@ -31,6 +31,7 @@ class MockBaseGameHandler implements BaseGameHandler {
     List<TileModel> tiles,
     int playerCount, {
     required List<BoardgameModel> activeExpansions,
+    bool isBigGame = false,
   }) {
     return [
       _createTile(id: 'tile_1', quantity: 2),
@@ -42,8 +43,9 @@ class MockBaseGameHandler implements BaseGameHandler {
   List<PreparationEntity> modifyPreparationSteps(
     List<PlayerEntity> players,
     List<TileModel> tiles,
-    List<PreparationEntity> currentSteps,
-  ) {
+    List<PreparationEntity> currentSteps, {
+    bool isBigGame = false,
+  }) {
     return [
       const PreparationEntity(
         id: 'base_step',
@@ -60,6 +62,7 @@ class MockModuleHandler implements ModulePreparationHandler {
     List<TileModel> tiles,
     int playerCount, {
     required List<BoardgameModel> activeExpansions,
+    bool isBigGame = false,
   }) {
     return tiles.map((t) {
       if (t.id == 'tile_1') {
@@ -73,8 +76,9 @@ class MockModuleHandler implements ModulePreparationHandler {
   List<PreparationEntity> modifyPreparationSteps(
     List<PlayerEntity> players,
     List<TileModel> tiles,
-    List<PreparationEntity> currentSteps,
-  ) {
+    List<PreparationEntity> currentSteps, {
+    bool isBigGame = false,
+  }) {
     return [
       ...currentSteps,
       const PreparationEntity(
