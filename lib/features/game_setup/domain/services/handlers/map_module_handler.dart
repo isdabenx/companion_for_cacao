@@ -39,6 +39,7 @@ class MapModuleHandler implements ModulePreparationHandler {
     final modifiedSteps = <PreparationEntity>[];
 
     // First pass: identify where playerSetup phase ends and add player map token steps
+    int lastMapTokenIndex = -1;
     for (int i = 0; i < preparation.length; i++) {
       modifiedSteps.add(preparation[i]);
 
@@ -49,14 +50,27 @@ class MapModuleHandler implements ModulePreparationHandler {
         modifiedSteps.add(
           PreparationEntity(
             id: 'setup_map_tokens_$color',
-            description:
-                'Player $color gets 2 map tiles. The surplus map tiles are put back into the box.',
+            description: 'Player $color takes 2 map tiles.',
             phase: PreparationPhase.playerSetup,
             color: color,
             imageKey: 'map_token',
           ),
         );
+        lastMapTokenIndex = modifiedSteps.length - 1;
       }
+    }
+
+    // Add surplus step only when there are fewer than 4 players (8 tiles / 2 per player)
+    if (players.length < 4 && lastMapTokenIndex >= 0) {
+      modifiedSteps.insert(
+        lastMapTokenIndex + 1,
+        const PreparationEntity(
+          id: 'setup_map_tokens_surplus',
+          description: 'Put the surplus map tiles back into the box.',
+          phase: PreparationPhase.playerSetup,
+          imageKey: 'map_token',
+        ),
+      );
     }
 
     // Second pass: find and replace the setup_jungle_display step in boardSetup

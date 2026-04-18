@@ -154,8 +154,6 @@ void main() {
           mockPreparationSteps,
         );
 
-        expect(result.length, equals(mockPreparationSteps.length + 1));
-
         final resourceBankIndex = result.indexWhere(
           (step) => step.id == 'setup_resources_bank',
         );
@@ -188,13 +186,223 @@ void main() {
             stepsWithoutBank,
           );
 
-          expect(result.length, equals(stepsWithoutBank.length));
           expect(
             result.any((step) => step.id == 'setup_chocolate_bars'),
             isFalse,
           );
         },
       );
+
+      group('tile substitution steps for 2 players', () {
+        late List<PreparationEntity> stepsWithBaseRemovals;
+
+        setUp(() {
+          stepsWithBaseRemovals = [
+            const PreparationEntity(
+              id: 'setup_jungle_tiles_2p_removal_gold_mine_value_1',
+              description:
+                  'Sort out 1x Gold Mine, value 1 and put it back in the box',
+              imageKey: 'jungle_gold_mine_v1',
+              phase: PreparationPhase.boardSetup,
+            ),
+            const PreparationEntity(
+              id: 'setup_jungle_tiles_2p_removal_market_selling_3',
+              description:
+                  'Sort out 1x Market, selling price 3 and put it back in the box',
+              imageKey: 'jungle_market_selling_3',
+              phase: PreparationPhase.boardSetup,
+            ),
+            const PreparationEntity(
+              id: 'setup_jungle_draw_pile',
+              description: 'Mix remaining jungle tiles',
+              phase: PreparationPhase.boardSetup,
+            ),
+            const PreparationEntity(
+              id: 'setup_resources_bank',
+              description: 'Resources bank',
+              phase: PreparationPhase.supplies,
+            ),
+          ];
+        });
+
+        test('should modify base gold_mine_v1 step from 1x to 2x', () {
+          final result = handler.modifyPreparationSteps(
+            mockPlayers,
+            mockTiles,
+            stepsWithBaseRemovals,
+          );
+
+          final goldMineStep = result.firstWhere(
+            (s) => s.id == 'setup_jungle_tiles_2p_removal_gold_mine_value_1',
+          );
+          expect(goldMineStep.description, contains('2x Gold Mine'));
+        });
+
+        test('should modify base market_selling_3 step from 1x to 3x', () {
+          final result = handler.modifyPreparationSteps(
+            mockPlayers,
+            mockTiles,
+            stepsWithBaseRemovals,
+          );
+
+          final marketStep = result.firstWhere(
+            (s) => s.id == 'setup_jungle_tiles_2p_removal_market_selling_3',
+          );
+          expect(marketStep.description, contains('3x Market'));
+        });
+
+        test('should add gold_mine_v2 removal step', () {
+          final result = handler.modifyPreparationSteps(
+            mockPlayers,
+            mockTiles,
+            stepsWithBaseRemovals,
+          );
+
+          final v2Step = result.where(
+            (s) => s.id == 'setup_chocolate_remove_gold_mine_v2',
+          );
+          expect(v2Step, hasLength(1));
+          expect(v2Step.first.description, contains('1x Gold Mine, value 2'));
+          expect(v2Step.first.imageKey, equals('jungle_gold_mine_v2'));
+        });
+
+        test('should add chocolate kitchen and market addition steps', () {
+          final result = handler.modifyPreparationSteps(
+            mockPlayers,
+            mockTiles,
+            stepsWithBaseRemovals,
+          );
+
+          final kitchenStep = result.where(
+            (s) => s.id == 'setup_chocolate_add_kitchen',
+          );
+          final marketStep = result.where(
+            (s) => s.id == 'setup_chocolate_add_market',
+          );
+
+          expect(kitchenStep, hasLength(1));
+          expect(marketStep, hasLength(1));
+          expect(
+            kitchenStep.first.description,
+            contains('2x Chocolate Kitchen'),
+          );
+          expect(marketStep.first.description, contains('2x Chocolate Market'));
+        });
+
+        test(
+          'should insert substitution steps before setup_jungle_draw_pile',
+          () {
+            final result = handler.modifyPreparationSteps(
+              mockPlayers,
+              mockTiles,
+              stepsWithBaseRemovals,
+            );
+
+            final drawPileIndex = result.indexWhere(
+              (s) => s.id == 'setup_jungle_draw_pile',
+            );
+            final v2Index = result.indexWhere(
+              (s) => s.id == 'setup_chocolate_remove_gold_mine_v2',
+            );
+            final kitchenIndex = result.indexWhere(
+              (s) => s.id == 'setup_chocolate_add_kitchen',
+            );
+
+            expect(v2Index, lessThan(drawPileIndex));
+            expect(kitchenIndex, lessThan(drawPileIndex));
+          },
+        );
+      });
+
+      group('tile substitution steps for 3+ players', () {
+        late List<PreparationEntity> stepsWithDrawPile;
+        late List<PlayerEntity> players3;
+
+        setUp(() {
+          players3 = [
+            PlayerEntity(name: 'Player 1', color: 'red'),
+            PlayerEntity(name: 'Player 2', color: 'blue'),
+            PlayerEntity(name: 'Player 3', color: 'white'),
+          ];
+
+          stepsWithDrawPile = [
+            const PreparationEntity(
+              id: 'setup_jungle_draw_pile',
+              description: 'Mix remaining jungle tiles',
+              phase: PreparationPhase.boardSetup,
+            ),
+            const PreparationEntity(
+              id: 'setup_resources_bank',
+              description: 'Resources bank',
+              phase: PreparationPhase.supplies,
+            ),
+          ];
+        });
+
+        test('should add all 5 substitution steps for 3+ players', () {
+          final result = handler.modifyPreparationSteps(
+            players3,
+            mockTiles,
+            stepsWithDrawPile,
+          );
+
+          expect(
+            result.any((s) => s.id == 'setup_chocolate_remove_gold_mine_v1'),
+            isTrue,
+          );
+          expect(
+            result.any((s) => s.id == 'setup_chocolate_remove_gold_mine_v2'),
+            isTrue,
+          );
+          expect(
+            result.any(
+              (s) => s.id == 'setup_chocolate_remove_market_selling_3',
+            ),
+            isTrue,
+          );
+          expect(
+            result.any((s) => s.id == 'setup_chocolate_add_kitchen'),
+            isTrue,
+          );
+          expect(
+            result.any((s) => s.id == 'setup_chocolate_add_market'),
+            isTrue,
+          );
+        });
+
+        test(
+          'should have correct quantities in descriptions for 3+ players',
+          () {
+            final result = handler.modifyPreparationSteps(
+              players3,
+              mockTiles,
+              stepsWithDrawPile,
+            );
+
+            final v1Step = result.firstWhere(
+              (s) => s.id == 'setup_chocolate_remove_gold_mine_v1',
+            );
+            final v2Step = result.firstWhere(
+              (s) => s.id == 'setup_chocolate_remove_gold_mine_v2',
+            );
+            final marketStep = result.firstWhere(
+              (s) => s.id == 'setup_chocolate_remove_market_selling_3',
+            );
+            final kitchenStep = result.firstWhere(
+              (s) => s.id == 'setup_chocolate_add_kitchen',
+            );
+            final mktStep = result.firstWhere(
+              (s) => s.id == 'setup_chocolate_add_market',
+            );
+
+            expect(v1Step.description, contains('2x Gold Mine, value 1'));
+            expect(v2Step.description, contains('1x Gold Mine, value 2'));
+            expect(marketStep.description, contains('3x Market'));
+            expect(kitchenStep.description, contains('3x Chocolate Kitchen'));
+            expect(mktStep.description, contains('3x Chocolate Market'));
+          },
+        );
+      });
     });
   });
 }

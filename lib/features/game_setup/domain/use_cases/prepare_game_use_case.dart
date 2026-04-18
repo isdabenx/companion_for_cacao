@@ -5,6 +5,10 @@ import 'package:companion_for_cacao/features/game_setup/domain/services/handlers
 import 'package:companion_for_cacao/features/game_setup/domain/services/handlers/huts_module_handler.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/services/handlers/map_module_handler.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/services/handlers/watering_module_handler.dart';
+import 'package:companion_for_cacao/features/game_setup/domain/services/handlers/gem_mines_module_handler.dart';
+import 'package:companion_for_cacao/features/game_setup/domain/services/handlers/tree_of_life_module_handler.dart';
+import 'package:companion_for_cacao/features/game_setup/domain/services/handlers/emperor_favor_module_handler.dart';
+import 'package:companion_for_cacao/features/game_setup/domain/services/handlers/new_workers_module_handler.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/services/preparation_pipeline.dart';
 
 class PrepareGameUseCase {
@@ -34,6 +38,10 @@ class PrepareGameUseCase {
         WateringModuleHandler.moduleId: WateringModuleHandler(),
         ChocolateModuleHandler.moduleId: ChocolateModuleHandler(),
         HutsModuleHandler.moduleId: HutsModuleHandler(),
+        GemMinesModuleHandler.moduleId: GemMinesModuleHandler(),
+        TreeOfLifeModuleHandler.moduleId: TreeOfLifeModuleHandler(),
+        EmperorFavorModuleHandler.moduleId: EmperorFavorModuleHandler(),
+        NewWorkersModuleHandler.moduleId: NewWorkersModuleHandler(),
       },
     );
 

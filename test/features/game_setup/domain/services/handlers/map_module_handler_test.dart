@@ -1,4 +1,3 @@
-import 'package:companion_for_cacao/core/data/models/boardgame_model.dart';
 import 'package:companion_for_cacao/core/data/models/tile_model.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/player_entity.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/preparation_entity.dart';
@@ -75,9 +74,10 @@ void main() {
 
           // Original steps: 3
           // Added map tokens: 2
+          // Surplus step (2 players < 4): 1
           // Replaced jungle display with 2 steps: -1 + 2 = +1
-          // Total expected: 3 + 2 + 1 = 6
-          expect(result.length, equals(6));
+          // Total expected: 3 + 2 + 1 + 1 = 7
+          expect(result.length, equals(7));
 
           // Check map tokens for red
           final mapTokensRedIndex = result.indexWhere(
@@ -90,6 +90,12 @@ void main() {
           );
           expect(result[mapTokensRedIndex].color, equals('red'));
 
+          // Check map tokens description (individual, no surplus text)
+          expect(
+            result[mapTokensRedIndex].description,
+            equals('Player red takes 2 map tiles.'),
+          );
+
           // Check map tokens for blue
           final mapTokensBlueIndex = result.indexWhere(
             (step) => step.id == 'setup_map_tokens_blue',
@@ -100,6 +106,16 @@ void main() {
             equals(PreparationPhase.playerSetup),
           );
           expect(result[mapTokensBlueIndex].color, equals('blue'));
+
+          // Check surplus step exists (2 players < 4)
+          final surplusIndex = result.indexWhere(
+            (step) => step.id == 'setup_map_tokens_surplus',
+          );
+          expect(surplusIndex, greaterThan(mapTokensBlueIndex));
+          expect(
+            result[surplusIndex].phase,
+            equals(PreparationPhase.playerSetup),
+          );
 
           // Check replaced jungle display
           expect(
@@ -145,9 +161,73 @@ void main() {
 
         // Original: 1
         // Added map tokens: 1
-        // Total: 2
-        expect(result.length, equals(2));
+        // Surplus step (2 players < 4): 1
+        // Total: 3
+        expect(result.length, equals(3));
         expect(result.any((step) => step.id == 'setup_map_board'), isFalse);
+      });
+
+      test('should not add surplus step for 4 players', () {
+        final fourPlayers = [
+          PlayerEntity(name: 'Player 1', color: 'red'),
+          PlayerEntity(name: 'Player 2', color: 'blue'),
+          PlayerEntity(name: 'Player 3', color: 'white'),
+          PlayerEntity(name: 'Player 4', color: 'yellow'),
+        ];
+
+        final stepsWithFourPlayers = [
+          const PreparationEntity(
+            id: 'setup_tiles_red',
+            description: 'Setup tiles for red',
+            phase: PreparationPhase.playerSetup,
+            color: 'red',
+          ),
+          const PreparationEntity(
+            id: 'setup_tiles_blue',
+            description: 'Setup tiles for blue',
+            phase: PreparationPhase.playerSetup,
+            color: 'blue',
+          ),
+          const PreparationEntity(
+            id: 'setup_tiles_white',
+            description: 'Setup tiles for white',
+            phase: PreparationPhase.playerSetup,
+            color: 'white',
+          ),
+          const PreparationEntity(
+            id: 'setup_tiles_yellow',
+            description: 'Setup tiles for yellow',
+            phase: PreparationPhase.playerSetup,
+            color: 'yellow',
+          ),
+          const PreparationEntity(
+            id: 'setup_jungle_display',
+            description: 'Setup jungle display',
+            phase: PreparationPhase.boardSetup,
+          ),
+        ];
+
+        final result = handler.modifyPreparationSteps(
+          fourPlayers,
+          mockTiles,
+          stepsWithFourPlayers,
+        );
+
+        // No surplus step for 4 players (8 tiles / 2 per player = 0 surplus)
+        expect(
+          result.any((step) => step.id == 'setup_map_tokens_surplus'),
+          isFalse,
+        );
+
+        // Should have 4 map token steps
+        final mapTokenSteps = result
+            .where(
+              (step) =>
+                  step.id.startsWith('setup_map_tokens_') &&
+                  step.id != 'setup_map_tokens_surplus',
+            )
+            .toList();
+        expect(mapTokenSteps.length, equals(4));
       });
     });
   });

@@ -49,8 +49,35 @@ class Assets {
       'assets/images/preparation/initial_single_plantation_water.webp';
   static const String preparationGems =
       'assets/images/preparation/resources_gems.webp';
+  static const String preparationMineCar =
+      'assets/images/preparation/resources_mine_car.webp';
+  static const String preparationMasks =
+      'assets/images/preparation/resources_masks.webp';
   static const String preparationEmperor =
       'assets/images/preparation/emperor_figure.webp';
   static const String preparationNewWorkersDeck =
       'assets/images/preparation/new_workers_deck.webp';
+
+  // Jungle tile images (logical keys → asset paths)
+  static const String jungleSinglePlantation =
+      '${imagesTilePath}base/single_plantation.webp';
+  static const String jungleDoublePlantation =
+      '${imagesTilePath}base/double_plantation.webp';
+  static const String jungleMarketSelling3 =
+      '${imagesTilePath}base/selling_price_3.webp';
+  static const String jungleGoldMineV1 = '${imagesTilePath}base/value_1.webp';
+  static const String jungleGoldMineV2 = '${imagesTilePath}base/value_2.webp';
+  static const String jungleWater = '${imagesTilePath}base/water.webp';
+  static const String jungleSunWorshipingSite =
+      '${imagesTilePath}base/sun_worshiping_site.webp';
+  static const String jungleTemple = '${imagesTilePath}base/temple.webp';
+  static const String jungleWatering =
+      '${imagesTilePath}chocolatl/watering.webp';
+  static const String jungleChocolateKitchen =
+      '${imagesTilePath}chocolatl/chocolate_kitchen.webp';
+  static const String jungleChocolateMarket =
+      '${imagesTilePath}chocolatl/chocolate_market.webp';
+  static const String jungleGemMine = '${imagesTilePath}diamante/gem_mine.webp';
+  static const String jungleTreeOfLife =
+      '${imagesTilePath}diamante/tree_of_life.webp';
 }

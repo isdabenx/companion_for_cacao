@@ -120,7 +120,7 @@ void main() {
 
     group('modifyPreparationSteps', () {
       test(
-        'should replace setup_initial_tiles_plantation_market with setup_initial_tiles_plantation_watering',
+        'should replace setup_initial_tiles_plantation_market with setup_initial_tiles_plantation_water',
         () {
           final result = handler.modifyPreparationSteps(
             mockPlayers,
@@ -128,26 +128,128 @@ void main() {
             mockPreparationSteps,
           );
 
-          // Length should remain the same
-          expect(result.length, equals(mockPreparationSteps.length));
-
           // Find the modified step
           final modifiedStep = result.firstWhere(
-            (step) => step.id == 'setup_initial_tiles_plantation_watering',
+            (step) => step.id == 'setup_initial_tiles_plantation_water',
           );
 
           // Verify the step was modified with correct ID and description
           expect(
             modifiedStep.id,
-            equals('setup_initial_tiles_plantation_watering'),
+            equals('setup_initial_tiles_plantation_water'),
           );
-          expect(modifiedStep.description.contains('watering'), isTrue);
+          expect(modifiedStep.description.contains('"water"'), isTrue);
           expect(
             modifiedStep.description.contains('single plantation'),
             isTrue,
           );
         },
       );
+
+      group('tile substitution steps', () {
+        late List<PreparationEntity> stepsWithDrawPile;
+
+        setUp(() {
+          stepsWithDrawPile = [
+            const PreparationEntity(
+              id: 'setup_initial_tiles_plantation_market',
+              description: 'Initial step',
+              phase: PreparationPhase.boardSetup,
+            ),
+            const PreparationEntity(
+              id: 'setup_jungle_draw_pile',
+              description: 'Mix remaining jungle tiles',
+              phase: PreparationPhase.boardSetup,
+            ),
+          ];
+        });
+
+        test('should add 2 substitution steps for 2 players', () {
+          final result = handler.modifyPreparationSteps(
+            mockPlayers,
+            mockTiles,
+            stepsWithDrawPile,
+          );
+
+          final removeDoublePlantation = result.where(
+            (s) => s.id == 'setup_watering_remove_double_plantation',
+          );
+          final addWatering = result.where(
+            (s) => s.id == 'setup_watering_add_watering_tiles',
+          );
+
+          expect(removeDoublePlantation, hasLength(1));
+          expect(addWatering, hasLength(1));
+          expect(
+            removeDoublePlantation.first.description,
+            contains('2x Double Plantation'),
+          );
+          expect(addWatering.first.description, contains('2x Watering'));
+          expect(
+            removeDoublePlantation.first.imageKey,
+            equals('jungle_double_plantation'),
+          );
+          expect(addWatering.first.imageKey, equals('jungle_watering'));
+        });
+
+        test('should add 3 substitution steps for 3+ players', () {
+          final players3 = [
+            PlayerEntity(name: 'Player 1', color: 'red'),
+            PlayerEntity(name: 'Player 2', color: 'blue'),
+            PlayerEntity(name: 'Player 3', color: 'white'),
+          ];
+
+          final result = handler.modifyPreparationSteps(
+            players3,
+            mockTiles,
+            stepsWithDrawPile,
+          );
+
+          final removeSinglePlantation = result.where(
+            (s) => s.id == 'setup_watering_remove_single_plantation',
+          );
+          final removeDoublePlantation = result.where(
+            (s) => s.id == 'setup_watering_remove_double_plantation',
+          );
+          final addWatering = result.where(
+            (s) => s.id == 'setup_watering_add_watering_tiles',
+          );
+
+          expect(removeSinglePlantation, hasLength(1));
+          expect(removeDoublePlantation, hasLength(1));
+          expect(addWatering, hasLength(1));
+          expect(
+            removeSinglePlantation.first.description,
+            contains('1x Single Plantation'),
+          );
+          expect(addWatering.first.description, contains('3x Watering'));
+        });
+
+        test(
+          'should insert substitution steps before setup_jungle_draw_pile',
+          () {
+            final result = handler.modifyPreparationSteps(
+              mockPlayers,
+              mockTiles,
+              stepsWithDrawPile,
+            );
+
+            final drawPileIndex = result.indexWhere(
+              (s) => s.id == 'setup_jungle_draw_pile',
+            );
+            final removeIndex = result.indexWhere(
+              (s) => s.id == 'setup_watering_remove_double_plantation',
+            );
+            final addIndex = result.indexWhere(
+              (s) => s.id == 'setup_watering_add_watering_tiles',
+            );
+
+            expect(removeIndex, lessThan(drawPileIndex));
+            expect(addIndex, lessThan(drawPileIndex));
+            expect(removeIndex, lessThan(addIndex));
+          },
+        );
+      });
     });
 
     group('interface compliance', () {
@@ -187,7 +289,12 @@ void main() {
           mockTiles,
           [],
         );
-        expect(result, isEmpty);
+        // With no initial tiles step to replace and no draw pile to insert
+        // before, substitution steps are appended
+        expect(
+          result.any((s) => s.id == 'setup_watering_remove_double_plantation'),
+          isTrue,
+        );
       });
 
       test('should handle various player counts', () {

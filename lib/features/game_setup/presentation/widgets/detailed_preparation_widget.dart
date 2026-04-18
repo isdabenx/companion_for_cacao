@@ -19,8 +19,15 @@ class PhaseExpansion extends _$PhaseExpansion {
     return {};
   }
 
-  void toggle(PreparationPhase phase) {
-    state = {...state, phase: !(state[phase] ?? false)};
+  void toggle(PreparationPhase phase, {required bool isDefaultExpanded}) {
+    final currentlyExpanded = state[phase] ?? isDefaultExpanded;
+    final newValue = !currentlyExpanded;
+    if (newValue == isDefaultExpanded) {
+      // Toggling back to default — remove override to keep map clean
+      state = Map.from(state)..remove(phase);
+    } else {
+      state = {...state, phase: newValue};
+    }
   }
 
   void clearAll() {
@@ -90,7 +97,11 @@ class DetailedPreparationWidget extends ConsumerWidget {
                         onTap: () {
                           ref
                               .read(phaseExpansionProvider.notifier)
-                              .toggle(entry.key);
+                              .toggle(
+                                entry.key,
+                                isDefaultExpanded:
+                                    entry.key == firstIncompletePhase,
+                              );
                         },
                       ),
                     ),
@@ -339,7 +350,6 @@ class PreparationCard extends ConsumerWidget {
             ref
                 .read(gameSetupProvider.notifier)
                 .togglePreparationCompletion(preparation.id);
-            ref.read(phaseExpansionProvider.notifier).clearAll();
           },
           onLongPress: preparation.imageKey != null
               ? () => _showImageDialog(

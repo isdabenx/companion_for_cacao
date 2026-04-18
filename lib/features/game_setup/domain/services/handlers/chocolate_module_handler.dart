@@ -102,7 +102,7 @@ class ChocolateModuleHandler implements ModulePreparationHandler {
   ) {
     final preparation = <PreparationEntity>[...currentSteps];
 
-    // Find and modify the setup_resources_bank step
+    // Find and modify the setup_resources_bank step to add chocolate bars
     int resourceBankIndex = -1;
     for (int i = 0; i < preparation.length; i++) {
       if (preparation[i].id == 'setup_resources_bank') {
@@ -124,7 +124,125 @@ class ChocolateModuleHandler implements ModulePreparationHandler {
       );
     }
 
+    // For 2 players: modify existing base game removal steps to reflect
+    // the combined total (base + chocolate module removals).
+    if (players.length == 2) {
+      _modifyBaseStepsFor2Players(preparation);
+    }
+
+    // Insert visible tile substitution steps before 'setup_jungle_draw_pile'
+    final substitutionSteps = _tileSubstitutionSteps(players.length);
+    if (substitutionSteps.isNotEmpty) {
+      final drawPileIndex = preparation.indexWhere(
+        (step) => step.id == 'setup_jungle_draw_pile',
+      );
+      if (drawPileIndex >= 0) {
+        preparation.insertAll(drawPileIndex, substitutionSteps);
+      } else {
+        preparation.addAll(substitutionSteps);
+      }
+    }
+
     return preparation;
+  }
+
+  /// For 2 players, modifies existing base game removal steps to reflect
+  /// the combined removal total (base removals + chocolate module removals).
+  ///
+  /// Base game 2p removes: 1x Gold Mine v1 + 1x Market selling 3.
+  /// Chocolate 2p removes: 1x Gold Mine v1 + 1x Gold Mine v2 + 2x Market selling 3.
+  /// Combined: 2x Gold Mine v1 + 1x Gold Mine v2 + 3x Market selling 3.
+  void _modifyBaseStepsFor2Players(List<PreparationEntity> preparation) {
+    for (int i = 0; i < preparation.length; i++) {
+      final step = preparation[i];
+      if (step.id == 'setup_jungle_tiles_2p_removal_gold_mine_value_1') {
+        preparation[i] = PreparationEntity(
+          id: step.id,
+          description:
+              'Sort out 2x Gold Mine, value 1 and put them back in the box',
+          imageKey: step.imageKey,
+          phase: step.phase,
+        );
+      } else if (step.id == 'setup_jungle_tiles_2p_removal_market_selling_3') {
+        preparation[i] = PreparationEntity(
+          id: step.id,
+          description:
+              'Sort out 3x Market, selling price 3 and put them back in the box',
+          imageKey: step.imageKey,
+          phase: step.phase,
+        );
+      }
+    }
+  }
+
+  /// Generates visible preparation steps for the chocolate tile substitution.
+  ///
+  /// For 2 players: gold mine v1 and market selling 3 are already handled by
+  /// modifying the base game steps. Only gold mine v2 removal and chocolate
+  /// tile additions need new steps.
+  ///
+  /// For 3+ players: all removal and addition steps are new.
+  List<PreparationEntity> _tileSubstitutionSteps(int playerCount) {
+    if (playerCount == 2) {
+      return const [
+        PreparationEntity(
+          id: 'setup_chocolate_remove_gold_mine_v2',
+          description:
+              'Sort out 1x Gold Mine, value 2 and put it back in the box',
+          imageKey: 'jungle_gold_mine_v2',
+          phase: PreparationPhase.boardSetup,
+        ),
+        PreparationEntity(
+          id: 'setup_chocolate_add_kitchen',
+          description: 'Add 2x Chocolate Kitchen tiles to the jungle tiles',
+          imageKey: 'jungle_chocolate_kitchen',
+          phase: PreparationPhase.boardSetup,
+        ),
+        PreparationEntity(
+          id: 'setup_chocolate_add_market',
+          description: 'Add 2x Chocolate Market tiles to the jungle tiles',
+          imageKey: 'jungle_chocolate_market',
+          phase: PreparationPhase.boardSetup,
+        ),
+      ];
+    } else if (playerCount >= 3) {
+      return const [
+        PreparationEntity(
+          id: 'setup_chocolate_remove_gold_mine_v1',
+          description:
+              'Sort out 2x Gold Mine, value 1 and put them back in the box',
+          imageKey: 'jungle_gold_mine_v1',
+          phase: PreparationPhase.boardSetup,
+        ),
+        PreparationEntity(
+          id: 'setup_chocolate_remove_gold_mine_v2',
+          description:
+              'Sort out 1x Gold Mine, value 2 and put it back in the box',
+          imageKey: 'jungle_gold_mine_v2',
+          phase: PreparationPhase.boardSetup,
+        ),
+        PreparationEntity(
+          id: 'setup_chocolate_remove_market_selling_3',
+          description:
+              'Sort out 3x Market, selling price 3 and put them back in the box',
+          imageKey: 'jungle_market_selling_3',
+          phase: PreparationPhase.boardSetup,
+        ),
+        PreparationEntity(
+          id: 'setup_chocolate_add_kitchen',
+          description: 'Add 3x Chocolate Kitchen tiles to the jungle tiles',
+          imageKey: 'jungle_chocolate_kitchen',
+          phase: PreparationPhase.boardSetup,
+        ),
+        PreparationEntity(
+          id: 'setup_chocolate_add_market',
+          description: 'Add 3x Chocolate Market tiles to the jungle tiles',
+          imageKey: 'jungle_chocolate_market',
+          phase: PreparationPhase.boardSetup,
+        ),
+      ];
+    }
+    return const [];
   }
 
   /// Reduces a jungle tile by the specified amount.
