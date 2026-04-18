@@ -54,7 +54,9 @@ class BaseGameHandler implements ModulePreparationHandler {
 
       adjustedTiles.addAll(
         activeExpansions.expand((boardgame) {
-          return boardgame.tiles.where((tile) => tile.color == tileColor);
+          return boardgame.tiles.where(
+            (tile) => tile.color == tileColor && tile.moduleId == null,
+          );
         }),
       );
     }
@@ -233,7 +235,13 @@ class BaseGameHandler implements ModulePreparationHandler {
           imageKey: 'initial_tiles_cacao',
           phase: PreparationPhase.boardSetup,
         ),
-      )
+      );
+
+    if (players.length == 2) {
+      preparation.addAll(_twoPlayerJungleTileRemovals());
+    }
+
+    preparation
       ..add(
         const PreparationEntity(
           id: 'setup_jungle_draw_pile',
@@ -309,5 +317,50 @@ class BaseGameHandler implements ModulePreparationHandler {
 
       return tile.copyWith(quantity: tile.quantity - reduction);
     }).toList();
+  }
+
+  List<PreparationEntity> _twoPlayerJungleTileRemovals() {
+    return const [
+      PreparationEntity(
+        id: 'setup_jungle_tiles_2p_removal_single_plantation',
+        description:
+            'Sort out 2x Single Plantation and put them back in the box',
+        imageKey: 'jungle_single_plantation',
+        phase: PreparationPhase.boardSetup,
+      ),
+      PreparationEntity(
+        id: 'setup_jungle_tiles_2p_removal_market_selling_3',
+        description:
+            'Sort out 1x Market, selling price 3 and put it back in the box',
+        imageKey: 'jungle_market_selling_3',
+        phase: PreparationPhase.boardSetup,
+      ),
+      PreparationEntity(
+        id: 'setup_jungle_tiles_2p_removal_gold_mine_value_1',
+        description:
+            'Sort out 1x Gold Mine, value 1 and put it back in the box',
+        imageKey: 'jungle_gold_mine_v1',
+        phase: PreparationPhase.boardSetup,
+      ),
+      PreparationEntity(
+        id: 'setup_jungle_tiles_2p_removal_water',
+        description: 'Sort out 1x Water and put it back in the box',
+        imageKey: 'jungle_water',
+        phase: PreparationPhase.boardSetup,
+      ),
+      PreparationEntity(
+        id: 'setup_jungle_tiles_2p_removal_sun_worshiping_site',
+        description:
+            'Sort out 1x Sun-Worshiping Site and put it back in the box',
+        imageKey: 'jungle_sun_worshiping_site',
+        phase: PreparationPhase.boardSetup,
+      ),
+      PreparationEntity(
+        id: 'setup_jungle_tiles_2p_removal_temple',
+        description: 'Sort out 1x Temple and put it back in the box',
+        imageKey: 'jungle_temple',
+        phase: PreparationPhase.boardSetup,
+      ),
+    ];
   }
 }

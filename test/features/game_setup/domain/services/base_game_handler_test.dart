@@ -1,5 +1,7 @@
 import 'package:companion_for_cacao/core/data/models/boardgame_model.dart';
 import 'package:companion_for_cacao/core/data/models/tile_model.dart';
+import 'package:companion_for_cacao/features/game_setup/domain/entities/player_entity.dart';
+import 'package:companion_for_cacao/features/game_setup/domain/entities/preparation_phase.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/services/base_game_handler.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -122,6 +124,218 @@ void main() {
       );
       // Original 4. Reduced by 1 -> 3.
       expect(tile1111.quantity, 3);
+    });
+
+    group('modifyPreparationSteps', () {
+      test('should generate all base preparation steps for 2 players', () {
+        handler = BaseGameHandler(
+          baseGame: baseGame,
+          activeExpansions: [baseGame],
+          selectedColors: ['red', 'purple'],
+        );
+
+        final players = [
+          PlayerEntity(name: 'Player 1', color: 'red'),
+          PlayerEntity(name: 'Player 2', color: 'purple'),
+        ];
+
+        final result = handler.modifyPreparationSteps(players, allTiles, []);
+
+        // Player setup steps: 4 per player (village board, water carrier, water field, tiles)
+        final playerSetupSteps = result
+            .where((s) => s.phase == PreparationPhase.playerSetup)
+            .toList();
+        // 4 steps per player + 1 shuffle step = 9
+        expect(playerSetupSteps.length, 9);
+
+        // Board setup steps: initial tiles + 6 individual 2p removal + jungle draw pile + jungle display = 9
+        final boardSetupSteps = result
+            .where((s) => s.phase == PreparationPhase.boardSetup)
+            .toList();
+        expect(boardSetupSteps.length, 9);
+
+        // Supply steps: 1 (resources bank)
+        final supplySteps = result
+            .where((s) => s.phase == PreparationPhase.supplies)
+            .toList();
+        expect(supplySteps.length, 1);
+      });
+
+      test(
+        'should include individual jungle tile removal steps for 2 players',
+        () {
+          handler = BaseGameHandler(
+            baseGame: baseGame,
+            activeExpansions: [baseGame],
+            selectedColors: ['red', 'purple'],
+          );
+
+          final players = [
+            PlayerEntity(name: 'Player 1', color: 'red'),
+            PlayerEntity(name: 'Player 2', color: 'purple'),
+          ];
+
+          final result = handler.modifyPreparationSteps(players, allTiles, []);
+
+          final removalSteps = result
+              .where((s) => s.id.startsWith('setup_jungle_tiles_2p_removal_'))
+              .toList();
+          expect(removalSteps.length, 6);
+
+          // Verify each tile has its own step with correct imageKey
+          expect(
+            removalSteps[0].id,
+            'setup_jungle_tiles_2p_removal_single_plantation',
+          );
+          expect(removalSteps[0].description, contains('2x Single Plantation'));
+          expect(removalSteps[0].imageKey, 'jungle_single_plantation');
+
+          expect(
+            removalSteps[1].id,
+            'setup_jungle_tiles_2p_removal_market_selling_3',
+          );
+          expect(
+            removalSteps[1].description,
+            contains('Market, selling price 3'),
+          );
+
+          expect(
+            removalSteps[2].id,
+            'setup_jungle_tiles_2p_removal_gold_mine_value_1',
+          );
+          expect(removalSteps[2].description, contains('Gold Mine, value 1'));
+
+          expect(removalSteps[3].id, 'setup_jungle_tiles_2p_removal_water');
+          expect(removalSteps[3].description, contains('Water'));
+
+          expect(
+            removalSteps[4].id,
+            'setup_jungle_tiles_2p_removal_sun_worshiping_site',
+          );
+          expect(removalSteps[4].description, contains('Sun-Worshiping Site'));
+
+          expect(removalSteps[5].id, 'setup_jungle_tiles_2p_removal_temple');
+          expect(removalSteps[5].description, contains('Temple'));
+
+          // All should be in boardSetup phase
+          for (final step in removalSteps) {
+            expect(step.phase, PreparationPhase.boardSetup);
+          }
+        },
+      );
+
+      test(
+        'should place jungle tile removal steps before jungle draw pile step',
+        () {
+          handler = BaseGameHandler(
+            baseGame: baseGame,
+            activeExpansions: [baseGame],
+            selectedColors: ['red', 'purple'],
+          );
+
+          final players = [
+            PlayerEntity(name: 'Player 1', color: 'red'),
+            PlayerEntity(name: 'Player 2', color: 'purple'),
+          ];
+
+          final result = handler.modifyPreparationSteps(players, allTiles, []);
+
+          final lastRemovalIndex = result.lastIndexWhere(
+            (s) => s.id.startsWith('setup_jungle_tiles_2p_removal_'),
+          );
+          final drawPileIndex = result.indexWhere(
+            (s) => s.id == 'setup_jungle_draw_pile',
+          );
+          expect(lastRemovalIndex, lessThan(drawPileIndex));
+        },
+      );
+
+      test('should NOT include jungle tile removal steps for 3 players', () {
+        handler = BaseGameHandler(
+          baseGame: baseGame,
+          activeExpansions: [baseGame],
+          selectedColors: ['red', 'purple', 'white'],
+        );
+
+        final players = [
+          PlayerEntity(name: 'Player 1', color: 'red'),
+          PlayerEntity(name: 'Player 2', color: 'purple'),
+          PlayerEntity(name: 'Player 3', color: 'white'),
+        ];
+
+        final result = handler.modifyPreparationSteps(players, allTiles, []);
+
+        final removalStep = result.where(
+          (s) => s.id.startsWith('setup_jungle_tiles_2p_removal_'),
+        );
+        expect(removalStep.length, 0);
+      });
+
+      test('should NOT include jungle tile removal step for 4 players', () {
+        handler = BaseGameHandler(
+          baseGame: baseGame,
+          activeExpansions: [baseGame],
+          selectedColors: ['red', 'purple', 'white', 'yellow'],
+        );
+
+        final players = [
+          PlayerEntity(name: 'Player 1', color: 'red'),
+          PlayerEntity(name: 'Player 2', color: 'purple'),
+          PlayerEntity(name: 'Player 3', color: 'white'),
+          PlayerEntity(name: 'Player 4', color: 'yellow'),
+        ];
+
+        final result = handler.modifyPreparationSteps(players, allTiles, []);
+
+        final removalStep = result.where(
+          (s) => s.id.startsWith('setup_jungle_tiles_2p_removal_'),
+        );
+        expect(removalStep.length, 0);
+      });
+
+      test('should include worker tile removal steps for 3 players', () {
+        handler = BaseGameHandler(
+          baseGame: baseGame,
+          activeExpansions: [baseGame],
+          selectedColors: ['red', 'purple', 'white'],
+        );
+
+        final players = [
+          PlayerEntity(name: 'Player 1', color: 'red'),
+          PlayerEntity(name: 'Player 2', color: 'purple'),
+          PlayerEntity(name: 'Player 3', color: 'white'),
+        ];
+
+        final result = handler.modifyPreparationSteps(players, allTiles, []);
+
+        // Should have removal steps for 1-1-1-1 for each player with matching tiles
+        final removalSteps = result.where(
+          (s) => s.id.startsWith('setup_remove_worker_1_'),
+        );
+        // Only red has tiles in our mock data
+        expect(removalSteps.length, 1);
+        expect(removalSteps.first.id, 'setup_remove_worker_1_red');
+      });
+
+      test('should NOT include worker tile removal steps for 2 players', () {
+        handler = BaseGameHandler(
+          baseGame: baseGame,
+          activeExpansions: [baseGame],
+          selectedColors: ['red', 'purple'],
+        );
+
+        final players = [
+          PlayerEntity(name: 'Player 1', color: 'red'),
+          PlayerEntity(name: 'Player 2', color: 'purple'),
+        ];
+
+        final result = handler.modifyPreparationSteps(players, allTiles, []);
+
+        final removalSteps = result.where(
+          (s) => s.id.startsWith('setup_remove_worker_'),
+        );
+        expect(removalSteps.length, 0);
+      });
     });
   });
 }
