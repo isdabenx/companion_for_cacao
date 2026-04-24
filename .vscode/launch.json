@@ -5,18 +5,18 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "cacao_boardgame_helper",
+            "name": "companion_for_cacao",
             "request": "launch",
             "type": "dart"
         },
         {
-            "name": "cacao_boardgame_helper (profile mode)",
+            "name": "companion_for_cacao (profile mode)",
             "request": "launch",
             "type": "dart",
             "flutterMode": "profile"
         },
         {
-            "name": "cacao_boardgame_helper (release mode)",
+            "name": "companion_for_cacao (release mode)",
             "request": "launch",
             "type": "dart",
             "flutterMode": "release"
