@@ -16,10 +16,8 @@ class SelectModuleWidget extends ConsumerWidget {
         (s) => s.value?.modules.any((e) => e.id == module.id) ?? false,
       ),
     );
-    final gameSetupNotifier = ref.read(gameSetupProvider.notifier);
-
     void onToggleModule() {
-      gameSetupNotifier.toggleModule(module);
+      ref.read(gameSetupProvider.notifier).toggleModule(module);
     }
 
     return Row(

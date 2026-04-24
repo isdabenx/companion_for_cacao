@@ -2,6 +2,7 @@ import 'package:companion_for_cacao/config/constants/assets.dart';
 import 'package:companion_for_cacao/core/data/models/tile_model.dart';
 import 'package:companion_for_cacao/core/theme/app_breakpoints.dart';
 import 'package:companion_for_cacao/core/theme/app_colors.dart';
+import 'package:companion_for_cacao/core/theme/app_spacing.dart';
 import 'package:companion_for_cacao/core/theme/app_text_styles.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/game_setup_state_entity.dart';
 import 'package:companion_for_cacao/features/tile/presentation/providers/tile_settings_notifier.dart';
@@ -32,7 +33,9 @@ class _DetailedSummaryWidgetState extends ConsumerState<DetailedSummaryWidget> {
         builder: (context, constraints) {
           final isWide = constraints.maxWidth >= AppBreakpoints.compact;
           return SingleChildScrollView(
-            padding: EdgeInsets.symmetric(vertical: isWide ? 16 : 12),
+            padding: EdgeInsets.symmetric(
+              vertical: isWide ? AppSpacing.l : AppSpacing.m,
+            ),
             child: _buildLayout(),
           );
         },
@@ -60,7 +63,7 @@ class _DetailedSummaryWidgetState extends ConsumerState<DetailedSummaryWidget> {
               ? Column(children: [_sectionDivider, _buildTilesSection()])
               : const SizedBox.shrink(),
         ),
-        const SizedBox(height: 8),
+        AppSpacing.verticalS,
         Center(
           child: TextButton.icon(
             onPressed: () {
@@ -87,7 +90,7 @@ class _DetailedSummaryWidgetState extends ConsumerState<DetailedSummaryWidget> {
 
   Widget get _sectionDivider => Container(
     height: 1,
-    margin: const EdgeInsets.symmetric(vertical: 8),
+    margin: const EdgeInsets.symmetric(vertical: AppSpacing.s),
     decoration: BoxDecoration(
       gradient: LinearGradient(
         colors: [
@@ -106,9 +109,9 @@ class _DetailedSummaryWidgetState extends ConsumerState<DetailedSummaryWidget> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         _sectionHeader(context, Icons.people_outline, 'Players'),
-        const SizedBox(height: 8),
+        AppSpacing.verticalS,
         Padding(
-          padding: const EdgeInsets.only(left: 8),
+          padding: const EdgeInsets.only(left: AppSpacing.s),
           child: widget.gameSetup.players.isEmpty
               ? _emptyText(context, 'No players selected')
               : _buildPlayersGrid(),
@@ -147,9 +150,9 @@ class _DetailedSummaryWidgetState extends ConsumerState<DetailedSummaryWidget> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         _sectionHeader(context, Icons.extension_outlined, 'Expansions'),
-        const SizedBox(height: 8),
+        AppSpacing.verticalS,
         Padding(
-          padding: const EdgeInsets.only(left: 8),
+          padding: const EdgeInsets.only(left: AppSpacing.s),
           child: expansions.isEmpty
               ? _emptyText(context, 'Base game only')
               : Wrap(
@@ -174,9 +177,9 @@ class _DetailedSummaryWidgetState extends ConsumerState<DetailedSummaryWidget> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         _sectionHeader(context, Icons.widgets_outlined, 'Modules'),
-        const SizedBox(height: 8),
+        AppSpacing.verticalS,
         Padding(
-          padding: const EdgeInsets.only(left: 8),
+          padding: const EdgeInsets.only(left: AppSpacing.s),
           child: widget.gameSetup.modules.isEmpty
               ? _emptyText(context, 'No modules')
               : Wrap(
@@ -201,8 +204,11 @@ class _DetailedSummaryWidgetState extends ConsumerState<DetailedSummaryWidget> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         _sectionHeader(context, Icons.star_outline, 'Game Variant'),
-        const SizedBox(height: 8),
-        Padding(padding: const EdgeInsets.only(left: 8), child: _BigGameChip()),
+        AppSpacing.verticalS,
+        Padding(
+          padding: const EdgeInsets.only(left: AppSpacing.s),
+          child: _BigGameChip(),
+        ),
       ],
     );
   }
@@ -233,46 +239,46 @@ class _DetailedSummaryWidgetState extends ConsumerState<DetailedSummaryWidget> {
           'Tiles',
           subtitle: '($totalTiles)',
         ),
-        const SizedBox(height: 8),
+        AppSpacing.verticalS,
         if (widget.gameSetup.tiles.isEmpty)
           _emptyText(context, 'No tiles')
         else ...[
           if (workerTiles.isNotEmpty) ...[
             Padding(
-              padding: const EdgeInsets.only(left: 8),
+              padding: const EdgeInsets.only(left: AppSpacing.s),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text('Workers', style: AppTextStyles.sectionSublabel),
-                  const SizedBox(height: 8),
+                  AppSpacing.verticalS,
                   _buildTileGrid(workerTiles, showColorCircle: false),
-                  const SizedBox(height: 8),
+                  AppSpacing.verticalS,
                 ],
               ),
             ),
           ],
           if (jungleTiles.isNotEmpty) ...[
             Padding(
-              padding: const EdgeInsets.only(left: 8),
+              padding: const EdgeInsets.only(left: AppSpacing.s),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text('Jungle', style: AppTextStyles.sectionSublabel),
-                  const SizedBox(height: 8),
+                  AppSpacing.verticalS,
                   _buildTileGrid(jungleTiles),
-                  const SizedBox(height: 8),
+                  AppSpacing.verticalS,
                 ],
               ),
             ),
           ],
           if (hutTiles.isNotEmpty) ...[
             Padding(
-              padding: const EdgeInsets.only(left: 8),
+              padding: const EdgeInsets.only(left: AppSpacing.s),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text('Huts', style: AppTextStyles.sectionSublabel),
-                  const SizedBox(height: 8),
+                  AppSpacing.verticalS,
                   _buildTileGrid(hutTiles),
                 ],
               ),
@@ -317,7 +323,7 @@ class _DetailedSummaryWidgetState extends ConsumerState<DetailedSummaryWidget> {
     return Row(
       children: [
         Icon(icon, size: 18, color: AppColors.greenDark),
-        const SizedBox(width: 8),
+        AppSpacing.horizontalS,
         Text(title, style: Theme.of(context).textTheme.titleSmall),
         if (subtitle != null) ...[
           const SizedBox(width: 6),
@@ -482,7 +488,7 @@ class _TileChip extends StatelessWidget {
                   ),
                 ],
               ),
-              const SizedBox(width: 4),
+              const SizedBox(width: AppSpacing.xs),
             ],
             // Name (flexible to shrink)
             Flexible(
@@ -495,7 +501,7 @@ class _TileChip extends StatelessWidget {
                 maxLines: 1,
               ),
             ),
-            const SizedBox(width: 4),
+            const SizedBox(width: AppSpacing.xs),
             // Quantity badge
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 1),
@@ -521,7 +527,10 @@ class _BigGameChip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+      padding: const EdgeInsets.symmetric(
+        horizontal: AppSpacing.m,
+        vertical: 6,
+      ),
       decoration: BoxDecoration(
         color: AppColors.gold.withValues(alpha: 0.2),
         borderRadius: BorderRadius.circular(16),

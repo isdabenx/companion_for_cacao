@@ -2,6 +2,7 @@ import 'package:companion_for_cacao/config/constants/assets.dart';
 import 'package:companion_for_cacao/core/data/models/tile_model.dart';
 import 'package:companion_for_cacao/core/theme/app_colors.dart';
 import 'package:companion_for_cacao/core/theme/app_markdown_style_sheet.dart';
+import 'package:companion_for_cacao/core/theme/app_spacing.dart';
 import 'package:companion_for_cacao/core/theme/app_text_styles.dart';
 import 'package:companion_for_cacao/shared/widgets/container_full_style_widget.dart';
 import 'package:companion_for_cacao/shared/widgets/custom_scaffold_widget.dart';
@@ -60,13 +61,13 @@ class TileDetailScreen extends ConsumerWidget {
                   ),
                 ),
               ),
-              const SizedBox(height: 16),
+              AppSpacing.verticalL,
               SelectableText(
                 tile.name,
                 style: AppTextStyles.titleTextStyle,
                 textAlign: TextAlign.center,
               ),
-              const SizedBox(height: 16),
+              AppSpacing.verticalL,
 
               // Metadata Section
               Wrap(
@@ -119,16 +120,16 @@ class TileDetailScreen extends ConsumerWidget {
                 ],
               ),
 
-              const SizedBox(height: 24),
+              AppSpacing.verticalXl,
               Divider(color: AppColors.brown.withValues(alpha: 0.5)),
-              const SizedBox(height: 16),
+              AppSpacing.verticalL,
 
               MarkdownBody(
                 data: tile.description,
                 selectable: true,
                 styleSheet: AppMarkdownStyleSheet.styleSheet,
               ),
-              const SizedBox(height: 24),
+              AppSpacing.verticalXl,
             ],
           ),
         ),
@@ -144,7 +145,10 @@ class TileDetailScreen extends ConsumerWidget {
     Color textColor = Colors.white,
   }) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+      padding: const EdgeInsets.symmetric(
+        horizontal: AppSpacing.m,
+        vertical: 6,
+      ),
       decoration: BoxDecoration(
         color: backgroundColor,
         borderRadius: BorderRadius.circular(16),

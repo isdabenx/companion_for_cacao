@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:companion_for_cacao/config/routes/app_routes.dart';
 import 'package:companion_for_cacao/core/theme/app_colors.dart';
+import 'package:companion_for_cacao/core/theme/app_spacing.dart';
 import 'package:companion_for_cacao/core/theme/app_text_styles.dart';
 import 'package:companion_for_cacao/features/game_setup/presentation/providers/game_setup_notifier.dart';
 import 'package:companion_for_cacao/features/game_setup/presentation/providers/game_setup_step_provider.dart';
@@ -62,7 +63,7 @@ class StartButtonWidget extends ConsumerWidget {
     );
 
     return Padding(
-      padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
+      padding: const EdgeInsets.fromLTRB(AppSpacing.l, 0, AppSpacing.l, 0),
       child: Column(
         children: [
           SizedBox(
@@ -82,7 +83,7 @@ class StartButtonWidget extends ConsumerWidget {
             ),
           ),
           if (hasAnyInput) ...[
-            const SizedBox(height: 8),
+            AppSpacing.verticalS,
             SizedBox(
               width: double.infinity,
               child: OutlinedButton.icon(

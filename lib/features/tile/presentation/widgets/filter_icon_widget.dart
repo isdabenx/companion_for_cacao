@@ -1,3 +1,4 @@
+import 'package:companion_for_cacao/core/theme/app_spacing.dart';
 import 'package:companion_for_cacao/features/tile/presentation/providers/tile_filter_notifier.dart';
 import 'package:companion_for_cacao/features/tile/presentation/widgets/tile_filter_bottom_sheet_widget.dart';
 import 'package:flutter/material.dart';
@@ -30,7 +31,7 @@ class FilterIconWidget extends ConsumerWidget {
               right: -4,
               top: -4,
               child: Container(
-                padding: const EdgeInsets.all(4),
+                padding: const EdgeInsets.all(AppSpacing.xs),
                 decoration: BoxDecoration(
                   color: Theme.of(context).colorScheme.primary,
                   shape: BoxShape.circle,

@@ -28,7 +28,7 @@ class TileIds {
 }
 
 /// Watering tile ID for Big Game 3-player removal.
-const String _WateringTileId = 'chocolatl.jungle_watering';
+const String _wateringTileId = 'chocolatl.jungle_watering';
 
 class BaseGameHandler implements ModulePreparationHandler {
   BaseGameHandler({
@@ -115,7 +115,7 @@ class BaseGameHandler implements ModulePreparationHandler {
         );
         adjustedTiles = _reduceJungleTileById(
           adjustedTiles,
-          id: _WateringTileId,
+          id: _wateringTileId,
           amount: 1,
         );
       }

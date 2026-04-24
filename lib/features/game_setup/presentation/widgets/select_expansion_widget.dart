@@ -1,5 +1,6 @@
 import 'package:companion_for_cacao/config/constants/assets.dart';
 import 'package:companion_for_cacao/core/data/models/boardgame_model.dart';
+import 'package:companion_for_cacao/core/theme/app_spacing.dart';
 import 'package:companion_for_cacao/features/game_setup/presentation/providers/game_setup_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -23,10 +24,8 @@ class SelectExpansionWidget extends ConsumerWidget {
         (s) => s.value?.expansions.any((e) => e.id == boardgame.id) ?? false,
       ),
     );
-    final gameSetupNotifier = ref.read(gameSetupProvider.notifier);
-
     void onToggleExpansion() {
-      gameSetupNotifier.toggleExpansion(boardgame);
+      ref.read(gameSetupProvider.notifier).toggleExpansion(boardgame);
     }
 
     return GestureDetector(
@@ -51,7 +50,7 @@ class SelectExpansionWidget extends ConsumerWidget {
               ),
             ),
           ),
-          const SizedBox(height: 4),
+          const SizedBox(height: AppSpacing.xs),
           Text(
             boardgame.name,
             style: Theme.of(context).textTheme.bodySmall,

@@ -1,5 +1,6 @@
 import 'package:collection/collection.dart';
 import 'package:companion_for_cacao/core/theme/app_colors.dart';
+import 'package:companion_for_cacao/core/theme/app_spacing.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/preparation_entity.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/preparation_phase.dart';
 import 'package:companion_for_cacao/features/game_setup/presentation/providers/game_setup_notifier.dart';
@@ -80,7 +81,7 @@ class DetailedPreparationWidget extends ConsumerWidget {
           constraints: const BoxConstraints(maxWidth: 800),
           child: CustomScrollView(
             slivers: [
-              const SliverPadding(padding: EdgeInsets.only(top: 16.0)),
+              const SliverPadding(padding: EdgeInsets.only(top: AppSpacing.l)),
               for (final entry in groupedPreparation.entries)
                 SliverMainAxisGroup(
                   slivers: [
@@ -136,7 +137,9 @@ class DetailedPreparationWidget extends ConsumerWidget {
                     ),
                   ],
                 ),
-              const SliverPadding(padding: EdgeInsets.only(bottom: 16.0)),
+              const SliverPadding(
+                padding: EdgeInsets.only(bottom: AppSpacing.l),
+              ),
             ],
           ),
         ),
@@ -183,7 +186,10 @@ class _PhaseHeaderDelegate extends SliverPersistentHeaderDelegate {
       child: InkWell(
         onTap: onTap,
         child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 8.0),
+          padding: const EdgeInsets.symmetric(
+            horizontal: AppSpacing.xl,
+            vertical: AppSpacing.s,
+          ),
           alignment: Alignment.centerLeft,
           child: Row(
             children: [
@@ -205,7 +211,7 @@ class _PhaseHeaderDelegate extends SliverPersistentHeaderDelegate {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                const SizedBox(width: 12),
+                AppSpacing.horizontalM,
                 SizedBox(
                   width: 24,
                   height: 24,
@@ -217,7 +223,7 @@ class _PhaseHeaderDelegate extends SliverPersistentHeaderDelegate {
                   ),
                 ),
               ],
-              const SizedBox(width: 12),
+              AppSpacing.horizontalM,
               Icon(
                 isExpanded ? Icons.expand_less : Icons.expand_more,
                 color: AppColors.brown,
@@ -258,7 +264,7 @@ class PreparationCard extends ConsumerWidget {
         return Dialog(
           backgroundColor: Colors.transparent,
           elevation: 0,
-          insetPadding: const EdgeInsets.all(24),
+          insetPadding: AppSpacing.allXl,
           child: GestureDetector(
             onTap: () => Navigator.of(context).pop(),
             child: Stack(
@@ -282,7 +288,7 @@ class PreparationCard extends ConsumerWidget {
                           ),
                         ],
                       ),
-                      padding: const EdgeInsets.all(16),
+                      padding: AppSpacing.allL,
                       child: Image.asset(
                         imagePath,
                         fit: BoxFit.contain,
@@ -336,7 +342,10 @@ class PreparationCard extends ConsumerWidget {
       child: Card(
         color: AppColors.cream,
         elevation: isCompleted ? 0 : 2,
-        margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+        margin: const EdgeInsets.symmetric(
+          horizontal: AppSpacing.l,
+          vertical: 6,
+        ),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12),
           side: BorderSide(
@@ -358,14 +367,14 @@ class PreparationCard extends ConsumerWidget {
                 )
               : null,
           child: Padding(
-            padding: const EdgeInsets.all(12),
+            padding: AppSpacing.allM,
             child: Row(
               children: [
                 if (preparation.color != null)
                   Container(
                     width: 12,
                     height: 40,
-                    margin: const EdgeInsets.only(right: 12),
+                    margin: const EdgeInsets.only(right: AppSpacing.m),
                     decoration: BoxDecoration(
                       color: AppColors.findColorByName(preparation.color!),
                       borderRadius: BorderRadius.circular(6),
@@ -383,7 +392,7 @@ class PreparationCard extends ConsumerWidget {
                       child: Container(
                         width: 48,
                         height: 48,
-                        margin: const EdgeInsets.only(right: 12),
+                        margin: const EdgeInsets.only(right: AppSpacing.m),
                         decoration: BoxDecoration(
                           color: Colors.white,
                           shape: BoxShape.circle,
@@ -423,7 +432,7 @@ class PreparationCard extends ConsumerWidget {
                     ),
                   ),
                 ),
-                const SizedBox(width: 12),
+                AppSpacing.horizontalM,
                 Icon(
                   isCompleted ? Icons.check_circle : Icons.circle_outlined,
                   color: AppColors.brown,

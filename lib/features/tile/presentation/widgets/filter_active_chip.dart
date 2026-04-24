@@ -1,3 +1,4 @@
+import 'package:companion_for_cacao/core/theme/app_spacing.dart';
 import 'package:companion_for_cacao/features/tile/presentation/providers/tile_filter_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -24,7 +25,12 @@ class FilterActiveChip extends ConsumerWidget {
     );
 
     return Padding(
-      padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
+      padding: const EdgeInsets.fromLTRB(
+        AppSpacing.s,
+        AppSpacing.s,
+        AppSpacing.s,
+        0,
+      ),
       child: Row(
         children: [
           Expanded(

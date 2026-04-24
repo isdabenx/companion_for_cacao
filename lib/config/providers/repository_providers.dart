@@ -1,8 +1,8 @@
+import 'package:companion_for_cacao/config/providers/database_provider.dart';
 import 'package:companion_for_cacao/core/data/repositories/boardgame_repository.dart';
 import 'package:companion_for_cacao/core/data/repositories/boardgame_repository_impl.dart';
 import 'package:companion_for_cacao/core/data/repositories/settings_repository.dart';
 import 'package:companion_for_cacao/core/data/repositories/settings_repository_impl.dart';
-import 'package:companion_for_cacao/core/providers/database_provider.dart';
 import 'package:companion_for_cacao/features/tile/data/repositories/tile_repository.dart';
 import 'package:companion_for_cacao/features/tile/data/repositories/tile_repository_impl.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -10,6 +10,9 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'repository_providers.g.dart';
 
 /// Composition root: all repository providers wired in one place.
+/// This file is intentionally placed in config/ (app-level) rather than core/
+/// because it wires feature implementations to their interfaces, which requires
+/// importing from features.
 
 @Riverpod(keepAlive: true)
 SettingsRepository settingsRepository(Ref ref) {

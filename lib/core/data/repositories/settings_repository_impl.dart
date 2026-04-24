@@ -1,5 +1,5 @@
 import 'package:companion_for_cacao/core/data/repositories/settings_repository.dart';
-import 'package:companion_for_cacao/features/tile/domain/entities/tile_settings_entity.dart';
+import 'package:companion_for_cacao/shared/domain/entities/tile_settings_entity.dart';
 import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 

@@ -1,3 +1,4 @@
+import 'package:companion_for_cacao/core/theme/app_spacing.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -27,7 +28,7 @@ class DialogButtonBarWidget extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
         TextButton(onPressed: onCancel, child: Text(cancelLabel)),
-        const SizedBox(width: 8),
+        AppSpacing.horizontalS,
         FilledButton(onPressed: onConfirm, child: Text(confirmLabel)),
       ],
     );

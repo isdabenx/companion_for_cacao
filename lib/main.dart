@@ -83,10 +83,6 @@ class MainApp extends ConsumerWidget {
           bodySmall: AppTextStyles.bodySmall,
           labelLarge: AppTextStyles.menuItem,
           labelSmall: AppTextStyles.sectionSubtitle,
-          // Additional styles for widgets
-          displayLarge: AppTextStyles.sectionSublabel,
-          displayMedium: AppTextStyles.badge,
-          displaySmall: AppTextStyles.instruction,
         ),
       ),
     );

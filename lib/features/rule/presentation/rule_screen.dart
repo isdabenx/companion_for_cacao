@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:companion_for_cacao/config/constants/assets.dart';
 import 'package:companion_for_cacao/config/routes/app_routes.dart';
 import 'package:companion_for_cacao/core/theme/app_colors.dart';
+import 'package:companion_for_cacao/core/theme/app_spacing.dart';
 import 'package:companion_for_cacao/core/theme/app_text_styles.dart';
 import 'package:companion_for_cacao/shared/widgets/container_full_style_widget.dart';
 import 'package:companion_for_cacao/shared/widgets/custom_scaffold_widget.dart';
@@ -28,14 +29,14 @@ class RuleScreen extends StatelessWidget {
                 pdfPath: Assets.ruleCacaoPdf,
                 imagePath: Assets.boardgameCacao,
               ),
-              const SizedBox(height: 12),
+              AppSpacing.verticalM,
               _buildRuleCard(
                 context,
                 title: 'Overview',
                 pdfPath: Assets.ruleCacaoOverviewPdf,
                 imagePath: Assets.boardgameCacao,
               ),
-              const SizedBox(height: 24),
+              AppSpacing.verticalXl,
               _buildSectionHeader('Expansion: Chocolatl'),
               _buildRuleCard(
                 context,
@@ -43,7 +44,7 @@ class RuleScreen extends StatelessWidget {
                 pdfPath: Assets.ruleCacaoChocolatlPdf,
                 imagePath: Assets.boardgameChocolatl,
               ),
-              const SizedBox(height: 24),
+              AppSpacing.verticalXl,
               _buildSectionHeader('Expansion: Diamante'),
               _buildRuleCard(
                 context,
@@ -51,7 +52,7 @@ class RuleScreen extends StatelessWidget {
                 pdfPath: Assets.ruleCacaoDiamantePdf,
                 imagePath: Assets.boardgameDiamante,
               ),
-              const SizedBox(height: 16),
+              AppSpacing.verticalL,
             ],
           ),
         ),
@@ -61,7 +62,10 @@ class RuleScreen extends StatelessWidget {
 
   Widget _buildSectionHeader(String title) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 4),
+      padding: const EdgeInsets.symmetric(
+        vertical: AppSpacing.m,
+        horizontal: AppSpacing.xs,
+      ),
       child: Text(
         title.toUpperCase(),
         style: AppTextStyles.titleTextStyle.copyWith(
@@ -93,11 +97,11 @@ class RuleScreen extends StatelessWidget {
         elevation: 4,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
         child: Padding(
-          padding: const EdgeInsets.all(16),
+          padding: AppSpacing.allL,
           child: Row(
             children: [
               CircleAvatar(backgroundImage: AssetImage(imagePath), radius: 30),
-              const SizedBox(width: 16),
+              AppSpacing.horizontalL,
               Expanded(
                 child: Text(
                   title,

@@ -1,4 +1,5 @@
 import 'package:companion_for_cacao/core/theme/app_colors.dart';
+import 'package:companion_for_cacao/core/theme/app_spacing.dart';
 import 'package:companion_for_cacao/core/theme/app_text_styles.dart';
 import 'package:companion_for_cacao/features/game_setup/presentation/providers/game_setup_notifier.dart';
 import 'package:companion_for_cacao/features/game_setup/presentation/providers/game_setup_step_provider.dart';
@@ -58,12 +59,12 @@ class GameSetupWidget extends ConsumerWidget {
                             'Players',
                             style: AppTextStyles.sectionTitlePlain,
                           ),
-                          const SizedBox(width: 8),
+                          AppSpacing.horizontalS,
                           // Player count badge
                           Container(
                             constraints: const BoxConstraints(minWidth: 52),
                             padding: const EdgeInsets.symmetric(
-                              horizontal: 8,
+                              horizontal: AppSpacing.s,
                               vertical: 2,
                             ),
                             decoration: BoxDecoration(
@@ -80,7 +81,7 @@ class GameSetupWidget extends ConsumerWidget {
                                   size: 14,
                                   color: AppColors.greenDarker,
                                 ),
-                                const SizedBox(width: 4),
+                                const SizedBox(width: AppSpacing.xs),
                                 Text(
                                   '$selectedCount/4',
                                   style: AppTextStyles.badgeCount,

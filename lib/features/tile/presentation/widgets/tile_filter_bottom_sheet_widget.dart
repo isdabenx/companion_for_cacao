@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:companion_for_cacao/core/data/models/tile_model.dart';
 import 'package:companion_for_cacao/core/theme/app_colors.dart';
+import 'package:companion_for_cacao/core/theme/app_spacing.dart';
 import 'package:companion_for_cacao/core/theme/app_text_styles.dart';
 import 'package:companion_for_cacao/features/tile/presentation/providers/tile_filter_notifier.dart';
 import 'package:flutter/material.dart';
@@ -46,16 +47,16 @@ class _TileFilterBottomSheetWidgetState
     return Padding(
       padding: EdgeInsets.only(
         bottom: MediaQuery.of(context).viewInsets.bottom,
-        left: 16,
-        right: 16,
-        top: 16,
+        left: AppSpacing.l,
+        right: AppSpacing.l,
+        top: AppSpacing.l,
       ),
       child: SingleChildScrollView(
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const SizedBox(height: 24),
+            AppSpacing.verticalXl,
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -79,7 +80,7 @@ class _TileFilterBottomSheetWidgetState
                 ),
               ],
             ),
-            const SizedBox(height: 16),
+            AppSpacing.verticalL,
             TextField(
               decoration: InputDecoration(
                 hintText: 'Search tile by name...',
@@ -101,7 +102,7 @@ class _TileFilterBottomSheetWidgetState
               style: AppTextStyles.bodyMedium,
               onChanged: _onSearchChanged,
             ),
-            const SizedBox(height: 24),
+            AppSpacing.verticalXl,
             Text(
               'EXPANSIONS',
               style: AppTextStyles.bodyMedium.copyWith(
@@ -111,7 +112,7 @@ class _TileFilterBottomSheetWidgetState
                 color: AppColors.brown.withValues(alpha: 0.8),
               ),
             ),
-            const SizedBox(height: 12),
+            AppSpacing.verticalM,
             Wrap(
               spacing: 8,
               runSpacing: 8,
@@ -121,7 +122,7 @@ class _TileFilterBottomSheetWidgetState
                 _buildBoardgameChip(ref, selectedBoardgameIds, 3, 'Diamante'),
               ],
             ),
-            const SizedBox(height: 24),
+            AppSpacing.verticalXl,
             Text(
               'TILE TYPES',
               style: AppTextStyles.bodyMedium.copyWith(
@@ -131,7 +132,7 @@ class _TileFilterBottomSheetWidgetState
                 color: AppColors.brown.withValues(alpha: 0.8),
               ),
             ),
-            const SizedBox(height: 12),
+            AppSpacing.verticalM,
             Wrap(
               spacing: 8,
               runSpacing: 8,
@@ -153,7 +154,7 @@ class _TileFilterBottomSheetWidgetState
                 );
               }).toList(),
             ),
-            const SizedBox(height: 32),
+            const SizedBox(height: AppSpacing.xxl),
           ],
         ),
       ),
@@ -184,7 +185,10 @@ class _TileFilterBottomSheetWidgetState
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
       showCheckmark: false,
       visualDensity: VisualDensity.compact,
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      padding: const EdgeInsets.symmetric(
+        horizontal: AppSpacing.s,
+        vertical: AppSpacing.xs,
+      ),
     );
   }
 
@@ -211,7 +215,10 @@ class _TileFilterBottomSheetWidgetState
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
       showCheckmark: false,
       visualDensity: VisualDensity.compact,
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      padding: const EdgeInsets.symmetric(
+        horizontal: AppSpacing.s,
+        vertical: AppSpacing.xs,
+      ),
     );
   }
 }

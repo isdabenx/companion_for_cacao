@@ -1,3 +1,4 @@
+import 'package:companion_for_cacao/core/theme/app_spacing.dart';
 import 'package:flutter/material.dart';
 
 class SelectableChip extends StatelessWidget {
@@ -11,7 +12,7 @@ class SelectableChip extends StatelessWidget {
     this.selectedBorderWidth = 2.5,
     this.unselectedBorderWidth = 1.5,
     this.borderRadius = 16.0,
-    this.padding = const EdgeInsets.all(12),
+    this.padding = AppSpacing.allM,
     this.onTap,
     this.showShadow = true,
     super.key,

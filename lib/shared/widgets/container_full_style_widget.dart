@@ -1,4 +1,5 @@
 import 'package:companion_for_cacao/core/theme/app_colors.dart';
+import 'package:companion_for_cacao/core/theme/app_spacing.dart';
 import 'package:flutter/material.dart';
 
 class ContainerFullStyleWidget extends StatelessWidget {
@@ -9,8 +10,8 @@ class ContainerFullStyleWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      margin: const EdgeInsets.all(8),
-      padding: const EdgeInsets.all(16),
+      margin: AppSpacing.allS,
+      padding: AppSpacing.allL,
       decoration: BoxDecoration(
         color: AppColors.greenLight,
         border: Border.all(color: AppColors.greenDarker, width: 4),

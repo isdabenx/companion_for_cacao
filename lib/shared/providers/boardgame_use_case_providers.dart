@@ -1,4 +1,4 @@
-import 'package:companion_for_cacao/core/providers/repository_providers.dart';
+import 'package:companion_for_cacao/config/providers/repository_providers.dart';
 import 'package:companion_for_cacao/shared/domain/use_cases/load_boardgames_use_case.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 

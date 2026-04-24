@@ -1,4 +1,5 @@
 import 'package:companion_for_cacao/core/theme/app_colors.dart';
+import 'package:companion_for_cacao/core/theme/app_spacing.dart';
 import 'package:companion_for_cacao/core/theme/app_text_styles.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/player_entity.dart';
 import 'package:companion_for_cacao/features/game_setup/presentation/providers/game_setup_notifier.dart';
@@ -108,7 +109,7 @@ class _PlayerChipWidgetState extends ConsumerState<PlayerChipWidget> {
               color: isDarkColor ? Colors.white : AppColors.brown,
             ),
           ),
-          const SizedBox(height: 8),
+          AppSpacing.verticalS,
           // Name field or placeholder
           SizedBox(
             width: 80,
@@ -124,7 +125,7 @@ class _PlayerChipWidgetState extends ConsumerState<PlayerChipWidget> {
                     decoration: InputDecoration(
                       isDense: true,
                       contentPadding: const EdgeInsets.symmetric(
-                        horizontal: 4,
+                        horizontal: AppSpacing.xs,
                         vertical: 6,
                       ),
                       filled: true,

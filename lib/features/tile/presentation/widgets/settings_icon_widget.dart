@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:companion_for_cacao/config/constants/tile_settings.dart';
 import 'package:companion_for_cacao/core/theme/app_colors.dart';
+import 'package:companion_for_cacao/core/theme/app_spacing.dart';
 import 'package:companion_for_cacao/core/theme/app_text_styles.dart';
 import 'package:companion_for_cacao/features/tile/presentation/widgets/settings_item_widget.dart';
 import 'package:flutter/material.dart';
@@ -24,16 +25,18 @@ class SettingsIconWidget extends StatelessWidget {
               return SingleChildScrollView(
                 child: Padding(
                   padding: const EdgeInsets.only(
-                    left: 16,
-                    right: 16,
-                    bottom: 32,
+                    left: AppSpacing.l,
+                    right: AppSpacing.l,
+                    bottom: AppSpacing.xxl,
                   ),
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 8),
+                        padding: const EdgeInsets.symmetric(
+                          vertical: AppSpacing.s,
+                        ),
                         child: Text(
                           'SETTINGS',
                           style: AppTextStyles.boardgameTitlePlain.copyWith(
@@ -41,9 +44,11 @@ class SettingsIconWidget extends StatelessWidget {
                           ),
                         ),
                       ),
-                      const SizedBox(height: 16),
+                      AppSpacing.verticalL,
                       Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 8),
+                        padding: const EdgeInsets.symmetric(
+                          vertical: AppSpacing.s,
+                        ),
                         child: Text(
                           'GENERAL',
                           style: AppTextStyles.bodyMedium.copyWith(
@@ -68,7 +73,9 @@ class SettingsIconWidget extends StatelessWidget {
                       ),
                       const Divider(height: 32),
                       Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 8),
+                        padding: const EdgeInsets.symmetric(
+                          vertical: AppSpacing.s,
+                        ),
                         child: Text(
                           'BADGES',
                           style: AppTextStyles.bodyMedium.copyWith(
@@ -89,7 +96,9 @@ class SettingsIconWidget extends StatelessWidget {
                       ),
                       const Divider(height: 32),
                       Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 8),
+                        padding: const EdgeInsets.symmetric(
+                          vertical: AppSpacing.s,
+                        ),
                         child: Text(
                           'PLAYER COLORS',
                           style: AppTextStyles.bodyMedium.copyWith(

@@ -1,4 +1,5 @@
 import 'package:companion_for_cacao/core/theme/app_colors.dart';
+import 'package:companion_for_cacao/core/theme/app_spacing.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/player_entity.dart';
 import 'package:companion_for_cacao/features/game_setup/presentation/providers/game_setup_notifier.dart';
 import 'package:flutter/material.dart';
@@ -36,7 +37,6 @@ class _PlayerRowWidgetState extends ConsumerState<PlayerRowWidget> {
           ),
         ) ??
         PlayerEntity(name: '', color: widget.colorString);
-    final gameSetupNotifier = ref.read(gameSetupProvider.notifier);
 
     // Sync controller with state when they differ (e.g. navigating back)
     if (player.isSelected && controller.text != player.name) {
@@ -45,21 +45,22 @@ class _PlayerRowWidgetState extends ConsumerState<PlayerRowWidget> {
 
     void onTogglePlayer() {
       final newSelected = !player.isSelected;
-      gameSetupNotifier.updatePlayerSelection(
-        widget.colorString,
-        isSelected: newSelected,
-      );
+      ref
+          .read(gameSetupProvider.notifier)
+          .updatePlayerSelection(widget.colorString, isSelected: newSelected);
       if (newSelected) {
-        gameSetupNotifier.addPlayer(controller.text, widget.colorString);
+        ref
+            .read(gameSetupProvider.notifier)
+            .addPlayer(controller.text, widget.colorString);
         focusNode.requestFocus();
       } else {
-        gameSetupNotifier.removePlayer(widget.colorString);
+        ref.read(gameSetupProvider.notifier).removePlayer(widget.colorString);
       }
     }
 
     void onPlayerNameChanged(String name) {
       if (player.isSelected) {
-        gameSetupNotifier
+        ref.read(gameSetupProvider.notifier)
           ..removePlayer(widget.colorString)
           ..addPlayer(name, widget.colorString);
       }
@@ -102,7 +103,7 @@ class _PlayerRowWidgetState extends ConsumerState<PlayerRowWidget> {
             ),
           ),
         ),
-        const SizedBox(width: 16),
+        AppSpacing.horizontalL,
         Flexible(
           child: AnimatedOpacity(
             opacity: player.isSelected ? 1.0 : 0.0,

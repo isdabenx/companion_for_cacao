@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:companion_for_cacao/config/constants/assets.dart';
+import 'package:companion_for_cacao/core/theme/app_spacing.dart';
 import 'package:companion_for_cacao/core/theme/app_text_styles.dart';
 import 'package:companion_for_cacao/shared/widgets/container_full_style_widget.dart';
 import 'package:companion_for_cacao/shared/widgets/custom_scaffold_widget.dart';
@@ -50,11 +51,11 @@ class HomeScreen extends StatelessWidget {
                     textAlign: TextAlign.center,
                   ),
                 ),
-                const SizedBox(height: 8),
+                AppSpacing.verticalS,
                 Center(child: Image.asset(Assets.cacaoTile)),
                 const SizedBox(height: 20),
                 const Padding(
-                  padding: EdgeInsets.symmetric(vertical: 4),
+                  padding: EdgeInsets.symmetric(vertical: AppSpacing.xs),
                   child: Text(
                     'Companion for Cacao is a mobile application developed with Flutter designed to assist players of the Cacao board game and its expansions. '
                     'The goal is to provide digital tools that enhance the gaming experience by facilitating score tracking, rule consultation, and game management.',
@@ -64,20 +65,24 @@ class HomeScreen extends StatelessWidget {
                 const HeaderWidget(text: 'Completed Features'),
                 for (final String feature in completedFeatures)
                   Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 4),
+                    padding: const EdgeInsets.symmetric(
+                      vertical: AppSpacing.xs,
+                    ),
                     child: Text(feature),
                   ),
                 const SizedBox(height: 20),
                 const HeaderWidget(text: 'Pending Features'),
                 for (final String feature in pendingFeatures)
                   Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 4),
+                    padding: const EdgeInsets.symmetric(
+                      vertical: AppSpacing.xs,
+                    ),
                     child: Text(feature),
                   ),
                 const SizedBox(height: 20),
                 const HeaderWidget(text: 'Contact Me'),
                 const Padding(
-                  padding: EdgeInsets.symmetric(vertical: 4),
+                  padding: EdgeInsets.symmetric(vertical: AppSpacing.xs),
                   child: Text(
                     'For suggestions, improvements, bug reports, or any other inquiries, '
                     'you can visit our GitHub repository. The application is open-source '
@@ -85,7 +90,7 @@ class HomeScreen extends StatelessWidget {
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 4),
+                  padding: const EdgeInsets.symmetric(vertical: AppSpacing.xs),
                   child: Text(
                     'Visit our GitHub repository:',
 
@@ -95,7 +100,7 @@ class HomeScreen extends StatelessWidget {
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 4),
+                  padding: const EdgeInsets.symmetric(vertical: AppSpacing.xs),
                   child: GestureDetector(
                     onTap: () {
                       final url = Uri.parse(
@@ -114,7 +119,7 @@ class HomeScreen extends StatelessWidget {
                   ),
                 ),
                 const Padding(
-                  padding: EdgeInsets.symmetric(vertical: 4),
+                  padding: EdgeInsets.symmetric(vertical: AppSpacing.xs),
                   child: Text(
                     'On GitHub, you can open "issues" to report bugs, suggest new features, '
                     'or even submit "pull requests" with your own contributions. '

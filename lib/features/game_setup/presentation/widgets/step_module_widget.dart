@@ -1,5 +1,6 @@
 import 'package:companion_for_cacao/core/data/models/module_model.dart';
 import 'package:companion_for_cacao/core/theme/app_colors.dart';
+import 'package:companion_for_cacao/core/theme/app_spacing.dart';
 import 'package:companion_for_cacao/core/theme/app_text_styles.dart';
 import 'package:companion_for_cacao/features/game_setup/presentation/providers/game_setup_notifier.dart';
 import 'package:companion_for_cacao/features/game_setup/presentation/widgets/select_module_widget.dart';
@@ -53,7 +54,7 @@ class StepModuleWidget extends ConsumerWidget {
                 children: [
                   Expanded(
                     child: Padding(
-                      padding: const EdgeInsets.only(top: 16),
+                      padding: const EdgeInsets.only(top: AppSpacing.l),
                       child: Text(
                         'No expansion with modules are selected',
                         style: AppTextStyles.boardgameTitle,
@@ -69,7 +70,7 @@ class StepModuleWidget extends ConsumerWidget {
         ),
         if (showBigGameToggle)
           Padding(
-            padding: const EdgeInsets.only(top: 12),
+            padding: const EdgeInsets.only(top: AppSpacing.m),
             child: ListTile(
               contentPadding: EdgeInsets.zero,
               title: Text('Big Game', style: AppTextStyles.bodyMedium),

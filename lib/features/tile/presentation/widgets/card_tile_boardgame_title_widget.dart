@@ -1,4 +1,5 @@
 import 'package:companion_for_cacao/core/theme/app_text_styles.dart';
+import 'package:companion_for_cacao/core/theme/app_spacing.dart';
 import 'package:flutter/material.dart';
 
 class CardTileBoardgameTitleWidget extends StatelessWidget {
@@ -22,7 +23,9 @@ class CardTileBoardgameTitleWidget extends StatelessWidget {
               child: FittedBox(
                 fit: BoxFit.scaleDown,
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 4),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: AppSpacing.xs,
+                  ),
                   child: Text(
                     title.toUpperCase(),
                     style: isCompact

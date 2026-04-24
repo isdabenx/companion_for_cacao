@@ -1,4 +1,5 @@
 import 'package:companion_for_cacao/core/theme/app_colors.dart';
+import 'package:companion_for_cacao/core/theme/app_spacing.dart';
 import 'package:companion_for_cacao/core/theme/app_text_styles.dart';
 import 'package:flutter/material.dart';
 
@@ -14,7 +15,7 @@ class HeaderWidget extends StatelessWidget {
           children: [
             Flexible(
               child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 8),
+                padding: const EdgeInsets.symmetric(horizontal: AppSpacing.s),
                 decoration: BoxDecoration(
                   color: AppColors.greenNormal,
                   borderRadius: BorderRadius.circular(4),
@@ -24,7 +25,7 @@ class HeaderWidget extends StatelessWidget {
             ),
           ],
         ),
-        const SizedBox(height: 8),
+        AppSpacing.verticalS,
       ],
     );
   }

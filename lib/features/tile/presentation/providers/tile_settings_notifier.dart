@@ -1,8 +1,8 @@
 import 'dart:async';
 
 import 'package:companion_for_cacao/config/constants/tile_settings.dart';
-import 'package:companion_for_cacao/core/providers/repository_providers.dart';
-import 'package:companion_for_cacao/features/tile/domain/entities/tile_settings_entity.dart';
+import 'package:companion_for_cacao/config/providers/repository_providers.dart';
+import 'package:companion_for_cacao/shared/domain/entities/tile_settings_entity.dart';
 import 'package:flutter/foundation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 

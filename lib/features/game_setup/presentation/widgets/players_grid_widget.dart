@@ -1,4 +1,5 @@
 import 'package:companion_for_cacao/core/theme/app_colors.dart';
+import 'package:companion_for_cacao/core/theme/app_spacing.dart';
 import 'package:companion_for_cacao/core/theme/app_text_styles.dart';
 import 'package:companion_for_cacao/features/game_setup/presentation/providers/game_setup_notifier.dart';
 import 'package:companion_for_cacao/features/game_setup/presentation/widgets/player_chip_widget.dart';
@@ -28,7 +29,7 @@ class PlayersGridWidget extends ConsumerWidget {
       children: [
         // Instruction text
         Text('Tap a color to add a player', style: AppTextStyles.instruction),
-        const SizedBox(height: 12),
+        AppSpacing.verticalM,
 
         // All colors - reorderable
         LayoutBuilder(
