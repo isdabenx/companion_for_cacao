@@ -17,7 +17,7 @@ class GetTilesWithBoardgameUseCase {
     final boardgames = await _boardgameRepository.getAllBoardgames();
     final modules = await _boardgameRepository.getAllModules();
 
-    return _mapTiles(tiles, boardgames, modules);
+    return _mapTiles(tiles, boardgames, modules)..sort(TileModel.defaultSort);
   }
 
   List<TileModel> _mapTiles(

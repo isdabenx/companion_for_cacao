@@ -111,6 +111,13 @@ class TileModel {
 
   String get typeAsString => type?.displayName ?? '';
 
+  /// Default sort: huts last, then alphabetical by name.
+  static int defaultSort(TileModel a, TileModel b) {
+    if (a.type == TileType.hut && b.type != TileType.hut) return 1;
+    if (a.type != TileType.hut && b.type == TileType.hut) return -1;
+    return a.name.compareTo(b.name);
+  }
+
   TileModel copyWith({
     String? id,
     String? name,
