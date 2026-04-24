@@ -41,7 +41,7 @@ class AppTextStyles {
   // ============================================
 
   static TextStyle loadingTextStyle = _titleBase.copyWith(fontSize: 54);
-  static TextStyle appBarTextStyle = _titleBase.copyWith(fontSize: 36);
+  static TextStyle appBarTextStyle = _titleBase.copyWith(fontSize: 28);
   static TextStyle titleTextStyle = _titleBase.copyWith(fontSize: 32);
   static TextStyle menuTitle = _titleBase.copyWith(fontSize: 54);
   static TextStyle markdownH2 = _titleBase.copyWith(fontSize: 20);

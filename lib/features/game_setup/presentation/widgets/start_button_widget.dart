@@ -62,47 +62,87 @@ class StartButtonWidget extends ConsumerWidget {
       }),
     );
 
+    final isLandscape =
+        MediaQuery.sizeOf(context).width > MediaQuery.sizeOf(context).height;
+    final isHorizontal = isLandscape && hasAnyInput;
+
     return Padding(
-      padding: const EdgeInsets.fromLTRB(AppSpacing.l, 0, AppSpacing.l, 0),
-      child: Column(
+      padding: const EdgeInsets.fromLTRB(
+        AppSpacing.l,
+        0,
+        AppSpacing.l,
+        AppSpacing.s,
+      ),
+      child: Flex(
+        direction: isHorizontal ? Axis.horizontal : Axis.vertical,
+        mainAxisSize: MainAxisSize.min,
         children: [
-          SizedBox(
-            width: double.infinity,
-            child: FilledButton(
-              onPressed: isStartButtonEnabled
-                  ? () => isStarted
-                        ? _onResumeButtonPressed(context, ref)
-                        : _onStartButtonPressed(context, ref)
-                  : null,
-              child: Text(
-                isStarted ? 'Resume Game' : 'Start Game',
-                style: AppTextStyles.boardgameTitlePlain.copyWith(
-                  color: Colors.white,
-                ),
-              ),
-            ),
-          ),
-          if (hasAnyInput) ...[
-            AppSpacing.verticalS,
-            SizedBox(
-              width: double.infinity,
-              child: OutlinedButton.icon(
-                onPressed: () => _onClearSetupPressed(context, ref),
-                icon: const Icon(Icons.clear_all, size: 20),
-                label: Text(
-                  'Clear Setup',
-                  style: AppTextStyles.boardgameTitlePlain.copyWith(
-                    color: AppColors.red,
+          isHorizontal
+              ? Expanded(
+                  flex: 2,
+                  child: _buildStartButton(
+                    context,
+                    ref,
+                    isStartButtonEnabled: isStartButtonEnabled,
+                    isStarted: isStarted,
+                  ),
+                )
+              : SizedBox(
+                  width: double.infinity,
+                  child: _buildStartButton(
+                    context,
+                    ref,
+                    isStartButtonEnabled: isStartButtonEnabled,
+                    isStarted: isStarted,
                   ),
                 ),
-                style: OutlinedButton.styleFrom(
-                  side: const BorderSide(color: AppColors.red),
-                  foregroundColor: AppColors.red,
-                ),
-              ),
+          if (hasAnyInput) ...[
+            SizedBox(
+              width: isHorizontal ? AppSpacing.s : 0,
+              height: isHorizontal ? 0 : AppSpacing.s,
             ),
+            isHorizontal
+                ? Expanded(child: _buildClearButton(context, ref))
+                : SizedBox(
+                    width: double.infinity,
+                    child: _buildClearButton(context, ref),
+                  ),
           ],
         ],
+      ),
+    );
+  }
+
+  Widget _buildStartButton(
+    BuildContext context,
+    WidgetRef ref, {
+    required bool isStartButtonEnabled,
+    required bool isStarted,
+  }) {
+    return FilledButton(
+      onPressed: isStartButtonEnabled
+          ? () => isStarted
+                ? _onResumeButtonPressed(context, ref)
+                : _onStartButtonPressed(context, ref)
+          : null,
+      child: Text(
+        isStarted ? 'Resume Game' : 'Start Game',
+        style: AppTextStyles.boardgameTitlePlain.copyWith(color: Colors.white),
+      ),
+    );
+  }
+
+  Widget _buildClearButton(BuildContext context, WidgetRef ref) {
+    return OutlinedButton.icon(
+      onPressed: () => _onClearSetupPressed(context, ref),
+      icon: const Icon(Icons.clear_all, size: 20),
+      label: Text(
+        'Clear Setup',
+        style: AppTextStyles.boardgameTitlePlain.copyWith(color: AppColors.red),
+      ),
+      style: OutlinedButton.styleFrom(
+        side: const BorderSide(color: AppColors.red),
+        foregroundColor: AppColors.red,
       ),
     );
   }

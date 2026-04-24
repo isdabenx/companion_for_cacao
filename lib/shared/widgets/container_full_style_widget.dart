@@ -10,8 +10,14 @@ class ContainerFullStyleWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      margin: AppSpacing.allS,
-      padding: AppSpacing.allL,
+      margin: const EdgeInsets.symmetric(
+        horizontal: AppSpacing.s,
+        vertical: AppSpacing.xs,
+      ),
+      padding: const EdgeInsets.symmetric(
+        horizontal: AppSpacing.l,
+        vertical: AppSpacing.s,
+      ),
       decoration: BoxDecoration(
         color: AppColors.greenLight,
         border: Border.all(color: AppColors.greenDarker, width: 4),

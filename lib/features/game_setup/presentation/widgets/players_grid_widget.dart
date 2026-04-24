@@ -28,13 +28,19 @@ class PlayersGridWidget extends ConsumerWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         // Instruction text
-        Text('Tap a color to add a player', style: AppTextStyles.instruction),
+        Text(
+          'Tap a color to add a player. Hold and drag to reorder.',
+          style: AppTextStyles.instruction,
+        ),
         AppSpacing.verticalM,
 
         // All colors - reorderable
         LayoutBuilder(
           builder: (context, constraints) {
             final crossAxisCount = constraints.maxWidth > 400 ? 4 : 2;
+            final isLandscape =
+                MediaQuery.sizeOf(context).width >
+                MediaQuery.sizeOf(context).height;
 
             return ReorderableGridView.count(
               crossAxisCount: crossAxisCount,
@@ -42,7 +48,7 @@ class PlayersGridWidget extends ConsumerWidget {
               physics: const NeverScrollableScrollPhysics(),
               mainAxisSpacing: 12,
               crossAxisSpacing: 12,
-              childAspectRatio: 1.0,
+              childAspectRatio: isLandscape ? 1.4 : 1.0,
               onReorder: (oldIndex, newIndex) {
                 ref
                     .read(gameSetupProvider.notifier)

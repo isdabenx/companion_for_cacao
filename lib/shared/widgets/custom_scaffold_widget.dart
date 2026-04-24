@@ -43,14 +43,16 @@ class _CustomScaffoldWidgetState extends State<CustomScaffoldWidget> {
 
   @override
   Widget build(BuildContext context) {
-    final width = MediaQuery.sizeOf(context).width;
-    final drawerRatio = _getDrawerRatio(width);
+    final size = MediaQuery.sizeOf(context);
+    final drawerRatio = _getDrawerRatio(size.width);
+    final isLandscape = size.width > size.height;
 
     return MainMenuWidget(
       drawerController: drawerController,
       openRatio: drawerRatio,
       child: Scaffold(
         appBar: AppBar(
+          toolbarHeight: isLandscape ? 40 : 48,
           bottom: widget.appBarBottom,
           actions: widget.actions,
           title: FittedBox(
