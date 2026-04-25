@@ -26,6 +26,7 @@ class AppColors {
   static const Color purple = Color(0xFF773C93);
   static const Color yellow = Color(0xFFFBC217);
   static const Color black = Color(0xFF231F20);
+  static const Color grey = Color(0xFFBDBDBD);
 
   static final Map<String, Color> colors = {
     'white': white,

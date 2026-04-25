@@ -53,7 +53,7 @@ class HomeScreen extends StatelessWidget {
                 ),
                 AppSpacing.verticalS,
                 Center(child: Image.asset(Assets.cacaoTile)),
-                const SizedBox(height: 20),
+                AppSpacing.verticalXl,
                 const Padding(
                   padding: EdgeInsets.symmetric(vertical: AppSpacing.xs),
                   child: Text(
@@ -61,7 +61,7 @@ class HomeScreen extends StatelessWidget {
                     'The goal is to provide digital tools that enhance the gaming experience by facilitating score tracking, rule consultation, and game management.',
                   ),
                 ),
-                const SizedBox(height: 20),
+                AppSpacing.verticalXl,
                 const HeaderWidget(text: 'Completed Features'),
                 for (final String feature in completedFeatures)
                   Padding(
@@ -70,7 +70,7 @@ class HomeScreen extends StatelessWidget {
                     ),
                     child: Text(feature),
                   ),
-                const SizedBox(height: 20),
+                AppSpacing.verticalXl,
                 const HeaderWidget(text: 'Pending Features'),
                 for (final String feature in pendingFeatures)
                   Padding(
@@ -79,7 +79,7 @@ class HomeScreen extends StatelessWidget {
                     ),
                     child: Text(feature),
                   ),
-                const SizedBox(height: 20),
+                AppSpacing.verticalXl,
                 const HeaderWidget(text: 'Contact Me'),
                 const Padding(
                   padding: EdgeInsets.symmetric(vertical: AppSpacing.xs),

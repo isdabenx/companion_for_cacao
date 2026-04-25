@@ -259,7 +259,7 @@ class PreparationCard extends ConsumerWidget {
   void _showImageDialog(BuildContext context, String imagePath) {
     showDialog<void>(
       context: context,
-      barrierColor: Colors.black.withValues(alpha: 0.7),
+      barrierColor: AppColors.black.withValues(alpha: 0.7),
       builder: (BuildContext context) {
         return Dialog(
           backgroundColor: Colors.transparent,
@@ -278,11 +278,11 @@ class PreparationCard extends ConsumerWidget {
                     minScale: 0.5,
                     child: Container(
                       decoration: BoxDecoration(
-                        color: Colors.white,
+                        color: AppColors.white,
                         borderRadius: BorderRadius.circular(16),
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.black.withValues(alpha: 0.2),
+                            color: AppColors.black.withValues(alpha: 0.2),
                             blurRadius: 10,
                             spreadRadius: 2,
                           ),
@@ -378,7 +378,7 @@ class PreparationCard extends ConsumerWidget {
                     decoration: BoxDecoration(
                       color: AppColors.findColorByName(preparation.color!),
                       borderRadius: BorderRadius.circular(6),
-                      border: Border.all(color: Colors.grey.shade400, width: 1),
+                      border: Border.all(color: AppColors.grey, width: 1),
                     ),
                   ),
                 if (preparation.imageKey != null)
@@ -394,7 +394,7 @@ class PreparationCard extends ConsumerWidget {
                         height: 48,
                         margin: const EdgeInsets.only(right: AppSpacing.m),
                         decoration: BoxDecoration(
-                          color: Colors.white,
+                          color: AppColors.white,
                           shape: BoxShape.circle,
                           boxShadow: [
                             BoxShadow(

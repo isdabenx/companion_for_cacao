@@ -17,123 +17,143 @@ class TileDetailScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final isLandscape =
+        MediaQuery.orientationOf(context) == Orientation.landscape;
+
+    final image = _buildTileImage();
+    final content = _buildTileContent(context);
+
     return CustomScaffoldWidget(
       showBackButton: true,
       title: tile.typeAsString,
       body: ContainerFullStyleWidget(
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              Container(
-                decoration: BoxDecoration(
-                  border: Border.all(
-                    color: tile.color == null
-                        ? AppColors.tileBorder
-                        : AppColors.findColorByName(
-                            tile.color.toString().split('.').last,
-                          ),
-                    width: 4,
-                  ),
-                ),
-                child: Hero(
-                  tag: 'tile-image-${tile.filenameImage}',
-                  child: Material(
-                    color: Colors.transparent,
-                    child: AspectRatio(
-                      aspectRatio: 1,
-                      child: Image.asset(
-                        '${Assets.imagesTilePath}${tile.filenameImage}',
-                        fit: BoxFit.contain,
-                        errorBuilder: (context, error, stackTrace) {
-                          return Container(
-                            color: AppColors.greenLight,
-                            child: Center(
-                              child: Icon(
-                                Icons.image_not_supported_outlined,
-                                color: AppColors.brown.withValues(alpha: 0.5),
-                                size: 64,
-                              ),
-                            ),
-                          );
-                        },
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-              AppSpacing.verticalL,
-              SelectableText(
-                tile.name,
-                style: AppTextStyles.titleTextStyle,
-                textAlign: TextAlign.center,
-              ),
-              AppSpacing.verticalL,
-
-              // Metadata Section
-              Wrap(
-                alignment: WrapAlignment.center,
-                spacing: 8,
-                runSpacing: 8,
+        child: isLandscape
+            ? Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  _buildChip(
-                    context,
-                    Icons.layers_outlined,
-                    'x${tile.quantity}',
-                    AppColors.brown,
+                  Expanded(flex: 2, child: Center(child: image)),
+                  AppSpacing.horizontalL,
+                  Expanded(
+                    flex: 3,
+                    child: SingleChildScrollView(child: content),
                   ),
-                  if (tile.boardgame.value != null)
-                    _buildChip(
-                      context,
-                      Icons.extension_outlined,
-                      tile.boardgame.value!.name,
-                      AppColors.greenDark,
-                    ),
-                  if (tile.module.value != null)
-                    _buildChip(
-                      context,
-                      Icons.view_module_outlined,
-                      tile.module.value!.name,
-                      AppColors.greenDarker,
-                    ),
-                  if (tile.hutCost != null && tile.hutCost! > 0)
-                    _buildChip(
-                      context,
-                      Icons.monetization_on,
-                      'Cost: ${tile.hutCost}',
-                      AppColors.gold,
-                      textColor: AppColors.brown,
-                    ),
-                  if (tile.color != null)
-                    _buildChip(
-                      context,
-                      Icons.person_outline,
-                      _getColorName(tile.color!),
-                      AppColors.findColorByName(
-                        tile.color.toString().split('.').last,
-                      ),
-                      textColor:
-                          tile.color == TileColor.white ||
-                              tile.color == TileColor.yellow
-                          ? AppColors.brown
-                          : Colors.white,
-                    ),
                 ],
+              )
+            : SingleChildScrollView(
+                child: Column(children: [image, AppSpacing.verticalL, content]),
               ),
+      ),
+    );
+  }
 
-              AppSpacing.verticalXl,
-              Divider(color: AppColors.brown.withValues(alpha: 0.5)),
-              AppSpacing.verticalL,
-
-              MarkdownBody(
-                data: tile.description,
-                selectable: true,
-                styleSheet: AppMarkdownStyleSheet.styleSheet,
-              ),
-              AppSpacing.verticalXl,
-            ],
+  Widget _buildTileImage() {
+    return Container(
+      decoration: BoxDecoration(
+        border: Border.all(
+          color: tile.color == null
+              ? AppColors.tileBorder
+              : AppColors.findColorByName(
+                  tile.color.toString().split('.').last,
+                ),
+          width: 4,
+        ),
+      ),
+      child: Hero(
+        tag: 'tile-image-${tile.filenameImage}',
+        child: Material(
+          color: Colors.transparent,
+          child: AspectRatio(
+            aspectRatio: 1,
+            child: Image.asset(
+              '${Assets.imagesTilePath}${tile.filenameImage}',
+              fit: BoxFit.contain,
+              errorBuilder: (context, error, stackTrace) {
+                return Container(
+                  color: AppColors.greenLight,
+                  child: Center(
+                    child: Icon(
+                      Icons.image_not_supported_outlined,
+                      color: AppColors.brown.withValues(alpha: 0.5),
+                      size: 64,
+                    ),
+                  ),
+                );
+              },
+            ),
           ),
         ),
       ),
+    );
+  }
+
+  Widget _buildTileContent(BuildContext context) {
+    return Column(
+      children: [
+        SelectableText(
+          tile.name,
+          style: AppTextStyles.titleTextStyle,
+          textAlign: TextAlign.center,
+        ),
+        AppSpacing.verticalL,
+        Wrap(
+          alignment: WrapAlignment.center,
+          spacing: 8,
+          runSpacing: 8,
+          children: [
+            _buildChip(
+              context,
+              Icons.layers_outlined,
+              'x${tile.quantity}',
+              AppColors.brown,
+            ),
+            if (tile.boardgame.value != null)
+              _buildChip(
+                context,
+                Icons.extension_outlined,
+                tile.boardgame.value!.name,
+                AppColors.greenDark,
+              ),
+            if (tile.module.value != null)
+              _buildChip(
+                context,
+                Icons.view_module_outlined,
+                tile.module.value!.name,
+                AppColors.greenDarker,
+              ),
+            if (tile.hutCost != null && tile.hutCost! > 0)
+              _buildChip(
+                context,
+                Icons.monetization_on,
+                'Cost: ${tile.hutCost}',
+                AppColors.gold,
+                textColor: AppColors.brown,
+              ),
+            if (tile.color != null)
+              _buildChip(
+                context,
+                Icons.person_outline,
+                _getColorName(tile.color!),
+                AppColors.findColorByName(
+                  tile.color.toString().split('.').last,
+                ),
+                textColor:
+                    tile.color == TileColor.white ||
+                        tile.color == TileColor.yellow
+                    ? AppColors.brown
+                    : AppColors.white,
+              ),
+          ],
+        ),
+        AppSpacing.verticalXl,
+        Divider(color: AppColors.brown.withValues(alpha: 0.5)),
+        AppSpacing.verticalL,
+        MarkdownBody(
+          data: tile.description,
+          selectable: true,
+          styleSheet: AppMarkdownStyleSheet.styleSheet,
+        ),
+        AppSpacing.verticalXl,
+      ],
     );
   }
 
@@ -142,7 +162,7 @@ class TileDetailScreen extends ConsumerWidget {
     IconData icon,
     String label,
     Color backgroundColor, {
-    Color textColor = Colors.white,
+    Color textColor = AppColors.white,
   }) {
     return Container(
       padding: const EdgeInsets.symmetric(

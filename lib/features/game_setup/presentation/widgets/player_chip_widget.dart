@@ -94,7 +94,7 @@ class _PlayerChipWidgetState extends ConsumerState<PlayerChipWidget> {
             color: color,
             size: circleSize,
             borderColor: widget.isSelected
-                ? (isDarkColor ? Colors.white : AppColors.brown)
+                ? (isDarkColor ? AppColors.white : AppColors.brown)
                 : Theme.of(context).colorScheme.outline,
             borderWidth: widget.isSelected ? 3 : 2,
             text: widget.isSelected && widget.position != null
@@ -106,7 +106,7 @@ class _PlayerChipWidgetState extends ConsumerState<PlayerChipWidget> {
             iconColor: Theme.of(context).colorScheme.onSurfaceVariant,
             iconSize: 20,
             textStyle: AppTextStyles.circlePosition.copyWith(
-              color: isDarkColor ? Colors.white : AppColors.brown,
+              color: isDarkColor ? AppColors.white : AppColors.brown,
             ),
           ),
           AppSpacing.verticalS,
@@ -120,7 +120,7 @@ class _PlayerChipWidgetState extends ConsumerState<PlayerChipWidget> {
                     onChanged: _onNameChanged,
                     textAlign: TextAlign.center,
                     style: AppTextStyles.playerName.copyWith(
-                      color: isDarkColor ? Colors.white : AppColors.brown,
+                      color: isDarkColor ? AppColors.white : AppColors.brown,
                     ),
                     decoration: InputDecoration(
                       isDense: true,
@@ -136,7 +136,7 @@ class _PlayerChipWidgetState extends ConsumerState<PlayerChipWidget> {
                       ),
                       hintText: 'Name',
                       hintStyle: AppTextStyles.hintText.copyWith(
-                        color: (isDarkColor ? Colors.white : AppColors.brown)
+                        color: (isDarkColor ? AppColors.white : AppColors.brown)
                             .withValues(alpha: 0.5),
                       ),
                     ),

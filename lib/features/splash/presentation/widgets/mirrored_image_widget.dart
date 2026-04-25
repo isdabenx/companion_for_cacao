@@ -1,6 +1,7 @@
 import 'dart:math' as math;
 
 import 'package:companion_for_cacao/config/constants/assets.dart';
+import 'package:companion_for_cacao/core/theme/app_colors.dart';
 import 'package:companion_for_cacao/features/splash/presentation/widgets/blur_filter_widget.dart';
 import 'package:flutter/material.dart';
 
@@ -23,8 +24,8 @@ class MirroredImageWidget extends StatelessWidget {
                   stops: const [0.15, 0.97, 1],
                   colors: [
                     Colors.transparent,
-                    Colors.black.withValues(alpha: 0.64),
-                    Colors.black.withValues(alpha: 0.05),
+                    AppColors.black.withValues(alpha: 0.64),
+                    AppColors.black.withValues(alpha: 0.05),
                   ],
                 ).createShader(rect);
               },

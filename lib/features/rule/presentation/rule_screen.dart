@@ -108,7 +108,10 @@ class RuleScreen extends StatelessWidget {
                   style: AppTextStyles.titleTextStyle.copyWith(fontSize: 22),
                 ),
               ),
-              const Icon(Icons.picture_as_pdf, color: Colors.white70),
+              Icon(
+                Icons.picture_as_pdf,
+                color: AppColors.white.withValues(alpha: 0.7),
+              ),
             ],
           ),
         ),

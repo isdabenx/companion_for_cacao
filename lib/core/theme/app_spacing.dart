@@ -24,4 +24,5 @@ class AppSpacing {
   static const SizedBox horizontalS = SizedBox(width: s);
   static const SizedBox horizontalM = SizedBox(width: m);
   static const SizedBox horizontalL = SizedBox(width: l);
+  static const SizedBox horizontalXl = SizedBox(width: xl);
 }

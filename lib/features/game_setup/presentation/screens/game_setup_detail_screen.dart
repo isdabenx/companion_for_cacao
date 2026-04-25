@@ -67,12 +67,12 @@ class _DashboardCard extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.symmetric(
             vertical: AppSpacing.xl,
-            horizontal: 20,
+            horizontal: AppSpacing.xl,
           ),
           child: Row(
             children: [
               Icon(icon, size: 32, color: AppColors.greenDarker),
-              const SizedBox(width: 20),
+              AppSpacing.horizontalXl,
               Expanded(
                 child: Text(
                   title,
