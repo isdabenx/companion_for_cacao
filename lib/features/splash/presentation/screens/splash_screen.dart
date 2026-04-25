@@ -89,7 +89,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
   @override
   Widget build(BuildContext context) {
     ref
-        .watch(splashScreenProvider)
+        .watch(splashProvider)
         .when(
           data: (_) {
             _disableImmersiveMode();

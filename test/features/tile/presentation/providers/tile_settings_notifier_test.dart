@@ -1,6 +1,6 @@
 import 'package:companion_for_cacao/config/constants/tile_settings.dart';
 import 'package:companion_for_cacao/config/providers/repository_providers.dart';
-import 'package:companion_for_cacao/core/data/repositories/settings_repository.dart';
+import 'package:companion_for_cacao/core/domain/repositories/settings_repository.dart';
 import 'package:companion_for_cacao/features/tile/presentation/providers/tile_settings_notifier.dart';
 import 'package:companion_for_cacao/shared/domain/entities/tile_settings_entity.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

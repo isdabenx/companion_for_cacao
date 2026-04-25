@@ -64,6 +64,6 @@ class CircleBadge extends StatelessWidget {
   }
 
   Color _getContrastColor(Color color) {
-    return color.computeLuminance() > 0.5 ? AppColors.brown : Colors.white;
+    return color.computeLuminance() > 0.5 ? AppColors.brown : AppColors.white;
   }
 }

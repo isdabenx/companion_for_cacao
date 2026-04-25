@@ -17,9 +17,13 @@ class GameSetupWidget extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final currentStep = ref.watch(gameSetupStepProvider);
     final gameSetupAsync = ref.watch(gameSetupProvider);
-    final isStarted = gameSetupAsync.value?.isStarted ?? false;
+    final isStarted = ref.watch(
+      gameSetupProvider.select((s) => s.value?.isStarted ?? false),
+    );
     final screenHeight = MediaQuery.sizeOf(context).height;
-    final selectedCount = gameSetupAsync.value?.players.length ?? 0;
+    final selectedCount = ref.watch(
+      gameSetupProvider.select((s) => s.value?.players.length ?? 0),
+    );
 
     // Adaptive heights
     const double baseHeightAllExpansions = 180;

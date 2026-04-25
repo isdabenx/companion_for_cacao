@@ -56,9 +56,12 @@ class DetailedPreparationWidget extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final gameSetup = ref.watch(gameSetupProvider).value;
-    final completionMap = Map<String, bool>.fromEntries(
-      gameSetup?.preparation.map((p) => MapEntry(p.id, p.isCompleted)) ?? [],
+    final completionMap = ref.watch(
+      gameSetupProvider.select(
+        (s) => Map<String, bool>.fromEntries(
+          s.value?.preparation.map((p) => MapEntry(p.id, p.isCompleted)) ?? [],
+        ),
+      ),
     );
     final expansionMap = ref.watch(phaseExpansionProvider);
     final groupedPreparation = groupBy(preparation, (p) => p.phase);
@@ -330,12 +333,15 @@ class PreparationCard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final gameSetup = ref.watch(gameSetupProvider).value;
-    final isCompleted =
-        gameSetup?.preparation
-            .firstWhere((p) => p.id == preparation.id)
-            .isCompleted ??
-        preparation.isCompleted;
+    final isCompleted = ref.watch(
+      gameSetupProvider.select(
+        (s) =>
+            s.value?.preparation
+                .firstWhere((p) => p.id == preparation.id)
+                .isCompleted ??
+            preparation.isCompleted,
+      ),
+    );
 
     return Opacity(
       opacity: isCompleted ? 0.6 : 1.0,

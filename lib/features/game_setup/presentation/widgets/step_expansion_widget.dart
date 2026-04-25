@@ -1,3 +1,4 @@
+import 'package:companion_for_cacao/config/constants/game_constants.dart';
 import 'package:companion_for_cacao/core/theme/app_spacing.dart';
 import 'package:companion_for_cacao/features/game_setup/presentation/widgets/select_expansion_widget.dart';
 import 'package:companion_for_cacao/shared/providers/boardgame_notifier.dart';
@@ -35,7 +36,9 @@ class StepExpansionWidget extends StatelessWidget {
               return boardgamesAsync.when(
                 data: (boardgames) {
                   final expansions = boardgames
-                      .where((element) => element.id != 1)
+                      .where(
+                        (element) => element.id != GameConstants.baseGameId,
+                      )
                       .toList();
 
                   final isDesktop =

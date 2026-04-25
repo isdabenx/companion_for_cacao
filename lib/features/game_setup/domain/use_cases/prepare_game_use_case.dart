@@ -1,3 +1,4 @@
+import 'package:companion_for_cacao/config/constants/game_constants.dart';
 import 'package:companion_for_cacao/core/theme/app_colors.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/game_setup_state_entity.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/services/base_game_handler.dart';
@@ -25,7 +26,9 @@ class PrepareGameUseCase {
         .where(playerColors.contains)
         .toList();
 
-    final baseGame = currentSetup.expansions.firstWhere((e) => e.id == 1);
+    final baseGame = currentSetup.expansions.firstWhere(
+      (e) => e.id == GameConstants.baseGameId,
+    );
 
     final pipeline = PreparationPipeline(
       baseHandler: BaseGameHandler(

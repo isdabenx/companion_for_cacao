@@ -194,7 +194,7 @@ class AppTextStyles {
   static TextStyle colorName = const TextStyle(
     fontFamily: AppFonts.bodyFont,
     fontSize: 11,
-    color: Colors.grey,
+    color: AppColors.grey,
   );
 
   // ============================================

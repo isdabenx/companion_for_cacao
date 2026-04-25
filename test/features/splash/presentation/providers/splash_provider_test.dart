@@ -90,7 +90,7 @@ void main() {
       );
 
       var completed = false;
-      final future = container.read(splashScreenProvider.future);
+      final future = container.read(splashProvider.future);
       future.then((_) => completed = true);
 
       await Future<void>.delayed(Duration.zero);
@@ -127,11 +127,11 @@ void main() {
       );
 
       await expectLater(
-        container.read(splashScreenProvider.future),
+        container.read(splashProvider.future),
         throwsA(same(exception)),
       );
 
-      final state = container.read(splashScreenProvider);
+      final state = container.read(splashProvider);
       expect(state.hasError, isTrue);
       expect(state.asError?.error, same(exception));
       verify(() => mockUseCase.initialize()).called(1);

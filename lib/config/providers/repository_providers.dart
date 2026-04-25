@@ -1,10 +1,10 @@
 import 'package:companion_for_cacao/config/providers/database_provider.dart';
-import 'package:companion_for_cacao/core/data/repositories/boardgame_repository.dart';
 import 'package:companion_for_cacao/core/data/repositories/boardgame_repository_impl.dart';
-import 'package:companion_for_cacao/core/data/repositories/settings_repository.dart';
 import 'package:companion_for_cacao/core/data/repositories/settings_repository_impl.dart';
-import 'package:companion_for_cacao/features/tile/data/repositories/tile_repository.dart';
+import 'package:companion_for_cacao/core/domain/repositories/boardgame_repository.dart';
+import 'package:companion_for_cacao/core/domain/repositories/settings_repository.dart';
 import 'package:companion_for_cacao/features/tile/data/repositories/tile_repository_impl.dart';
+import 'package:companion_for_cacao/features/tile/domain/repositories/tile_repository.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'repository_providers.g.dart';

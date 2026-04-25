@@ -151,6 +151,7 @@ class _TileFilterBottomSheetWidgetState
                   ref,
                   selectedTileTypes,
                   dummyModel.typeAsString,
+                  chipKey: ValueKey('tile_type_${type.name}'),
                 );
               }).toList(),
             ),
@@ -195,10 +196,12 @@ class _TileFilterBottomSheetWidgetState
   Widget _buildTypeChip(
     WidgetRef ref,
     Set<String> selectedTileTypes,
-    String type,
-  ) {
+    String type, {
+    Key? chipKey,
+  }) {
     final isSelected = selectedTileTypes.contains(type);
     return FilterChip(
+      key: chipKey,
       label: Text(
         type,
         style: AppTextStyles.bodyMedium.copyWith(

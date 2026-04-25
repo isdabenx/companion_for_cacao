@@ -11,9 +11,12 @@ InitializeAppUseCase initializeAppUseCase(Ref ref) {
 }
 
 @Riverpod(keepAlive: true)
-Future<void> splashScreen(Ref ref) async {
-  final initializeAppUseCase = ref.read(initializeAppUseCaseProvider);
-  await initializeAppUseCase.initialize();
-  // Ensure boardgames are loaded before navigating away from splash
-  await ref.read(boardgameProvider.future);
+class SplashNotifier extends _$SplashNotifier {
+  @override
+  Future<void> build() async {
+    final initializeAppUseCase = ref.read(initializeAppUseCaseProvider);
+    await initializeAppUseCase.initialize();
+    // Ensure boardgames are loaded before navigating away from splash
+    await ref.read(boardgameProvider.future);
+  }
 }

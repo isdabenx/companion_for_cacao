@@ -1,3 +1,4 @@
+import 'package:companion_for_cacao/config/constants/game_constants.dart';
 import 'package:companion_for_cacao/core/data/models/boardgame_model.dart';
 import 'package:companion_for_cacao/core/data/models/module_model.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/game_setup_state_entity.dart';
@@ -14,9 +15,9 @@ class GameSetupNotifier extends _$GameSetupNotifier {
   FutureOr<GameSetupStateEntity> build() async {
     final boardgames = await ref.watch(boardgameProvider.future);
     final baseGame = boardgames.firstWhere(
-      (b) => b.id == 1,
+      (b) => b.id == GameConstants.baseGameId,
       orElse: () => BoardgameModel(
-        id: 1,
+        id: GameConstants.baseGameId,
         name: 'Cacao',
         description: '',
         filenameImage: '',
@@ -173,9 +174,9 @@ class GameSetupNotifier extends _$GameSetupNotifier {
   Future<void> clearAll() async {
     final boardgames = await ref.read(boardgameProvider.future);
     final baseGame = boardgames.firstWhere(
-      (b) => b.id == 1,
+      (b) => b.id == GameConstants.baseGameId,
       orElse: () => BoardgameModel(
-        id: 1,
+        id: GameConstants.baseGameId,
         name: 'Cacao',
         description: '',
         filenameImage: '',

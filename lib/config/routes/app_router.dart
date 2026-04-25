@@ -29,7 +29,7 @@ GoRouter goRouter(Ref ref) {
   final refreshNotifier = _RouterRefreshNotifier();
 
   // Listen for splash state changes and notify the router to re-evaluate redirects
-  ref.listen(splashScreenProvider, (_, _) {
+  ref.listen(splashProvider, (_, _) {
     refreshNotifier.notify();
   });
 
@@ -133,7 +133,7 @@ GoRouter goRouter(Ref ref) {
       ),
     ],
     redirect: (context, state) {
-      final splashState = ref.read(splashScreenProvider);
+      final splashState = ref.read(splashProvider);
       final isSplashDone = splashState is AsyncData<void>;
       final isSplashRoute = state.matchedLocation == AppRoutes.splash;
 

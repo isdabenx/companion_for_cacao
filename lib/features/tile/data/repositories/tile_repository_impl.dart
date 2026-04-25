@@ -1,6 +1,6 @@
 import 'package:companion_for_cacao/core/data/database/app_database.dart';
 import 'package:companion_for_cacao/core/data/models/tile_model.dart';
-import 'package:companion_for_cacao/features/tile/data/repositories/tile_repository.dart';
+import 'package:companion_for_cacao/features/tile/domain/repositories/tile_repository.dart';
 
 class TileRepositoryImpl implements TileRepository {
   TileRepositoryImpl(this._database);

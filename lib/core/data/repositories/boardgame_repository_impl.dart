@@ -2,7 +2,7 @@ import 'package:companion_for_cacao/core/data/database/app_database.dart';
 import 'package:companion_for_cacao/core/data/models/boardgame_model.dart';
 import 'package:companion_for_cacao/core/data/models/module_model.dart';
 import 'package:companion_for_cacao/core/data/models/tile_model.dart';
-import 'package:companion_for_cacao/core/data/repositories/boardgame_repository.dart';
+import 'package:companion_for_cacao/core/domain/repositories/boardgame_repository.dart';
 
 class BoardgameRepositoryImpl implements BoardgameRepository {
   BoardgameRepositoryImpl(this._database);

@@ -1,14 +1,15 @@
 import 'package:companion_for_cacao/config/constants/assets.dart';
+import 'package:companion_for_cacao/config/constants/game_constants.dart';
 import 'package:companion_for_cacao/core/data/models/tile_model.dart';
 import 'package:companion_for_cacao/core/theme/app_breakpoints.dart';
 import 'package:companion_for_cacao/core/theme/app_colors.dart';
 import 'package:companion_for_cacao/core/theme/app_spacing.dart';
 import 'package:companion_for_cacao/core/theme/app_text_styles.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/game_setup_state_entity.dart';
-import 'package:companion_for_cacao/features/tile/presentation/providers/tile_settings_notifier.dart';
+import 'package:companion_for_cacao/features/tile/tile_public_api.dart';
 import 'package:companion_for_cacao/shared/widgets/circle_badge.dart';
 import 'package:companion_for_cacao/shared/widgets/container_full_style_widget.dart';
-import 'package:companion_for_cacao/shared/widgets/responsive_grid_builder.dart';
+import 'package:companion_for_cacao/features/game_setup/presentation/widgets/responsive_grid_builder.dart';
 import 'package:companion_for_cacao/shared/widgets/selectable_chip.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -129,11 +130,11 @@ class _DetailedSummaryWidgetState extends ConsumerState<DetailedSummaryWidget> {
       horizontalSpacing: 12.0,
       verticalSpacing: 8.0,
       itemBuilder: (context, index) {
+        final player = widget.gameSetup.players[index];
         return _PlayerRow(
-          color: AppColors.findColorByName(
-            widget.gameSetup.players[index].color,
-          ),
-          name: widget.gameSetup.players[index].name,
+          key: ValueKey('player_${player.color}'),
+          color: AppColors.findColorByName(player.color),
+          name: player.name,
           position: index + 1,
         );
       },
@@ -143,7 +144,7 @@ class _DetailedSummaryWidgetState extends ConsumerState<DetailedSummaryWidget> {
   Widget _buildExpansionsSection() {
     // Filter out base game (id=1) - only show actual expansions
     final expansions = widget.gameSetup.expansions
-        .where((e) => e.id != 1)
+        .where((e) => e.id != GameConstants.baseGameId)
         .toList();
 
     return Column(
@@ -161,6 +162,7 @@ class _DetailedSummaryWidgetState extends ConsumerState<DetailedSummaryWidget> {
                   children: expansions
                       .map(
                         (e) => _SmallChip(
+                          key: ValueKey('expansion_${e.id}'),
                           icon: Icons.add_circle_outline,
                           label: e.name,
                         ),
@@ -188,6 +190,7 @@ class _DetailedSummaryWidgetState extends ConsumerState<DetailedSummaryWidget> {
                   children: widget.gameSetup.modules
                       .map(
                         (m) => _SmallChip(
+                          key: ValueKey('module_${m.id}'),
                           icon: Icons.check_circle_outline,
                           label: m.name,
                         ),
@@ -348,6 +351,7 @@ class _DetailedSummaryWidgetState extends ConsumerState<DetailedSummaryWidget> {
 
 class _PlayerRow extends StatelessWidget {
   const _PlayerRow({
+    super.key,
     required this.color,
     required this.name,
     required this.position,
@@ -389,7 +393,7 @@ class _PlayerRow extends StatelessWidget {
 }
 
 class _SmallChip extends StatelessWidget {
-  const _SmallChip({required this.icon, required this.label});
+  const _SmallChip({required this.icon, required this.label, super.key});
 
   final IconData icon;
   final String label;
@@ -524,6 +528,8 @@ class _TileChip extends StatelessWidget {
 }
 
 class _BigGameChip extends StatelessWidget {
+  const _BigGameChip();
+
   @override
   Widget build(BuildContext context) {
     return Container(

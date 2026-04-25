@@ -1,8 +1,8 @@
 import 'package:companion_for_cacao/core/data/models/boardgame_model.dart';
 import 'package:companion_for_cacao/core/data/models/module_model.dart';
 import 'package:companion_for_cacao/core/data/models/tile_model.dart';
-import 'package:companion_for_cacao/core/data/repositories/boardgame_repository.dart';
-import 'package:companion_for_cacao/features/tile/data/repositories/tile_repository.dart';
+import 'package:companion_for_cacao/core/domain/repositories/boardgame_repository.dart';
+import 'package:companion_for_cacao/features/tile/domain/repositories/tile_repository.dart';
 import 'package:companion_for_cacao/features/tile/domain/use_cases/get_tiles_with_boardgame_use_case.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';

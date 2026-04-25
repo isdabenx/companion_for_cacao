@@ -1,5 +1,5 @@
 import 'package:companion_for_cacao/core/data/models/boardgame_model.dart';
-import 'package:companion_for_cacao/core/data/repositories/boardgame_repository.dart';
+import 'package:companion_for_cacao/core/domain/repositories/boardgame_repository.dart';
 
 class LoadBoardgamesUseCase {
   final BoardgameRepository _repository;
