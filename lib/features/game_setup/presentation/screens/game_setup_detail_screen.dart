@@ -19,22 +19,30 @@ class GameSetupDetailScreen extends StatelessWidget {
       title: 'Game Dashboard',
       showBackButton: true,
       body: ListView(
-        padding: AppSpacing.allL,
+        padding: const EdgeInsets.symmetric(vertical: AppSpacing.xs),
         children: [
           DetailedSummaryWidget(gameSetup: gameSetup),
           AppSpacing.verticalXl,
-          _DashboardCard(
-            title: 'Preparation',
-            icon: Icons.list_alt,
-            onTap: () =>
-                context.push(AppRoutes.gameSetupPreparation, extra: gameSetup),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: AppSpacing.s),
+            child: _DashboardCard(
+              title: 'Preparation',
+              icon: Icons.list_alt,
+              onTap: () => context.push(
+                AppRoutes.gameSetupPreparation,
+                extra: gameSetup,
+              ),
+            ),
           ),
           AppSpacing.verticalL,
-          _DashboardCard(
-            title: 'Tiles in Play',
-            icon: Icons.grid_view,
-            onTap: () =>
-                context.push(AppRoutes.gameSetupTiles, extra: gameSetup),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: AppSpacing.s),
+            child: _DashboardCard(
+              title: 'Tiles in Play',
+              icon: Icons.grid_view,
+              onTap: () =>
+                  context.push(AppRoutes.gameSetupTiles, extra: gameSetup),
+            ),
           ),
           // Add more dashboard items here in the future
         ],

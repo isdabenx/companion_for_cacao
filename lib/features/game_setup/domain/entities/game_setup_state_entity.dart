@@ -3,6 +3,7 @@ import 'package:companion_for_cacao/core/data/models/module_model.dart';
 import 'package:companion_for_cacao/core/data/models/tile_model.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/player_entity.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/preparation_entity.dart';
+import 'package:flutter/foundation.dart';
 
 class GameSetupStateEntity {
   GameSetupStateEntity({
@@ -45,4 +46,31 @@ class GameSetupStateEntity {
       isBigGame: isBigGame ?? this.isBigGame,
     );
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+
+    return other is GameSetupStateEntity &&
+        listEquals(other.players, players) &&
+        listEquals(other.expansions, expansions) &&
+        listEquals(other.modules, modules) &&
+        listEquals(other.tiles, tiles) &&
+        listEquals(other.preparation, preparation) &&
+        listEquals(other.colorOrder, colorOrder) &&
+        other.isStarted == isStarted &&
+        other.isBigGame == isBigGame;
+  }
+
+  @override
+  int get hashCode => Object.hash(
+    Object.hashAll(players),
+    Object.hashAll(expansions),
+    Object.hashAll(modules),
+    Object.hashAll(tiles),
+    Object.hashAll(preparation),
+    Object.hashAll(colorOrder),
+    isStarted,
+    isBigGame,
+  );
 }

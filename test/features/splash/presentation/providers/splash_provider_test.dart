@@ -43,7 +43,7 @@ void main() {
 
   ProviderContainer createContainer({List<dynamic> overrides = const []}) {
     final container = ProviderContainer(
-      retry: (_, __) => null,
+      retry: (_, _) => null,
       overrides: overrides.cast(),
     );
     addTearDown(container.dispose);

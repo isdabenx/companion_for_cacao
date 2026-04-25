@@ -48,7 +48,7 @@ class PlayersGridWidget extends ConsumerWidget {
               physics: const NeverScrollableScrollPhysics(),
               mainAxisSpacing: 12,
               crossAxisSpacing: 12,
-              childAspectRatio: isLandscape ? 1.4 : 1.0,
+              childAspectRatio: isLandscape ? 1.6 : 1.0,
               onReorder: (oldIndex, newIndex) {
                 ref
                     .read(gameSetupProvider.notifier)

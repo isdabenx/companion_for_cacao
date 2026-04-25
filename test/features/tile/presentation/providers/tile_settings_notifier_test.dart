@@ -27,7 +27,7 @@ void main() {
 
   ProviderContainer createContainer() {
     final container = ProviderContainer(
-      retry: (_, __) => null,
+      retry: (_, _) => null,
       overrides: [
         settingsRepositoryProvider.overrideWith(
           (ref) => mockSettingsRepository,

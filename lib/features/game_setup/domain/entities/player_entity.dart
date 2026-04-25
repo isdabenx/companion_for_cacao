@@ -15,4 +15,17 @@ class PlayerEntity {
       isSelected: isSelected ?? this.isSelected,
     );
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+
+    return other is PlayerEntity &&
+        other.name == name &&
+        other.color == color &&
+        other.isSelected == isSelected;
+  }
+
+  @override
+  int get hashCode => Object.hash(name, color, isSelected);
 }

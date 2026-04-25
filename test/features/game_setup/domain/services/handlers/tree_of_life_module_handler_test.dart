@@ -1,4 +1,3 @@
-import 'package:companion_for_cacao/core/data/models/boardgame_model.dart';
 import 'package:companion_for_cacao/core/data/models/tile_model.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/player_entity.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/preparation_entity.dart';

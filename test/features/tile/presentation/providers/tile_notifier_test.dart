@@ -31,7 +31,7 @@ void main() {
 
   ProviderContainer createContainer() {
     final container = ProviderContainer(
-      retry: (_, __) => null,
+      retry: (_, _) => null,
       overrides: [
         getTilesWithBoardgameUseCaseProvider.overrideWith(
           (ref) => Future.value(mockUseCase),

@@ -26,10 +26,10 @@ class ModuleModel {
     );
   }
 
-  int id;
-  late String name;
-  late String description;
-  int? boardgameId;
+  final int id;
+  final String name;
+  final String description;
+  final int? boardgameId;
 
   ModuleModel copyWith({
     int? id,
@@ -44,4 +44,18 @@ class ModuleModel {
       boardgameId: boardgameId ?? this.boardgameId,
     );
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+
+    return other is ModuleModel &&
+        other.id == id &&
+        other.name == name &&
+        other.description == description &&
+        other.boardgameId == boardgameId;
+  }
+
+  @override
+  int get hashCode => Object.hash(id, name, description, boardgameId);
 }

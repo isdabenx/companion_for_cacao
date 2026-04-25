@@ -25,9 +25,9 @@ enum TileType {
 enum TileColor { red, purple, white, yellow }
 
 class ModelLink<T> {
-  ModelLink([this.value]);
+  const ModelLink([this.value]);
 
-  T? value;
+  final T? value;
 }
 
 class TileModel {
@@ -149,4 +149,39 @@ class TileModel {
       module: clearModule ? null : (module ?? this.module.value),
     );
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+
+    return other is TileModel &&
+        other.id == id &&
+        other.name == name &&
+        other.description == description &&
+        other.filenameImage == filenameImage &&
+        other.quantity == quantity &&
+        other.type == type &&
+        other.color == color &&
+        other.boardgameId == boardgameId &&
+        other.moduleId == moduleId &&
+        other.hutCost == hutCost &&
+        other.boardgame.value == boardgame.value &&
+        other.module.value == module.value;
+  }
+
+  @override
+  int get hashCode => Object.hash(
+    id,
+    name,
+    description,
+    filenameImage,
+    quantity,
+    type,
+    color,
+    boardgameId,
+    moduleId,
+    hutCost,
+    boardgame.value,
+    module.value,
+  );
 }

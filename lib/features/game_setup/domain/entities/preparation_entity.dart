@@ -1,4 +1,5 @@
 import 'package:companion_for_cacao/features/game_setup/domain/entities/preparation_phase.dart';
+import 'package:flutter/foundation.dart';
 
 class PreparationEntity {
   const PreparationEntity({
@@ -37,4 +38,29 @@ class PreparationEntity {
       variables: variables ?? this.variables,
     );
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+
+    return other is PreparationEntity &&
+        other.id == id &&
+        other.description == description &&
+        other.phase == phase &&
+        other.imageKey == imageKey &&
+        other.isCompleted == isCompleted &&
+        other.color == color &&
+        mapEquals(other.variables, variables);
+  }
+
+  @override
+  int get hashCode => Object.hash(
+    id,
+    description,
+    phase,
+    imageKey,
+    isCompleted,
+    color,
+    variables == null ? null : Object.hashAll(variables!.entries),
+  );
 }

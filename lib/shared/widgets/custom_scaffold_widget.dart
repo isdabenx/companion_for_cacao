@@ -81,14 +81,9 @@ class _CustomScaffoldWidgetState extends State<CustomScaffoldWidget> {
                   fit: BoxFit.cover,
                 ),
               ),
-              child: Center(
-                child: ConstrainedBox(
-                  constraints: BoxConstraints(
-                    minHeight: constraints.maxHeight,
-                    maxWidth: AppBreakpoints.medium,
-                  ),
-                  child: widget.body,
-                ),
+              child: ConstrainedBox(
+                constraints: BoxConstraints(minHeight: constraints.maxHeight),
+                child: widget.body,
               ),
             );
           },

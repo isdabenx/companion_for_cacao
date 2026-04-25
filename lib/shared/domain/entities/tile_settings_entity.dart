@@ -58,4 +58,29 @@ class TileSettingsEntity {
         return false;
     }
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+
+    return other is TileSettingsEntity &&
+        other.playerColorInBorder == playerColorInBorder &&
+        other.playerColorInCircle == playerColorInCircle &&
+        other.badgeTypeInImage == badgeTypeInImage &&
+        other.badgeTypeInText == badgeTypeInText &&
+        other.boardgameInTitle == boardgameInTitle &&
+        other.showQuantity == showQuantity &&
+        other.compactTileLayout == compactTileLayout;
+  }
+
+  @override
+  int get hashCode => Object.hash(
+    playerColorInBorder,
+    playerColorInCircle,
+    badgeTypeInImage,
+    badgeTypeInText,
+    boardgameInTitle,
+    showQuantity,
+    compactTileLayout,
+  );
 }

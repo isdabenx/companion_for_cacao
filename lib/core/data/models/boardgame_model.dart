@@ -1,6 +1,7 @@
 import 'package:companion_for_cacao/core/data/database/app_database.dart';
 import 'package:companion_for_cacao/core/data/models/module_model.dart';
 import 'package:companion_for_cacao/core/data/models/tile_model.dart';
+import 'package:flutter/foundation.dart';
 
 class BoardgameModel {
   BoardgameModel({
@@ -60,4 +61,29 @@ class BoardgameModel {
       tiles: tiles ?? this.tiles,
     );
   }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+
+    return other is BoardgameModel &&
+        other.id == id &&
+        other.name == name &&
+        other.description == description &&
+        other.filenameImage == filenameImage &&
+        other.requireId == requireId &&
+        listEquals(other.modules, modules) &&
+        listEquals(other.tiles, tiles);
+  }
+
+  @override
+  int get hashCode => Object.hash(
+    id,
+    name,
+    description,
+    filenameImage,
+    requireId,
+    Object.hashAll(modules),
+    Object.hashAll(tiles),
+  );
 }
