@@ -1,5 +1,6 @@
 import 'package:companion_for_cacao/core/theme/app_spacing.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/game_setup_state_entity.dart';
+import 'package:companion_for_cacao/features/game_setup/presentation/providers/game_setup_notifier.dart';
 import 'package:companion_for_cacao/features/tile/tile_public_api.dart';
 import 'package:companion_for_cacao/shared/widgets/custom_scaffold_widget.dart';
 import 'package:flutter/material.dart';
@@ -12,8 +13,12 @@ class GameSetupTilesScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    // Prefer the live state: applying a worker selection during preparation
+    // re-runs the pipeline, and the route extra is only a snapshot taken
+    // when the game was started.
+    final liveSetup = ref.watch(gameSetupProvider).value ?? gameSetup;
     final filter = ref.watch(tileFilterProvider);
-    final filteredTiles = gameSetup.tiles
+    final filteredTiles = liveSetup.tiles
         .where((t) => filter.matches(t))
         .toList();
 

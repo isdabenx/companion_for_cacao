@@ -5,12 +5,23 @@ import 'package:companion_for_cacao/features/game_setup/domain/entities/game_set
 import 'package:companion_for_cacao/features/game_setup/domain/entities/player_entity.dart';
 import 'package:companion_for_cacao/features/game_setup/presentation/screens/game_setup_detail_screen.dart';
 import 'package:companion_for_cacao/features/game_setup/presentation/widgets/detailed_summary_widget.dart';
+import 'package:companion_for_cacao/shared/providers/boardgame_notifier.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mocktail/mocktail.dart';
 
 class MockGoRouter extends Mock implements GoRouter {}
+
+class FakeBoardgameNotifier extends BoardgameNotifier {
+  @override
+  Future<List<BoardgameModel>> build() async {
+    return [
+      BoardgameModel(id: 1, name: 'Cacao', description: '', filenameImage: ''),
+    ];
+  }
+}
 
 void main() {
   group('GameSetupDetailScreen', () {
@@ -52,11 +63,16 @@ void main() {
 
     testWidgets('displays dashboard UI elements', (tester) async {
       await tester.pumpWidget(
-        MaterialApp(
-          home: InheritedGoRouter(
-            goRouter: mockGoRouter,
-            child: Scaffold(
-              body: GameSetupDetailScreen(gameSetup: dummyGameSetup),
+        ProviderScope(
+          overrides: [
+            boardgameProvider.overrideWith(FakeBoardgameNotifier.new),
+          ],
+          child: MaterialApp(
+            home: InheritedGoRouter(
+              goRouter: mockGoRouter,
+              child: Scaffold(
+                body: GameSetupDetailScreen(gameSetup: dummyGameSetup),
+              ),
             ),
           ),
         ),

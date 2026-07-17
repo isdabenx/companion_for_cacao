@@ -3,25 +3,32 @@ import 'package:companion_for_cacao/core/theme/app_colors.dart';
 import 'package:companion_for_cacao/core/theme/app_spacing.dart';
 import 'package:companion_for_cacao/core/theme/app_text_styles.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/game_setup_state_entity.dart';
+import 'package:companion_for_cacao/features/game_setup/presentation/providers/game_setup_notifier.dart';
 import 'package:companion_for_cacao/features/game_setup/presentation/widgets/detailed_summary_widget.dart';
 import 'package:companion_for_cacao/shared/widgets/custom_scaffold_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-class GameSetupDetailScreen extends StatelessWidget {
+class GameSetupDetailScreen extends ConsumerWidget {
   const GameSetupDetailScreen({required this.gameSetup, super.key});
 
   final GameSetupStateEntity gameSetup;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    // Prefer the live state: applying a worker selection during preparation
+    // re-runs the pipeline, and the route extra is only a snapshot taken
+    // when the game was started.
+    final liveSetup = ref.watch(gameSetupProvider).value ?? gameSetup;
+
     return CustomScaffoldWidget(
       title: 'Game Dashboard',
       showBackButton: true,
       body: ListView(
         padding: const EdgeInsets.symmetric(vertical: AppSpacing.xs),
         children: [
-          DetailedSummaryWidget(gameSetup: gameSetup),
+          DetailedSummaryWidget(gameSetup: liveSetup),
           AppSpacing.verticalXl,
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: AppSpacing.s),
@@ -30,7 +37,7 @@ class GameSetupDetailScreen extends StatelessWidget {
               icon: Icons.list_alt,
               onTap: () => context.push(
                 AppRoutes.gameSetupPreparation,
-                extra: gameSetup,
+                extra: liveSetup,
               ),
             ),
           ),
@@ -41,7 +48,7 @@ class GameSetupDetailScreen extends StatelessWidget {
               title: 'Tiles in Play',
               icon: Icons.grid_view,
               onTap: () =>
-                  context.push(AppRoutes.gameSetupTiles, extra: gameSetup),
+                  context.push(AppRoutes.gameSetupTiles, extra: liveSetup),
             ),
           ),
           // Add more dashboard items here in the future
