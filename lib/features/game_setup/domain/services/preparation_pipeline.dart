@@ -35,7 +35,14 @@ class PreparationPipeline {
       isBigGame: isBigGame,
     );
 
-    for (final module in state.modules) {
+    // Handlers must run in moduleId order regardless of the order the user
+    // toggled the modules: some handlers depend on earlier ones having run
+    // (e.g. New Workers (8) overrides worker quantities set by Tree of
+    // Life (6), and removes preparation steps that Tree of Life inserts).
+    final sortedModules = [...state.modules]
+      ..sort((a, b) => a.id.compareTo(b.id));
+
+    for (final module in sortedModules) {
       final handler = moduleHandlers[module.id];
       if (handler == null) {
         continue;
