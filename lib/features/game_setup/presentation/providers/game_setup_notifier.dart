@@ -3,6 +3,8 @@ import 'package:companion_for_cacao/core/data/models/boardgame_model.dart';
 import 'package:companion_for_cacao/core/data/models/module_model.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/game_setup_state_entity.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/player_entity.dart';
+import 'package:companion_for_cacao/features/game_setup/domain/entities/worker_selection_entity.dart';
+import 'package:companion_for_cacao/features/game_setup/domain/services/handlers/new_workers_module_handler.dart';
 import 'package:companion_for_cacao/features/game_setup/presentation/providers/game_setup_use_case_providers.dart';
 import 'package:companion_for_cacao/shared/providers/boardgame_notifier.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -133,6 +135,10 @@ class GameSetupNotifier extends _$GameSetupNotifier {
     if (state.value == null) return;
     if (state.value!.modules.any((m) => m.id == module.id)) {
       removeModule(module);
+      // Clear worker selection when Module D is removed
+      if (module.id == NewWorkersModuleHandler.moduleId) {
+        state = AsyncData(state.value!.copyWith(clearWorkerSelection: true));
+      }
     } else {
       addModule(module);
     }
@@ -160,14 +166,23 @@ class GameSetupNotifier extends _$GameSetupNotifier {
 
   void startGame() {
     if (state.value == null) return;
+    // Worker selection is a per-game choice made during preparation: every
+    // new game starts from the default (add all), never from a selection
+    // applied in a previous game.
+    final setup = state.value!.copyWith(clearWorkerSelection: true);
     final useCase = ref.read(prepareGameUseCaseProvider);
-    state = AsyncData(useCase.execute(state.value!).copyWith(isStarted: true));
+    state = AsyncData(useCase.execute(setup).copyWith(isStarted: true));
   }
 
   void resetGame() {
     if (state.value == null) return;
     state = AsyncData(
-      state.value!.copyWith(preparation: [], tiles: [], isStarted: false),
+      state.value!.copyWith(
+        preparation: [],
+        tiles: [],
+        isStarted: false,
+        clearWorkerSelection: true,
+      ),
     );
   }
 
@@ -183,6 +198,25 @@ class GameSetupNotifier extends _$GameSetupNotifier {
       ),
     );
     state = AsyncData(GameSetupStateEntity(expansions: [baseGame]));
+  }
+
+  /// Applies a worker tile selection and re-runs the pipeline to update
+  /// tiles and preparation steps accordingly.
+  void applyWorkerSelection(WorkerSelectionEntity selection) {
+    if (state.value == null) return;
+    final updated = state.value!.copyWith(workerSelection: selection);
+    final useCase = ref.read(prepareGameUseCaseProvider);
+    state = AsyncData(
+      useCase
+          .execute(updated)
+          .copyWith(isStarted: true, workerSelection: selection),
+    );
+  }
+
+  /// Clears the worker tile selection (reverts to default addAll behavior).
+  void clearWorkerSelection() {
+    if (state.value == null) return;
+    state = AsyncData(state.value!.copyWith(clearWorkerSelection: true));
   }
 
   void togglePreparationCompletion(String id) {

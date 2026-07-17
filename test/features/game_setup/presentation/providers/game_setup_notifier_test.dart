@@ -5,6 +5,7 @@ import 'package:companion_for_cacao/features/game_setup/domain/entities/game_set
 import 'package:companion_for_cacao/features/game_setup/domain/entities/player_entity.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/preparation_entity.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/preparation_phase.dart';
+import 'package:companion_for_cacao/features/game_setup/domain/entities/worker_selection_entity.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/use_cases/prepare_game_use_case.dart';
 import 'package:companion_for_cacao/features/game_setup/presentation/providers/game_setup_notifier.dart';
 import 'package:companion_for_cacao/features/game_setup/presentation/providers/game_setup_use_case_providers.dart';
@@ -357,6 +358,126 @@ void main() {
         expect(state.isStarted, isFalse);
       },
     );
+
+    test(
+      'applyWorkerSelection stores selection and re-runs pipeline',
+      () async {
+        when(() => mockPrepareGameUseCase.execute(any())).thenAnswer(
+          (inv) => inv.positionalArguments.first as GameSetupStateEntity,
+        );
+
+        final container = createContainer(
+          prepareGameUseCase: mockPrepareGameUseCase,
+        );
+        addTearDown(container.dispose);
+        await container.read(gameSetupProvider.future);
+
+        final notifier = container.read(gameSetupProvider.notifier);
+        notifier.addPlayer('Alice', 'red');
+        notifier.startGame();
+
+        const selection = WorkerSelectionEntity(
+          mode: WorkerSelectionMode.preset,
+          presetType: WorkerPresetType.baseOnly,
+        );
+        notifier.applyWorkerSelection(selection);
+
+        final state = await container.read(gameSetupProvider.future);
+
+        expect(state.workerSelection, selection);
+        expect(state.isStarted, isTrue);
+        // Once for startGame, once for applyWorkerSelection
+        verify(() => mockPrepareGameUseCase.execute(any())).called(2);
+      },
+    );
+
+    test(
+      'startGame does not reuse a worker selection from a previous game',
+      () async {
+        when(() => mockPrepareGameUseCase.execute(any())).thenAnswer(
+          (inv) => inv.positionalArguments.first as GameSetupStateEntity,
+        );
+
+        final container = createContainer(
+          prepareGameUseCase: mockPrepareGameUseCase,
+        );
+        addTearDown(container.dispose);
+        await container.read(gameSetupProvider.future);
+
+        final notifier = container.read(gameSetupProvider.notifier);
+        notifier.addPlayer('Alice', 'red');
+        notifier.startGame();
+        notifier.applyWorkerSelection(
+          const WorkerSelectionEntity(
+            mode: WorkerSelectionMode.manual,
+            tileQuantities: {'1-1-1-1': 4, '0-0-0-4': 1},
+          ),
+        );
+
+        // Starting a new game must begin from the default selection
+        notifier.startGame();
+
+        final state = await container.read(gameSetupProvider.future);
+        expect(state.workerSelection, isNull);
+
+        // The setup passed to the pipeline on the last call had no selection
+        final captured = verify(
+          () => mockPrepareGameUseCase.execute(captureAny()),
+        ).captured;
+        final lastSetup = captured.last as GameSetupStateEntity;
+        expect(lastSetup.workerSelection, isNull);
+      },
+    );
+
+    test(
+      'toggleModule removing Module D (id 8) clears the worker selection',
+      () async {
+        when(() => mockPrepareGameUseCase.execute(any())).thenAnswer(
+          (inv) => inv.positionalArguments.first as GameSetupStateEntity,
+        );
+
+        final container = createContainer(
+          prepareGameUseCase: mockPrepareGameUseCase,
+        );
+        addTearDown(container.dispose);
+        await container.read(gameSetupProvider.future);
+
+        final notifier = container.read(gameSetupProvider.notifier);
+        final moduleD = allModules.firstWhere((m) => m.id == 8);
+        notifier.addPlayer('Alice', 'red');
+        notifier.toggleModule(moduleD);
+        notifier.startGame();
+        notifier.applyWorkerSelection(const WorkerSelectionEntity());
+
+        notifier.toggleModule(moduleD); // removes Module D
+
+        final state = await container.read(gameSetupProvider.future);
+        expect(state.modules.any((m) => m.id == 8), isFalse);
+        expect(state.workerSelection, isNull);
+      },
+    );
+
+    test('resetGame clears the worker selection', () async {
+      when(() => mockPrepareGameUseCase.execute(any())).thenAnswer(
+        (inv) => inv.positionalArguments.first as GameSetupStateEntity,
+      );
+
+      final container = createContainer(
+        prepareGameUseCase: mockPrepareGameUseCase,
+      );
+      addTearDown(container.dispose);
+      await container.read(gameSetupProvider.future);
+
+      final notifier = container.read(gameSetupProvider.notifier);
+      notifier.addPlayer('Alice', 'red');
+      notifier.startGame();
+      notifier.applyWorkerSelection(const WorkerSelectionEntity());
+      notifier.resetGame();
+
+      final state = await container.read(gameSetupProvider.future);
+      expect(state.workerSelection, isNull);
+      expect(state.isStarted, isFalse);
+    });
 
     test('clearAll resets to initial state', () async {
       final container = createContainer();

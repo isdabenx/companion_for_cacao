@@ -3,6 +3,8 @@ import 'package:companion_for_cacao/core/data/repositories/boardgame_repository_
 import 'package:companion_for_cacao/core/data/repositories/settings_repository_impl.dart';
 import 'package:companion_for_cacao/core/domain/repositories/boardgame_repository.dart';
 import 'package:companion_for_cacao/core/domain/repositories/settings_repository.dart';
+import 'package:companion_for_cacao/features/game_setup/data/repositories/custom_preset_repository_impl.dart';
+import 'package:companion_for_cacao/features/game_setup/domain/repositories/custom_preset_repository.dart';
 import 'package:companion_for_cacao/features/tile/data/repositories/tile_repository_impl.dart';
 import 'package:companion_for_cacao/features/tile/domain/repositories/tile_repository.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -17,6 +19,11 @@ part 'repository_providers.g.dart';
 @Riverpod(keepAlive: true)
 SettingsRepository settingsRepository(Ref ref) {
   return SettingsRepositoryImpl();
+}
+
+@Riverpod(keepAlive: true)
+CustomPresetRepository customPresetRepository(Ref ref) {
+  return CustomPresetRepositoryImpl();
 }
 
 @Riverpod(keepAlive: true)

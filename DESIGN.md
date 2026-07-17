@@ -245,12 +245,12 @@ Les 14 cabanes no tenen model de dades (ni JSON ni Drift). Caldria un HutModel o
 - Figura emperador sobre mercat preu 2 (o reg si activa)
 - +1 or al moure, +1 or a l'inici del torn si està a la teva rajola
 
-### Mòdul Nous Treballadors — selecció interactiva pendent
+### Mòdul Nous Treballadors — selecció interactiva ✅ implementada
 - 16 noves (4 per color) amb distribucions inèdites (incloent 0-0-0-4)
 - Dues opcions: reemplaçar o afegir a les existents
 - Regles d'equilibri: treballadors han de superar selva per 1-16 segons nombre jugadors
-- **Estat actual:** S'afegeixen totes les 16 tiles noves al pool (opció "afegir") perquè apareguin a "Tiles in Play". Text informatiu amb instruccions.
-- **Pendent:** Selecció interactiva amb presets — presets predefinits, presets personalitzats guardables, i selecció manual tile per tile amb validació d'equilibri en temps real.
+- **Estat actual:** Selector interactiu al flux de preparació — 4 presets predefinits (només base; reemplaçar; base + 0-0-0-4, recomanat per la comunitat de BGG; afegir tots), acció "Sorpresa +2" (base + 2 noves aleatòries, variant comentada a BGG), presets personalitzats guardables (SharedPreferences), i selecció manual tile per tile amb validació d'equilibri en temps real. El desequilibri es mostra com a avís (ambre) sense bloquejar, perquè el rang del reglament és una recomanació. Amb Tree of Life a 2J es força el 0-0-0-4 obligatori.
+- **Pendent (variant del reglament):** Diamante pàg. 4 permet incorporar mòduls amb rajoles de selva addicionals *sense* substituir les del joc base (per compensar-ho amb més treballadors). Actualment els handlers sempre fan la substitució estàndard (1:1); caldria una opció per mòdul "afegir sense substituir" que recalculi el balanç.
 
 ### Variant "Gran Partida" no contemplada
 - Combinar TOT: base + Chocolatl + Diamante
@@ -390,4 +390,4 @@ Algoritme de càlcul pas a pas:
 - **Fase 2:** Historial de partides, perfils de jugador, comptador probabilitats, foto partida, gestor expansions millorat
 - **Fase 3:** Assoliments, grups de joc, anàlisi post-partida, temporitzador
 - **Fase 4:** Mode daltònic, i18n, configuració general
-- **Futur:** Sincronització amb BGG, estadístiques avançades, mini-expansions, IA local (RAG) per consultar regles (PDFs a Markdown + Gemini Nano)
+- **Futur:** Sincronització amb BGG, estadístiques avançades, mini-expansions, IA local (RAG) per consultar regles (PDFs a Markdown + Gemini Nano), variant "afegir selva sense substituir" (Diamante pàg. 4: incorporar rajoles de selva de mòduls sense retirar les del joc base, compensant amb més treballadors)

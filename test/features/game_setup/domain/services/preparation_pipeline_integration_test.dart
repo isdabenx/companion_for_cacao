@@ -3,6 +3,7 @@ import 'package:companion_for_cacao/core/data/models/boardgame_model.dart';
 import 'package:companion_for_cacao/core/data/models/module_model.dart';
 import 'package:companion_for_cacao/core/data/models/tile_model.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/game_setup_state_entity.dart';
+import 'package:companion_for_cacao/features/game_setup/domain/entities/worker_selection_entity.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/player_entity.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/services/base_game_handler.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/services/handlers/chocolate_module_handler.dart';
@@ -555,6 +556,7 @@ BoardgameModel _createDiamanteExpansion({
   required List<ModuleModel> activeModules,
   List<BoardgameModel>? expansions,
   bool isBigGame = false,
+  WorkerSelectionEntity? workerSelection,
 }) {
   final baseGame = _createBaseGame(selectedColors);
 
@@ -616,7 +618,9 @@ BoardgameModel _createDiamanteExpansion({
       case 7:
         moduleHandlers[7] = EmperorFavorModuleHandler();
       case 8:
-        moduleHandlers[8] = NewWorkersModuleHandler();
+        moduleHandlers[8] = NewWorkersModuleHandler(
+          workerSelection: workerSelection,
+        );
     }
   }
 
@@ -1774,9 +1778,13 @@ void main() {
       expect(_hasStep(r.stepIds, 'setup_map_tokens_red'), isTrue);
       expect(_hasStep(r.stepIds, 'setup_map_tokens_surplus'), isTrue);
 
-      // 0-0-0-4 worker tiles (Tree of Life, 2p)
-      expect(_hasStep(r.stepIds, 'setup_tree_of_life_add_0004_red'), isTrue);
-      expect(_hasStep(r.stepIds, 'setup_tree_of_life_add_0004_purple'), isTrue);
+      // 0-0-0-4 worker tile steps removed by New Workers handler (selector
+      // subsumes them when both Tree of Life and New Workers are active)
+      expect(_hasStep(r.stepIds, 'setup_tree_of_life_add_0004_red'), isFalse);
+      expect(
+        _hasStep(r.stepIds, 'setup_tree_of_life_add_0004_purple'),
+        isFalse,
+      );
 
       // NO worker removal steps (2p)
       expect(
@@ -2088,11 +2096,16 @@ void main() {
       expect(_hasStep(r.stepIds, 'setup_map_tokens_yellow'), isTrue);
       expect(_hasStep(r.stepIds, 'setup_map_tokens_surplus'), isFalse);
 
-      // Worker 1-1-1-1 IS removed (4p, Tree of Life only restores 2-1-0-1)
-      expect(_hasStep(r.stepIds, 'setup_remove_worker_1_red'), isTrue);
-      expect(_hasStep(r.stepIds, 'setup_remove_worker_1_yellow'), isTrue);
+      // Worker removal steps removed by New Workers selector (always authoritative)
+      expect(
+        _hasAnyStepMatching(
+          r.stepIds,
+          (id) => id.startsWith('setup_remove_worker_1_'),
+        ),
+        isFalse,
+      );
 
-      // Worker 2-1-0-1 NOT removed (Tree of Life restores)
+      // Worker 2-1-0-1 also removed by selector
       expect(
         _hasAnyStepMatching(
           r.stepIds,
@@ -2152,8 +2165,8 @@ void main() {
       expect(_tileQty(r.tiles, 'diamante.jungle_gem_mine'), 5);
       expect(_tileQty(r.tiles, 'diamante.jungle_tree_of_life'), 3);
 
-      // Workers: 1-1-1-1 reduced, 2-1-0-1 restored
-      expect(_tileQty(r.tiles, 'base.worker_red_1-1-1-1'), 3);
+      // Workers: selector overrides base 4p reductions
+      expect(_tileQty(r.tiles, 'base.worker_red_1-1-1-1'), 4);
       expect(_tileQty(r.tiles, 'base.worker_red_2-1-0-1'), 5);
 
       // New worker tiles added by NewWorkers handler for all 4 colors
@@ -2571,5 +2584,405 @@ void main() {
       final totalHuts31 = hutTiles31.fold(0, (sum, t) => sum + t.quantity);
       expect(totalHuts31, 14);
     });
+  });
+
+  // ---------------------------------------------------------------------------
+  // GRUP 5: New Workers module conflict resolution
+  // ---------------------------------------------------------------------------
+  group('GRUP 5: New Workers module conflict resolution', () {
+    test('Test 32 — New Workers 3p addAll: removes base removal steps', () {
+      final diamanteExp = _createDiamanteExpansion(
+        selectedColors: _selectedColors(3),
+        modules: [_newWorkersModule],
+      );
+      final r = _runPipeline(
+        players: _makePlayers(3),
+        selectedColors: _selectedColors(3),
+        activeModules: [_newWorkersModule],
+        expansions: [diamanteExp],
+        workerSelection: const WorkerSelectionEntity(
+          mode: WorkerSelectionMode.preset,
+          presetType: WorkerPresetType.addAll,
+        ),
+      );
+
+      // Selector is authoritative — all base removal steps removed
+      expect(
+        _hasAnyStepMatching(
+          r.stepIds,
+          (id) => id.startsWith('setup_remove_worker_1_'),
+        ),
+        isFalse,
+      );
+
+      // New workers selection step is present
+      expect(_hasStep(r.stepIds, 'setup_new_workers_selection'), isTrue);
+
+      // Tile quantities: selector overrides base 3p reduction (4, not 3)
+      expect(_tileQty(r.tiles, 'base.worker_red_1-1-1-1'), 4);
+    });
+
+    test(
+      'Test 33 — New Workers 3p replaceWithNew: removes base removal step',
+      () {
+        final diamanteExp = _createDiamanteExpansion(
+          selectedColors: _selectedColors(3),
+          modules: [_newWorkersModule],
+        );
+        final r = _runPipeline(
+          players: _makePlayers(3),
+          selectedColors: _selectedColors(3),
+          activeModules: [_newWorkersModule],
+          expansions: [diamanteExp],
+          workerSelection: const WorkerSelectionEntity(
+            mode: WorkerSelectionMode.preset,
+            presetType: WorkerPresetType.replaceWithNew,
+          ),
+        );
+
+        // replaceWithNew sets 1-1-1-1 to 0 (≠ default 4), so removal steps gone
+        expect(
+          _hasAnyStepMatching(
+            r.stepIds,
+            (id) => id.startsWith('setup_remove_worker_1_'),
+          ),
+          isFalse,
+        );
+
+        // Selection step present
+        expect(_hasStep(r.stepIds, 'setup_new_workers_selection'), isTrue);
+
+        // Tile: 1-1-1-1 set to 0
+        expect(_tileQty(r.tiles, 'base.worker_red_1-1-1-1'), 0);
+
+        // New tiles added
+        expect(_tileQty(r.tiles, 'diamante.worker_red_0-0-0-4'), 1);
+        expect(_tileQty(r.tiles, 'diamante.worker_red_0-0-2-2'), 1);
+      },
+    );
+
+    test(
+      'Test 34 — New Workers 4p replaceWithNew: removes both removal steps',
+      () {
+        final diamanteExp = _createDiamanteExpansion(
+          selectedColors: _selectedColors(4),
+          modules: [_newWorkersModule],
+        );
+        final r = _runPipeline(
+          players: _makePlayers(4),
+          selectedColors: _selectedColors(4),
+          activeModules: [_newWorkersModule],
+          expansions: [diamanteExp],
+          workerSelection: const WorkerSelectionEntity(
+            mode: WorkerSelectionMode.preset,
+            presetType: WorkerPresetType.replaceWithNew,
+          ),
+        );
+
+        // Both removal step types removed (selector is always authoritative)
+        expect(
+          _hasAnyStepMatching(
+            r.stepIds,
+            (id) => id.startsWith('setup_remove_worker_1_'),
+          ),
+          isFalse,
+        );
+
+        // Selector removes all base removal steps unconditionally
+        expect(
+          _hasAnyStepMatching(
+            r.stepIds,
+            (id) => id.startsWith('setup_remove_worker_2_'),
+          ),
+          isFalse,
+        );
+      },
+    );
+
+    test('Test 35 — New Workers 4p manual both changed: removes both', () {
+      final diamanteExp = _createDiamanteExpansion(
+        selectedColors: _selectedColors(4),
+        modules: [_newWorkersModule],
+      );
+      final r = _runPipeline(
+        players: _makePlayers(4),
+        selectedColors: _selectedColors(4),
+        activeModules: [_newWorkersModule],
+        expansions: [diamanteExp],
+        workerSelection: const WorkerSelectionEntity(
+          mode: WorkerSelectionMode.manual,
+          tileQuantities: {
+            '1-1-1-1': 2,
+            '2-1-0-1': 3,
+            '3-0-0-1': 1,
+            '3-1-0-0': 1,
+            '0-0-0-4': 1,
+            '0-0-2-2': 1,
+            '0-2-0-2': 1,
+            '0-1-0-3': 1,
+          },
+        ),
+      );
+
+      // Both removal steps removed (both quantities differ from defaults)
+      expect(
+        _hasAnyStepMatching(
+          r.stepIds,
+          (id) => id.startsWith('setup_remove_worker_1_'),
+        ),
+        isFalse,
+      );
+      expect(
+        _hasAnyStepMatching(
+          r.stepIds,
+          (id) => id.startsWith('setup_remove_worker_2_'),
+        ),
+        isFalse,
+      );
+
+      // Tiles: overridden to manual quantities
+      expect(_tileQty(r.tiles, 'base.worker_red_1-1-1-1'), 2);
+      expect(_tileQty(r.tiles, 'base.worker_red_2-1-0-1'), 3);
+    });
+
+    test(
+      'Test 36 — Tree of Life + New Workers 2p: removes Tree of Life 0-0-0-4 step',
+      () {
+        final diamanteExp = _createDiamanteExpansion(
+          selectedColors: _selectedColors(2),
+          modules: [_treeOfLifeModule, _newWorkersModule],
+        );
+        final r = _runPipeline(
+          players: _makePlayers(2),
+          selectedColors: _selectedColors(2),
+          activeModules: [_treeOfLifeModule, _newWorkersModule],
+          expansions: [diamanteExp],
+          workerSelection: const WorkerSelectionEntity(
+            mode: WorkerSelectionMode.preset,
+            presetType: WorkerPresetType.addAll,
+          ),
+        );
+
+        // Tree of Life's per-player 0-0-0-4 step removed by New Workers handler
+        expect(
+          _hasAnyStepMatching(
+            r.stepIds,
+            (id) => id.startsWith('setup_tree_of_life_add_0004_'),
+          ),
+          isFalse,
+        );
+
+        // New workers selection step present instead
+        expect(_hasStep(r.stepIds, 'setup_new_workers_selection'), isTrue);
+
+        // Tree of Life jungle steps still present
+        expect(_hasStep(r.stepIds, 'setup_tree_of_life_add_tiles'), isTrue);
+
+        // 0-0-0-4 tile still in the pool (handled by selector)
+        expect(_tileQty(r.tiles, 'diamante.worker_red_0-0-0-4'), 1);
+        expect(_tileQty(r.tiles, 'diamante.worker_purple_0-0-0-4'), 1);
+      },
+    );
+
+    test(
+      'Test 37 — Tree of Life + New Workers 4p: removes worker_1 if selection changes 1-1-1-1',
+      () {
+        final diamanteExp = _createDiamanteExpansion(
+          selectedColors: _selectedColors(4),
+          modules: [_treeOfLifeModule, _newWorkersModule],
+        );
+        final r = _runPipeline(
+          players: _makePlayers(4),
+          selectedColors: _selectedColors(4),
+          activeModules: [_treeOfLifeModule, _newWorkersModule],
+          expansions: [diamanteExp],
+          workerSelection: const WorkerSelectionEntity(
+            mode: WorkerSelectionMode.preset,
+            presetType: WorkerPresetType.replaceWithNew,
+          ),
+        );
+
+        // New Workers handler removes all base removal steps unconditionally
+        expect(
+          _hasAnyStepMatching(
+            r.stepIds,
+            (id) => id.startsWith('setup_remove_worker_1_'),
+          ),
+          isFalse,
+        );
+
+        // Both handlers remove setup_remove_worker_2_ (Tree of Life 4p + New Workers)
+        expect(
+          _hasAnyStepMatching(
+            r.stepIds,
+            (id) => id.startsWith('setup_remove_worker_2_'),
+          ),
+          isFalse,
+        );
+
+        // Selection step present
+        expect(_hasStep(r.stepIds, 'setup_new_workers_selection'), isTrue);
+
+        // 1-1-1-1 tiles gone
+        expect(_tileQty(r.tiles, 'base.worker_red_1-1-1-1'), 0);
+      },
+    );
+
+    test('Test 38 — New Workers 3p baseOnly: removes base removal steps', () {
+      final diamanteExp = _createDiamanteExpansion(
+        selectedColors: _selectedColors(3),
+        modules: [_newWorkersModule],
+      );
+      final r = _runPipeline(
+        players: _makePlayers(3),
+        selectedColors: _selectedColors(3),
+        activeModules: [_newWorkersModule],
+        expansions: [diamanteExp],
+        workerSelection: const WorkerSelectionEntity(
+          mode: WorkerSelectionMode.preset,
+          presetType: WorkerPresetType.baseOnly,
+        ),
+      );
+
+      // Selector is authoritative — all base removal steps removed
+      expect(
+        _hasAnyStepMatching(
+          r.stepIds,
+          (id) => id.startsWith('setup_remove_worker_1_'),
+        ),
+        isFalse,
+      );
+
+      // No new worker tiles in pool
+      expect(_tileQty(r.tiles, 'diamante.worker_red_0-0-0-4'), 0);
+      expect(_tileQty(r.tiles, 'diamante.worker_red_0-0-2-2'), 0);
+    });
+
+    test(
+      'Test 39 — Toggle order independence: [NW, ToL] 2p addAll same as [ToL, NW]',
+      () {
+        // User toggled New Workers BEFORE Tree of Life. The pipeline must
+        // run handlers in moduleId order (6 before 8) regardless, otherwise
+        // the 0-0-0-4 tile gets duplicated and Tree of Life re-inserts the
+        // per-player steps that New Workers subsumes.
+        final diamanteExp = _createDiamanteExpansion(
+          selectedColors: _selectedColors(2),
+          modules: [_newWorkersModule, _treeOfLifeModule],
+        );
+        final r = _runPipeline(
+          players: _makePlayers(2),
+          selectedColors: _selectedColors(2),
+          activeModules: [_newWorkersModule, _treeOfLifeModule],
+          expansions: [diamanteExp],
+          workerSelection: const WorkerSelectionEntity(
+            mode: WorkerSelectionMode.preset,
+            presetType: WorkerPresetType.addAll,
+          ),
+        );
+
+        // Exactly one 0-0-0-4 per player (no duplicate entry from ToL)
+        expect(_tileQty(r.tiles, 'diamante.worker_red_0-0-0-4'), 1);
+        expect(_tileQty(r.tiles, 'diamante.worker_purple_0-0-0-4'), 1);
+
+        // Tree of Life's per-player steps stay removed
+        expect(
+          _hasAnyStepMatching(
+            r.stepIds,
+            (id) => id.startsWith('setup_tree_of_life_add_0004_'),
+          ),
+          isFalse,
+        );
+        expect(_hasStep(r.stepIds, 'setup_new_workers_selection'), isTrue);
+      },
+    );
+
+    test(
+      'Test 40 — Toggle order independence: [NW, ToL] 3p addAll keeps 1-1-1-1 at 4',
+      () {
+        // With handlers unsorted, Tree of Life (3p) would "restore" one
+        // 1-1-1-1 AFTER the selector already set it to 4, yielding an
+        // impossible quantity of 5 (only 4 copies exist per player).
+        final diamanteExp = _createDiamanteExpansion(
+          selectedColors: _selectedColors(3),
+          modules: [_newWorkersModule, _treeOfLifeModule],
+        );
+        final r = _runPipeline(
+          players: _makePlayers(3),
+          selectedColors: _selectedColors(3),
+          activeModules: [_newWorkersModule, _treeOfLifeModule],
+          expansions: [diamanteExp],
+          workerSelection: const WorkerSelectionEntity(
+            mode: WorkerSelectionMode.preset,
+            presetType: WorkerPresetType.addAll,
+          ),
+        );
+
+        expect(_tileQty(r.tiles, 'base.worker_red_1-1-1-1'), 4);
+        expect(_tileQty(r.tiles, 'base.worker_white_1-1-1-1'), 4);
+      },
+    );
+
+    test(
+      'Test 41 — Tree of Life + New Workers 2p baseOnly: keeps mandatory 0-0-0-4',
+      () {
+        // Diamante rulebook (p. 3): with Tree of Life at 2 players, each
+        // player MUST take their 0-0-0-4 tile from the New Workers module.
+        // The baseOnly preset must not drop it.
+        final diamanteExp = _createDiamanteExpansion(
+          selectedColors: _selectedColors(2),
+          modules: [_treeOfLifeModule, _newWorkersModule],
+        );
+        final r = _runPipeline(
+          players: _makePlayers(2),
+          selectedColors: _selectedColors(2),
+          activeModules: [_treeOfLifeModule, _newWorkersModule],
+          expansions: [diamanteExp],
+          workerSelection: const WorkerSelectionEntity(
+            mode: WorkerSelectionMode.preset,
+            presetType: WorkerPresetType.baseOnly,
+          ),
+        );
+
+        expect(_tileQty(r.tiles, 'diamante.worker_red_0-0-0-4'), 1);
+        expect(_tileQty(r.tiles, 'diamante.worker_purple_0-0-0-4'), 1);
+
+        // Other new worker tiles stay excluded by the preset
+        expect(_tileQty(r.tiles, 'diamante.worker_red_0-0-2-2'), 0);
+        expect(_tileQty(r.tiles, 'diamante.worker_red_0-2-0-2'), 0);
+        expect(_tileQty(r.tiles, 'diamante.worker_red_0-1-0-3'), 0);
+      },
+    );
+
+    test(
+      'Test 42 — New Workers 2p baseWith0004: base tiles plus only 0-0-0-4',
+      () {
+        final diamanteExp = _createDiamanteExpansion(
+          selectedColors: _selectedColors(2),
+          modules: [_newWorkersModule],
+        );
+        final r = _runPipeline(
+          players: _makePlayers(2),
+          selectedColors: _selectedColors(2),
+          activeModules: [_newWorkersModule],
+          expansions: [diamanteExp],
+          workerSelection: const WorkerSelectionEntity(
+            mode: WorkerSelectionMode.preset,
+            presetType: WorkerPresetType.baseWith0004,
+          ),
+        );
+
+        // Base tiles at default quantities
+        expect(_tileQty(r.tiles, 'base.worker_red_1-1-1-1'), 4);
+        expect(_tileQty(r.tiles, 'base.worker_red_2-1-0-1'), 5);
+        expect(_tileQty(r.tiles, 'base.worker_red_3-0-0-1'), 1);
+        expect(_tileQty(r.tiles, 'base.worker_red_3-1-0-0'), 1);
+
+        // Only the 0-0-0-4 new tile added (12 per player total)
+        expect(_tileQty(r.tiles, 'diamante.worker_red_0-0-0-4'), 1);
+        expect(_tileQty(r.tiles, 'diamante.worker_red_0-0-2-2'), 0);
+        expect(_tileQty(r.tiles, 'diamante.worker_red_0-2-0-2'), 0);
+        expect(_tileQty(r.tiles, 'diamante.worker_red_0-1-0-3'), 0);
+      },
+    );
   });
 }

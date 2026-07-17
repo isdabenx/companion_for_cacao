@@ -44,7 +44,9 @@ class PrepareGameUseCase {
         GemMinesModuleHandler.moduleId: GemMinesModuleHandler(),
         TreeOfLifeModuleHandler.moduleId: TreeOfLifeModuleHandler(),
         EmperorFavorModuleHandler.moduleId: EmperorFavorModuleHandler(),
-        NewWorkersModuleHandler.moduleId: NewWorkersModuleHandler(),
+        NewWorkersModuleHandler.moduleId: NewWorkersModuleHandler(
+          workerSelection: currentSetup.workerSelection,
+        ),
       },
     );
 

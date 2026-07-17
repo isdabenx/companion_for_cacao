@@ -20,6 +20,9 @@ class AppColors {
   static const Color brown = Color(0xFF2C0801);
   static const Color gold = Color(0xFFFFC20F);
 
+  /// Amber tone for non-blocking warnings (readable on cream/white).
+  static const Color warning = Color(0xFFD97706);
+
   static const Color white = Color(0xFFFFFFFF);
   static const Color cream = Color(0xFFF8F3E6);
   static const Color red = Color(0xFFEB1D2E);

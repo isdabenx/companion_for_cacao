@@ -3,6 +3,7 @@ import 'package:companion_for_cacao/core/data/models/module_model.dart';
 import 'package:companion_for_cacao/core/data/models/tile_model.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/player_entity.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/preparation_entity.dart';
+import 'package:companion_for_cacao/features/game_setup/domain/entities/worker_selection_entity.dart';
 import 'package:flutter/foundation.dart';
 
 class GameSetupStateEntity {
@@ -15,6 +16,7 @@ class GameSetupStateEntity {
     this.colorOrder = const ['white', 'red', 'purple', 'yellow'],
     this.isStarted = false,
     this.isBigGame = false,
+    this.workerSelection,
   });
   final List<PlayerEntity> players;
   final List<BoardgameModel> expansions;
@@ -25,6 +27,10 @@ class GameSetupStateEntity {
   final bool isStarted;
   final bool isBigGame;
 
+  /// Worker tile selection for Module D (The New Workers).
+  /// Null when Module D is not active or using default behavior (addAll).
+  final WorkerSelectionEntity? workerSelection;
+
   GameSetupStateEntity copyWith({
     List<PlayerEntity>? players,
     List<BoardgameModel>? expansions,
@@ -34,6 +40,8 @@ class GameSetupStateEntity {
     List<String>? colorOrder,
     bool? isStarted,
     bool? isBigGame,
+    WorkerSelectionEntity? workerSelection,
+    bool clearWorkerSelection = false,
   }) {
     return GameSetupStateEntity(
       players: players ?? this.players,
@@ -44,6 +52,9 @@ class GameSetupStateEntity {
       colorOrder: colorOrder ?? this.colorOrder,
       isStarted: isStarted ?? this.isStarted,
       isBigGame: isBigGame ?? this.isBigGame,
+      workerSelection: clearWorkerSelection
+          ? null
+          : (workerSelection ?? this.workerSelection),
     );
   }
 
@@ -59,7 +70,8 @@ class GameSetupStateEntity {
         listEquals(other.preparation, preparation) &&
         listEquals(other.colorOrder, colorOrder) &&
         other.isStarted == isStarted &&
-        other.isBigGame == isBigGame;
+        other.isBigGame == isBigGame &&
+        other.workerSelection == workerSelection;
   }
 
   @override
@@ -72,5 +84,6 @@ class GameSetupStateEntity {
     Object.hashAll(colorOrder),
     isStarted,
     isBigGame,
+    workerSelection,
   );
 }

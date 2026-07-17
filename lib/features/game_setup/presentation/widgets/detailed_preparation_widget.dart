@@ -3,8 +3,10 @@ import 'package:companion_for_cacao/core/theme/app_colors.dart';
 import 'package:companion_for_cacao/core/theme/app_spacing.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/preparation_entity.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/preparation_phase.dart';
+import 'package:companion_for_cacao/features/game_setup/domain/services/handlers/new_workers_module_handler.dart';
 import 'package:companion_for_cacao/features/game_setup/presentation/providers/game_setup_notifier.dart';
 import 'package:companion_for_cacao/features/game_setup/presentation/utils/preparation_image_resolver.dart';
+import 'package:companion_for_cacao/features/game_setup/presentation/widgets/worker_selector_widget.dart';
 import 'package:companion_for_cacao/shared/widgets/container_full_style_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -68,7 +70,10 @@ class DetailedPreparationWidget extends ConsumerWidget {
 
     PreparationPhase? firstIncompletePhase;
     for (final entry in groupedPreparation.entries) {
-      final items = entry.value;
+      // The worker selector step has no checkbox — exclude it from counts
+      final items = entry.value
+          .where((p) => p.id != NewWorkersModuleHandler.selectionStepId)
+          .toList();
       final completedCount = items
           .where((p) => completionMap[p.id] ?? p.isCompleted)
           .length;
@@ -130,6 +135,11 @@ class DetailedPreparationWidget extends ConsumerWidget {
                             index,
                           ) {
                             final item = items[index];
+                            // Render interactive widget for worker selection step
+                            if (item.id ==
+                                NewWorkersModuleHandler.selectionStepId) {
+                              return const WorkerSelectorWidget();
+                            }
                             return PreparationCard(
                               key: ValueKey(item.id),
                               preparation: item,
@@ -174,10 +184,14 @@ class _PhaseHeaderDelegate extends SliverPersistentHeaderDelegate {
     double shrinkOffset,
     bool overlapsContent,
   ) {
-    final phaseCompletedCount = items
+    // The worker selector step has no checkbox — exclude it from counts
+    final countableItems = items
+        .where((p) => p.id != NewWorkersModuleHandler.selectionStepId)
+        .toList();
+    final phaseCompletedCount = countableItems
         .where((p) => completionMap[p.id] ?? p.isCompleted)
         .length;
-    final phaseTotalCount = items.length;
+    final phaseTotalCount = countableItems.length;
     final isPhaseCompleted =
         phaseTotalCount > 0 && phaseCompletedCount == phaseTotalCount;
     final phaseProgress = phaseTotalCount == 0
