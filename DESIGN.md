@@ -390,4 +390,4 @@ Algoritme de càlcul pas a pas:
 - **Fase 2:** Historial de partides, perfils de jugador, comptador probabilitats, foto partida, gestor expansions millorat
 - **Fase 3:** Assoliments, grups de joc, anàlisi post-partida, temporitzador
 - **Fase 4:** Mode daltònic, i18n, configuració general
-- **Futur:** Sincronització amb BGG, estadístiques avançades, mini-expansions
+- **Futur:** Sincronització amb BGG, estadístiques avançades, mini-expansions, IA local (RAG) per consultar regles (PDFs a Markdown + Gemini Nano)
