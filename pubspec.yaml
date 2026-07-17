@@ -21,8 +21,8 @@ dependencies:
   go_router: ^17.2.2
   path_provider: ^2.1.5
   shared_preferences: ^2.5.5
-  syncfusion_flutter_pdfviewer: ^33.2.3
-  upgrader: ^13.1.0
+  syncfusion_flutter_pdfviewer: ^34.1.31
+  upgrader: ^13.5.0
   url_launcher: ^6.3.2
   reorderable_grid: ^1.0.13
   collection: ^1.19.1
