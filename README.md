@@ -75,8 +75,9 @@ L'objectiu es proporcionar eines digitals que complementin l'experiencia de joc 
 | **Filtrat de Rajoles** | Cerca i filtra rajoles per tipus, color i expansio |
 | **Configuracio de Partida** | Dashboard amb resum, preparacio i rajoles en joc (joc base, expansions i Big Game) |
 | **Reordenacio de Jugadors** | Arrossega per canviar l'ordre dels jugadors |
-| **Preparacio Automatica** | Visualitzacio pas a pas de la preparacio (joc base) |
-| **Manual de Regles** | Visor PDF integrat del manual del joc base |
+| **Preparacio Automatica** | Visualitzacio pas a pas de la preparacio (joc base, expansions i Big Game) |
+| **Selector de Treballadors** | Selector interactiu del modul Nous Treballadors: presets, presets personalitzats, seleccio manual i validacio d'equilibri |
+| **Manual de Regles** | Visor PDF integrat dels manuals (joc base, Chocolatl i Diamante) |
 | **UI Adaptativa** | Layout optimitzat per a diferents mides de pantalla |
 | **Notificador d'Actualitzacions** | Detecta automaticament noves versions al Play Store |
 
@@ -206,7 +207,7 @@ feature/
 - [ ] Comptador de probabilitats de rajoles
 - [ ] Foto de partida
 - [ ] Gestor d'expansions millorat
-- [ ] Selector interactiu de nous treballadors (presets predefinits, presets personalitzats i seleccio manual amb validacio d'equilibri)
+- [x] Selector interactiu de nous treballadors (presets predefinits, presets personalitzats i seleccio manual amb validacio d'equilibri)
 
 ### Fase 3 — Engagement
 

@@ -166,7 +166,7 @@ For each test, configure the app with the specified players and modules, then ve
 
 - **Config**: 2 jugadors, Hut Module
 - **Board Setup**:
-  - [x] Pas al final de boardSetup: "12 hut tiles, drop, sort by cost" (⚠️ el pas diu 12 però `tiles.json` en conté 14)
+  - [x] Pas al final de boardSetup: "12 hut tiles, drop, sort by cost" (Nota: el pas diu 12 [rajoles físiques de doble cara] i `tiles.json` en conté 14 [una entrada per funció; algunes cares es repeteixen]. Totes dues xifres són correctes — vegeu DESIGN.md § Mòdul D Cabanes)
 - **Tiles en joc**:
   - [x] 14 hut tiles afegides al pool
 
@@ -442,7 +442,7 @@ For each test, configure the app with the specified players and modules, then ve
   - [x] Gem Mines: "Sort out all Temple tiles" + "Add 4x Gem Mine tiles"
   - [x] Tree of Life: "Add 2x Tree of Life tiles" (NO gold mine removal — Chocolate actiu)
   - [x] Map board + 4 jungle tiles
-  - [x] 14 hut tiles (el pas diu "12", però `tiles.json` en conté 14)
+  - [x] 14 hut tiles (el pas diu "12" rajoles físiques de doble cara; el catàleg llista 14 funcions — correcte, vegeu DESIGN.md § Mòdul D Cabanes)
 - **Tiles en joc**:
   - [x] Plantations reduïdes (Watering) + 2 watering
   - [x] Gold mines trets (Chocolate) + 2 choc kitchen + 2 choc market

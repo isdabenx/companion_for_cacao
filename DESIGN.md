@@ -97,6 +97,8 @@ Es compren durant la partida pagant el seu cost en or. Màxim una cabana de cada
 | Dona del Cap | 20 | Bonus fix | +5 or |
 | Cap | 24 | Bonus fix | +6 or |
 
+**Nota — 12 rajoles físiques, 14 funcions:** el joc porta 12 rajoles de cabana impreses per les dues cares (24 cares) amb 14 funcions diferents — algunes funcions es repeteixen en més d'una cara. El pas de preparació parla de "12 hut tiles" (rajoles físiques que es deixen caure), mentre que `tiles.json` i el catàleg de l'app en llisten 14 (una entrada per funció). Totes dues xifres són correctes en la seva dimensió; NO és una discrepància de dades.
+
 ## 4. Expansió 2 — Diamante
 Inclou 4 mòduls independents combinables amb tota la resta.
 
@@ -391,3 +393,11 @@ Algoritme de càlcul pas a pas:
 - **Fase 3:** Assoliments, grups de joc, anàlisi post-partida, temporitzador
 - **Fase 4:** Mode daltònic, i18n, configuració general
 - **Futur:** Sincronització amb BGG, estadístiques avançades, mini-expansions, IA local (RAG) per consultar regles (PDFs a Markdown + Gemini Nano), variant "afegir selva sense substituir" (Diamante pàg. 4: incorporar rajoles de selva de mòduls sense retirar les del joc base, compensant amb més treballadors)
+
+### Deute tècnic planificat
+
+- **Inversió de Clean Architecture (models ↔ domini)** — PLANIFICAT: fer-ho **abans de començar la propera feature gran** (p. ex. l'historial de partides de Fase 2), perquè cada feature nova multiplica els consumidors dels models i encareix el refactor.
+  - **Problema:** les interfícies de `core/domain/repositories` retornen `BoardgameModel`/`ModuleModel`/`TileModel` (de `core/data/models/`), que importen drift pels factories `fromDrift` i `ModelLink`. El domini depèn transitivament del motor de persistència — la fletxa de dependència va al revés.
+  - **Solució (opció A, completa):** crear entitats pures de domini (sense drift), moure el mapping fila→entitat a mappers de la capa de dades, fer que les interfícies del domini retornin entitats, i actualitzar els consumidors (~60-80 fitxers, majoritàriament imports). Punt delicat: repensar `ModelLink` (relacions lazy boardgame/module) en entitats pures.
+  - **Per què val la pena:** el projecte ja va patir una migració de motor (Isar → drift) que va tocar tota l'app; amb entitats pures només s'hauria tocat `core/data/`. També evita que canvis d'esquema (com `Tiles.id` int→String) es propaguin fins a la presentació.
+  - **Xarxa de seguretat:** la suite de tests (370+) i el compilador guien el refactor; fer-ho en branca pròpia sense barrejar-hi features.
