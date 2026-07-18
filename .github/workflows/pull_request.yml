@@ -17,8 +17,10 @@ jobs:
       - name: Install dependencies
         run: flutter pub get
 
-      - name: Check outdated dependencies
-        run: dart pub outdated | grep -q 'upgradable' && exit 1 || exit 0
+      # Informational only: failing PRs whenever ANY dependency has a newer
+      # version turns CI red over time for reasons unrelated to the change.
+      - name: Check outdated dependencies (informational)
+        run: dart pub outdated || true
 
       - name: Build Runner
         run: dart run build_runner build --delete-conflicting-outputs
@@ -29,5 +31,5 @@ jobs:
       - name: Format
         run: dart format --set-exit-if-changed .
 
-      # - name: Test
-      #   run: flutter test
+      - name: Test
+        run: flutter test
