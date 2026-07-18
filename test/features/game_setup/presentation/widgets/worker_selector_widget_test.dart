@@ -1,3 +1,6 @@
+// Root-level test overrides don't need provider `dependencies` declarations.
+// ignore_for_file: riverpod_lint/scoped_providers_should_specify_dependencies
+
 import 'dart:async';
 
 import 'package:companion_for_cacao/config/providers/repository_providers.dart';

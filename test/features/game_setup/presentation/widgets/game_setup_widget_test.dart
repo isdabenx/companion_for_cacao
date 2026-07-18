@@ -7,12 +7,25 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import '../../../../support/fakes.dart';
+
 void main() {
   group('GameSetupWidget', () {
+    final testBoardgames = [
+      BoardgameModel(
+        id: 1,
+        name: 'Cacao',
+        description: 'Base Game',
+        filenameImage: '',
+      ),
+    ];
+
     testWidgets('should display Stepper with 3 steps', (tester) async {
       final container = ProviderContainer(
         overrides: [
-          boardgameProvider.overrideWith(() => FakeBoardgameNotifier()),
+          boardgameProvider.overrideWith(
+            () => FakeBoardgameNotifier(testBoardgames),
+          ),
           gameSetupProvider.overrideWith(
             () => FakeGameSetupNotifier(isStarted: false),
           ),
@@ -37,7 +50,9 @@ void main() {
     testWidgets('should display Start Game button', (tester) async {
       final container = ProviderContainer(
         overrides: [
-          boardgameProvider.overrideWith(() => FakeBoardgameNotifier()),
+          boardgameProvider.overrideWith(
+            () => FakeBoardgameNotifier(testBoardgames),
+          ),
           gameSetupProvider.overrideWith(
             () => FakeGameSetupNotifier(isStarted: false),
           ),
@@ -60,7 +75,9 @@ void main() {
     testWidgets('should navigate to different steps', (tester) async {
       final container = ProviderContainer(
         overrides: [
-          boardgameProvider.overrideWith(() => FakeBoardgameNotifier()),
+          boardgameProvider.overrideWith(
+            () => FakeBoardgameNotifier(testBoardgames),
+          ),
           gameSetupProvider.overrideWith(
             () => FakeGameSetupNotifier(isStarted: false),
           ),
@@ -99,7 +116,9 @@ void main() {
     ) async {
       final container = ProviderContainer(
         overrides: [
-          boardgameProvider.overrideWith(() => FakeBoardgameNotifier()),
+          boardgameProvider.overrideWith(
+            () => FakeBoardgameNotifier(testBoardgames),
+          ),
           gameSetupProvider.overrideWith(
             () => FakeGameSetupNotifier(isStarted: false),
           ),
@@ -150,7 +169,9 @@ void main() {
     ) async {
       final container = ProviderContainer(
         overrides: [
-          boardgameProvider.overrideWith(() => FakeBoardgameNotifier()),
+          boardgameProvider.overrideWith(
+            () => FakeBoardgameNotifier(testBoardgames),
+          ),
           gameSetupProvider.overrideWith(
             () => FakeGameSetupNotifier(isStarted: true),
           ),
@@ -188,20 +209,6 @@ void main() {
       expect(stepperOpacity.opacity, equals(0.6));
     });
   });
-}
-
-class FakeBoardgameNotifier extends BoardgameNotifier {
-  @override
-  Future<List<BoardgameModel>> build() async {
-    return [
-      BoardgameModel(
-        id: 1,
-        name: 'Cacao',
-        description: 'Base Game',
-        filenameImage: '',
-      ),
-    ];
-  }
 }
 
 class FakeGameSetupNotifier extends GameSetupNotifier {

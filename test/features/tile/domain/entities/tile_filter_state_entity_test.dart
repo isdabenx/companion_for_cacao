@@ -2,6 +2,8 @@ import 'package:companion_for_cacao/core/data/models/tile_model.dart';
 import 'package:companion_for_cacao/features/tile/domain/entities/tile_filter_state_entity.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import '../../../../support/tile_fixtures.dart';
+
 void main() {
   group('TileFilterStateEntity.hasActiveFilters', () {
     test('should return false when all filters are empty', () {
@@ -75,28 +77,28 @@ void main() {
     late TileModel chocolatlTile;
 
     setUp(() {
-      marketTile = _createTile(
+      marketTile = makeTile(
         id: 'base.market_2',
         name: 'Market Price 2',
         boardgameId: 1,
         type: TileType.market,
       );
 
-      plantationTile = _createTile(
+      plantationTile = makeTile(
         id: 'base.plantation',
         name: 'Single Plantation',
         boardgameId: 1,
         type: TileType.plantation,
       );
 
-      waterTile = _createTile(
+      waterTile = makeTile(
         id: 'base.water',
         name: 'Water Source',
         boardgameId: 1,
         type: TileType.water,
       );
 
-      chocolatlTile = _createTile(
+      chocolatlTile = makeTile(
         id: 'chocolatl.hut',
         name: 'Chief Hut',
         boardgameId: 2,
@@ -247,7 +249,7 @@ void main() {
       });
 
       test('should handle tiles with special characters in names', () {
-        final specialTile = _createTile(
+        final specialTile = makeTile(
           id: 'test.special',
           name: "Chief's Hut",
           boardgameId: 1,
@@ -370,19 +372,3 @@ void main() {
 }
 
 // Helper function to create test tiles
-TileModel _createTile({
-  required String id,
-  required String name,
-  required int boardgameId,
-  required TileType type,
-}) {
-  return TileModel(
-    id: id,
-    name: name,
-    description: 'Test description',
-    filenameImage: 'test.png',
-    quantity: 1,
-    type: type,
-    boardgameId: boardgameId,
-  );
-}

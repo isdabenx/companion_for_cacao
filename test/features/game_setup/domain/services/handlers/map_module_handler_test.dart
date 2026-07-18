@@ -5,6 +5,8 @@ import 'package:companion_for_cacao/features/game_setup/domain/entities/preparat
 import 'package:companion_for_cacao/features/game_setup/domain/services/handlers/map_module_handler.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import '../../../../../support/tile_fixtures.dart';
+
 void main() {
   group('MapModuleHandler', () {
     late MapModuleHandler handler;
@@ -16,7 +18,7 @@ void main() {
       handler = MapModuleHandler();
 
       mockTiles = [
-        _createTile(
+        makeTile(
           id: 'base.jungle_single_plantation',
           name: 'Jungle Single Plantation',
           quantity: 8,
@@ -231,22 +233,4 @@ void main() {
       });
     });
   });
-}
-
-// Helper function to create mock tiles
-TileModel _createTile({
-  required String id,
-  required String name,
-  required int quantity,
-  required TileType type,
-}) {
-  return TileModel(
-    id: id,
-    name: name,
-    description: 'Test description',
-    filenameImage: 'test.png',
-    quantity: quantity,
-    type: type,
-    boardgameId: 1,
-  );
 }

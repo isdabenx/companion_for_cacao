@@ -5,6 +5,8 @@ import 'package:companion_for_cacao/features/game_setup/domain/entities/preparat
 import 'package:companion_for_cacao/features/game_setup/domain/services/handlers/tree_of_life_module_handler.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import '../../../../../support/tile_fixtures.dart';
+
 void main() {
   group('TreeOfLifeModuleHandler', () {
     late TreeOfLifeModuleHandler handler;
@@ -17,27 +19,29 @@ void main() {
       handler = TreeOfLifeModuleHandler();
 
       mockTiles = [
-        _createTile(
+        makeTile(
           id: 'base.jungle_gold_mine_value_1',
           name: 'Gold Mine Value 1',
           quantity: 2,
           type: TileType.goldMine,
         ),
-        _createTile(
+        makeTile(
           id: 'base.jungle_gold_mine_value_2',
           name: 'Gold Mine Value 2',
           quantity: 2,
           type: TileType.goldMine,
         ),
-        _createPlayerTile(
+        makeTile(
           id: 'base.worker_red_1-1-1-1',
           name: '1-1-1-1',
+          type: TileType.player,
           color: TileColor.red,
           quantity: 4,
         ),
-        _createPlayerTile(
+        makeTile(
           id: 'base.worker_purple_1-1-1-1',
           name: '1-1-1-1',
+          type: TileType.player,
           color: TileColor.purple,
           quantity: 4,
         ),
@@ -431,40 +435,4 @@ void main() {
       });
     });
   });
-}
-
-// Helper function to create mock tiles
-TileModel _createTile({
-  required String id,
-  required String name,
-  required int quantity,
-  required TileType type,
-}) {
-  return TileModel(
-    id: id,
-    name: name,
-    description: 'Test description',
-    filenameImage: 'test.png',
-    quantity: quantity,
-    type: type,
-    boardgameId: 1,
-  );
-}
-
-TileModel _createPlayerTile({
-  required String id,
-  required String name,
-  required TileColor color,
-  required int quantity,
-}) {
-  return TileModel(
-    id: id,
-    name: name,
-    description: 'Test description',
-    filenameImage: 'test.png',
-    quantity: quantity,
-    type: TileType.player,
-    boardgameId: 1,
-    color: color,
-  );
 }

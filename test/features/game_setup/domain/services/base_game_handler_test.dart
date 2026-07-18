@@ -5,6 +5,8 @@ import 'package:companion_for_cacao/features/game_setup/domain/entities/preparat
 import 'package:companion_for_cacao/features/game_setup/domain/services/base_game_handler.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import '../../../../support/tile_fixtures.dart';
+
 void main() {
   group('BaseGameHandler', () {
     late BaseGameHandler handler;
@@ -15,36 +17,29 @@ void main() {
       // Mock Data using string IDs
       allTiles = [
         // Jungle Tiles
-        _createTile(
+        makeTile(
           id: 'base.jungle_single_plantation',
           name: 'Single Plantation',
           quantity: 8,
-          isJungle: true,
         ),
-        _createTile(
+        makeTile(
           id: 'base.jungle_market_selling_3',
           name: 'Selling price 3',
           quantity: 2,
-          isJungle: true,
         ),
-        _createTile(
-          id: 'base.jungle_water',
-          name: 'Water',
-          quantity: 3,
-          isJungle: true,
-        ),
+        makeTile(id: 'base.jungle_water', name: 'Water', quantity: 3),
         // Player Tiles (Red)
-        _createTile(
+        makeTile(
           id: 'base.worker_red_1-1-1-1',
           name: '1-1-1-1',
           quantity: 4,
-          color: 'red',
+          color: TileColor.red,
         ),
-        _createTile(
+        makeTile(
           id: 'base.worker_red_2-1-0-1',
           name: '2-1-0-1',
           quantity: 5,
-          color: 'red',
+          color: TileColor.red,
         ),
       ];
 
@@ -338,24 +333,4 @@ void main() {
       });
     });
   });
-}
-
-TileModel _createTile({
-  required String id,
-  required String name,
-  required int quantity,
-  bool isJungle = false,
-  String? color,
-}) {
-  return TileModel(
-    id: id,
-    name: name,
-    description: 'desc',
-    filenameImage: 'img.png',
-    quantity: quantity,
-    color: color != null
-        ? TileColor.values.firstWhere((c) => c.name == color)
-        : null,
-    boardgameId: 1,
-  );
 }

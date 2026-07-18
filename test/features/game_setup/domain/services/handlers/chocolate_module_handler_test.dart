@@ -6,6 +6,8 @@ import 'package:companion_for_cacao/features/game_setup/domain/entities/preparat
 import 'package:companion_for_cacao/features/game_setup/domain/services/handlers/chocolate_module_handler.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import '../../../../../support/tile_fixtures.dart';
+
 void main() {
   group('ChocolateModuleHandler', () {
     late ChocolateModuleHandler handler;
@@ -17,31 +19,31 @@ void main() {
       handler = ChocolateModuleHandler();
 
       mockTiles = [
-        _createTile(
+        makeTile(
           id: 'base.jungle_gold_mine_value_1',
           name: 'Gold Mine Value 1',
           quantity: 4,
           type: TileType.goldMine,
         ),
-        _createTile(
+        makeTile(
           id: 'base.jungle_gold_mine_value_2',
           name: 'Gold Mine Value 2',
           quantity: 2,
           type: TileType.goldMine,
         ),
-        _createTile(
+        makeTile(
           id: 'base.jungle_market_selling_3',
           name: 'Market Selling 3',
           quantity: 5,
           type: TileType.market,
         ),
-        _createTile(
+        makeTile(
           id: 'chocolatl.jungle_chocolate_kitchen',
           name: 'Chocolate Kitchen',
           quantity: 0,
           type: TileType.chocolateKitchen,
         ),
-        _createTile(
+        makeTile(
           id: 'chocolatl.jungle_chocolate_market',
           name: 'Chocolate Market',
           quantity: 0,
@@ -407,47 +409,23 @@ void main() {
   });
 }
 
-// Helper function to create mock tiles
-TileModel _createTile({
-  required String id,
-  required String name,
-  required int quantity,
-  required TileType type,
-}) {
-  return TileModel(
-    id: id,
-    name: name,
-    description: 'Test description',
-    filenameImage: 'test.png',
-    quantity: quantity,
-    type: type,
-    boardgameId: 1,
-  );
-}
-
 // Helper to create mock expansions with chocolate tiles
 BoardgameModel _createMockExpansion() {
-  return BoardgameModel(
+  return makeBoardgame(
     id: 2,
     name: 'Chocolatl',
-    description: 'Test Expansion',
-    filenameImage: 'test.png',
     tiles: [
-      TileModel(
+      makeTile(
         id: 'chocolatl.jungle_chocolate_kitchen',
         name: 'Chocolate Kitchen',
-        description: 'Test description',
-        filenameImage: 'test.png',
         quantity: 3,
         type: TileType.chocolateKitchen,
         boardgameId: 2,
         moduleId: ChocolateModuleHandler.moduleId,
       ),
-      TileModel(
+      makeTile(
         id: 'chocolatl.jungle_chocolate_market',
         name: 'Chocolate Market',
-        description: 'Test description',
-        filenameImage: 'test.png',
         quantity: 3,
         type: TileType.chocolateMarket,
         boardgameId: 2,

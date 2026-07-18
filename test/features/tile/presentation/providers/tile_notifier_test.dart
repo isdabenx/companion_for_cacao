@@ -2,12 +2,15 @@ import 'dart:async';
 
 import 'package:companion_for_cacao/core/data/models/tile_model.dart';
 import 'package:companion_for_cacao/features/tile/domain/use_cases/get_tiles_with_boardgame_use_case.dart';
+import 'package:companion_for_cacao/features/tile/domain/entities/tile_filter_scope.dart';
 import 'package:companion_for_cacao/features/tile/presentation/providers/tile_filter_notifier.dart';
 import 'package:companion_for_cacao/features/tile/presentation/providers/tile_notifier.dart';
 import 'package:companion_for_cacao/features/tile/presentation/providers/tile_use_case_providers.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
+
+import '../../../../support/tile_fixtures.dart';
 
 class MockGetTilesWithBoardgameUseCase extends Mock
     implements GetTilesWithBoardgameUseCase {}
@@ -45,25 +48,25 @@ void main() {
   setUp(() {
     mockUseCase = MockGetTilesWithBoardgameUseCase();
     mockTiles = [
-      _createTile(
+      makeTile(
         id: 'base.market_2',
         name: 'Market Price 2',
         boardgameId: 1,
         type: TileType.market,
       ),
-      _createTile(
+      makeTile(
         id: 'base.water',
         name: 'Water',
         boardgameId: 1,
         type: TileType.water,
       ),
-      _createTile(
+      makeTile(
         id: 'chocolatl.watering',
         name: 'Watering',
         boardgameId: 2,
         type: TileType.watering,
       ),
-      _createTile(
+      makeTile(
         id: 'chocolatl.hut_chief',
         name: 'Hut Chief',
         boardgameId: 2,
@@ -193,9 +196,15 @@ void main() {
 
       await container.read(filteredTilesProvider.future);
 
-      container.read(tileFilterProvider.notifier).updateSearchQuery('water');
-      container.read(tileFilterProvider.notifier).toggleBoardgame(2);
-      container.read(tileFilterProvider.notifier).toggleTileType('Watering');
+      container
+          .read(tileFilterProvider(TileFilterScope.catalog).notifier)
+          .updateSearchQuery('water');
+      container
+          .read(tileFilterProvider(TileFilterScope.catalog).notifier)
+          .toggleBoardgame(2);
+      container
+          .read(tileFilterProvider(TileFilterScope.catalog).notifier)
+          .toggleTileType('Watering');
 
       final result = await container.read(filteredTilesProvider.future);
 
@@ -204,21 +213,4 @@ void main() {
       expect(result.single.name, equals('Watering'));
     });
   });
-}
-
-TileModel _createTile({
-  required String id,
-  required String name,
-  required int boardgameId,
-  required TileType type,
-}) {
-  return TileModel(
-    id: id,
-    name: name,
-    description: 'Test description',
-    filenameImage: 'test.png',
-    quantity: 1,
-    type: type,
-    boardgameId: boardgameId,
-  );
 }

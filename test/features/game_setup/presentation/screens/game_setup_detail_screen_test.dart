@@ -12,16 +12,9 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mocktail/mocktail.dart';
 
-class MockGoRouter extends Mock implements GoRouter {}
+import '../../../../support/fakes.dart';
 
-class FakeBoardgameNotifier extends BoardgameNotifier {
-  @override
-  Future<List<BoardgameModel>> build() async {
-    return [
-      BoardgameModel(id: 1, name: 'Cacao', description: '', filenameImage: ''),
-    ];
-  }
-}
+class MockGoRouter extends Mock implements GoRouter {}
 
 void main() {
   group('GameSetupDetailScreen', () {
@@ -65,7 +58,16 @@ void main() {
       await tester.pumpWidget(
         ProviderScope(
           overrides: [
-            boardgameProvider.overrideWith(FakeBoardgameNotifier.new),
+            boardgameProvider.overrideWith(
+              () => FakeBoardgameNotifier([
+                BoardgameModel(
+                  id: 1,
+                  name: 'Cacao',
+                  description: '',
+                  filenameImage: '',
+                ),
+              ]),
+            ),
           ],
           child: MaterialApp(
             home: InheritedGoRouter(

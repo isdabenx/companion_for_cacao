@@ -6,6 +6,8 @@ import 'package:companion_for_cacao/features/game_setup/domain/entities/preparat
 import 'package:companion_for_cacao/features/game_setup/domain/services/handlers/watering_module_handler.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import '../../../../../support/tile_fixtures.dart';
+
 void main() {
   group('WateringModuleHandler', () {
     late WateringModuleHandler handler;
@@ -18,25 +20,25 @@ void main() {
 
       // Create mock tiles including plantation tiles that should be replaced
       mockTiles = [
-        _createTile(
+        makeTile(
           id: 'base.jungle_single_plantation',
           name: 'Jungle Single Plantation',
           quantity: 8,
           type: TileType.plantation,
         ),
-        _createTile(
+        makeTile(
           id: 'base.jungle_double_plantation',
           name: 'Jungle Double Plantation',
           quantity: 4,
           type: TileType.plantation,
         ),
-        _createTile(
+        makeTile(
           id: 'base.market_2',
           name: 'Market Price 2',
           quantity: 5,
           type: TileType.market,
         ),
-        _createTile(
+        makeTile(
           id: 'chocolatl.jungle_watering',
           name: 'Jungle Watering',
           quantity: 3,
@@ -312,7 +314,7 @@ void main() {
     group('edge cases', () {
       test('should handle tiles with no plantations', () {
         final tilesWithoutPlantations = [
-          _createTile(
+          makeTile(
             id: 'base.market_2',
             name: 'Market Price 2',
             quantity: 5,
@@ -350,37 +352,15 @@ void main() {
   });
 }
 
-// Helper function to create mock tiles
-TileModel _createTile({
-  required String id,
-  required String name,
-  required int quantity,
-  required TileType type,
-}) {
-  return TileModel(
-    id: id,
-    name: name,
-    description: 'Test description',
-    filenameImage: 'test.png',
-    quantity: quantity,
-    type: type,
-    boardgameId: 1,
-  );
-}
-
 // Helper to create mock expansions with watering tile
 BoardgameModel _createMockExpansion() {
-  return BoardgameModel(
+  return makeBoardgame(
     id: 2,
     name: 'Chocolatl',
-    description: 'Test Expansion',
-    filenameImage: 'test.png',
     tiles: [
-      TileModel(
+      makeTile(
         id: 'chocolatl.jungle_watering',
         name: 'Jungle Watering',
-        description: 'Test description',
-        filenameImage: 'test.png',
         quantity: 10,
         type: TileType.watering,
         boardgameId: 2,

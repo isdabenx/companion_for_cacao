@@ -107,35 +107,14 @@ void main() {
     });
 
     group('generateId', () {
-      test('should generate unique IDs', () async {
-        final id1 = CustomPresetEntity.generateId();
-        // Add small delay to ensure different timestamp
-        await Future.delayed(const Duration(milliseconds: 2));
-        final id2 = CustomPresetEntity.generateId();
-
-        expect(id1, isNot(equals(id2)));
-        expect(id1, startsWith('preset_'));
-        expect(id2, startsWith('preset_'));
+      test('generates unique IDs even within the same millisecond', () {
+        final ids = List.generate(100, (_) => CustomPresetEntity.generateId());
+        expect(ids.toSet().length, ids.length);
       });
 
-      test('should generate IDs with correct format', () {
+      test('generates IDs with the expected format', () {
         final id = CustomPresetEntity.generateId();
-
-        expect(id, startsWith('preset_'));
-        // Extract timestamp part and verify it's numeric
-        final timestamp = id.substring('preset_'.length);
-        expect(int.tryParse(timestamp), isNotNull);
-      });
-
-      test('should generate IDs with increasing timestamps', () async {
-        final id1 = CustomPresetEntity.generateId();
-        await Future.delayed(const Duration(milliseconds: 10));
-        final id2 = CustomPresetEntity.generateId();
-
-        final timestamp1 = int.parse(id1.substring('preset_'.length));
-        final timestamp2 = int.parse(id2.substring('preset_'.length));
-
-        expect(timestamp2, greaterThan(timestamp1));
+        expect(id, matches(RegExp(r'^preset_\d+_\d+$')));
       });
     });
 

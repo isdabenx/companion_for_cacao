@@ -81,7 +81,7 @@ void main() {
             tiles: '[]',
           );
 
-          // Pre-populate database with existing data
+          // Pre-populate database with complete existing seed data
           await testDb
               .into(testDb.boardgames)
               .insert(
@@ -90,6 +90,18 @@ void main() {
                   name: 'Cacao',
                   description: 'Base game',
                   filenameImage: 'cacao.webp',
+                ),
+              );
+          await testDb
+              .into(testDb.tiles)
+              .insert(
+                TilesCompanion.insert(
+                  id: 'base.existing_tile',
+                  name: 'Existing Tile',
+                  description: 'Already seeded',
+                  filenameImage: 'tile.webp',
+                  quantity: 1,
+                  boardgameId: 1,
                 ),
               );
 
@@ -106,6 +118,40 @@ void main() {
           expect(boardgames.first.name, equals('Cacao'));
         },
       );
+
+      test('should re-seed when a seed table is empty even at current version '
+          '(self-healing after a drift migration recreates a table)', () async {
+        SharedPreferences.setMockInitialValues({'db_seed_version': 5});
+
+        _mockAssetBundle(
+          boardgames:
+              '[{"id": 1, "name": "Cacao Reseeded", "description": "Base game", "filenameImage": "cacao.webp"}]',
+          modules: '[]',
+          tiles:
+              '[{"id": "base.test_tile", "name": "Test Tile", "description": "A test tile", "filenameImage": "test.webp", "quantity": 5, "type": "market", "boardgame": 1}]',
+        );
+
+        // Boardgames present but tiles table empty (as after a migration
+        // that dropped and recreated the Tiles table)
+        await testDb
+            .into(testDb.boardgames)
+            .insert(
+              BoardgamesCompanion.insert(
+                id: const Value(1),
+                name: 'Cacao Stale',
+                description: 'Base game',
+                filenameImage: 'cacao.webp',
+              ),
+            );
+
+        await repository.initialize();
+
+        final db = repository.getDatabase();
+        final boardgames = await db.getAllBoardgames();
+        final tiles = await db.getAllTiles();
+        expect(boardgames.single.name, equals('Cacao Reseeded'));
+        expect(tiles, isNotEmpty);
+      });
 
       test(
         'should wipe and re-seed database when upgrading from older version',

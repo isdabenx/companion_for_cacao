@@ -9,10 +9,13 @@ import 'package:companion_for_cacao/features/game_setup/domain/entities/worker_s
 import 'package:companion_for_cacao/features/game_setup/domain/use_cases/prepare_game_use_case.dart';
 import 'package:companion_for_cacao/features/game_setup/presentation/providers/game_setup_notifier.dart';
 import 'package:companion_for_cacao/features/game_setup/presentation/providers/game_setup_use_case_providers.dart';
+import 'package:companion_for_cacao/features/tile/tile_public_api.dart';
 import 'package:companion_for_cacao/shared/providers/boardgame_notifier.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
+
+import '../../../../support/fakes.dart';
 
 class MockPrepareGameUseCase extends Mock implements PrepareGameUseCase {}
 
@@ -457,6 +460,40 @@ void main() {
       },
     );
 
+    test('startGame clears the in-play tile filter', () async {
+      when(() => mockPrepareGameUseCase.execute(any())).thenAnswer(
+        (inv) => inv.positionalArguments.first as GameSetupStateEntity,
+      );
+
+      final container = createContainer(
+        prepareGameUseCase: mockPrepareGameUseCase,
+      );
+      addTearDown(container.dispose);
+      await container.read(gameSetupProvider.future);
+
+      // Leftover filter from a previous game's Tiles in Play screen
+      container
+          .read(tileFilterProvider(TileFilterScope.inPlay).notifier)
+          .updateSearchQuery('water');
+      expect(
+        container
+            .read(tileFilterProvider(TileFilterScope.inPlay))
+            .hasActiveFilters,
+        isTrue,
+      );
+
+      container.read(gameSetupProvider.notifier)
+        ..addPlayer('Alice', 'red')
+        ..startGame();
+
+      expect(
+        container
+            .read(tileFilterProvider(TileFilterScope.inPlay))
+            .hasActiveFilters,
+        isFalse,
+      );
+    });
+
     test('resetGame clears the worker selection', () async {
       when(() => mockPrepareGameUseCase.execute(any())).thenAnswer(
         (inv) => inv.positionalArguments.first as GameSetupStateEntity,
@@ -502,6 +539,33 @@ void main() {
       expect(state.colorOrder, ['white', 'red', 'purple', 'yellow']);
       expect(state.isStarted, isFalse);
       expect(state.isBigGame, isFalse);
+    });
+
+    test('updatePlayerName keeps player order and Big Game state', () async {
+      final container = createContainer();
+      addTearDown(container.dispose);
+      await container.read(gameSetupProvider.future);
+
+      final notifier = container.read(gameSetupProvider.notifier);
+      notifier.addPlayer('Alice', 'red');
+      notifier.addPlayer('Bob', 'yellow');
+      notifier.addPlayer('Carla', 'white');
+      for (final module in allModules) {
+        notifier.toggleModule(module);
+      }
+      notifier.setBigGame(true);
+
+      // Renaming (as the name field does per keystroke) must not disturb
+      // player order nor invalidate Big Game via player-count checks.
+      notifier.updatePlayerName('red', 'Alicia');
+
+      final state = await container.read(gameSetupProvider.future);
+      expect(state.players.map((p) => p.name).toList(), [
+        'Alicia',
+        'Bob',
+        'Carla',
+      ]);
+      expect(state.isBigGame, isTrue);
     });
 
     test('reorderColorOrder reorders color list', () async {
@@ -579,15 +643,4 @@ void main() {
       },
     );
   });
-}
-
-class FakeBoardgameNotifier extends BoardgameNotifier {
-  FakeBoardgameNotifier(this.boardgames);
-
-  final List<BoardgameModel> boardgames;
-
-  @override
-  Future<List<BoardgameModel>> build() async {
-    return boardgames;
-  }
 }

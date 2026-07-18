@@ -242,6 +242,8 @@ class FakePlayer {
   final bool isSelected;
 }
 
+// Test fake: public fields configure the fixture and spy on calls.
+// ignore_for_file: riverpod_lint/avoid_public_notifier_properties
 class FakeGameSetupNotifier extends GameSetupNotifier {
   FakeGameSetupNotifier({required this.players, this.isStarted = false});
 

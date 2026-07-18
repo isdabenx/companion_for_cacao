@@ -8,9 +8,12 @@ import 'package:companion_for_cacao/features/game_setup/domain/entities/preparat
 import 'package:companion_for_cacao/features/game_setup/domain/services/base_game_handler.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/services/module_preparation_handler.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/services/preparation_pipeline.dart';
+import 'package:companion_for_cacao/features/game_setup/domain/services/tile_adjustments.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-class MockBaseGameHandler implements BaseGameHandler {
+import '../../../../support/tile_fixtures.dart';
+
+class MockBaseGameHandler with TileAdjustments implements BaseGameHandler {
   @override
   List<BoardgameModel> get activeExpansions => [];
 
@@ -34,8 +37,8 @@ class MockBaseGameHandler implements BaseGameHandler {
     bool isBigGame = false,
   }) {
     return [
-      _createTile(id: 'tile_1', quantity: 2),
-      _createTile(id: 'tile_2', quantity: 1),
+      makeTile(id: 'tile_1', quantity: 2, type: TileType.plantation),
+      makeTile(id: 'tile_2', quantity: 1, type: TileType.plantation),
     ];
   }
 
@@ -69,7 +72,9 @@ class MockModuleHandler implements ModulePreparationHandler {
         return t.copyWith(quantity: 0); // Set quantity to 0 to test filtering
       }
       return t;
-    }).toList()..add(_createTile(id: 'module_tile', quantity: 3));
+    }).toList()..add(
+      makeTile(id: 'module_tile', quantity: 3, type: TileType.plantation),
+    );
   }
 
   @override
@@ -174,16 +179,4 @@ void main() {
       expect(result.preparation.length, 1);
     });
   });
-}
-
-TileModel _createTile({required String id, required int quantity}) {
-  return TileModel(
-    id: id,
-    name: 'Test Tile',
-    description: 'Test',
-    filenameImage: 'test.png',
-    quantity: quantity,
-    type: TileType.plantation,
-    boardgameId: 1,
-  );
 }

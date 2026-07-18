@@ -3,12 +3,15 @@ import 'package:companion_for_cacao/core/data/models/tile_model.dart';
 import 'package:companion_for_cacao/core/domain/repositories/boardgame_repository.dart';
 import 'package:companion_for_cacao/features/tile/domain/repositories/tile_repository.dart';
 import 'package:companion_for_cacao/features/tile/domain/use_cases/get_tiles_with_boardgame_use_case.dart';
+import 'package:companion_for_cacao/features/tile/domain/entities/tile_filter_scope.dart';
 import 'package:companion_for_cacao/features/tile/presentation/providers/tile_filter_notifier.dart';
 import 'package:companion_for_cacao/features/tile/presentation/providers/tile_notifier.dart';
 import 'package:companion_for_cacao/features/tile/presentation/providers/tile_use_case_providers.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import '../../../../support/tile_fixtures.dart';
 
 class MockTileRepository extends Mock implements TileRepository {}
 
@@ -26,37 +29,37 @@ void main() {
 
       // Create a diverse set of mock tiles for testing
       mockTiles = [
-        _createTile(
+        makeTile(
           id: 'base.market_2',
           name: 'Market Price 2',
           boardgameId: 1,
           type: TileType.market,
         ),
-        _createTile(
+        makeTile(
           id: 'base.plantation_single',
           name: 'Single Plantation',
           boardgameId: 1,
           type: TileType.plantation,
         ),
-        _createTile(
+        makeTile(
           id: 'base.water',
           name: 'Water',
           boardgameId: 1,
           type: TileType.water,
         ),
-        _createTile(
+        makeTile(
           id: 'chocolatl.hut_chief',
           name: 'Hut Chief',
           boardgameId: 2,
           type: TileType.hut,
         ),
-        _createTile(
+        makeTile(
           id: 'chocolatl.watering',
           name: 'Watering',
           boardgameId: 2,
           type: TileType.watering,
         ),
-        _createTile(
+        makeTile(
           id: 'base.worker_red',
           name: 'Red Worker',
           boardgameId: 1,
@@ -130,7 +133,9 @@ void main() {
       await container.read(filteredTilesProvider.future);
 
       // Set search query filter
-      container.read(tileFilterProvider.notifier).updateSearchQuery('water');
+      container
+          .read(tileFilterProvider(TileFilterScope.catalog).notifier)
+          .updateSearchQuery('water');
 
       // Read the filtered result
       final result = await container.read(filteredTilesProvider.future);
@@ -158,7 +163,9 @@ void main() {
       await container.read(filteredTilesProvider.future);
 
       // Filter by boardgame ID 2 (Chocolatl)
-      container.read(tileFilterProvider.notifier).toggleBoardgame(2);
+      container
+          .read(tileFilterProvider(TileFilterScope.catalog).notifier)
+          .toggleBoardgame(2);
 
       final result = await container.read(filteredTilesProvider.future);
 
@@ -184,7 +191,9 @@ void main() {
       await container.read(filteredTilesProvider.future);
 
       // Filter by market type
-      container.read(tileFilterProvider.notifier).toggleTileType('Market');
+      container
+          .read(tileFilterProvider(TileFilterScope.catalog).notifier)
+          .toggleTileType('Market');
 
       final result = await container.read(filteredTilesProvider.future);
 
@@ -210,8 +219,12 @@ void main() {
       await container.read(filteredTilesProvider.future);
 
       // Filter by boardgame ID 2 AND search query "hut"
-      container.read(tileFilterProvider.notifier).toggleBoardgame(2);
-      container.read(tileFilterProvider.notifier).updateSearchQuery('hut');
+      container
+          .read(tileFilterProvider(TileFilterScope.catalog).notifier)
+          .toggleBoardgame(2);
+      container
+          .read(tileFilterProvider(TileFilterScope.catalog).notifier)
+          .updateSearchQuery('hut');
 
       final result = await container.read(filteredTilesProvider.future);
 
@@ -239,7 +252,7 @@ void main() {
 
       // Search for non-existent tile
       container
-          .read(tileFilterProvider.notifier)
+          .read(tileFilterProvider(TileFilterScope.catalog).notifier)
           .updateSearchQuery('nonexistent');
 
       final result = await container.read(filteredTilesProvider.future);
@@ -265,14 +278,20 @@ void main() {
       await container.read(filteredTilesProvider.future);
 
       // Apply filters
-      container.read(tileFilterProvider.notifier).updateSearchQuery('water');
-      container.read(tileFilterProvider.notifier).toggleBoardgame(1);
+      container
+          .read(tileFilterProvider(TileFilterScope.catalog).notifier)
+          .updateSearchQuery('water');
+      container
+          .read(tileFilterProvider(TileFilterScope.catalog).notifier)
+          .toggleBoardgame(1);
 
       var result = await container.read(filteredTilesProvider.future);
       expect(result.length, equals(1)); // Only "Water" from boardgame 1
 
       // Clear filters
-      container.read(tileFilterProvider.notifier).clearFilters();
+      container
+          .read(tileFilterProvider(TileFilterScope.catalog).notifier)
+          .clearFilters();
 
       result = await container.read(filteredTilesProvider.future);
       expect(result.length, equals(mockTiles.length));
@@ -296,8 +315,12 @@ void main() {
       await container.read(filteredTilesProvider.future);
 
       // Filter by both boardgame IDs
-      container.read(tileFilterProvider.notifier).toggleBoardgame(1);
-      container.read(tileFilterProvider.notifier).toggleBoardgame(2);
+      container
+          .read(tileFilterProvider(TileFilterScope.catalog).notifier)
+          .toggleBoardgame(1);
+      container
+          .read(tileFilterProvider(TileFilterScope.catalog).notifier)
+          .toggleBoardgame(2);
 
       final result = await container.read(filteredTilesProvider.future);
 
@@ -325,8 +348,12 @@ void main() {
       await container.read(filteredTilesProvider.future);
 
       // Filter by market and plantation types
-      container.read(tileFilterProvider.notifier).toggleTileType('Market');
-      container.read(tileFilterProvider.notifier).toggleTileType('Plantation');
+      container
+          .read(tileFilterProvider(TileFilterScope.catalog).notifier)
+          .toggleTileType('Market');
+      container
+          .read(tileFilterProvider(TileFilterScope.catalog).notifier)
+          .toggleTileType('Plantation');
 
       final result = await container.read(filteredTilesProvider.future);
 
@@ -334,25 +361,47 @@ void main() {
       expect(result.any((tile) => tile.type == TileType.market), isTrue);
       expect(result.any((tile) => tile.type == TileType.plantation), isTrue);
     });
+
+    test(
+      'in-play filter scope is independent from the catalog scope',
+      () async {
+        final container = ProviderContainer(
+          overrides: [
+            getTilesWithBoardgameUseCaseProvider.overrideWith(
+              (ref) => Future.value(
+                GetTilesWithBoardgameUseCase(
+                  mockTileRepository,
+                  mockBoardgameRepository,
+                ),
+              ),
+            ),
+          ],
+        );
+        addTearDown(container.dispose);
+
+        await container.read(filteredTilesProvider.future);
+
+        // Filtering the IN-PLAY scope must not affect the catalog results
+        container
+            .read(tileFilterProvider(TileFilterScope.inPlay).notifier)
+            .updateSearchQuery('water');
+
+        final catalogResult = await container.read(
+          filteredTilesProvider.future,
+        );
+        expect(catalogResult.length, equals(mockTiles.length));
+
+        final inPlayFilter = container.read(
+          tileFilterProvider(TileFilterScope.inPlay),
+        );
+        final catalogFilter = container.read(
+          tileFilterProvider(TileFilterScope.catalog),
+        );
+        expect(inPlayFilter.hasActiveFilters, isTrue);
+        expect(catalogFilter.hasActiveFilters, isFalse);
+      },
+    );
   });
 }
 
 // Helper function to create mock tiles
-TileModel _createTile({
-  required String id,
-  required String name,
-  required int boardgameId,
-  required TileType type,
-  TileColor? color,
-}) {
-  return TileModel(
-    id: id,
-    name: name,
-    description: 'Test description',
-    filenameImage: 'test.png',
-    quantity: 1,
-    type: type,
-    color: color,
-    boardgameId: boardgameId,
-  );
-}
