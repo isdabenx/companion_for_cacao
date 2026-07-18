@@ -1,18 +1,22 @@
 import 'package:companion_for_cacao/core/theme/app_spacing.dart';
+import 'package:companion_for_cacao/features/tile/domain/entities/tile_filter_scope.dart';
 import 'package:companion_for_cacao/features/tile/presentation/providers/tile_filter_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-/// Widget que mostra un chip quan hi ha filtres actius aplicats.
-/// Permet netejar tots els filtres fàcilment.
+/// Shows a chip when there are active filters applied.
+/// Allows clearing all filters easily.
 class FilterActiveChip extends ConsumerWidget {
-  const FilterActiveChip({super.key});
+  const FilterActiveChip({required this.scope, super.key});
+
+  /// Which independent filter state this chip reflects.
+  final TileFilterScope scope;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     // Use ref.select to only rebuild when hasActiveFilters changes
     final hasFilters = ref.watch(
-      tileFilterProvider.select((state) => state.hasActiveFilters),
+      tileFilterProvider(scope).select((state) => state.hasActiveFilters),
     );
 
     if (!hasFilters) {
@@ -21,7 +25,7 @@ class FilterActiveChip extends ConsumerWidget {
 
     // Use ref.select to only rebuild when activeFilterCount changes
     final filterCount = ref.watch(
-      tileFilterProvider.select((state) => state.activeFilterCount),
+      tileFilterProvider(scope).select((state) => state.activeFilterCount),
     );
 
     return Padding(
@@ -41,7 +45,7 @@ class FilterActiveChip extends ConsumerWidget {
               ),
               deleteIcon: const Icon(Icons.close, size: 18),
               onDeleted: () {
-                ref.read(tileFilterProvider.notifier).clearFilters();
+                ref.read(tileFilterProvider(scope).notifier).clearFilters();
               },
             ),
           ),

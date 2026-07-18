@@ -31,6 +31,17 @@ class GameSetupStateEntity {
   /// Null when Module D is not active or using default behavior (addAll).
   final WorkerSelectionEntity? workerSelection;
 
+  /// Total number of modules across all expansions
+  /// (Chocolatl 4 + Diamante 4).
+  static const int totalModuleCount = 8;
+
+  /// Big Game rule (single source of truth): requires ALL modules
+  /// selected and 3–4 players.
+  bool get canEnableBigGame =>
+      modules.length >= totalModuleCount &&
+      players.length >= 3 &&
+      players.length <= 4;
+
   GameSetupStateEntity copyWith({
     List<PlayerEntity>? players,
     List<BoardgameModel>? expansions,

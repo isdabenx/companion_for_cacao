@@ -10,9 +10,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 class StepModuleWidget extends ConsumerWidget {
   const StepModuleWidget({super.key});
 
-  /// Total number of modules available across all expansions.
-  static const int _totalModuleCount = 8;
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final modules = ref.watch(
@@ -26,22 +23,14 @@ class StepModuleWidget extends ConsumerWidget {
       ),
     );
 
-    final selectedModuleCount = ref.watch(
-      gameSetupProvider.select((s) => s.value?.modules.length ?? 0),
-    );
-
-    final playerCount = ref.watch(
-      gameSetupProvider.select((s) => s.value?.players.length ?? 0),
-    );
-
     final isBigGame = ref.watch(
       gameSetupProvider.select((s) => s.value?.isBigGame ?? false),
     );
 
-    final showBigGameToggle =
-        selectedModuleCount >= _totalModuleCount &&
-        playerCount >= 3 &&
-        playerCount <= 4;
+    // Single source of truth for the Big Game rule (entity getter)
+    final showBigGameToggle = ref.watch(
+      gameSetupProvider.select((s) => s.value?.canEnableBigGame ?? false),
+    );
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,

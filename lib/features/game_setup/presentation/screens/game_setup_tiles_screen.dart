@@ -17,7 +17,9 @@ class GameSetupTilesScreen extends ConsumerWidget {
     // re-runs the pipeline, and the route extra is only a snapshot taken
     // when the game was started.
     final liveSetup = ref.watch(gameSetupProvider).value ?? gameSetup;
-    final filter = ref.watch(tileFilterProvider);
+    // In-play scope: independent from the tile catalog filter, so a filter
+    // left on while browsing the collection never hides in-game tiles.
+    final filter = ref.watch(tileFilterProvider(TileFilterScope.inPlay));
     final filteredTiles = liveSetup.tiles
         .where((t) => filter.matches(t))
         .toList();
@@ -25,10 +27,13 @@ class GameSetupTilesScreen extends ConsumerWidget {
     return CustomScaffoldWidget(
       title: 'Tiles in Play',
       showBackButton: true,
-      actions: const [FilterIconWidget(), SettingsIconWidget()],
+      actions: const [
+        FilterIconWidget(scope: TileFilterScope.inPlay),
+        SettingsIconWidget(),
+      ],
       body: Column(
         children: [
-          const FilterActiveChip(),
+          const FilterActiveChip(scope: TileFilterScope.inPlay),
           Expanded(
             child: Padding(
               padding: AppSpacing.allS,

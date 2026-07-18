@@ -7,6 +7,7 @@
 /// Widgets:
 library;
 
+export 'domain/entities/tile_filter_scope.dart';
 export 'presentation/providers/tile_filter_notifier.dart';
 export 'presentation/providers/tile_settings_notifier.dart';
 export 'presentation/widgets/filter_active_chip.dart';

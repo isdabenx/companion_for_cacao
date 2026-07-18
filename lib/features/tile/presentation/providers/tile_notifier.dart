@@ -1,4 +1,5 @@
 import 'package:companion_for_cacao/core/data/models/tile_model.dart';
+import 'package:companion_for_cacao/features/tile/domain/entities/tile_filter_scope.dart';
 import 'package:companion_for_cacao/features/tile/presentation/providers/tile_use_case_providers.dart';
 import 'package:companion_for_cacao/features/tile/presentation/providers/tile_filter_notifier.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -36,7 +37,7 @@ class AllTiles extends _$AllTiles {
 Future<List<TileModel>> filteredTiles(Ref ref) async {
   // Watch both dependencies - rebuilds when either changes
   final tiles = await ref.watch(allTilesProvider.future);
-  final filter = ref.watch(tileFilterProvider);
+  final filter = ref.watch(tileFilterProvider(TileFilterScope.catalog));
 
   // Return filtered list
   return tiles.where((tile) => filter.matches(tile)).toList();

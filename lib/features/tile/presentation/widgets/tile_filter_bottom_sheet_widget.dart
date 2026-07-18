@@ -1,15 +1,22 @@
 import 'dart:async';
 
+import 'package:companion_for_cacao/core/data/models/boardgame_model.dart';
 import 'package:companion_for_cacao/core/data/models/tile_model.dart';
+import 'package:companion_for_cacao/core/data/models/tile_type_extension.dart';
 import 'package:companion_for_cacao/core/theme/app_colors.dart';
 import 'package:companion_for_cacao/core/theme/app_spacing.dart';
 import 'package:companion_for_cacao/core/theme/app_text_styles.dart';
+import 'package:companion_for_cacao/features/tile/domain/entities/tile_filter_scope.dart';
 import 'package:companion_for_cacao/features/tile/presentation/providers/tile_filter_notifier.dart';
+import 'package:companion_for_cacao/shared/providers/boardgame_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class TileFilterBottomSheetWidget extends ConsumerStatefulWidget {
-  const TileFilterBottomSheetWidget({super.key});
+  const TileFilterBottomSheetWidget({required this.scope, super.key});
+
+  /// Which independent filter state this sheet edits.
+  final TileFilterScope scope;
 
   @override
   ConsumerState<TileFilterBottomSheetWidget> createState() =>
@@ -29,7 +36,9 @@ class _TileFilterBottomSheetWidgetState
   void _onSearchChanged(String value) {
     if (_debounce?.isActive ?? false) _debounce!.cancel();
     _debounce = Timer(const Duration(milliseconds: 300), () {
-      ref.read(tileFilterProvider.notifier).updateSearchQuery(value);
+      ref
+          .read(tileFilterProvider(widget.scope).notifier)
+          .updateSearchQuery(value);
     });
   }
 
@@ -37,11 +46,15 @@ class _TileFilterBottomSheetWidgetState
   Widget build(BuildContext context) {
     // Use ref.select to only rebuild when selectedBoardgameIds changes
     final selectedBoardgameIds = ref.watch(
-      tileFilterProvider.select((state) => state.selectedBoardgameIds),
+      tileFilterProvider(
+        widget.scope,
+      ).select((state) => state.selectedBoardgameIds),
     );
     // Use ref.select to only rebuild when selectedTileTypes changes
     final selectedTileTypes = ref.watch(
-      tileFilterProvider.select((state) => state.selectedTileTypes),
+      tileFilterProvider(
+        widget.scope,
+      ).select((state) => state.selectedTileTypes),
     );
 
     return Padding(
@@ -68,7 +81,9 @@ class _TileFilterBottomSheetWidgetState
                 ),
                 TextButton(
                   onPressed: () {
-                    ref.read(tileFilterProvider.notifier).clearFilters();
+                    ref
+                        .read(tileFilterProvider(widget.scope).notifier)
+                        .clearFilters();
                   },
                   child: Text(
                     'CLEAR ALL',
@@ -117,9 +132,17 @@ class _TileFilterBottomSheetWidgetState
               spacing: 8,
               runSpacing: 8,
               children: [
-                _buildBoardgameChip(ref, selectedBoardgameIds, 1, 'Cacao'),
-                _buildBoardgameChip(ref, selectedBoardgameIds, 2, 'Chocolatl'),
-                _buildBoardgameChip(ref, selectedBoardgameIds, 3, 'Diamante'),
+                // Built from the loaded boardgames so the filter always
+                // matches the actual catalog (no hardcoded ids/names)
+                for (final boardgame
+                    in ref.watch(boardgameProvider).value ??
+                        const <BoardgameModel>[])
+                  _buildBoardgameChip(
+                    ref,
+                    selectedBoardgameIds,
+                    boardgame.id,
+                    boardgame.name,
+                  ),
               ],
             ),
             AppSpacing.verticalXl,
@@ -137,20 +160,10 @@ class _TileFilterBottomSheetWidgetState
               spacing: 8,
               runSpacing: 8,
               children: TileType.values.map((type) {
-                // To get the string representation we create a dummy model just to use the getter,
-                // or we could extract it to an extension. Since the app is small, let's use a dummy.
-                final dummyModel = TileModel(
-                  id: 'dummy',
-                  name: '',
-                  description: '',
-                  filenameImage: '',
-                  quantity: 0,
-                  type: type,
-                );
                 return _buildTypeChip(
                   ref,
                   selectedTileTypes,
-                  dummyModel.typeAsString,
+                  type.displayName,
                   chipKey: ValueKey('tile_type_${type.name}'),
                 );
               }).toList(),
@@ -178,7 +191,7 @@ class _TileFilterBottomSheetWidgetState
       ),
       selected: isSelected,
       onSelected: (_) {
-        ref.read(tileFilterProvider.notifier).toggleBoardgame(id);
+        ref.read(tileFilterProvider(widget.scope).notifier).toggleBoardgame(id);
       },
       selectedColor: AppColors.greenDark,
       backgroundColor: AppColors.white,
@@ -210,7 +223,9 @@ class _TileFilterBottomSheetWidgetState
       ),
       selected: isSelected,
       onSelected: (_) {
-        ref.read(tileFilterProvider.notifier).toggleTileType(type);
+        ref
+            .read(tileFilterProvider(widget.scope).notifier)
+            .toggleTileType(type);
       },
       selectedColor: AppColors.greenDark,
       backgroundColor: AppColors.white,

@@ -1,24 +1,29 @@
 import 'package:companion_for_cacao/core/theme/app_spacing.dart';
+import 'package:companion_for_cacao/features/tile/domain/entities/tile_filter_scope.dart';
 import 'package:companion_for_cacao/features/tile/presentation/providers/tile_filter_notifier.dart';
 import 'package:companion_for_cacao/features/tile/presentation/widgets/tile_filter_bottom_sheet_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class FilterIconWidget extends ConsumerWidget {
-  const FilterIconWidget({super.key});
+  const FilterIconWidget({required this.scope, super.key});
+
+  /// Which independent filter state this icon controls.
+  final TileFilterScope scope;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     // Use ref.select to only rebuild when hasActiveFilters changes
     final hasFilters = ref.watch(
-      tileFilterProvider.select((state) => state.hasActiveFilters),
+      tileFilterProvider(scope).select((state) => state.hasActiveFilters),
     );
     // Use ref.select to only rebuild when activeFilterCount changes
     final filterCount = ref.watch(
-      tileFilterProvider.select((state) => state.activeFilterCount),
+      tileFilterProvider(scope).select((state) => state.activeFilterCount),
     );
 
     return IconButton(
+      tooltip: 'Filter tiles',
       icon: Stack(
         clipBehavior: Clip.none,
         children: [
@@ -57,7 +62,7 @@ class FilterIconWidget extends ConsumerWidget {
           useSafeArea: true,
           showDragHandle: true,
           builder: (context) {
-            return const TileFilterBottomSheetWidget();
+            return TileFilterBottomSheetWidget(scope: scope);
           },
         );
       },

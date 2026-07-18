@@ -6,6 +6,7 @@ import 'package:companion_for_cacao/features/game_setup/domain/entities/player_e
 import 'package:companion_for_cacao/features/game_setup/domain/entities/worker_selection_entity.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/services/handlers/new_workers_module_handler.dart';
 import 'package:companion_for_cacao/features/game_setup/presentation/providers/game_setup_use_case_providers.dart';
+import 'package:companion_for_cacao/features/tile/tile_public_api.dart';
 import 'package:companion_for_cacao/shared/providers/boardgame_notifier.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -150,16 +151,11 @@ class GameSetupNotifier extends _$GameSetupNotifier {
     state = AsyncData(state.value!.copyWith(isBigGame: value));
   }
 
-  /// Total number of modules available across all selected expansions.
-  static const int _totalModuleCount = 8;
-
-  /// Resets isBigGame to false if conditions are no longer met
-  /// (requires all 8 modules + 3-4 players).
+  /// Resets isBigGame to false if the Big Game rule
+  /// ([GameSetupStateEntity.canEnableBigGame]) is no longer met.
   void _resetBigGameIfInvalid() {
     if (state.value == null || !state.value!.isBigGame) return;
-    final playerCount = state.value!.players.length;
-    final moduleCount = state.value!.modules.length;
-    if (moduleCount < _totalModuleCount || playerCount < 3 || playerCount > 4) {
+    if (!state.value!.canEnableBigGame) {
       state = AsyncData(state.value!.copyWith(isBigGame: false));
     }
   }
@@ -170,6 +166,8 @@ class GameSetupNotifier extends _$GameSetupNotifier {
     // new game starts from the default (add all), never from a selection
     // applied in a previous game.
     final setup = state.value!.copyWith(clearWorkerSelection: true);
+    // A new game also starts without leftover in-play tile filters
+    ref.invalidate(tileFilterProvider(TileFilterScope.inPlay));
     final useCase = ref.read(prepareGameUseCaseProvider);
     state = AsyncData(useCase.execute(setup).copyWith(isStarted: true));
   }
