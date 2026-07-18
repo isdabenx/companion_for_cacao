@@ -1,4 +1,4 @@
-import 'package:companion_for_cacao/core/data/models/tile_model.dart';
+import 'package:companion_for_cacao/core/domain/entities/tile_entity.dart';
 
 /// Result of a worker-jungle balance validation.
 class WorkerBalanceResult {
@@ -78,7 +78,7 @@ class WorkerBalanceValidator {
   /// Jungle tiles are all non-player tiles that go into the central
   /// jungle area. Huts and map tiles are excluded as they have
   /// separate placement rules.
-  static int countJungleTiles(List<TileModel> tiles) {
+  static int countJungleTiles(List<TileEntity> tiles) {
     return tiles
         .where((t) => _jungleTileTypes.contains(t.type))
         .fold(0, (sum, t) => sum + t.quantity);

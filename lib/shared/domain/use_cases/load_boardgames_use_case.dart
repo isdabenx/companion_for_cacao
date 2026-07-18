@@ -1,4 +1,4 @@
-import 'package:companion_for_cacao/core/data/models/boardgame_model.dart';
+import 'package:companion_for_cacao/core/domain/entities/boardgame_entity.dart';
 import 'package:companion_for_cacao/core/domain/repositories/boardgame_repository.dart';
 
 class LoadBoardgamesUseCase {
@@ -6,7 +6,7 @@ class LoadBoardgamesUseCase {
 
   LoadBoardgamesUseCase(this._repository);
 
-  Future<List<BoardgameModel>> execute() async {
+  Future<List<BoardgameEntity>> execute() async {
     final boardgames = await _repository.getAllBoardgames();
     final modules = await _repository.getAllModules();
     final tiles = await _repository.getAllTiles();

@@ -1,6 +1,6 @@
-import 'package:companion_for_cacao/core/data/models/boardgame_model.dart';
-import 'package:companion_for_cacao/core/data/models/module_model.dart';
-import 'package:companion_for_cacao/core/data/models/tile_model.dart';
+import 'package:companion_for_cacao/core/domain/entities/boardgame_entity.dart';
+import 'package:companion_for_cacao/core/domain/entities/module_entity.dart';
+import 'package:companion_for_cacao/core/domain/entities/tile_entity.dart';
 import 'package:companion_for_cacao/core/domain/repositories/boardgame_repository.dart';
 import 'package:companion_for_cacao/shared/domain/use_cases/load_boardgames_use_case.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -19,13 +19,13 @@ void main() {
 
   test('execute should load boardgames and merge modules and tiles', () async {
     final boardgames = [
-      BoardgameModel(
+      BoardgameEntity(
         id: 1,
         name: 'Cacao',
         description: 'Base',
         filenameImage: 'cacao.png',
       ),
-      BoardgameModel(
+      BoardgameEntity(
         id: 2,
         name: 'Chocolatl',
         description: 'Exp 1',
@@ -34,13 +34,13 @@ void main() {
     ];
 
     final modules = [
-      ModuleModel(
+      ModuleEntity(
         id: 1,
         boardgameId: 2,
         name: 'Map',
         description: 'Map module',
       ),
-      ModuleModel(
+      ModuleEntity(
         id: 2,
         boardgameId: 2,
         name: 'Chocolate',
@@ -49,7 +49,7 @@ void main() {
     ];
 
     final tiles = [
-      TileModel(
+      TileEntity(
         id: 'test_tile_1',
         name: 'Tile 1',
         description: 'Desc 1',
@@ -57,7 +57,7 @@ void main() {
         quantity: 1,
         boardgameId: 1,
       ),
-      TileModel(
+      TileEntity(
         id: 'test_tile_2',
         name: 'Tile 2',
         description: 'Desc 2',

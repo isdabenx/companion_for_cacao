@@ -1,6 +1,6 @@
-import 'package:companion_for_cacao/core/data/models/boardgame_model.dart';
-import 'package:companion_for_cacao/core/data/models/module_model.dart';
-import 'package:companion_for_cacao/core/data/models/tile_model.dart';
+import 'package:companion_for_cacao/core/domain/entities/boardgame_entity.dart';
+import 'package:companion_for_cacao/core/domain/entities/module_entity.dart';
+import 'package:companion_for_cacao/core/domain/entities/tile_entity.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/game_setup_state_entity.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/player_entity.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/preparation_entity.dart';
@@ -15,10 +15,10 @@ import '../../../../support/tile_fixtures.dart';
 
 class MockBaseGameHandler with TileAdjustments implements BaseGameHandler {
   @override
-  List<BoardgameModel> get activeExpansions => [];
+  List<BoardgameEntity> get activeExpansions => [];
 
   @override
-  BoardgameModel get baseGame => BoardgameModel(
+  BoardgameEntity get baseGame => BoardgameEntity(
     id: 1,
     name: 'Base',
     description: '',
@@ -30,10 +30,10 @@ class MockBaseGameHandler with TileAdjustments implements BaseGameHandler {
   List<String> get selectedColors => [];
 
   @override
-  List<TileModel> adjustTiles(
-    List<TileModel> tiles,
+  List<TileEntity> adjustTiles(
+    List<TileEntity> tiles,
     int playerCount, {
-    required List<BoardgameModel> activeExpansions,
+    required List<BoardgameEntity> activeExpansions,
     bool isBigGame = false,
   }) {
     return [
@@ -45,7 +45,7 @@ class MockBaseGameHandler with TileAdjustments implements BaseGameHandler {
   @override
   List<PreparationEntity> modifyPreparationSteps(
     List<PlayerEntity> players,
-    List<TileModel> tiles,
+    List<TileEntity> tiles,
     List<PreparationEntity> currentSteps, {
     bool isBigGame = false,
   }) {
@@ -61,10 +61,10 @@ class MockBaseGameHandler with TileAdjustments implements BaseGameHandler {
 
 class MockModuleHandler implements ModulePreparationHandler {
   @override
-  List<TileModel> adjustTiles(
-    List<TileModel> tiles,
+  List<TileEntity> adjustTiles(
+    List<TileEntity> tiles,
     int playerCount, {
-    required List<BoardgameModel> activeExpansions,
+    required List<BoardgameEntity> activeExpansions,
     bool isBigGame = false,
   }) {
     return tiles.map((t) {
@@ -80,7 +80,7 @@ class MockModuleHandler implements ModulePreparationHandler {
   @override
   List<PreparationEntity> modifyPreparationSteps(
     List<PlayerEntity> players,
-    List<TileModel> tiles,
+    List<TileEntity> tiles,
     List<PreparationEntity> currentSteps, {
     bool isBigGame = false,
   }) {
@@ -136,7 +136,7 @@ void main() {
           players: [PlayerEntity(name: 'P1', color: 'red')],
           expansions: [],
           modules: [
-            ModuleModel(
+            ModuleEntity(
               id: 1,
               name: 'Module 1',
               description: '',
@@ -164,7 +164,7 @@ void main() {
         players: [PlayerEntity(name: 'P1', color: 'red')],
         expansions: [],
         modules: [
-          ModuleModel(
+          ModuleEntity(
             id: 99,
             name: 'Unknown Module',
             description: '',

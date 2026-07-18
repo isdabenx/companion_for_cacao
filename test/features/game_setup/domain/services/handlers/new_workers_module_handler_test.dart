@@ -1,5 +1,5 @@
-import 'package:companion_for_cacao/core/data/models/boardgame_model.dart';
-import 'package:companion_for_cacao/core/data/models/tile_model.dart';
+import 'package:companion_for_cacao/core/domain/entities/boardgame_entity.dart';
+import 'package:companion_for_cacao/core/domain/entities/tile_entity.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/player_entity.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/preparation_entity.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/preparation_phase.dart';
@@ -12,8 +12,8 @@ import '../../../../../support/tile_fixtures.dart';
 
 void main() {
   group('NewWorkersModuleHandler', () {
-    late List<TileModel> baseWorkerTiles;
-    late BoardgameModel diamanteExpansion;
+    late List<TileEntity> baseWorkerTiles;
+    late BoardgameEntity diamanteExpansion;
     late List<PlayerEntity> mockPlayers2;
 
     setUp(() {
@@ -37,7 +37,7 @@ void main() {
       ];
     });
 
-    int qty(List<TileModel> tiles, String id) {
+    int qty(List<TileEntity> tiles, String id) {
       final matches = tiles.where((t) => t.id == id);
       if (matches.isEmpty) return 0;
       return matches.fold(0, (sum, t) => sum + t.quantity);
@@ -169,7 +169,7 @@ void main() {
       });
 
       group('Tree of Life 2p enforcement', () {
-        late List<TileModel> tilesWithTreeOfLife;
+        late List<TileEntity> tilesWithTreeOfLife;
 
         setUp(() {
           tilesWithTreeOfLife = [

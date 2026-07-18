@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:companion_for_cacao/config/providers/initialization_provider.dart';
-import 'package:companion_for_cacao/core/data/models/boardgame_model.dart';
+import 'package:companion_for_cacao/core/domain/entities/boardgame_entity.dart';
 import 'package:companion_for_cacao/features/splash/domain/repositories/initialization_repository.dart';
 import 'package:companion_for_cacao/features/splash/domain/use_cases/initialize_app_use_case.dart';
 import 'package:companion_for_cacao/features/splash/presentation/providers/splash_provider.dart';
@@ -18,11 +18,11 @@ class MockInitializeAppUseCase extends Mock implements InitializeAppUseCase {}
 class FakeBoardgameNotifier extends BoardgameNotifier {
   FakeBoardgameNotifier(this.boardgamesFuture, {this.onBuild});
 
-  final Future<List<BoardgameModel>> boardgamesFuture;
+  final Future<List<BoardgameEntity>> boardgamesFuture;
   final void Function()? onBuild;
 
   @override
-  Future<List<BoardgameModel>> build() {
+  Future<List<BoardgameEntity>> build() {
     onBuild?.call();
     return boardgamesFuture;
   }
@@ -72,7 +72,7 @@ void main() {
 
   group('splashScreenProvider', () {
     test('calls initialize and waits for boardgames', () async {
-      final boardgamesCompleter = Completer<List<BoardgameModel>>();
+      final boardgamesCompleter = Completer<List<BoardgameEntity>>();
       var boardgameBuildCalls = 0;
 
       when(() => mockUseCase.initialize()).thenAnswer((_) async {});
@@ -100,7 +100,7 @@ void main() {
       expect(completed, isFalse);
 
       boardgamesCompleter.complete([
-        BoardgameModel(
+        BoardgameEntity(
           id: 1,
           name: 'Cacao',
           description: 'Base game',

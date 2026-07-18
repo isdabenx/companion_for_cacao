@@ -1,8 +1,7 @@
 import 'package:collection/collection.dart';
-import 'package:companion_for_cacao/core/data/database/app_database.dart';
-import 'package:companion_for_cacao/core/data/models/boardgame_model.dart';
-import 'package:companion_for_cacao/core/data/models/module_model.dart';
-import 'package:companion_for_cacao/core/data/models/tile_type_extension.dart';
+import 'package:companion_for_cacao/core/domain/entities/boardgame_entity.dart';
+import 'package:companion_for_cacao/core/domain/entities/module_entity.dart';
+import 'package:companion_for_cacao/core/domain/entities/tile_type_extension.dart';
 import 'package:companion_for_cacao/core/utils/app_logger.dart';
 
 enum TileType {
@@ -26,14 +25,14 @@ enum TileType {
 
 enum TileColor { red, purple, white, yellow }
 
-class ModelLink<T> {
-  const ModelLink([this.value]);
+class EntityLink<T> {
+  const EntityLink([this.value]);
 
   final T? value;
 }
 
-class TileModel {
-  TileModel({
+class TileEntity {
+  TileEntity({
     required this.id,
     required this.name,
     required this.description,
@@ -44,25 +43,10 @@ class TileModel {
     this.boardgameId,
     this.moduleId,
     this.hutCost,
-    BoardgameModel? boardgame,
-    ModuleModel? module,
-  }) : boardgame = ModelLink<BoardgameModel>(boardgame),
-       module = ModelLink<ModuleModel>(module);
-
-  factory TileModel.fromDrift(Tile row) {
-    return TileModel(
-      id: row.id, // row.id is now String after regeneration
-      name: row.name,
-      description: row.description,
-      filenameImage: row.filenameImage,
-      quantity: row.quantity,
-      type: typeFromName(row.type),
-      color: colorFromName(row.color),
-      boardgameId: row.boardgameId,
-      moduleId: row.moduleId,
-      hutCost: row.hutCost,
-    );
-  }
+    BoardgameEntity? boardgame,
+    ModuleEntity? module,
+  }) : boardgame = EntityLink<BoardgameEntity>(boardgame),
+       module = EntityLink<ModuleEntity>(module);
 
   /// Parses a [TileType] from its serialized name.
   ///
@@ -74,7 +58,7 @@ class TileModel {
     final type = TileType.values.firstWhereOrNull((t) => t.name == name);
     if (type == null) {
       AppLogger.warning(
-        'TileModel: unknown TileType "$name", loading tile untyped',
+        'TileEntity: unknown TileType "$name", loading tile untyped',
       );
     }
     return type;
@@ -90,7 +74,7 @@ class TileModel {
     final color = TileColor.values.firstWhereOrNull((c) => c.name == name);
     if (color == null) {
       AppLogger.warning(
-        'TileModel: unknown TileColor "$name", loading tile uncolored',
+        'TileEntity: unknown TileColor "$name", loading tile uncolored',
       );
     }
     return color;
@@ -102,8 +86,8 @@ class TileModel {
   final String filenameImage;
   final int quantity;
 
-  final ModelLink<BoardgameModel> boardgame;
-  final ModelLink<ModuleModel> module;
+  final EntityLink<BoardgameEntity> boardgame;
+  final EntityLink<ModuleEntity> module;
 
   final TileType? type;
   final TileColor? color;
@@ -115,13 +99,13 @@ class TileModel {
   String get typeAsString => type?.displayName ?? '';
 
   /// Default sort: huts last, then alphabetical by name.
-  static int defaultSort(TileModel a, TileModel b) {
+  static int defaultSort(TileEntity a, TileEntity b) {
     if (a.type == TileType.hut && b.type != TileType.hut) return 1;
     if (a.type != TileType.hut && b.type == TileType.hut) return -1;
     return a.name.compareTo(b.name);
   }
 
-  TileModel copyWith({
+  TileEntity copyWith({
     String? id,
     String? name,
     String? description,
@@ -132,12 +116,12 @@ class TileModel {
     int? boardgameId,
     int? moduleId,
     int? hutCost,
-    BoardgameModel? boardgame,
-    ModuleModel? module,
+    BoardgameEntity? boardgame,
+    ModuleEntity? module,
     bool clearBoardgame = false,
     bool clearModule = false,
   }) {
-    return TileModel(
+    return TileEntity(
       id: id ?? this.id,
       name: name ?? this.name,
       description: description ?? this.description,
@@ -157,7 +141,7 @@ class TileModel {
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
 
-    return other is TileModel &&
+    return other is TileEntity &&
         other.id == id &&
         other.name == name &&
         other.description == description &&

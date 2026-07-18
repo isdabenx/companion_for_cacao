@@ -1,4 +1,4 @@
-import 'package:companion_for_cacao/core/data/models/boardgame_model.dart';
+import 'package:companion_for_cacao/core/domain/entities/boardgame_entity.dart';
 import 'package:companion_for_cacao/shared/domain/use_cases/load_boardgames_use_case.dart';
 import 'package:companion_for_cacao/shared/providers/boardgame_notifier.dart';
 import 'package:companion_for_cacao/shared/providers/boardgame_use_case_providers.dart';
@@ -19,7 +19,7 @@ class TestException implements Exception {
 
 void main() {
   late MockLoadBoardgamesUseCase mockUseCase;
-  late List<BoardgameModel> mockBoardgames;
+  late List<BoardgameEntity> mockBoardgames;
 
   ProviderContainer createContainer() {
     final container = ProviderContainer(
@@ -37,13 +37,13 @@ void main() {
   setUp(() {
     mockUseCase = MockLoadBoardgamesUseCase();
     mockBoardgames = [
-      BoardgameModel(
+      BoardgameEntity(
         id: 1,
         name: 'Cacao',
         description: 'Base game',
         filenameImage: 'cacao.png',
       ),
-      BoardgameModel(
+      BoardgameEntity(
         id: 2,
         name: 'Chocolatl',
         description: 'Expansion',
@@ -98,7 +98,7 @@ void main() {
       const exception = TestException('load failed');
       when(
         () => mockUseCase.execute(),
-      ).thenAnswer((_) => Future<List<BoardgameModel>>.error(exception));
+      ).thenAnswer((_) => Future<List<BoardgameEntity>>.error(exception));
 
       final container = createContainer();
 

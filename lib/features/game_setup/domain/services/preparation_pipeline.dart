@@ -1,4 +1,4 @@
-import 'package:companion_for_cacao/core/data/models/tile_model.dart';
+import 'package:companion_for_cacao/core/domain/entities/tile_entity.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/game_setup_state_entity.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/preparation_entity.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/services/base_game_handler.dart';
@@ -17,7 +17,7 @@ class PreparationPipeline {
 
   /// Executes the full preparation pipeline.
   /// Returns a record with the final tiles and preparation steps.
-  ({List<TileModel> tiles, List<PreparationEntity> preparation}) execute(
+  ({List<TileEntity> tiles, List<PreparationEntity> preparation}) execute(
     GameSetupStateEntity state,
   ) {
     final isBigGame = state.isBigGame;
@@ -68,7 +68,7 @@ class PreparationPipeline {
     final filteredTiles = tiles.where((t) => t.quantity > 0).toList();
 
     // Sort tiles by type (huts at the end) and then by name alphabetically
-    filteredTiles.sort(TileModel.defaultSort);
+    filteredTiles.sort(TileEntity.defaultSort);
 
     return (tiles: filteredTiles, preparation: preparation);
   }

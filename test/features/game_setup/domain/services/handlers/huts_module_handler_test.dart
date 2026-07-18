@@ -1,5 +1,5 @@
-import 'package:companion_for_cacao/core/data/models/boardgame_model.dart';
-import 'package:companion_for_cacao/core/data/models/tile_model.dart';
+import 'package:companion_for_cacao/core/domain/entities/boardgame_entity.dart';
+import 'package:companion_for_cacao/core/domain/entities/tile_entity.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/player_entity.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/preparation_entity.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/preparation_phase.dart';
@@ -11,7 +11,7 @@ import '../../../../../support/tile_fixtures.dart';
 void main() {
   group('HutsModuleHandler', () {
     late HutsModuleHandler handler;
-    late List<TileModel> mockTiles;
+    late List<TileEntity> mockTiles;
     late List<PlayerEntity> mockPlayers;
     late List<PreparationEntity> mockPreparationSteps;
 
@@ -53,7 +53,7 @@ void main() {
 
     group('adjustTiles', () {
       test('should add hut tiles from expansions', () {
-        final mockHut = TileModel(
+        final mockHut = TileEntity(
           id: 'chocolatl.hut_test',
           name: 'Hut Test',
           description: 'Test description',
@@ -70,7 +70,7 @@ void main() {
           type: TileType.market,
         );
 
-        final expansion = BoardgameModel(
+        final expansion = BoardgameEntity(
           id: 2,
           name: 'Chocolatl',
           description: '',

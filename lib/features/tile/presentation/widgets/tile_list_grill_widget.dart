@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:companion_for_cacao/config/routes/app_routes.dart';
-import 'package:companion_for_cacao/core/data/models/tile_model.dart';
+import 'package:companion_for_cacao/core/domain/entities/tile_entity.dart';
 import 'package:companion_for_cacao/features/tile/presentation/providers/tile_notifier.dart';
 import 'package:companion_for_cacao/features/tile/presentation/providers/tile_settings_notifier.dart';
 import 'package:companion_for_cacao/features/tile/presentation/widgets/card_tile_widget.dart';
@@ -13,7 +13,7 @@ import 'package:go_router/go_router.dart';
 class TileListGrillWidget extends ConsumerStatefulWidget {
   const TileListGrillWidget({super.key, this.customTiles});
 
-  final List<TileModel>? customTiles;
+  final List<TileEntity>? customTiles;
 
   @override
   ConsumerState<TileListGrillWidget> createState() =>
@@ -54,7 +54,7 @@ class _TileListGrillWidgetState extends ConsumerState<TileListGrillWidget>
     );
   }
 
-  Widget _buildGrid(List<TileModel> tiles) {
+  Widget _buildGrid(List<TileEntity> tiles) {
     _initController(tiles.length);
     final tileSettings = ref.watch(tileSettingsProvider.select((s) => s.value));
 

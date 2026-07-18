@@ -1,4 +1,4 @@
-import 'package:companion_for_cacao/core/data/models/module_model.dart';
+import 'package:companion_for_cacao/core/domain/entities/module_entity.dart';
 import 'package:companion_for_cacao/core/theme/app_colors.dart';
 import 'package:companion_for_cacao/core/theme/app_spacing.dart';
 import 'package:companion_for_cacao/core/theme/app_text_styles.dart';
@@ -53,7 +53,7 @@ class StepModuleWidget extends ConsumerWidget {
                   ),
                 ],
               ),
-            for (final ModuleModel module in modules)
+            for (final ModuleEntity module in modules)
               SelectModuleWidget(module: module),
           ],
         ),

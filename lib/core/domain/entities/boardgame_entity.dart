@@ -1,10 +1,9 @@
-import 'package:companion_for_cacao/core/data/database/app_database.dart';
-import 'package:companion_for_cacao/core/data/models/module_model.dart';
-import 'package:companion_for_cacao/core/data/models/tile_model.dart';
+import 'package:companion_for_cacao/core/domain/entities/module_entity.dart';
+import 'package:companion_for_cacao/core/domain/entities/tile_entity.dart';
 import 'package:flutter/foundation.dart';
 
-class BoardgameModel {
-  BoardgameModel({
+class BoardgameEntity {
+  BoardgameEntity({
     required this.id,
     required this.name,
     required this.description,
@@ -14,34 +13,24 @@ class BoardgameModel {
     this.tiles = const [],
   });
 
-  factory BoardgameModel.fromDrift(Boardgame row) {
-    return BoardgameModel(
-      id: row.id,
-      name: row.name,
-      description: row.description,
-      filenameImage: row.filenameImage,
-      requireId: row.requireId,
-    );
-  }
-
   final int id;
   final String name;
   final String description;
   final String filenameImage;
   final int? requireId;
-  final List<ModuleModel> modules;
-  final List<TileModel> tiles;
+  final List<ModuleEntity> modules;
+  final List<TileEntity> tiles;
 
-  BoardgameModel copyWith({
+  BoardgameEntity copyWith({
     int? id,
     String? name,
     String? description,
     String? filenameImage,
     int? requireId,
-    List<ModuleModel>? modules,
-    List<TileModel>? tiles,
+    List<ModuleEntity>? modules,
+    List<TileEntity>? tiles,
   }) {
-    return BoardgameModel(
+    return BoardgameEntity(
       id: id ?? this.id,
       name: name ?? this.name,
       description: description ?? this.description,
@@ -56,7 +45,7 @@ class BoardgameModel {
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
 
-    return other is BoardgameModel &&
+    return other is BoardgameEntity &&
         other.id == id &&
         other.name == name &&
         other.description == description &&

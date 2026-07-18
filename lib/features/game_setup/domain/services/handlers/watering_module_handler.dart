@@ -1,5 +1,5 @@
-import 'package:companion_for_cacao/core/data/models/boardgame_model.dart';
-import 'package:companion_for_cacao/core/data/models/tile_model.dart';
+import 'package:companion_for_cacao/core/domain/entities/boardgame_entity.dart';
+import 'package:companion_for_cacao/core/domain/entities/tile_entity.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/player_entity.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/preparation_entity.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/preparation_phase.dart';
@@ -33,16 +33,16 @@ class WateringModuleHandler
   static const int moduleId = 2;
 
   @override
-  List<TileModel> adjustTiles(
-    List<TileModel> tiles,
+  List<TileEntity> adjustTiles(
+    List<TileEntity> tiles,
     int playerCount, {
-    required List<BoardgameModel> activeExpansions,
+    required List<BoardgameEntity> activeExpansions,
     bool isBigGame = false,
   }) {
     // Big Game: all tiles already loaded by base handler
     if (isBigGame) return tiles;
 
-    var adjustedTiles = <TileModel>[...tiles];
+    var adjustedTiles = <TileEntity>[...tiles];
 
     if (playerCount == 2) {
       // 2 players: remove 2 double plantations
@@ -87,7 +87,7 @@ class WateringModuleHandler
   @override
   List<PreparationEntity> modifyPreparationSteps(
     List<PlayerEntity> players,
-    List<TileModel> tiles,
+    List<TileEntity> tiles,
     List<PreparationEntity> currentSteps, {
     bool isBigGame = false,
   }) {

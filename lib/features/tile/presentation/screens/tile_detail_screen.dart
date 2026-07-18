@@ -1,5 +1,5 @@
 import 'package:companion_for_cacao/config/constants/assets.dart';
-import 'package:companion_for_cacao/core/data/models/tile_model.dart';
+import 'package:companion_for_cacao/core/domain/entities/tile_entity.dart';
 import 'package:companion_for_cacao/core/theme/app_colors.dart';
 import 'package:companion_for_cacao/core/theme/app_markdown_style_sheet.dart';
 import 'package:companion_for_cacao/core/theme/app_spacing.dart';
@@ -13,7 +13,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 class TileDetailScreen extends ConsumerWidget {
   const TileDetailScreen({required this.tile, super.key});
 
-  final TileModel tile;
+  final TileEntity tile;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

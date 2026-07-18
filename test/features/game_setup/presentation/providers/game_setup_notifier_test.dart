@@ -1,6 +1,6 @@
-import 'package:companion_for_cacao/core/data/models/boardgame_model.dart';
-import 'package:companion_for_cacao/core/data/models/module_model.dart';
-import 'package:companion_for_cacao/core/data/models/tile_model.dart';
+import 'package:companion_for_cacao/core/domain/entities/boardgame_entity.dart';
+import 'package:companion_for_cacao/core/domain/entities/module_entity.dart';
+import 'package:companion_for_cacao/core/domain/entities/tile_entity.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/game_setup_state_entity.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/player_entity.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/preparation_entity.dart';
@@ -22,14 +22,14 @@ class MockPrepareGameUseCase extends Mock implements PrepareGameUseCase {}
 class FakeGameSetupStateEntity extends Fake implements GameSetupStateEntity {}
 
 void main() {
-  late BoardgameModel baseGame;
-  late BoardgameModel chocolatl;
-  late ModuleModel mapModule;
-  late List<ModuleModel> allModules;
+  late BoardgameEntity baseGame;
+  late BoardgameEntity chocolatl;
+  late ModuleEntity mapModule;
+  late List<ModuleEntity> allModules;
   late MockPrepareGameUseCase mockPrepareGameUseCase;
 
   ProviderContainer createContainer({
-    List<BoardgameModel>? boardgames,
+    List<BoardgameEntity>? boardgames,
     PrepareGameUseCase? prepareGameUseCase,
   }) {
     return ProviderContainer(
@@ -48,13 +48,13 @@ void main() {
   });
 
   setUp(() {
-    baseGame = BoardgameModel(
+    baseGame = BoardgameEntity(
       id: 1,
       name: 'Cacao',
       description: 'Base Game',
       filenameImage: 'cacao.png',
     );
-    mapModule = ModuleModel(
+    mapModule = ModuleEntity(
       id: 1,
       name: 'Map',
       description: 'Map module',
@@ -62,14 +62,14 @@ void main() {
     );
     allModules = List.generate(
       8,
-      (index) => ModuleModel(
+      (index) => ModuleEntity(
         id: index + 1,
         name: 'Module ${index + 1}',
         description: 'Module ${index + 1} description',
         boardgameId: 2,
       ),
     );
-    chocolatl = BoardgameModel(
+    chocolatl = BoardgameEntity(
       id: 2,
       name: 'Chocolatl',
       description: 'Expansion',
@@ -266,7 +266,7 @@ void main() {
     test(
       'startGame calls PrepareGameUseCase and sets isStarted to true',
       () async {
-        final preparedTile = TileModel(
+        final preparedTile = TileEntity(
           id: 'prepared_tile',
           name: 'Prepared Tile',
           description: 'Prepared tile description',
@@ -316,7 +316,7 @@ void main() {
     test(
       'resetGame clears preparation and tiles and sets isStarted to false',
       () async {
-        final preparedTile = TileModel(
+        final preparedTile = TileEntity(
           id: 'prepared_tile',
           name: 'Prepared Tile',
           description: 'Prepared tile description',

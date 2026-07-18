@@ -1,4 +1,4 @@
-import 'package:companion_for_cacao/core/data/models/tile_model.dart';
+import 'package:companion_for_cacao/core/domain/entities/tile_entity.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/services/worker_balance_validator.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -97,7 +97,7 @@ void main() {
   });
 
   group('WorkerBalanceValidator.countJungleTiles', () {
-    TileModel jungleTile(String id, TileType type, int quantity) => TileModel(
+    TileEntity jungleTile(String id, TileType type, int quantity) => TileEntity(
       id: id,
       name: id,
       description: '',
@@ -111,7 +111,7 @@ void main() {
         jungleTile('market', TileType.market, 7),
         jungleTile('plantation', TileType.plantation, 8),
         jungleTile('temple', TileType.temple, 5),
-        TileModel(
+        TileEntity(
           id: 'worker',
           name: '1-1-1-1',
           description: '',

@@ -1,5 +1,5 @@
-import 'package:companion_for_cacao/core/data/models/boardgame_model.dart';
-import 'package:companion_for_cacao/core/data/models/tile_model.dart';
+import 'package:companion_for_cacao/core/domain/entities/boardgame_entity.dart';
+import 'package:companion_for_cacao/core/domain/entities/tile_entity.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/game_setup_state_entity.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/player_entity.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/services/base_game_handler.dart';
@@ -14,13 +14,13 @@ void main() {
   });
 
   test('execute should prepare game correctly for 2 players', () {
-    final baseGame = BoardgameModel(
+    final baseGame = BoardgameEntity(
       id: 1,
       name: 'Cacao',
       description: 'Base Game',
       filenameImage: 'cacao.png',
       tiles: [
-        TileModel(
+        TileEntity(
           id: TileIds.workerTile('red', '1-1-1-1'),
           boardgameId: 1,
           name: '1-1-1-1',
@@ -29,7 +29,7 @@ void main() {
           quantity: 4,
           color: TileColor.red,
         ),
-        TileModel(
+        TileEntity(
           id: TileIds.workerTile('white', '1-1-1-1'),
           boardgameId: 1,
           name: '1-1-1-1',
@@ -38,7 +38,7 @@ void main() {
           quantity: 4,
           color: TileColor.white,
         ),
-        TileModel(
+        TileEntity(
           id: TileIds.singlePlantation,
           boardgameId: 1,
           name: 'Single Plantation',

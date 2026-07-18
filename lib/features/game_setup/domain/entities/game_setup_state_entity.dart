@@ -1,6 +1,6 @@
-import 'package:companion_for_cacao/core/data/models/boardgame_model.dart';
-import 'package:companion_for_cacao/core/data/models/module_model.dart';
-import 'package:companion_for_cacao/core/data/models/tile_model.dart';
+import 'package:companion_for_cacao/core/domain/entities/boardgame_entity.dart';
+import 'package:companion_for_cacao/core/domain/entities/module_entity.dart';
+import 'package:companion_for_cacao/core/domain/entities/tile_entity.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/player_entity.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/preparation_entity.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/worker_selection_entity.dart';
@@ -19,9 +19,9 @@ class GameSetupStateEntity {
     this.workerSelection,
   });
   final List<PlayerEntity> players;
-  final List<BoardgameModel> expansions;
-  final List<ModuleModel> modules;
-  final List<TileModel> tiles;
+  final List<BoardgameEntity> expansions;
+  final List<ModuleEntity> modules;
+  final List<TileEntity> tiles;
   final List<PreparationEntity> preparation;
   final List<String> colorOrder;
   final bool isStarted;
@@ -44,9 +44,9 @@ class GameSetupStateEntity {
 
   GameSetupStateEntity copyWith({
     List<PlayerEntity>? players,
-    List<BoardgameModel>? expansions,
-    List<ModuleModel>? modules,
-    List<TileModel>? tiles,
+    List<BoardgameEntity>? expansions,
+    List<ModuleEntity>? modules,
+    List<TileEntity>? tiles,
     List<PreparationEntity>? preparation,
     List<String>? colorOrder,
     bool? isStarted,

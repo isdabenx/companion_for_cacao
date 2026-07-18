@@ -1,9 +1,9 @@
-import 'package:companion_for_cacao/core/data/models/boardgame_model.dart';
-import 'package:companion_for_cacao/core/data/models/module_model.dart';
-import 'package:companion_for_cacao/core/data/models/tile_model.dart';
+import 'package:companion_for_cacao/core/domain/entities/boardgame_entity.dart';
+import 'package:companion_for_cacao/core/domain/entities/module_entity.dart';
+import 'package:companion_for_cacao/core/domain/entities/tile_entity.dart';
 
 abstract class BoardgameRepository {
-  Future<List<BoardgameModel>> getAllBoardgames();
-  Future<List<ModuleModel>> getAllModules();
-  Future<List<TileModel>> getAllTiles();
+  Future<List<BoardgameEntity>> getAllBoardgames();
+  Future<List<ModuleEntity>> getAllModules();
+  Future<List<TileEntity>> getAllTiles();
 }
