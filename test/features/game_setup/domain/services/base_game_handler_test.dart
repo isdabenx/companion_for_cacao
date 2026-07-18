@@ -1,5 +1,5 @@
-import 'package:companion_for_cacao/core/data/models/boardgame_model.dart';
-import 'package:companion_for_cacao/core/data/models/tile_model.dart';
+import 'package:companion_for_cacao/core/domain/entities/boardgame_entity.dart';
+import 'package:companion_for_cacao/core/domain/entities/tile_entity.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/player_entity.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/preparation_phase.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/services/base_game_handler.dart';
@@ -10,8 +10,8 @@ import '../../../../support/tile_fixtures.dart';
 void main() {
   group('BaseGameHandler', () {
     late BaseGameHandler handler;
-    late BoardgameModel baseGame;
-    late List<TileModel> allTiles;
+    late BoardgameEntity baseGame;
+    late List<TileEntity> allTiles;
 
     setUp(() {
       // Mock Data using string IDs
@@ -43,7 +43,7 @@ void main() {
         ),
       ];
 
-      baseGame = BoardgameModel(
+      baseGame = BoardgameEntity(
         id: 1,
         name: 'Cacao',
         description: 'Base',

@@ -1,4 +1,4 @@
-import 'package:companion_for_cacao/core/data/models/tile_model.dart';
+import 'package:companion_for_cacao/core/domain/entities/tile_entity.dart';
 import 'package:flutter/foundation.dart';
 
 @immutable
@@ -28,7 +28,7 @@ class TileFilterStateEntity {
     return count;
   }
 
-  bool matches(TileModel tile) {
+  bool matches(TileEntity tile) {
     if (searchQuery.isNotEmpty) {
       if (!tile.name.toLowerCase().contains(searchQuery.toLowerCase())) {
         return false;

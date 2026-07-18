@@ -1,5 +1,5 @@
 import 'package:companion_for_cacao/core/data/database/app_database.dart';
-import 'package:companion_for_cacao/core/data/models/tile_model.dart';
+import 'package:companion_for_cacao/core/domain/entities/tile_entity.dart';
 import 'package:companion_for_cacao/features/tile/data/repositories/tile_repository_impl.dart';
 import 'package:drift/drift.dart' hide isNotNull, isNull;
 import 'package:drift/native.dart';
@@ -60,7 +60,7 @@ void main() {
         expect(result, isEmpty);
       });
 
-      test('returns correctly mapped TileModels', () async {
+      test('returns correctly mapped TileEntities', () async {
         await insertTile(
           id: 'base.jungle_temple',
           name: 'Temple',

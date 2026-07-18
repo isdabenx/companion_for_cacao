@@ -1,4 +1,4 @@
-import 'package:companion_for_cacao/core/data/models/boardgame_model.dart';
+import 'package:companion_for_cacao/core/domain/entities/boardgame_entity.dart';
 import 'package:companion_for_cacao/shared/providers/boardgame_notifier.dart';
 
 /// Fake [BoardgameNotifier] that returns the given [boardgames] from build().
@@ -8,10 +8,10 @@ import 'package:companion_for_cacao/shared/providers/boardgame_notifier.dart';
 class FakeBoardgameNotifier extends BoardgameNotifier {
   FakeBoardgameNotifier(this.boardgames);
 
-  final List<BoardgameModel> boardgames;
+  final List<BoardgameEntity> boardgames;
 
   @override
-  Future<List<BoardgameModel>> build() async {
+  Future<List<BoardgameEntity>> build() async {
     return boardgames;
   }
 }

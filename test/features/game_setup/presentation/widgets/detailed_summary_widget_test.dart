@@ -1,6 +1,6 @@
-import 'package:companion_for_cacao/core/data/models/boardgame_model.dart';
-import 'package:companion_for_cacao/core/data/models/module_model.dart';
-import 'package:companion_for_cacao/core/data/models/tile_model.dart';
+import 'package:companion_for_cacao/core/domain/entities/boardgame_entity.dart';
+import 'package:companion_for_cacao/core/domain/entities/module_entity.dart';
+import 'package:companion_for_cacao/core/domain/entities/tile_entity.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/game_setup_state_entity.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/player_entity.dart';
 import 'package:companion_for_cacao/features/game_setup/presentation/widgets/detailed_summary_widget.dart';
@@ -19,13 +19,13 @@ void main() {
           PlayerEntity(name: 'Bob', color: 'yellow', isSelected: true),
         ],
         expansions: [
-          BoardgameModel(
+          BoardgameEntity(
             id: 1,
             name: 'Cacao',
             description: '',
             filenameImage: '',
           ),
-          BoardgameModel(
+          BoardgameEntity(
             id: 2,
             name: 'Chocolatl',
             description: '',
@@ -33,10 +33,10 @@ void main() {
           ),
         ],
         modules: [
-          ModuleModel(id: 3, name: 'Huts', description: '', boardgameId: 1),
+          ModuleEntity(id: 3, name: 'Huts', description: '', boardgameId: 1),
         ],
         tiles: [
-          TileModel(
+          TileEntity(
             id: 'base.jungle_single_plantation',
             name: '1-1-1-1',
             description: '',

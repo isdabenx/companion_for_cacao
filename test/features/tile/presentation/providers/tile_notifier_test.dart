@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:companion_for_cacao/core/data/models/tile_model.dart';
+import 'package:companion_for_cacao/core/domain/entities/tile_entity.dart';
 import 'package:companion_for_cacao/features/tile/domain/use_cases/get_tiles_with_boardgame_use_case.dart';
 import 'package:companion_for_cacao/features/tile/domain/entities/tile_filter_scope.dart';
 import 'package:companion_for_cacao/features/tile/presentation/providers/tile_filter_notifier.dart';
@@ -30,7 +30,7 @@ void main() {
   });
 
   late MockGetTilesWithBoardgameUseCase mockUseCase;
-  late List<TileModel> mockTiles;
+  late List<TileEntity> mockTiles;
 
   ProviderContainer createContainer() {
     final container = ProviderContainer(
@@ -119,7 +119,7 @@ void main() {
       const exception = TestException('build failed');
       when(
         () => mockUseCase.execute(),
-      ).thenAnswer((_) => Future<List<TileModel>>.error(exception));
+      ).thenAnswer((_) => Future<List<TileEntity>>.error(exception));
 
       final container = createContainer();
 
@@ -135,12 +135,12 @@ void main() {
     });
 
     test('emits loading then data during initial build', () async {
-      final completer = Completer<List<TileModel>>();
+      final completer = Completer<List<TileEntity>>();
       when(() => mockUseCase.execute()).thenAnswer((_) => completer.future);
 
       final container = createContainer();
-      final states = <AsyncValue<List<TileModel>>>[];
-      final subscription = container.listen<AsyncValue<List<TileModel>>>(
+      final states = <AsyncValue<List<TileEntity>>>[];
+      final subscription = container.listen<AsyncValue<List<TileEntity>>>(
         allTilesProvider,
         (_, next) => states.add(next),
         fireImmediately: true,
@@ -169,8 +169,8 @@ void main() {
       final container = createContainer();
       await container.read(allTilesProvider.future);
 
-      final states = <AsyncValue<List<TileModel>>>[];
-      final subscription = container.listen<AsyncValue<List<TileModel>>>(
+      final states = <AsyncValue<List<TileEntity>>>[];
+      final subscription = container.listen<AsyncValue<List<TileEntity>>>(
         allTilesProvider,
         (_, next) => states.add(next),
         fireImmediately: true,

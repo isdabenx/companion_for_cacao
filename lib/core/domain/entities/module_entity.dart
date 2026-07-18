@@ -1,34 +1,23 @@
-import 'package:companion_for_cacao/core/data/database/app_database.dart';
-
-class ModuleModel {
-  ModuleModel({
+class ModuleEntity {
+  ModuleEntity({
     required this.id,
     required this.name,
     required this.description,
     this.boardgameId,
   });
 
-  factory ModuleModel.fromDrift(Module row) {
-    return ModuleModel(
-      id: row.id,
-      name: row.name,
-      description: row.description,
-      boardgameId: row.boardgameId,
-    );
-  }
-
   final int id;
   final String name;
   final String description;
   final int? boardgameId;
 
-  ModuleModel copyWith({
+  ModuleEntity copyWith({
     int? id,
     String? name,
     String? description,
     int? boardgameId,
   }) {
-    return ModuleModel(
+    return ModuleEntity(
       id: id ?? this.id,
       name: name ?? this.name,
       description: description ?? this.description,
@@ -40,7 +29,7 @@ class ModuleModel {
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
 
-    return other is ModuleModel &&
+    return other is ModuleEntity &&
         other.id == id &&
         other.name == name &&
         other.description == description &&

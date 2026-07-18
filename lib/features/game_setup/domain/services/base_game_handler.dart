@@ -1,5 +1,5 @@
-import 'package:companion_for_cacao/core/data/models/boardgame_model.dart';
-import 'package:companion_for_cacao/core/data/models/tile_model.dart';
+import 'package:companion_for_cacao/core/domain/entities/boardgame_entity.dart';
+import 'package:companion_for_cacao/core/domain/entities/tile_entity.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/player_entity.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/preparation_entity.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/preparation_phase.dart';
@@ -38,18 +38,18 @@ class BaseGameHandler with TileAdjustments implements ModulePreparationHandler {
     required this.selectedColors,
   });
 
-  final BoardgameModel baseGame;
-  final List<BoardgameModel> activeExpansions;
+  final BoardgameEntity baseGame;
+  final List<BoardgameEntity> activeExpansions;
   final List<String> selectedColors;
 
   @override
-  List<TileModel> adjustTiles(
-    List<TileModel> tiles,
+  List<TileEntity> adjustTiles(
+    List<TileEntity> tiles,
     int playerCount, {
-    required List<BoardgameModel> activeExpansions,
+    required List<BoardgameEntity> activeExpansions,
     bool isBigGame = false,
   }) {
-    var adjustedTiles = <TileModel>[...tiles];
+    var adjustedTiles = <TileEntity>[...tiles];
 
     for (final color in selectedColors) {
       final tileColor = _tileColorFromString(color);
@@ -165,7 +165,7 @@ class BaseGameHandler with TileAdjustments implements ModulePreparationHandler {
   @override
   List<PreparationEntity> modifyPreparationSteps(
     List<PlayerEntity> players,
-    List<TileModel> tiles,
+    List<TileEntity> tiles,
     List<PreparationEntity> currentSteps, {
     bool isBigGame = false,
   }) {
@@ -331,8 +331,8 @@ class BaseGameHandler with TileAdjustments implements ModulePreparationHandler {
     return null;
   }
 
-  TileModel? _findWorkerTileByColorAndValue(
-    List<TileModel> tiles, {
+  TileEntity? _findWorkerTileByColorAndValue(
+    List<TileEntity> tiles, {
     required String color,
     required String value,
   }) {

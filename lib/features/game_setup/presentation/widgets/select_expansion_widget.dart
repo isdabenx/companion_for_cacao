@@ -1,5 +1,5 @@
 import 'package:companion_for_cacao/config/constants/assets.dart';
-import 'package:companion_for_cacao/core/data/models/boardgame_model.dart';
+import 'package:companion_for_cacao/core/domain/entities/boardgame_entity.dart';
 import 'package:companion_for_cacao/core/theme/app_spacing.dart';
 import 'package:companion_for_cacao/features/game_setup/presentation/providers/game_setup_notifier.dart';
 import 'package:flutter/material.dart';
@@ -15,7 +15,7 @@ class SelectExpansionWidget extends ConsumerWidget {
 
   final double width;
   final double height;
-  final BoardgameModel boardgame;
+  final BoardgameEntity boardgame;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

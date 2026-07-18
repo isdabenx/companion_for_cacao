@@ -1,4 +1,4 @@
-import 'package:companion_for_cacao/core/data/models/tile_model.dart';
+import 'package:companion_for_cacao/core/domain/entities/tile_entity.dart';
 import 'package:companion_for_cacao/features/tile/domain/entities/tile_filter_state_entity.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -71,10 +71,10 @@ void main() {
   });
 
   group('TileFilterStateEntity.matches', () {
-    late TileModel marketTile;
-    late TileModel plantationTile;
-    late TileModel waterTile;
-    late TileModel chocolatlTile;
+    late TileEntity marketTile;
+    late TileEntity plantationTile;
+    late TileEntity waterTile;
+    late TileEntity chocolatlTile;
 
     setUp(() {
       marketTile = makeTile(
@@ -262,7 +262,7 @@ void main() {
       });
 
       test('should handle tiles with null type', () {
-        final nullTypeTile = TileModel(
+        final nullTypeTile = TileEntity(
           id: 'test.null',
           name: 'Null Type Tile',
           description: 'Test',

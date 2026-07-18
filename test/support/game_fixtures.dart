@@ -1,9 +1,9 @@
 // Shared realistic game fixtures matching tiles.json, plus a pipeline
 // runner used by the preparation pipeline integration tests.
 // ignore_for_file: lines_longer_than_80_chars
-import 'package:companion_for_cacao/core/data/models/boardgame_model.dart';
-import 'package:companion_for_cacao/core/data/models/module_model.dart';
-import 'package:companion_for_cacao/core/data/models/tile_model.dart';
+import 'package:companion_for_cacao/core/domain/entities/boardgame_entity.dart';
+import 'package:companion_for_cacao/core/domain/entities/module_entity.dart';
+import 'package:companion_for_cacao/core/domain/entities/tile_entity.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/game_setup_state_entity.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/player_entity.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/worker_selection_entity.dart';
@@ -23,10 +23,10 @@ import 'package:companion_for_cacao/features/game_setup/domain/services/preparat
 // =============================================================================
 
 /// All base game tiles (boardgameId: 1), colorless (jungle) only.
-List<TileModel> baseGameJungleTiles() {
+List<TileEntity> baseGameJungleTiles() {
   return [
     // Plantations
-    TileModel(
+    TileEntity(
       id: 'base.jungle_single_plantation',
       name: 'Single Plantation',
       description: '',
@@ -35,7 +35,7 @@ List<TileModel> baseGameJungleTiles() {
       type: TileType.plantation,
       boardgameId: 1,
     ),
-    TileModel(
+    TileEntity(
       id: 'base.jungle_double_plantation',
       name: 'Double Plantation',
       description: '',
@@ -45,7 +45,7 @@ List<TileModel> baseGameJungleTiles() {
       boardgameId: 1,
     ),
     // Markets
-    TileModel(
+    TileEntity(
       id: 'base.jungle_market_selling_2',
       name: 'Selling price 2',
       description: '',
@@ -54,7 +54,7 @@ List<TileModel> baseGameJungleTiles() {
       type: TileType.market,
       boardgameId: 1,
     ),
-    TileModel(
+    TileEntity(
       id: 'base.jungle_market_selling_3',
       name: 'Selling price 3',
       description: '',
@@ -63,7 +63,7 @@ List<TileModel> baseGameJungleTiles() {
       type: TileType.market,
       boardgameId: 1,
     ),
-    TileModel(
+    TileEntity(
       id: 'base.jungle_market_selling_4',
       name: 'Selling price 4',
       description: '',
@@ -73,7 +73,7 @@ List<TileModel> baseGameJungleTiles() {
       boardgameId: 1,
     ),
     // Gold Mines
-    TileModel(
+    TileEntity(
       id: 'base.jungle_gold_mine_value_1',
       name: 'Value 1',
       description: '',
@@ -82,7 +82,7 @@ List<TileModel> baseGameJungleTiles() {
       type: TileType.goldMine,
       boardgameId: 1,
     ),
-    TileModel(
+    TileEntity(
       id: 'base.jungle_gold_mine_value_2',
       name: 'Value 2',
       description: '',
@@ -92,7 +92,7 @@ List<TileModel> baseGameJungleTiles() {
       boardgameId: 1,
     ),
     // Water
-    TileModel(
+    TileEntity(
       id: 'base.jungle_water',
       name: 'Water',
       description: '',
@@ -102,7 +102,7 @@ List<TileModel> baseGameJungleTiles() {
       boardgameId: 1,
     ),
     // Sun-Worshiping Site
-    TileModel(
+    TileEntity(
       id: 'base.jungle_sun_worshiping_site',
       name: 'Sun-Worshiping Site',
       description: '',
@@ -112,7 +112,7 @@ List<TileModel> baseGameJungleTiles() {
       boardgameId: 1,
     ),
     // Temple
-    TileModel(
+    TileEntity(
       id: 'base.jungle_temple',
       name: 'Temple',
       description: '',
@@ -125,10 +125,10 @@ List<TileModel> baseGameJungleTiles() {
 }
 
 /// Worker tiles for a given color (base game, boardgameId: 1).
-List<TileModel> baseWorkerTilesForColor(TileColor color) {
+List<TileEntity> baseWorkerTilesForColor(TileColor color) {
   final c = color.name;
   return [
-    TileModel(
+    TileEntity(
       id: 'base.worker_${c}_1-1-1-1',
       name: '1-1-1-1',
       description: '',
@@ -138,7 +138,7 @@ List<TileModel> baseWorkerTilesForColor(TileColor color) {
       color: color,
       boardgameId: 1,
     ),
-    TileModel(
+    TileEntity(
       id: 'base.worker_${c}_2-1-0-1',
       name: '2-1-0-1',
       description: '',
@@ -148,7 +148,7 @@ List<TileModel> baseWorkerTilesForColor(TileColor color) {
       color: color,
       boardgameId: 1,
     ),
-    TileModel(
+    TileEntity(
       id: 'base.worker_${c}_3-0-0-1',
       name: '3-0-0-1',
       description: '',
@@ -158,7 +158,7 @@ List<TileModel> baseWorkerTilesForColor(TileColor color) {
       color: color,
       boardgameId: 1,
     ),
-    TileModel(
+    TileEntity(
       id: 'base.worker_${c}_3-1-0-0',
       name: '3-1-0-0',
       description: '',
@@ -172,10 +172,10 @@ List<TileModel> baseWorkerTilesForColor(TileColor color) {
 }
 
 /// Chocolatl expansion tiles (boardgameId: 2).
-List<TileModel> chocolatlExpansionTiles() {
+List<TileEntity> chocolatlExpansionTiles() {
   return [
     // Watering (moduleId: 2)
-    TileModel(
+    TileEntity(
       id: 'chocolatl.jungle_watering',
       name: 'Watering',
       description: '',
@@ -186,7 +186,7 @@ List<TileModel> chocolatlExpansionTiles() {
       moduleId: 2,
     ),
     // Chocolate Kitchen (moduleId: 3)
-    TileModel(
+    TileEntity(
       id: 'chocolatl.jungle_chocolate_kitchen',
       name: 'Chocolate Kitchen',
       description: '',
@@ -197,7 +197,7 @@ List<TileModel> chocolatlExpansionTiles() {
       moduleId: 3,
     ),
     // Chocolate Market (moduleId: 3)
-    TileModel(
+    TileEntity(
       id: 'chocolatl.jungle_chocolate_market',
       name: 'Chocolate Market',
       description: '',
@@ -208,7 +208,7 @@ List<TileModel> chocolatlExpansionTiles() {
       moduleId: 3,
     ),
     // 12 hut tiles (moduleId: 4)
-    TileModel(
+    TileEntity(
       id: 'chocolatl.hut_market_crier',
       name: 'Market Crier',
       description: '',
@@ -219,7 +219,7 @@ List<TileModel> chocolatlExpansionTiles() {
       moduleId: 4,
       hutCost: 4,
     ),
-    TileModel(
+    TileEntity(
       id: 'chocolatl.hut_hermit',
       name: 'Hermit',
       description: '',
@@ -230,7 +230,7 @@ List<TileModel> chocolatlExpansionTiles() {
       moduleId: 4,
       hutCost: 6,
     ),
-    TileModel(
+    TileEntity(
       id: 'chocolatl.hut_road_worker',
       name: 'Road Worker',
       description: '',
@@ -241,7 +241,7 @@ List<TileModel> chocolatlExpansionTiles() {
       moduleId: 4,
       hutCost: 6,
     ),
-    TileModel(
+    TileEntity(
       id: 'chocolatl.hut_trader',
       name: 'Trader',
       description: '',
@@ -252,7 +252,7 @@ List<TileModel> chocolatlExpansionTiles() {
       moduleId: 4,
       hutCost: 6,
     ),
-    TileModel(
+    TileEntity(
       id: 'chocolatl.hut_farmer',
       name: 'Farmer',
       description: '',
@@ -263,7 +263,7 @@ List<TileModel> chocolatlExpansionTiles() {
       moduleId: 4,
       hutCost: 8,
     ),
-    TileModel(
+    TileEntity(
       id: 'chocolatl.hut_shaman',
       name: 'Shaman',
       description: '',
@@ -274,7 +274,7 @@ List<TileModel> chocolatlExpansionTiles() {
       moduleId: 4,
       hutCost: 8,
     ),
-    TileModel(
+    TileEntity(
       id: 'chocolatl.hut_monk',
       name: 'Monk',
       description: '',
@@ -285,7 +285,7 @@ List<TileModel> chocolatlExpansionTiles() {
       moduleId: 4,
       hutCost: 10,
     ),
-    TileModel(
+    TileEntity(
       id: 'chocolatl.hut_master_builder',
       name: 'Master Builder',
       description: '',
@@ -296,7 +296,7 @@ List<TileModel> chocolatlExpansionTiles() {
       moduleId: 4,
       hutCost: 10,
     ),
-    TileModel(
+    TileEntity(
       id: 'chocolatl.hut_foreman',
       name: 'Foreman',
       description: '',
@@ -307,7 +307,7 @@ List<TileModel> chocolatlExpansionTiles() {
       moduleId: 4,
       hutCost: 12,
     ),
-    TileModel(
+    TileEntity(
       id: 'chocolatl.hut_fountain_master',
       name: 'Fountain Master',
       description: '',
@@ -318,7 +318,7 @@ List<TileModel> chocolatlExpansionTiles() {
       moduleId: 4,
       hutCost: 12,
     ),
-    TileModel(
+    TileEntity(
       id: 'chocolatl.hut_chiefs_daughter',
       name: "Chief's Daughter",
       description: '',
@@ -329,7 +329,7 @@ List<TileModel> chocolatlExpansionTiles() {
       moduleId: 4,
       hutCost: 14,
     ),
-    TileModel(
+    TileEntity(
       id: 'chocolatl.hut_chiefs_son',
       name: "Chief's Son",
       description: '',
@@ -340,7 +340,7 @@ List<TileModel> chocolatlExpansionTiles() {
       moduleId: 4,
       hutCost: 16,
     ),
-    TileModel(
+    TileEntity(
       id: 'chocolatl.hut_chiefs_wife',
       name: "Chief's Wife",
       description: '',
@@ -351,7 +351,7 @@ List<TileModel> chocolatlExpansionTiles() {
       moduleId: 4,
       hutCost: 20,
     ),
-    TileModel(
+    TileEntity(
       id: 'chocolatl.hut_chief',
       name: 'Chief',
       description: '',
@@ -366,9 +366,9 @@ List<TileModel> chocolatlExpansionTiles() {
 }
 
 /// Diamante expansion tiles (boardgameId: 3) — colorless.
-List<TileModel> diamanteExpansionColorlessTiles() {
+List<TileEntity> diamanteExpansionColorlessTiles() {
   return [
-    TileModel(
+    TileEntity(
       id: 'diamante.jungle_gem_mine',
       name: 'Gem Mine',
       description: '',
@@ -378,7 +378,7 @@ List<TileModel> diamanteExpansionColorlessTiles() {
       boardgameId: 3,
       moduleId: 5,
     ),
-    TileModel(
+    TileEntity(
       id: 'diamante.jungle_tree_of_life',
       name: 'Tree of Life',
       description: '',
@@ -392,10 +392,10 @@ List<TileModel> diamanteExpansionColorlessTiles() {
 }
 
 /// Diamante expansion worker tiles for a color (boardgameId: 3, moduleId: 8).
-List<TileModel> diamanteWorkerTilesForColor(TileColor color) {
+List<TileEntity> diamanteWorkerTilesForColor(TileColor color) {
   final c = color.name;
   return [
-    TileModel(
+    TileEntity(
       id: 'diamante.worker_${c}_0-0-0-4',
       name: '0-0-0-4',
       description: '',
@@ -406,7 +406,7 @@ List<TileModel> diamanteWorkerTilesForColor(TileColor color) {
       boardgameId: 3,
       moduleId: 8,
     ),
-    TileModel(
+    TileEntity(
       id: 'diamante.worker_${c}_0-0-2-2',
       name: '0-0-2-2',
       description: '',
@@ -417,7 +417,7 @@ List<TileModel> diamanteWorkerTilesForColor(TileColor color) {
       boardgameId: 3,
       moduleId: 8,
     ),
-    TileModel(
+    TileEntity(
       id: 'diamante.worker_${c}_0-2-0-2',
       name: '0-2-0-2',
       description: '',
@@ -428,7 +428,7 @@ List<TileModel> diamanteWorkerTilesForColor(TileColor color) {
       boardgameId: 3,
       moduleId: 8,
     ),
-    TileModel(
+    TileEntity(
       id: 'diamante.worker_${c}_0-1-0-3',
       name: '0-1-0-3',
       description: '',
@@ -443,67 +443,67 @@ List<TileModel> diamanteWorkerTilesForColor(TileColor color) {
 }
 
 // =============================================================================
-// Helpers: BoardgameModels with modules and tiles
+// Helpers: BoardgameEntities with modules and tiles
 // =============================================================================
 
-final mapModule = ModuleModel(
+final mapModule = ModuleEntity(
   id: 1,
   name: 'Map',
   description: '',
   boardgameId: 2,
 );
-final wateringModule = ModuleModel(
+final wateringModule = ModuleEntity(
   id: 2,
   name: 'Watering',
   description: '',
   boardgameId: 2,
 );
-final chocolateModule = ModuleModel(
+final chocolateModule = ModuleEntity(
   id: 3,
   name: 'Chocolate',
   description: '',
   boardgameId: 2,
 );
-final hutModule = ModuleModel(
+final hutModule = ModuleEntity(
   id: 4,
   name: 'Huts',
   description: '',
   boardgameId: 2,
 );
-final gemMinesModule = ModuleModel(
+final gemMinesModule = ModuleEntity(
   id: 5,
   name: 'Gem Mines',
   description: '',
   boardgameId: 3,
 );
-final treeOfLifeModule = ModuleModel(
+final treeOfLifeModule = ModuleEntity(
   id: 6,
   name: 'Tree of Life',
   description: '',
   boardgameId: 3,
 );
-final emperorModule = ModuleModel(
+final emperorModule = ModuleEntity(
   id: 7,
   name: 'Emperor Favour',
   description: '',
   boardgameId: 2,
 );
-final newWorkersModule = ModuleModel(
+final newWorkersModule = ModuleEntity(
   id: 8,
   name: 'New Workers',
   description: '',
   boardgameId: 3,
 );
 
-BoardgameModel createBaseGame(List<String> selectedColors) {
-  final tiles = <TileModel>[
+BoardgameEntity createBaseGame(List<String> selectedColors) {
+  final tiles = <TileEntity>[
     ...baseGameJungleTiles(),
     for (final color in selectedColors)
       ...baseWorkerTilesForColor(
         TileColor.values.firstWhere((c) => c.name == color),
       ),
   ];
-  return BoardgameModel(
+  return BoardgameEntity(
     id: 1,
     name: 'Cacao',
     description: '',
@@ -512,11 +512,11 @@ BoardgameModel createBaseGame(List<String> selectedColors) {
   );
 }
 
-BoardgameModel createChocolatlExpansion({
+BoardgameEntity createChocolatlExpansion({
   required List<String> selectedColors,
-  required List<ModuleModel> modules,
+  required List<ModuleEntity> modules,
 }) {
-  return BoardgameModel(
+  return BoardgameEntity(
     id: 2,
     name: 'Chocolatl',
     description: '',
@@ -526,18 +526,18 @@ BoardgameModel createChocolatlExpansion({
   );
 }
 
-BoardgameModel createDiamanteExpansion({
+BoardgameEntity createDiamanteExpansion({
   required List<String> selectedColors,
-  required List<ModuleModel> modules,
+  required List<ModuleEntity> modules,
 }) {
-  final tiles = <TileModel>[
+  final tiles = <TileEntity>[
     ...diamanteExpansionColorlessTiles(),
     for (final color in selectedColors)
       ...diamanteWorkerTilesForColor(
         TileColor.values.firstWhere((c) => c.name == color),
       ),
   ];
-  return BoardgameModel(
+  return BoardgameEntity(
     id: 3,
     name: 'Diamante',
     description: '',
@@ -551,11 +551,11 @@ BoardgameModel createDiamanteExpansion({
 // Pipeline builder
 // =============================================================================
 
-({List<TileModel> tiles, List<String> stepIds}) runPipeline({
+({List<TileEntity> tiles, List<String> stepIds}) runPipeline({
   required List<PlayerEntity> players,
   required List<String> selectedColors,
-  required List<ModuleModel> activeModules,
-  List<BoardgameModel>? expansions,
+  required List<ModuleEntity> activeModules,
+  List<BoardgameEntity>? expansions,
   bool isBigGame = false,
   WorkerSelectionEntity? workerSelection,
 }) {
@@ -568,7 +568,7 @@ BoardgameModel createDiamanteExpansion({
       .where((m) => m.boardgameId == 3)
       .toList();
 
-  final activeExpansions = <BoardgameModel>[baseGame];
+  final activeExpansions = <BoardgameEntity>[baseGame];
   if (chocolatlModules.isNotEmpty) {
     activeExpansions.add(
       createChocolatlExpansion(
@@ -664,7 +664,7 @@ List<String> selectedColors(int count) {
 // Tile query helpers
 // =============================================================================
 
-int tileQty(List<TileModel> tiles, String id) {
+int tileQty(List<TileEntity> tiles, String id) {
   final matches = tiles.where((t) => t.id == id);
   if (matches.isEmpty) return 0;
   return matches.fold(0, (sum, t) => sum + t.quantity);

@@ -1,4 +1,4 @@
-import 'package:companion_for_cacao/core/data/models/module_model.dart';
+import 'package:companion_for_cacao/core/domain/entities/module_entity.dart';
 import 'package:companion_for_cacao/core/theme/app_colors.dart';
 import 'package:companion_for_cacao/features/game_setup/presentation/providers/game_setup_notifier.dart';
 import 'package:flutter/material.dart';
@@ -7,7 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 class SelectModuleWidget extends ConsumerWidget {
   const SelectModuleWidget({required this.module, super.key});
 
-  final ModuleModel module;
+  final ModuleEntity module;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

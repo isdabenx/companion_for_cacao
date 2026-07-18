@@ -1,5 +1,5 @@
-import 'package:companion_for_cacao/core/data/models/boardgame_model.dart';
-import 'package:companion_for_cacao/core/data/models/tile_model.dart';
+import 'package:companion_for_cacao/core/domain/entities/boardgame_entity.dart';
+import 'package:companion_for_cacao/core/domain/entities/tile_entity.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/player_entity.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/preparation_entity.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/preparation_phase.dart';
@@ -11,7 +11,7 @@ import '../../../../../support/tile_fixtures.dart';
 void main() {
   group('GemMinesModuleHandler', () {
     late GemMinesModuleHandler handler;
-    late List<TileModel> mockTiles;
+    late List<TileEntity> mockTiles;
     late List<PlayerEntity> mockPlayers2;
     late List<PlayerEntity> mockPlayers3;
 
@@ -322,7 +322,7 @@ void main() {
 }
 
 // Helper to create mock expansions with gem mine tile
-BoardgameModel _createMockExpansion() {
+BoardgameEntity _createMockExpansion() {
   return makeBoardgame(
     id: 3,
     name: 'Diamante',

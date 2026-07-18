@@ -1,5 +1,5 @@
 import 'package:companion_for_cacao/config/routes/app_routes.dart';
-import 'package:companion_for_cacao/core/data/models/tile_model.dart';
+import 'package:companion_for_cacao/core/domain/entities/tile_entity.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/game_setup_state_entity.dart';
 import 'package:companion_for_cacao/features/game_setup/presentation/screens/game_setup_detail_screen.dart';
 import 'package:companion_for_cacao/features/game_setup/presentation/screens/game_setup_preparation_screen.dart';
@@ -59,7 +59,7 @@ GoRouter goRouter(Ref ref) {
         path: AppRoutes.tileDetail,
         builder: (context, state) {
           final tile = state.extra;
-          if (tile is! TileModel) {
+          if (tile is! TileEntity) {
             return Scaffold(
               appBar: AppBar(title: const Text('Error')),
               body: const Center(child: Text('Invalid tile data')),

@@ -1,12 +1,12 @@
-import 'package:companion_for_cacao/core/data/models/boardgame_model.dart';
-import 'package:companion_for_cacao/core/data/models/module_model.dart';
-import 'package:companion_for_cacao/core/data/models/tile_model.dart';
+import 'package:companion_for_cacao/core/domain/entities/boardgame_entity.dart';
+import 'package:companion_for_cacao/core/domain/entities/module_entity.dart';
+import 'package:companion_for_cacao/core/domain/entities/tile_entity.dart';
 
-/// Builds a [TileModel] with sensible test defaults.
+/// Builds a [TileEntity] with sensible test defaults.
 ///
 /// Only override what the test cares about; everything else gets a
 /// generic value.
-TileModel makeTile({
+TileEntity makeTile({
   String id = 'test.tile',
   String name = 'Test Tile',
   String description = 'Test description',
@@ -18,7 +18,7 @@ TileModel makeTile({
   int? moduleId,
   int? hutCost,
 }) {
-  return TileModel(
+  return TileEntity(
     id: id,
     name: name,
     description: description,
@@ -32,17 +32,17 @@ TileModel makeTile({
   );
 }
 
-/// Builds a [BoardgameModel] with sensible test defaults.
-BoardgameModel makeBoardgame({
+/// Builds a [BoardgameEntity] with sensible test defaults.
+BoardgameEntity makeBoardgame({
   int id = 1,
   String name = 'Cacao',
   String description = 'Test Boardgame',
   String filenameImage = 'test.png',
   int? requireId,
-  List<ModuleModel> modules = const [],
-  List<TileModel> tiles = const [],
+  List<ModuleEntity> modules = const [],
+  List<TileEntity> tiles = const [],
 }) {
-  return BoardgameModel(
+  return BoardgameEntity(
     id: id,
     name: name,
     description: description,
@@ -53,14 +53,14 @@ BoardgameModel makeBoardgame({
   );
 }
 
-/// Builds a [ModuleModel] with sensible test defaults.
-ModuleModel makeModule({
+/// Builds a [ModuleEntity] with sensible test defaults.
+ModuleEntity makeModule({
   int id = 1,
   String name = 'Test Module',
   String description = 'Test module description',
   int? boardgameId,
 }) {
-  return ModuleModel(
+  return ModuleEntity(
     id: id,
     name: name,
     description: description,

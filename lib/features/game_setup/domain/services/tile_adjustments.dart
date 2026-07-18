@@ -1,12 +1,12 @@
-import 'package:companion_for_cacao/core/data/models/boardgame_model.dart';
-import 'package:companion_for_cacao/core/data/models/tile_model.dart';
+import 'package:companion_for_cacao/core/domain/entities/boardgame_entity.dart';
+import 'package:companion_for_cacao/core/domain/entities/tile_entity.dart';
 
 /// Shared tile-list adjustment helpers used by preparation handlers.
 mixin TileAdjustments {
   /// Reduces the quantity of the tile with [id] by up to [amount],
   /// never going below zero.
-  List<TileModel> reduceTileById(
-    List<TileModel> tiles, {
+  List<TileEntity> reduceTileById(
+    List<TileEntity> tiles, {
     required String id,
     required int amount,
   }) {
@@ -27,13 +27,13 @@ mixin TileAdjustments {
   /// Adds [quantityEach] copies of every tile belonging to [moduleId]
   /// (looked up in the active expansions' definitions), incrementing
   /// existing pool entries or appending new ones.
-  List<TileModel> addModuleTiles(
-    List<TileModel> tiles, {
+  List<TileEntity> addModuleTiles(
+    List<TileEntity> tiles, {
     required int moduleId,
     required int quantityEach,
-    required List<BoardgameModel> activeExpansions,
+    required List<BoardgameEntity> activeExpansions,
   }) {
-    final result = <TileModel>[...tiles];
+    final result = <TileEntity>[...tiles];
 
     final tileDefs = [
       for (final expansion in activeExpansions)

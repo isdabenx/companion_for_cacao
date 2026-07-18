@@ -1,6 +1,6 @@
-import 'package:companion_for_cacao/core/data/models/tile_model.dart';
+import 'package:companion_for_cacao/core/domain/entities/tile_entity.dart';
 
 abstract class TileRepository {
-  Future<List<TileModel>> getAllTiles();
-  Future<List<TileModel>> getTilesByIds(List<String> ids);
+  Future<List<TileEntity>> getAllTiles();
+  Future<List<TileEntity>> getTilesByIds(List<String> ids);
 }

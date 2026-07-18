@@ -1,6 +1,6 @@
-import 'package:companion_for_cacao/core/data/models/boardgame_model.dart';
-import 'package:companion_for_cacao/core/data/models/module_model.dart';
-import 'package:companion_for_cacao/core/data/models/tile_model.dart';
+import 'package:companion_for_cacao/core/domain/entities/boardgame_entity.dart';
+import 'package:companion_for_cacao/core/domain/entities/module_entity.dart';
+import 'package:companion_for_cacao/core/domain/entities/tile_entity.dart';
 import 'package:companion_for_cacao/core/domain/repositories/boardgame_repository.dart';
 import 'package:companion_for_cacao/features/tile/domain/repositories/tile_repository.dart';
 import 'package:companion_for_cacao/features/tile/domain/use_cases/get_tiles_with_boardgame_use_case.dart';
@@ -29,13 +29,13 @@ void main() {
     'execute should return all tiles with their boardgames and modules when idsList is null',
     () async {
       final boardgames = [
-        BoardgameModel(
+        BoardgameEntity(
           id: 1,
           name: 'Cacao',
           description: 'Base',
           filenameImage: 'cacao.png',
         ),
-        BoardgameModel(
+        BoardgameEntity(
           id: 2,
           name: 'Chocolatl',
           description: 'Exp 1',
@@ -44,7 +44,7 @@ void main() {
       ];
 
       final modules = [
-        ModuleModel(
+        ModuleEntity(
           id: 1,
           name: 'Map Module',
           description: 'Map',
@@ -53,7 +53,7 @@ void main() {
       ];
 
       final tiles = [
-        TileModel(
+        TileEntity(
           id: 'test_tile_1',
           name: 'Tile 1',
           description: 'Desc 1',
@@ -61,7 +61,7 @@ void main() {
           quantity: 1,
           boardgameId: 1,
         ),
-        TileModel(
+        TileEntity(
           id: 'test_tile_2',
           name: 'Tile 2',
           description: 'Desc 2',
@@ -70,7 +70,7 @@ void main() {
           boardgameId: 2,
           moduleId: 1,
         ),
-        TileModel(
+        TileEntity(
           id: 'test_tile_3',
           name: 'Tile 3',
           description: 'Desc 3',
@@ -114,7 +114,7 @@ void main() {
     'execute should return specific tiles with their boardgames and modules when idsList is provided',
     () async {
       final boardgames = [
-        BoardgameModel(
+        BoardgameEntity(
           id: 1,
           name: 'Cacao',
           description: 'Base',
@@ -122,10 +122,10 @@ void main() {
         ),
       ];
 
-      final modules = <ModuleModel>[];
+      final modules = <ModuleEntity>[];
 
       final tiles = [
-        TileModel(
+        TileEntity(
           id: 'test_tile_1',
           name: 'Tile 1',
           description: 'Desc 1',

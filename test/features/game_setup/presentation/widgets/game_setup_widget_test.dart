@@ -1,4 +1,4 @@
-import 'package:companion_for_cacao/core/data/models/boardgame_model.dart';
+import 'package:companion_for_cacao/core/domain/entities/boardgame_entity.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/game_setup_state_entity.dart';
 import 'package:companion_for_cacao/features/game_setup/presentation/providers/game_setup_notifier.dart';
 import 'package:companion_for_cacao/features/game_setup/presentation/widgets/game_setup_widget.dart';
@@ -12,7 +12,7 @@ import '../../../../support/fakes.dart';
 void main() {
   group('GameSetupWidget', () {
     final testBoardgames = [
-      BoardgameModel(
+      BoardgameEntity(
         id: 1,
         name: 'Cacao',
         description: 'Base Game',

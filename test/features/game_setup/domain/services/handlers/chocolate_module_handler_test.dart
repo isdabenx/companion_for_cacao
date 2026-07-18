@@ -1,5 +1,5 @@
-import 'package:companion_for_cacao/core/data/models/boardgame_model.dart';
-import 'package:companion_for_cacao/core/data/models/tile_model.dart';
+import 'package:companion_for_cacao/core/domain/entities/boardgame_entity.dart';
+import 'package:companion_for_cacao/core/domain/entities/tile_entity.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/player_entity.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/preparation_entity.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/preparation_phase.dart';
@@ -11,7 +11,7 @@ import '../../../../../support/tile_fixtures.dart';
 void main() {
   group('ChocolateModuleHandler', () {
     late ChocolateModuleHandler handler;
-    late List<TileModel> mockTiles;
+    late List<TileEntity> mockTiles;
     late List<PlayerEntity> mockPlayers;
     late List<PreparationEntity> mockPreparationSteps;
 
@@ -410,7 +410,7 @@ void main() {
 }
 
 // Helper to create mock expansions with chocolate tiles
-BoardgameModel _createMockExpansion() {
+BoardgameEntity _createMockExpansion() {
   return makeBoardgame(
     id: 2,
     name: 'Chocolatl',

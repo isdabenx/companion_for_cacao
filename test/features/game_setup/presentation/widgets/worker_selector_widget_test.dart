@@ -4,7 +4,7 @@
 import 'dart:async';
 
 import 'package:companion_for_cacao/config/providers/repository_providers.dart';
-import 'package:companion_for_cacao/core/data/models/module_model.dart';
+import 'package:companion_for_cacao/core/domain/entities/module_entity.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/game_setup_state_entity.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/player_entity.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/worker_selection_entity.dart';
@@ -31,13 +31,13 @@ class MockCustomPresetRepository extends Mock
 void main() {
   late MockCustomPresetRepository mockPresetRepository;
 
-  final treeOfLifeModule = ModuleModel(
+  final treeOfLifeModule = ModuleEntity(
     id: 6,
     name: 'Tree of Life',
     description: '',
     boardgameId: 2,
   );
-  final newWorkersModule = ModuleModel(
+  final newWorkersModule = ModuleEntity(
     id: 8,
     name: 'The New Workers',
     description: '',
@@ -46,7 +46,7 @@ void main() {
 
   GameSetupStateEntity buildState({
     int playerCount = 2,
-    List<ModuleModel> modules = const [],
+    List<ModuleEntity> modules = const [],
     WorkerSelectionEntity? workerSelection,
   }) {
     const colors = ['red', 'purple', 'white', 'yellow'];

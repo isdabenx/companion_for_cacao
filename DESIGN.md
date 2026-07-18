@@ -396,8 +396,4 @@ Algoritme de càlcul pas a pas:
 
 ### Deute tècnic planificat
 
-- **Inversió de Clean Architecture (models ↔ domini)** — PLANIFICAT: fer-ho **abans de començar la propera feature gran** (p. ex. l'historial de partides de Fase 2), perquè cada feature nova multiplica els consumidors dels models i encareix el refactor.
-  - **Problema:** les interfícies de `core/domain/repositories` retornen `BoardgameModel`/`ModuleModel`/`TileModel` (de `core/data/models/`), que importen drift pels factories `fromDrift` i `ModelLink`. El domini depèn transitivament del motor de persistència — la fletxa de dependència va al revés.
-  - **Solució (opció A, completa):** crear entitats pures de domini (sense drift), moure el mapping fila→entitat a mappers de la capa de dades, fer que les interfícies del domini retornin entitats, i actualitzar els consumidors (~60-80 fitxers, majoritàriament imports). Punt delicat: repensar `ModelLink` (relacions lazy boardgame/module) en entitats pures.
-  - **Per què val la pena:** el projecte ja va patir una migració de motor (Isar → drift) que va tocar tota l'app; amb entitats pures només s'hauria tocat `core/data/`. També evita que canvis d'esquema (com `Tiles.id` int→String) es propaguin fins a la presentació.
-  - **Xarxa de seguretat:** la suite de tests (370+) i el compilador guien el refactor; fer-ho en branca pròpia sense barrejar-hi features.
+- **Inversió de Clean Architecture (models ↔ domini)** — ✅ FET (2026-07-18): entitats pures de domini a `core/domain/entities/` (`TileEntity`, `BoardgameEntity`, `ModuleEntity`, `EntityLink`, sense cap dependència de drift) i mapping fila→entitat extret a `core/data/mappers/drift_entity_mappers.dart` (extensions `toEntity()` sobre les files de drift). Les interfícies de `core/domain/repositories` i `features/tile/domain/repositories` ara retornen entitats; els antics `core/data/models/` s'han eliminat.

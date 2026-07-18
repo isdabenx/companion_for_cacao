@@ -1,5 +1,5 @@
-import 'package:companion_for_cacao/core/data/models/boardgame_model.dart';
-import 'package:companion_for_cacao/core/data/models/tile_model.dart';
+import 'package:companion_for_cacao/core/domain/entities/boardgame_entity.dart';
+import 'package:companion_for_cacao/core/domain/entities/tile_entity.dart';
 import 'package:companion_for_cacao/core/domain/repositories/boardgame_repository.dart';
 import 'package:companion_for_cacao/features/tile/domain/repositories/tile_repository.dart';
 import 'package:companion_for_cacao/features/tile/domain/use_cases/get_tiles_with_boardgame_use_case.dart';
@@ -19,7 +19,7 @@ class MockBoardgameRepository extends Mock implements BoardgameRepository {}
 
 void main() {
   group('filteredTilesProvider', () {
-    late List<TileModel> mockTiles;
+    late List<TileEntity> mockTiles;
     late MockTileRepository mockTileRepository;
     late MockBoardgameRepository mockBoardgameRepository;
 
@@ -77,13 +77,13 @@ void main() {
       ).thenAnswer((_) async => []);
       when(() => mockBoardgameRepository.getAllBoardgames()).thenAnswer(
         (_) async => [
-          BoardgameModel(
+          BoardgameEntity(
             id: 1,
             name: 'Cacao',
             description: 'Base',
             filenameImage: 'cacao.png',
           ),
-          BoardgameModel(
+          BoardgameEntity(
             id: 2,
             name: 'Chocolatl',
             description: 'Exp 1',

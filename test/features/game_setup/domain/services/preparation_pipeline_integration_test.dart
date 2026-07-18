@@ -1,5 +1,5 @@
 // ignore_for_file: lines_longer_than_80_chars
-import 'package:companion_for_cacao/core/data/models/tile_model.dart';
+import 'package:companion_for_cacao/core/domain/entities/tile_entity.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/worker_selection_entity.dart';
 import 'package:flutter_test/flutter_test.dart';
 

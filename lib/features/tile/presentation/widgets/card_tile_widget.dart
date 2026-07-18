@@ -1,4 +1,4 @@
-import 'package:companion_for_cacao/core/data/models/tile_model.dart';
+import 'package:companion_for_cacao/core/domain/entities/tile_entity.dart';
 import 'package:companion_for_cacao/core/theme/app_colors.dart';
 import 'package:companion_for_cacao/features/tile/presentation/providers/tile_settings_notifier.dart';
 import 'package:companion_for_cacao/features/tile/presentation/widgets/card_tile_badge_row_widget.dart';
@@ -10,7 +10,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class CardTileWidget extends ConsumerWidget {
   const CardTileWidget({required this.tile, super.key});
-  final TileModel tile;
+  final TileEntity tile;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

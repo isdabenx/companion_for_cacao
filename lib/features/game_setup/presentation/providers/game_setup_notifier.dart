@@ -1,6 +1,6 @@
 import 'package:companion_for_cacao/config/constants/game_constants.dart';
-import 'package:companion_for_cacao/core/data/models/boardgame_model.dart';
-import 'package:companion_for_cacao/core/data/models/module_model.dart';
+import 'package:companion_for_cacao/core/domain/entities/boardgame_entity.dart';
+import 'package:companion_for_cacao/core/domain/entities/module_entity.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/game_setup_state_entity.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/player_entity.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/worker_selection_entity.dart';
@@ -19,7 +19,7 @@ class GameSetupNotifier extends _$GameSetupNotifier {
     final boardgames = await ref.watch(boardgameProvider.future);
     final baseGame = boardgames.firstWhere(
       (b) => b.id == GameConstants.baseGameId,
-      orElse: () => BoardgameModel(
+      orElse: () => BoardgameEntity(
         id: GameConstants.baseGameId,
         name: 'Cacao',
         description: '',
@@ -86,7 +86,7 @@ class GameSetupNotifier extends _$GameSetupNotifier {
     );
   }
 
-  void addExpansion(BoardgameModel expansion) {
+  void addExpansion(BoardgameEntity expansion) {
     if (state.value == null) return;
     state = AsyncData(
       state.value!.copyWith(
@@ -95,7 +95,7 @@ class GameSetupNotifier extends _$GameSetupNotifier {
     );
   }
 
-  void removeExpansion(BoardgameModel expansion) {
+  void removeExpansion(BoardgameEntity expansion) {
     if (state.value == null) return;
     state = AsyncData(
       state.value!.copyWith(
@@ -107,7 +107,7 @@ class GameSetupNotifier extends _$GameSetupNotifier {
     _resetBigGameIfInvalid();
   }
 
-  void toggleExpansion(BoardgameModel expansion) {
+  void toggleExpansion(BoardgameEntity expansion) {
     if (state.value == null) return;
     if (state.value!.expansions.any((e) => e.id == expansion.id)) {
       removeExpansion(expansion);
@@ -116,14 +116,14 @@ class GameSetupNotifier extends _$GameSetupNotifier {
     }
   }
 
-  void addModule(ModuleModel module) {
+  void addModule(ModuleEntity module) {
     if (state.value == null) return;
     state = AsyncData(
       state.value!.copyWith(modules: [...state.value!.modules, module]),
     );
   }
 
-  void removeModule(ModuleModel module) {
+  void removeModule(ModuleEntity module) {
     if (state.value == null) return;
     state = AsyncData(
       state.value!.copyWith(
@@ -132,7 +132,7 @@ class GameSetupNotifier extends _$GameSetupNotifier {
     );
   }
 
-  void toggleModule(ModuleModel module) {
+  void toggleModule(ModuleEntity module) {
     if (state.value == null) return;
     if (state.value!.modules.any((m) => m.id == module.id)) {
       removeModule(module);
@@ -188,7 +188,7 @@ class GameSetupNotifier extends _$GameSetupNotifier {
     final boardgames = await ref.read(boardgameProvider.future);
     final baseGame = boardgames.firstWhere(
       (b) => b.id == GameConstants.baseGameId,
-      orElse: () => BoardgameModel(
+      orElse: () => BoardgameEntity(
         id: GameConstants.baseGameId,
         name: 'Cacao',
         description: '',

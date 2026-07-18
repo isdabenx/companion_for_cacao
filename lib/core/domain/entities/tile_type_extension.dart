@@ -1,4 +1,4 @@
-import 'package:companion_for_cacao/core/data/models/tile_model.dart';
+import 'package:companion_for_cacao/core/domain/entities/tile_entity.dart';
 
 extension TileTypeExtension on TileType {
   String get displayName {

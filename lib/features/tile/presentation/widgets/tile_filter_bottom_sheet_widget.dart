@@ -1,8 +1,8 @@
 import 'dart:async';
 
-import 'package:companion_for_cacao/core/data/models/boardgame_model.dart';
-import 'package:companion_for_cacao/core/data/models/tile_model.dart';
-import 'package:companion_for_cacao/core/data/models/tile_type_extension.dart';
+import 'package:companion_for_cacao/core/domain/entities/boardgame_entity.dart';
+import 'package:companion_for_cacao/core/domain/entities/tile_entity.dart';
+import 'package:companion_for_cacao/core/domain/entities/tile_type_extension.dart';
 import 'package:companion_for_cacao/core/theme/app_colors.dart';
 import 'package:companion_for_cacao/core/theme/app_spacing.dart';
 import 'package:companion_for_cacao/core/theme/app_text_styles.dart';
@@ -136,7 +136,7 @@ class _TileFilterBottomSheetWidgetState
                 // matches the actual catalog (no hardcoded ids/names)
                 for (final boardgame
                     in ref.watch(boardgameProvider).value ??
-                        const <BoardgameModel>[])
+                        const <BoardgameEntity>[])
                   _buildBoardgameChip(
                     ref,
                     selectedBoardgameIds,

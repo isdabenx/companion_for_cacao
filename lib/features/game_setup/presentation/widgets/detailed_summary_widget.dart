@@ -1,6 +1,6 @@
 import 'package:companion_for_cacao/config/constants/assets.dart';
 import 'package:companion_for_cacao/config/constants/game_constants.dart';
-import 'package:companion_for_cacao/core/data/models/tile_model.dart';
+import 'package:companion_for_cacao/core/domain/entities/tile_entity.dart';
 import 'package:companion_for_cacao/core/theme/app_breakpoints.dart';
 import 'package:companion_for_cacao/core/theme/app_colors.dart';
 import 'package:companion_for_cacao/core/theme/app_spacing.dart';
@@ -292,7 +292,7 @@ class _DetailedSummaryWidgetState extends ConsumerState<DetailedSummaryWidget> {
     );
   }
 
-  Widget _buildTileGrid(List<TileModel> tiles, {bool showColorCircle = true}) {
+  Widget _buildTileGrid(List<TileEntity> tiles, {bool showColorCircle = true}) {
     final tileSettings = ref.watch(tileSettingsProvider.select((s) => s.value));
     final useCompact = tileSettings?.compactTileLayout ?? true;
 

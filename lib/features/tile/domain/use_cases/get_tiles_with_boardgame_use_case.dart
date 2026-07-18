@@ -1,6 +1,6 @@
-import 'package:companion_for_cacao/core/data/models/boardgame_model.dart';
-import 'package:companion_for_cacao/core/data/models/module_model.dart';
-import 'package:companion_for_cacao/core/data/models/tile_model.dart';
+import 'package:companion_for_cacao/core/domain/entities/boardgame_entity.dart';
+import 'package:companion_for_cacao/core/domain/entities/module_entity.dart';
+import 'package:companion_for_cacao/core/domain/entities/tile_entity.dart';
 import 'package:companion_for_cacao/core/domain/repositories/boardgame_repository.dart';
 import 'package:companion_for_cacao/features/tile/domain/repositories/tile_repository.dart';
 
@@ -10,25 +10,25 @@ class GetTilesWithBoardgameUseCase {
 
   GetTilesWithBoardgameUseCase(this._tileRepository, this._boardgameRepository);
 
-  Future<List<TileModel>> execute({List<String>? idsList}) async {
+  Future<List<TileEntity>> execute({List<String>? idsList}) async {
     final tiles = idsList != null
         ? await _tileRepository.getTilesByIds(idsList)
         : await _tileRepository.getAllTiles();
     final boardgames = await _boardgameRepository.getAllBoardgames();
     final modules = await _boardgameRepository.getAllModules();
 
-    return _mapTiles(tiles, boardgames, modules)..sort(TileModel.defaultSort);
+    return _mapTiles(tiles, boardgames, modules)..sort(TileEntity.defaultSort);
   }
 
-  List<TileModel> _mapTiles(
-    List<TileModel> tiles,
-    List<BoardgameModel> boardgames,
-    List<ModuleModel> modules,
+  List<TileEntity> _mapTiles(
+    List<TileEntity> tiles,
+    List<BoardgameEntity> boardgames,
+    List<ModuleEntity> modules,
   ) {
     return tiles.map((tile) {
       final boardgameRow = boardgames.firstWhere(
         (b) => b.id == tile.boardgameId,
-        orElse: () => BoardgameModel(
+        orElse: () => BoardgameEntity(
           id: 0,
           name: 'Unknown',
           description: 'Unknown',
@@ -41,7 +41,7 @@ class GetTilesWithBoardgameUseCase {
       final moduleRow = tile.moduleId != null
           ? modules.firstWhere(
               (m) => m.id == tile.moduleId,
-              orElse: () => ModuleModel(
+              orElse: () => ModuleEntity(
                 id: 0,
                 name: 'Unknown',
                 description: 'Unknown',
