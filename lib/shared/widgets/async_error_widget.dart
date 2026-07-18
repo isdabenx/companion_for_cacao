@@ -1,6 +1,8 @@
-import 'package:flutter/material.dart';
 import 'package:companion_for_cacao/core/theme/app_colors.dart';
 import 'package:companion_for_cacao/core/theme/app_spacing.dart';
+import 'package:companion_for_cacao/core/theme/app_text_styles.dart';
+import 'package:companion_for_cacao/core/utils/app_logger.dart';
+import 'package:flutter/material.dart';
 
 class AsyncErrorWidget extends StatelessWidget {
   final Object error;
@@ -10,6 +12,8 @@ class AsyncErrorWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Log the technical detail; the user sees a friendly message
+    AppLogger.warning('AsyncErrorWidget shown', error);
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -17,9 +21,9 @@ class AsyncErrorWidget extends StatelessWidget {
           Icon(Icons.error_outline, color: AppColors.brown, size: 48),
           SizedBox(height: AppSpacing.m),
           Text(
-            error.toString(),
+            'Something went wrong. Please try again.',
             textAlign: TextAlign.center,
-            style: TextStyle(color: AppColors.brown),
+            style: AppTextStyles.bodyMedium.copyWith(color: AppColors.brown),
           ),
           if (onRetry != null) ...[
             SizedBox(height: AppSpacing.m),

@@ -2,8 +2,8 @@ import 'dart:async';
 
 import 'package:companion_for_cacao/config/constants/tile_settings.dart';
 import 'package:companion_for_cacao/config/providers/repository_providers.dart';
+import 'package:companion_for_cacao/core/utils/app_logger.dart';
 import 'package:companion_for_cacao/shared/domain/entities/tile_settings_entity.dart';
-import 'package:flutter/foundation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'tile_settings_notifier.g.dart';
@@ -64,22 +64,32 @@ class TileSettingsNotifier extends _$TileSettingsNotifier {
     );
   }
 
+  /// Error policy lives HERE, in one place — the repository is pure I/O
+  /// and propagates failures.
+  ///
+  /// Load failures degrade to default settings instead of surfacing an
+  /// AsyncError: these are cosmetic display preferences, and the tile
+  /// widgets read them via `select((s) => s.value)` — blocking the whole
+  /// tile catalog over a failed preference read would be worse UX.
   Future<TileSettingsEntity> _loadSettings() async {
     try {
       final repository = ref.read(settingsRepositoryProvider);
       return await repository.getTileSettings();
     } catch (e, stackTrace) {
-      debugPrint('Error loading tile settings: $e\n$stackTrace');
+      AppLogger.error('Error loading tile settings', e, stackTrace);
       return TileSettingsEntity();
     }
   }
 
+  /// Saves are optimistic: the in-memory state is already updated, so a
+  /// failed write only costs persistence across restarts. Logged, not
+  /// surfaced.
   Future<void> _saveSettings(TileSettingsEntity current) async {
     try {
       final repository = ref.read(settingsRepositoryProvider);
       await repository.saveTileSettings(current);
     } catch (e, stackTrace) {
-      debugPrint('Error saving tile settings: $e\n$stackTrace');
+      AppLogger.error('Error saving tile settings', e, stackTrace);
     }
   }
 

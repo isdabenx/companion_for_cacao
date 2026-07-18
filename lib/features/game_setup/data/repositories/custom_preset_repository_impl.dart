@@ -1,8 +1,8 @@
 import 'dart:convert';
 
 import 'package:companion_for_cacao/features/game_setup/domain/entities/custom_preset_entity.dart';
+import 'package:companion_for_cacao/core/utils/app_logger.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/repositories/custom_preset_repository.dart';
-import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class CustomPresetRepositoryImpl implements CustomPresetRepository {
@@ -19,7 +19,7 @@ class CustomPresetRepositoryImpl implements CustomPresetRepository {
           .map((e) => CustomPresetEntity.fromJson(e as Map<String, dynamic>))
           .toList();
     } catch (e, stackTrace) {
-      debugPrint('Error loading custom presets: $e\n$stackTrace');
+      AppLogger.error('Error loading custom presets', e, stackTrace);
       return [];
     }
   }
@@ -31,7 +31,7 @@ class CustomPresetRepositoryImpl implements CustomPresetRepository {
       final jsonString = jsonEncode(presets.map((p) => p.toJson()).toList());
       await prefs.setString(_key, jsonString);
     } catch (e, stackTrace) {
-      debugPrint('Error saving custom presets: $e\n$stackTrace');
+      AppLogger.error('Error saving custom presets', e, stackTrace);
     }
   }
 }

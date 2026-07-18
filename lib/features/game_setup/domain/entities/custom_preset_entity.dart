@@ -23,9 +23,12 @@ class CustomPresetEntity {
   int get tilesPerPlayer =>
       tileQuantities.values.fold(0, (sum, qty) => sum + qty);
 
-  /// Creates a new unique id based on the current timestamp.
+  static int _idSequence = 0;
+
+  /// Creates a new unique id: timestamp plus a session-scoped sequence so
+  /// two ids generated within the same millisecond never collide.
   static String generateId() =>
-      'preset_${DateTime.now().millisecondsSinceEpoch}';
+      'preset_${DateTime.now().millisecondsSinceEpoch}_${_idSequence++}';
 
   factory CustomPresetEntity.fromJson(Map<String, dynamic> json) {
     return CustomPresetEntity(

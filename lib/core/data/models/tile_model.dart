@@ -1,7 +1,9 @@
+import 'package:collection/collection.dart';
 import 'package:companion_for_cacao/core/data/database/app_database.dart';
 import 'package:companion_for_cacao/core/data/models/boardgame_model.dart';
 import 'package:companion_for_cacao/core/data/models/module_model.dart';
 import 'package:companion_for_cacao/core/data/models/tile_type_extension.dart';
+import 'package:companion_for_cacao/core/utils/app_logger.dart';
 
 enum TileType {
   player,
@@ -47,29 +49,6 @@ class TileModel {
   }) : boardgame = ModelLink<BoardgameModel>(boardgame),
        module = ModelLink<ModuleModel>(module);
 
-  factory TileModel.fromJson(Map<String, dynamic> json) {
-    return TileModel(
-      id: json['id'] as String,
-      name: json['name'] as String,
-      description: json['description'] as String,
-      filenameImage: json['filenameImage'] as String,
-      quantity: json['quantity'] as int,
-      type: json['type'] != null
-          ? TileType.values.firstWhere(
-              (type) => type.toString() == 'TileType.${json['type']}',
-            )
-          : null,
-      color: json['color'] != null
-          ? TileColor.values.firstWhere(
-              (color) => color.toString() == 'TileColor.${json['color']}',
-            )
-          : null,
-      boardgameId: json['boardgame'] as int,
-      moduleId: json['module'] as int?,
-      hutCost: json['hutCost'] as int?,
-    );
-  }
-
   factory TileModel.fromDrift(Tile row) {
     return TileModel(
       id: row.id, // row.id is now String after regeneration
@@ -77,20 +56,44 @@ class TileModel {
       description: row.description,
       filenameImage: row.filenameImage,
       quantity: row.quantity,
-      type: row.type != null
-          ? TileType.values.firstWhere(
-              (type) => type.toString() == 'TileType.${row.type}',
-            )
-          : null,
-      color: row.color != null
-          ? TileColor.values.firstWhere(
-              (color) => color.toString() == 'TileColor.${row.color}',
-            )
-          : null,
+      type: typeFromName(row.type),
+      color: colorFromName(row.color),
       boardgameId: row.boardgameId,
       moduleId: row.moduleId,
       hutCost: row.hutCost,
     );
+  }
+
+  /// Parses a [TileType] from its serialized name.
+  ///
+  /// Returns null for unknown values (logging a warning) so a single
+  /// malformed record in the seed data or database can't crash the
+  /// whole tile catalog.
+  static TileType? typeFromName(String? name) {
+    if (name == null) return null;
+    final type = TileType.values.firstWhereOrNull((t) => t.name == name);
+    if (type == null) {
+      AppLogger.warning(
+        'TileModel: unknown TileType "$name", loading tile untyped',
+      );
+    }
+    return type;
+  }
+
+  /// Parses a [TileColor] from its serialized name.
+  ///
+  /// Returns null for unknown values (logging a warning) so a single
+  /// malformed record in the seed data or database can't crash the
+  /// whole tile catalog.
+  static TileColor? colorFromName(String? name) {
+    if (name == null) return null;
+    final color = TileColor.values.firstWhereOrNull((c) => c.name == name);
+    if (color == null) {
+      AppLogger.warning(
+        'TileModel: unknown TileColor "$name", loading tile uncolored',
+      );
+    }
+    return color;
   }
 
   final String id;

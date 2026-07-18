@@ -30,6 +30,24 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
   void initState() {
     super.initState();
 
+    // Side effects (system UI mode, error snackbar) belong in a listener,
+    // not in build. fireImmediately covers the initial loading state.
+    ref.listenManual(splashProvider, fireImmediately: true, (previous, next) {
+      next.when(
+        data: (_) => _disableImmersiveMode(),
+        loading: _enableImmersiveMode,
+        error: (error, _) {
+          _disableImmersiveMode();
+          SchedulerBinding.instance.addPostFrameCallback((_) {
+            if (!mounted) return;
+            ScaffoldMessenger.of(
+              context,
+            ).showSnackBar(SnackBar(content: Text('Error: $error')));
+          });
+        },
+      );
+    });
+
     _controller = AnimationController(
       duration: const Duration(milliseconds: 1200),
       vsync: this,
@@ -88,23 +106,6 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
 
   @override
   Widget build(BuildContext context) {
-    ref
-        .watch(splashProvider)
-        .when(
-          data: (_) {
-            _disableImmersiveMode();
-          },
-          loading: _enableImmersiveMode,
-          error: (error, _) {
-            _disableImmersiveMode();
-            SchedulerBinding.instance.addPostFrameCallback((_) {
-              ScaffoldMessenger.of(
-                context,
-              ).showSnackBar(SnackBar(content: Text('Error: $error')));
-            });
-          },
-        );
-
     final size = MediaQuery.sizeOf(context);
     const imageAspectRatio =
         Assets.splashBackgroundWidth / Assets.splashBackgroundHeight;

@@ -1,8 +1,8 @@
 import 'dart:async';
 
 import 'package:companion_for_cacao/config/providers/repository_providers.dart';
+import 'package:companion_for_cacao/core/utils/app_logger.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/custom_preset_entity.dart';
-import 'package:flutter/foundation.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'custom_preset_notifier.g.dart';
@@ -35,7 +35,7 @@ class CustomPresetNotifier extends _$CustomPresetNotifier {
       final repository = ref.read(customPresetRepositoryProvider);
       return await repository.getPresets();
     } catch (e, stackTrace) {
-      debugPrint('Error loading custom presets: $e\n$stackTrace');
+      AppLogger.error('Error loading custom presets', e, stackTrace);
       return [];
     }
   }
@@ -45,7 +45,7 @@ class CustomPresetNotifier extends _$CustomPresetNotifier {
       final repository = ref.read(customPresetRepositoryProvider);
       await repository.savePresets(presets);
     } catch (e, stackTrace) {
-      debugPrint('Error saving custom presets: $e\n$stackTrace');
+      AppLogger.error('Error saving custom presets', e, stackTrace);
     }
   }
 }

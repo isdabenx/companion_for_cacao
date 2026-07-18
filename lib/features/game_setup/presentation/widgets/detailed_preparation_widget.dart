@@ -349,10 +349,13 @@ class PreparationCard extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final isCompleted = ref.watch(
       gameSetupProvider.select(
+        // firstWhereOrNull: the preparation list can be regenerated (e.g.
+        // applyWorkerSelection re-runs the pipeline) while a card with a
+        // stale id is still mounted — a missing id must not throw.
         (s) =>
             s.value?.preparation
-                .firstWhere((p) => p.id == preparation.id)
-                .isCompleted ??
+                .firstWhereOrNull((p) => p.id == preparation.id)
+                ?.isCompleted ??
             preparation.isCompleted,
       ),
     );
