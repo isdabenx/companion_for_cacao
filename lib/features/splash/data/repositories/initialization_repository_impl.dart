@@ -12,8 +12,15 @@ class InitializationRepositoryImpl implements InitializationRepository {
 
   AppDatabase? _db;
   static const String _dbVersionKey = 'db_seed_version';
-  static const int _currentDbVersion =
-      5; // Bumped to 5 to refresh assets from tiles.json
+
+  /// Version of the bundled SEED DATA (assets/initial_data/*.json).
+  ///
+  /// Bump this when the JSON content changes so existing installs
+  /// re-seed. STRUCTURAL schema changes are versioned separately by
+  /// [AppDatabase.schemaVersion] + drift migrations; those don't need a
+  /// bump here — seeding also re-runs whenever a seed table is empty
+  /// (e.g. after a migration recreates it).
+  static const int _currentDbVersion = 5;
 
   @override
   Future<void> initialize() async {
@@ -36,15 +43,20 @@ class InitializationRepositoryImpl implements InitializationRepository {
       final prefs = await SharedPreferences.getInstance();
       final seededVersion = prefs.getInt(_dbVersionKey) ?? 0;
 
-      final existing = await db.getAllBoardgames();
+      final hasBoardgames = (await db.getAllBoardgames()).isNotEmpty;
+      final hasTiles = (await db.getAllTiles()).isNotEmpty;
+      final isComplete = hasBoardgames && hasTiles;
 
-      // If we have data and we're at the current version, do nothing
-      if (existing.isNotEmpty && seededVersion >= _currentDbVersion) {
+      // Skip only when seed data is present AND up to date. The emptiness
+      // check makes seeding self-healing: a drift migration that drops or
+      // recreates a seed table gets repopulated on the next startup
+      // without having to bump the seed version.
+      if (isComplete && seededVersion >= _currentDbVersion) {
         return;
       }
 
-      // If upgrading from an older version, wipe the tables to re-seed fresh data
-      if (existing.isNotEmpty && seededVersion < _currentDbVersion) {
+      // Outdated or partially missing: wipe the seed tables to re-seed
+      if (hasBoardgames || hasTiles) {
         // ⚠️ IMPORTANT: This deletion ONLY targets SEED DATA (tiles, modules, boardgames).
         // ⚠️ Future USER data tables (saved games, history, settings, user profiles, etc.)
         // ⚠️ MUST NOT be deleted here. Create separate cleanup if needed for those tables.

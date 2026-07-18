@@ -45,8 +45,17 @@ class Tiles extends Table {
 class AppDatabase extends _$AppDatabase {
   AppDatabase([QueryExecutor? executor]) : super(executor ?? _openConnection());
 
+  /// STRUCTURAL schema version, handled by the drift migrations below.
+  ///
+  /// Bump this (and add a migration) for schema changes: new columns,
+  /// tables, or type changes. Refreshes of the bundled SEED DATA are
+  /// versioned separately by `_currentDbVersion` in
+  /// `InitializationRepositoryImpl` — bump that one instead when only the
+  /// assets/initial_data/*.json content changes. Migrations that drop or
+  /// recreate a seed table are safe: the seeder re-seeds automatically
+  /// whenever a seed table is empty.
   @override
-  int get schemaVersion => 2;
+  int get schemaVersion => 3;
 
   @override
   MigrationStrategy get migration {
@@ -58,6 +67,16 @@ class AppDatabase extends _$AppDatabase {
         if (from < 2) {
           // Add the hutCost column to the Tiles table
           await m.addColumn(tiles, tiles.hutCost);
+        }
+        if (from < 3) {
+          // Tiles.id changed from INTEGER to TEXT (stable string ids)
+          // without a migration at the time, leaving upgraded installs
+          // with the old column affinity. Recreate the table so it
+          // matches the declared schema. Tiles are pure seed data: the
+          // seeder repopulates the table on next startup because it
+          // re-seeds whenever a seed table is empty.
+          await m.deleteTable(tiles.actualTableName);
+          await m.createTable(tiles);
         }
       },
     );
