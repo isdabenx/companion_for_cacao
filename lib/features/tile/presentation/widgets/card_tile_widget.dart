@@ -22,7 +22,7 @@ class CardTileWidget extends ConsumerWidget {
 
     final tileColor = tile.color == null
         ? null
-        : AppColors.findColorByName(tile.color.toString().split('.').last);
+        : AppColors.findColorByName(tile.color!.name);
 
     final borderColor = (tileColor != null && tileSettings.playerColorInBorder)
         ? tileColor

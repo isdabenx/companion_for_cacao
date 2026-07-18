@@ -35,7 +35,6 @@ extension PreparationImageResolver on String {
     'resources_mine_car' => Assets.preparationMineCar,
     'resources_masks' => Assets.preparationMasks,
     'emperor_figure' => Assets.preparationEmperor,
-    'new_workers_deck' => Assets.preparationNewWorkersDeck,
     // Jungle tile logical keys
     'jungle_single_plantation' => Assets.jungleSinglePlantation,
     'jungle_double_plantation' => Assets.jungleDoublePlantation,

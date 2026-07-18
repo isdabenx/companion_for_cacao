@@ -52,9 +52,7 @@ class TileDetailScreen extends ConsumerWidget {
         border: Border.all(
           color: tile.color == null
               ? AppColors.tileBorder
-              : AppColors.findColorByName(
-                  tile.color.toString().split('.').last,
-                ),
+              : AppColors.findColorByName(tile.color!.name),
           width: 4,
         ),
       ),
@@ -132,10 +130,8 @@ class TileDetailScreen extends ConsumerWidget {
               _buildChip(
                 context,
                 Icons.person_outline,
-                _getColorName(tile.color!),
-                AppColors.findColorByName(
-                  tile.color.toString().split('.').last,
-                ),
+                _capitalize(tile.color!.name),
+                AppColors.findColorByName(tile.color!.name),
                 textColor:
                     tile.color == TileColor.white ||
                         tile.color == TileColor.yellow
@@ -195,16 +191,6 @@ class TileDetailScreen extends ConsumerWidget {
     );
   }
 
-  String _getColorName(TileColor color) {
-    switch (color) {
-      case TileColor.red:
-        return 'Red';
-      case TileColor.purple:
-        return 'Purple';
-      case TileColor.white:
-        return 'White';
-      case TileColor.yellow:
-        return 'Yellow';
-    }
-  }
+  String _capitalize(String s) =>
+      s.isEmpty ? s : '${s[0].toUpperCase()}${s.substring(1)}';
 }

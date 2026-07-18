@@ -8,15 +8,6 @@ class ModuleModel {
     this.boardgameId,
   });
 
-  factory ModuleModel.fromJson(Map<String, dynamic> json) {
-    return ModuleModel(
-      id: json['id'] as int,
-      name: json['name'] as String,
-      description: json['description'] as String,
-      boardgameId: json['boardgame'] as int?,
-    );
-  }
-
   factory ModuleModel.fromDrift(Module row) {
     return ModuleModel(
       id: row.id,

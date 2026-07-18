@@ -13,6 +13,7 @@ class SettingsIconWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return IconButton(
+      tooltip: 'Display settings',
       icon: const Icon(Icons.settings),
       onPressed: () {
         unawaited(

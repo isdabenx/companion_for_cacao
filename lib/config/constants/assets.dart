@@ -55,8 +55,6 @@ class Assets {
       'assets/images/preparation/resources_masks.webp';
   static const String preparationEmperor =
       'assets/images/preparation/emperor_figure.webp';
-  static const String preparationNewWorkersDeck =
-      'assets/images/preparation/new_workers_deck.webp';
 
   // Jungle tile images (logical keys → asset paths)
   static const String jungleSinglePlantation =

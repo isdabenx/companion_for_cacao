@@ -14,16 +14,6 @@ class BoardgameModel {
     this.tiles = const [],
   });
 
-  factory BoardgameModel.fromJson(Map<String, dynamic> json) {
-    return BoardgameModel(
-      id: json['id'] as int,
-      name: json['name'] as String,
-      description: json['description'] as String,
-      filenameImage: json['filenameImage'] as String,
-      requireId: json['require'] as int?,
-    );
-  }
-
   factory BoardgameModel.fromDrift(Boardgame row) {
     return BoardgameModel(
       id: row.id,
