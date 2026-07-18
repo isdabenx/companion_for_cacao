@@ -4,6 +4,7 @@ import 'package:companion_for_cacao/features/game_setup/domain/entities/player_e
 import 'package:companion_for_cacao/features/game_setup/domain/entities/preparation_entity.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/preparation_phase.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/services/module_preparation_handler.dart';
+import 'package:companion_for_cacao/features/game_setup/domain/services/tile_adjustments.dart';
 
 /// Constants for tile IDs used in game preparation.
 /// These IDs are stable identifiers that don't change with translations.
@@ -30,7 +31,7 @@ class TileIds {
 /// Watering tile ID for Big Game 3-player removal.
 const String _wateringTileId = 'chocolatl.jungle_watering';
 
-class BaseGameHandler implements ModulePreparationHandler {
+class BaseGameHandler with TileAdjustments implements ModulePreparationHandler {
   BaseGameHandler({
     required this.baseGame,
     required this.activeExpansions,
@@ -93,27 +94,27 @@ class BaseGameHandler implements ModulePreparationHandler {
 
       // 3-player Big Game: remove specific tiles
       if (playerCount == 3) {
-        adjustedTiles = _reduceJungleTileById(
+        adjustedTiles = reduceTileById(
           adjustedTiles,
           id: TileIds.singlePlantation,
           amount: 2,
         );
-        adjustedTiles = _reduceJungleTileById(
+        adjustedTiles = reduceTileById(
           adjustedTiles,
           id: TileIds.goldMineValue1,
           amount: 2,
         );
-        adjustedTiles = _reduceJungleTileById(
+        adjustedTiles = reduceTileById(
           adjustedTiles,
           id: TileIds.marketSelling2,
           amount: 1,
         );
-        adjustedTiles = _reduceJungleTileById(
+        adjustedTiles = reduceTileById(
           adjustedTiles,
           id: TileIds.marketSelling3,
           amount: 1,
         );
-        adjustedTiles = _reduceJungleTileById(
+        adjustedTiles = reduceTileById(
           adjustedTiles,
           id: _wateringTileId,
           amount: 1,
@@ -125,32 +126,32 @@ class BaseGameHandler implements ModulePreparationHandler {
 
       if (playerCount == 2) {
         // 2-player game: reduce specific jungle tiles
-        adjustedTiles = _reduceJungleTileById(
+        adjustedTiles = reduceTileById(
           adjustedTiles,
           id: TileIds.singlePlantation,
           amount: 2,
         );
-        adjustedTiles = _reduceJungleTileById(
+        adjustedTiles = reduceTileById(
           adjustedTiles,
           id: TileIds.marketSelling3,
           amount: 1,
         );
-        adjustedTiles = _reduceJungleTileById(
+        adjustedTiles = reduceTileById(
           adjustedTiles,
           id: TileIds.goldMineValue1,
           amount: 1,
         );
-        adjustedTiles = _reduceJungleTileById(
+        adjustedTiles = reduceTileById(
           adjustedTiles,
           id: TileIds.water,
           amount: 1,
         );
-        adjustedTiles = _reduceJungleTileById(
+        adjustedTiles = reduceTileById(
           adjustedTiles,
           id: TileIds.sunWorshipingSite,
           amount: 1,
         );
-        adjustedTiles = _reduceJungleTileById(
+        adjustedTiles = reduceTileById(
           adjustedTiles,
           id: TileIds.temple,
           amount: 1,
@@ -348,25 +349,6 @@ class BaseGameHandler implements ModulePreparationHandler {
     }
 
     return null;
-  }
-
-  List<TileModel> _reduceJungleTileById(
-    List<TileModel> tiles, {
-    required String id,
-    required int amount,
-  }) {
-    var remaining = amount;
-
-    return tiles.map((tile) {
-      if (remaining == 0 || tile.id != id) {
-        return tile;
-      }
-
-      final reduction = tile.quantity >= remaining ? remaining : tile.quantity;
-      remaining -= reduction;
-
-      return tile.copyWith(quantity: tile.quantity - reduction);
-    }).toList();
   }
 
   List<PreparationEntity> _twoPlayerJungleTileRemovals() {

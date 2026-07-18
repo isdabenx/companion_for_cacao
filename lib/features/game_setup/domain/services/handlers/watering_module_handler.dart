@@ -4,6 +4,7 @@ import 'package:companion_for_cacao/features/game_setup/domain/entities/player_e
 import 'package:companion_for_cacao/features/game_setup/domain/entities/preparation_entity.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/preparation_phase.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/services/module_preparation_handler.dart';
+import 'package:companion_for_cacao/features/game_setup/domain/services/tile_adjustments.dart';
 
 /// Constants for watering module tile IDs.
 class _WateringTileIds {
@@ -26,7 +27,9 @@ class _WateringTileIds {
 /// Tile substitution logic:
 ///   - 3+ players: Remove 1 single plantation + 2 double plantations. Add 3 watering tiles.
 ///   - 2 players: Remove 2 double plantations. Add 2 watering tiles.
-class WateringModuleHandler implements ModulePreparationHandler {
+class WateringModuleHandler
+    with TileAdjustments
+    implements ModulePreparationHandler {
   static const int moduleId = 2;
 
   @override
@@ -43,35 +46,37 @@ class WateringModuleHandler implements ModulePreparationHandler {
 
     if (playerCount == 2) {
       // 2 players: remove 2 double plantations
-      adjustedTiles = _reduceJungleTileById(
+      adjustedTiles = reduceTileById(
         adjustedTiles,
         id: _WateringTileIds.doublePlantation,
         amount: 2,
       );
 
       // Add 2 watering tiles
-      adjustedTiles = _addWateringTiles(
+      adjustedTiles = addModuleTiles(
         adjustedTiles,
-        wateringTiles: 2,
+        moduleId: moduleId,
+        quantityEach: 2,
         activeExpansions: activeExpansions,
       );
     } else if (playerCount >= 3) {
       // 3+ players: remove 1 single plantation and 2 double plantations
-      adjustedTiles = _reduceJungleTileById(
+      adjustedTiles = reduceTileById(
         adjustedTiles,
         id: _WateringTileIds.singlePlantation,
         amount: 1,
       );
-      adjustedTiles = _reduceJungleTileById(
+      adjustedTiles = reduceTileById(
         adjustedTiles,
         id: _WateringTileIds.doublePlantation,
         amount: 2,
       );
 
       // Add 3 watering tiles
-      adjustedTiles = _addWateringTiles(
+      adjustedTiles = addModuleTiles(
         adjustedTiles,
-        wateringTiles: 3,
+        moduleId: moduleId,
+        quantityEach: 3,
         activeExpansions: activeExpansions,
       );
     }
@@ -174,67 +179,5 @@ class WateringModuleHandler implements ModulePreparationHandler {
       ];
     }
     return const [];
-  }
-
-  /// Reduces a jungle tile by the specified amount.
-  List<TileModel> _reduceJungleTileById(
-    List<TileModel> tiles, {
-    required String id,
-    required int amount,
-  }) {
-    var remaining = amount;
-
-    return tiles.map((tile) {
-      if (remaining == 0 || tile.id != id) {
-        return tile;
-      }
-
-      final reduction = tile.quantity >= remaining ? remaining : tile.quantity;
-      remaining -= reduction;
-
-      return tile.copyWith(quantity: tile.quantity - reduction);
-    }).toList();
-  }
-
-  /// Adds watering tiles to the tile list.
-  /// If tiles don't exist in the list, creates them from expansion definitions.
-  List<TileModel> _addWateringTiles(
-    List<TileModel> tiles, {
-    required int wateringTiles,
-    required List<BoardgameModel> activeExpansions,
-  }) {
-    final result = <TileModel>[...tiles];
-
-    // Find watering tile from expansion definitions
-    TileModel? wateringTileDef;
-
-    for (final expansion in activeExpansions) {
-      for (final tile in expansion.tiles) {
-        if (tile.moduleId == moduleId) {
-          wateringTileDef = tile;
-          break;
-        }
-      }
-      if (wateringTileDef != null) break;
-    }
-
-    // Find watering tile in the list and increase its quantity
-    bool wateringFound = false;
-    for (int i = 0; i < result.length; i++) {
-      if (result[i].id == wateringTileDef?.id) {
-        result[i] = result[i].copyWith(
-          quantity: result[i].quantity + wateringTiles,
-        );
-        wateringFound = true;
-        break;
-      }
-    }
-
-    // If not found in list but definition exists, add it
-    if (!wateringFound && wateringTileDef != null) {
-      result.add(wateringTileDef.copyWith(quantity: wateringTiles));
-    }
-
-    return result;
   }
 }

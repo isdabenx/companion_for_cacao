@@ -3,9 +3,14 @@ import 'package:companion_for_cacao/core/data/models/tile_model.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/player_entity.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/preparation_entity.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/preparation_phase.dart';
+import 'package:companion_for_cacao/features/game_setup/domain/services/handlers/chocolate_module_handler.dart';
+import 'package:companion_for_cacao/features/game_setup/domain/services/handlers/new_workers_module_handler.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/services/module_preparation_handler.dart';
+import 'package:companion_for_cacao/features/game_setup/domain/services/tile_adjustments.dart';
 
-class TreeOfLifeModuleHandler implements ModulePreparationHandler {
+class TreeOfLifeModuleHandler
+    with TileAdjustments
+    implements ModulePreparationHandler {
   static const int moduleId = 6;
 
   @override
@@ -21,31 +26,31 @@ class TreeOfLifeModuleHandler implements ModulePreparationHandler {
     var result = <TileModel>[...tiles];
 
     final isChocolateActive = activeExpansions.any(
-      (exp) => exp.modules.any((m) => m.id == 3),
+      (exp) => exp.modules.any((m) => m.id == ChocolateModuleHandler.moduleId),
     );
 
     // 1. Handle Jungle Tiles (Gold Mines vs Trees of Life)
     if (!isChocolateActive) {
       if (playerCount == 2) {
         // Remove 1 value-1 gold mine, 1 value-2 gold mine
-        result = _reduceJungleTileById(
+        result = reduceTileById(
           result,
           id: 'base.jungle_gold_mine_value_1',
           amount: 1,
         );
-        result = _reduceJungleTileById(
+        result = reduceTileById(
           result,
           id: 'base.jungle_gold_mine_value_2',
           amount: 1,
         );
       } else {
         // Remove all 3 gold mines (2 value-1, 1 value-2)
-        result = _reduceJungleTileById(
+        result = reduceTileById(
           result,
           id: 'base.jungle_gold_mine_value_1',
           amount: 2,
         );
-        result = _reduceJungleTileById(
+        result = reduceTileById(
           result,
           id: 'base.jungle_gold_mine_value_2',
           amount: 1,
@@ -77,7 +82,7 @@ class TreeOfLifeModuleHandler implements ModulePreparationHandler {
       for (final color in playerColors) {
         for (final expansion in activeExpansions) {
           for (final tile in expansion.tiles) {
-            if (tile.moduleId == 8 &&
+            if (tile.moduleId == NewWorkersModuleHandler.moduleId &&
                 tile.color == color &&
                 tile.id.contains('0-0-0-4')) {
               result.add(tile.copyWith(quantity: 1));
@@ -286,24 +291,5 @@ class TreeOfLifeModuleHandler implements ModulePreparationHandler {
       ];
     }
     return const [];
-  }
-
-  List<TileModel> _reduceJungleTileById(
-    List<TileModel> tiles, {
-    required String id,
-    required int amount,
-  }) {
-    var remaining = amount;
-
-    return tiles.map((tile) {
-      if (remaining == 0 || tile.id != id) {
-        return tile;
-      }
-
-      final reduction = tile.quantity >= remaining ? remaining : tile.quantity;
-      remaining -= reduction;
-
-      return tile.copyWith(quantity: tile.quantity - reduction);
-    }).toList();
   }
 }
