@@ -53,9 +53,12 @@ class _PlayerChipWidgetState extends ConsumerState<PlayerChipWidget> {
   }
 
   void _onNameChanged(String name) {
-    final notifier = ref.read(gameSetupProvider.notifier);
-    notifier.removePlayer(widget.colorString);
-    notifier.addPlayer(name, widget.colorString);
+    // Update in place: remove+add would emit two states per keystroke and
+    // the intermediate lower player count disables Big Game via
+    // _resetBigGameIfInvalid.
+    ref
+        .read(gameSetupProvider.notifier)
+        .updatePlayerName(widget.colorString, name);
   }
 
   @override
