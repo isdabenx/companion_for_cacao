@@ -48,23 +48,29 @@ void main() {
     );
   }
 
-  testWidgets('shows the all-set message and draws a first player', (
-    tester,
-  ) async {
-    await tester.pumpWidget(buildTestApp(buildState()));
-    // Confetti keeps animating, so pump fixed frames instead of settle.
-    await tester.pump();
-    await tester.pump(const Duration(milliseconds: 50));
+  testWidgets(
+    'announces the first player from the setup order and only redraws '
+    'on explicit request',
+    (tester) async {
+      await tester.pumpWidget(buildTestApp(buildState()));
+      // Confetti keeps animating, so pump fixed frames instead of settle.
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 50));
 
-    expect(find.text('All set!'), findsOneWidget);
-    expect(find.text('Draw the first player'), findsOneWidget);
+      expect(find.text('All set!'), findsOneWidget);
+      // The order dragged in Game Setup is respected: white (Anna) is
+      // first in the default color order — no draw needed.
+      expect(find.text('Anna starts!'), findsOneWidget);
+      expect(find.text('Draw randomly instead'), findsOneWidget);
 
-    await tester.tap(find.text('Draw the first player'));
-    await tester.pump(const Duration(milliseconds: 50));
+      await tester.tap(find.text('Draw randomly instead'));
+      await tester.pump(const Duration(milliseconds: 50));
 
-    expect(find.textContaining('starts!'), findsOneWidget);
-    expect(find.text('Draw again'), findsOneWidget);
-  });
+      // Still exactly one announcement (whoever the redraw picked).
+      expect(find.textContaining('starts!'), findsOneWidget);
+      expect(find.text('Draw again'), findsOneWidget);
+    },
+  );
 
   testWidgets('close button invokes onClose', (tester) async {
     var closed = false;

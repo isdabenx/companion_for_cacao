@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:collection/collection.dart';
 import 'package:companion_for_cacao/core/theme/app_colors.dart';
 import 'package:companion_for_cacao/core/theme/app_spacing.dart';
 import 'package:companion_for_cacao/core/theme/app_text_styles.dart';
@@ -30,7 +31,12 @@ class _PreparationCelebrationOverlayState
   late final ConfettiController _confetti = ConfettiController(
     duration: const Duration(seconds: 2),
   );
-  String? _drawnName;
+
+  /// Set once the user explicitly redraws. Until then the overlay
+  /// announces the order already defined by dragging in Game Setup —
+  /// the app's canonical first-player mechanism — instead of
+  /// overriding it.
+  bool _redrawn = false;
 
   @override
   void initState() {
@@ -54,11 +60,27 @@ class _PreparationCelebrationOverlayState
     final drawn = ref.read(gameSetupProvider.notifier).drawRandomFirstPlayer();
     if (drawn == null) return;
     HapticFeedback.mediumImpact();
-    setState(() => _drawnName = drawn.displayName);
+    setState(() => _redrawn = true);
   }
 
   @override
   Widget build(BuildContext context) {
+    // First player = position 1 of the order dragged in Game Setup;
+    // watching keeps the pill in sync when a redraw rotates the order.
+    final firstPlayerName = ref.watch(
+      gameSetupProvider.select((s) {
+        final state = s.value;
+        if (state == null) return null;
+        final selected = state.players.where((p) => p.isSelected).toList();
+        if (selected.isEmpty) return null;
+        for (final color in state.colorOrder) {
+          final player = selected.where((p) => p.color == color).firstOrNull;
+          if (player != null) return player.displayName;
+        }
+        return selected.first.displayName;
+      }),
+    );
+
     return Positioned.fill(
       child: Material(
         color: AppColors.greenLight.withValues(alpha: 0.95),
@@ -114,7 +136,7 @@ class _PreparationCelebrationOverlayState
                       ).textTheme.bodyMedium?.copyWith(color: AppColors.brown),
                     ),
                     AppSpacing.verticalL,
-                    if (_drawnName != null) ...[
+                    if (firstPlayerName != null) ...[
                       Container(
                         padding: const EdgeInsets.symmetric(
                           horizontal: AppSpacing.l,
@@ -126,7 +148,7 @@ class _PreparationCelebrationOverlayState
                           border: Border.all(color: AppColors.gold),
                         ),
                         child: Text(
-                          PreparationCopy.startsFirst(_drawnName!),
+                          PreparationCopy.startsFirst(firstPlayerName),
                           style: Theme.of(context).textTheme.titleMedium
                               ?.copyWith(
                                 color: AppColors.brown,
@@ -136,19 +158,22 @@ class _PreparationCelebrationOverlayState
                       ),
                       AppSpacing.verticalM,
                     ],
-                    FilledButton.icon(
-                      onPressed: _drawFirstPlayer,
-                      icon: const Icon(Icons.casino_outlined, size: 18),
-                      label: Text(
-                        _drawnName == null
-                            ? PreparationCopy.drawFirstPlayerAction
-                            : PreparationCopy.drawAgainAction,
-                      ),
-                    ),
-                    AppSpacing.verticalS,
-                    OutlinedButton(
+                    FilledButton(
                       onPressed: () => Navigator.of(context).maybePop(),
                       child: Text(PreparationCopy.backToGameAction),
+                    ),
+                    AppSpacing.verticalS,
+                    // Random draw stays available for groups that did not
+                    // settle an order in Game Setup — explicitly opt-in,
+                    // because it rotates the defined turn order.
+                    TextButton.icon(
+                      onPressed: _drawFirstPlayer,
+                      icon: const Icon(Icons.casino_outlined, size: 16),
+                      label: Text(
+                        _redrawn
+                            ? PreparationCopy.drawAgainAction
+                            : PreparationCopy.drawFirstPlayerAction,
+                      ),
                     ),
                   ],
                 ),

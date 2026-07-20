@@ -88,7 +88,7 @@ Widgets **modificats**:
 
 - **Progrés global**: barra fina sota l'AppBar de la pantalla de preparació (passos completats / totals, ja derivables del `completionMap` existent que inclou els passos interactius).
 - **Check amb resposta**: animació de "pop" (~250 ms, `ScaleTransition` — sense dependències noves) + `HapticFeedback.lightImpact()`; en completar una fase sencera, `mediumImpact()`.
-- **Celebració final**: overlay quan tot està complet — confeti (paquet `confetti`), missatge, i **sorteig opcional de jugador inicial**. L'ordre de torn és `colorOrder` (posició a la graella, drag existent), però `reorderColorOrder(oldIndex, newIndex)` és una API de moviment únic: PR-3 afegeix al notifier un mètode `drawRandomFirstPlayer()` que tria un color seleccionat a l'atzar, el rota a la posició 1 de `colorOrder` i retorna el jugador per anunciar "Starts: {displayName}". Botó final → torna al dashboard de partida.
+- **Celebració final**: overlay quan tot està complet — confeti (paquet `confetti`), missatge, i **anunci del jugador inicial segons l'ordre ja definit al Game Setup** (posició 1 de `colorOrder`, el mecanisme canònic de primer jugador de l'app — la celebració no el sobreescriu). Per als grups que no han decidit ordre, una acció secundària explícita "Draw randomly instead" crida `drawRandomFirstPlayer()` (mètode nou del notifier que rota un color seleccionat a l'atzar a la posició 1). Botó principal → torna al dashboard de partida.
 - Decisió d'acordió vs. chips de fase: **es manté l'acordió** (funciona i té lògica fina ja provada); els chips de navegació queden per a UX-2 si el mode guiat no els fa innecessaris.
 
 Dependència nova única: `confetti` (el "pop" i les expansions es fan amb animacions implícites del SDK).

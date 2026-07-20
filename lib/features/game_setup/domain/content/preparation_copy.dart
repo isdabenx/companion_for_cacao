@@ -254,7 +254,7 @@ abstract final class PreparationCopy {
   static const String allSetTitle = 'All set!';
   static const String allSetMessage =
       'The table is ready. May the best cacao farmer win!';
-  static const String drawFirstPlayerAction = 'Draw the first player';
+  static const String drawFirstPlayerAction = 'Draw randomly instead';
   static const String drawAgainAction = 'Draw again';
   static String startsFirst(String name) => '$name starts!';
   static const String backToGameAction = 'Back to the game';
