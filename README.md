@@ -202,11 +202,11 @@ feature/
 
 ### Fase UX-1 — Redisseny de la preparacio
 
-- [ ] Model de preparacio estructurat (actor, que/com/per que, zona de taula)
-- [ ] Targetes consolidades per jugador amb files expandibles i noms reals
-- [ ] Imatge protagonista amb zoom visible
-- [ ] Targeta de New Workers unificada amb la resta de passos
-- [ ] Progres global, chips de fase, feedback haptic i celebracio final
+- [x] Model de preparacio estructurat (actor, que/com/per que, zona de taula)
+- [x] Targetes consolidades per jugador amb files expandibles i noms reals
+- [x] Imatge protagonista amb zoom visible
+- [x] Targeta de New Workers unificada amb la resta de passos
+- [x] Progres global, feedback haptic i celebracio final amb sorteig de primer jugador
 
 ### Fase UX-2 — Preparacio guiada
 
