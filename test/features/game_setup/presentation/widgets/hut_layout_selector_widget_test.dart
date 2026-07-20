@@ -1,3 +1,5 @@
+// Root-level test overrides don't need provider `dependencies` declarations.
+// ignore_for_file: riverpod_lint/scoped_providers_should_specify_dependencies
 import 'package:companion_for_cacao/core/domain/services/hut_tile_supply.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/game_setup_state_entity.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/hut_layout_entity.dart';
