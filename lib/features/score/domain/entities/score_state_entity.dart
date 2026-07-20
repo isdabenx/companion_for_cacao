@@ -1,9 +1,9 @@
 import 'package:companion_for_cacao/features/game_setup/domain/entities/player_entity.dart';
-import 'package:companion_for_cacao/features/score/domain/entities/hut_type.dart';
+import 'package:companion_for_cacao/core/domain/entities/hut_type.dart';
 import 'package:companion_for_cacao/features/score/domain/entities/player_score_input_entity.dart';
 import 'package:companion_for_cacao/features/score/domain/entities/score_input_entity.dart';
 import 'package:companion_for_cacao/features/score/domain/entities/temple_entry_entity.dart';
-import 'package:companion_for_cacao/features/score/domain/services/hut_tile_supply.dart';
+import 'package:companion_for_cacao/core/domain/services/hut_tile_supply.dart';
 import 'package:companion_for_cacao/features/score/domain/services/score_calculator_service.dart';
 import 'package:flutter/foundation.dart';
 

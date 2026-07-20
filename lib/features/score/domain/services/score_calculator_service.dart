@@ -1,4 +1,4 @@
-import 'package:companion_for_cacao/features/score/domain/entities/hut_type.dart';
+import 'package:companion_for_cacao/core/domain/entities/hut_type.dart';
 import 'package:companion_for_cacao/features/score/domain/entities/player_score_input_entity.dart';
 import 'package:companion_for_cacao/features/score/domain/entities/score_category.dart';
 import 'package:companion_for_cacao/features/score/domain/entities/score_input_entity.dart';

@@ -2,12 +2,12 @@ import 'package:companion_for_cacao/features/game_setup/domain/entities/player_e
 import 'package:companion_for_cacao/features/game_setup/domain/services/handlers/gem_mines_module_handler.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/services/handlers/huts_module_handler.dart';
 import 'package:companion_for_cacao/features/game_setup/presentation/providers/game_setup_notifier.dart';
-import 'package:companion_for_cacao/features/score/domain/entities/hut_type.dart';
+import 'package:companion_for_cacao/core/domain/entities/hut_type.dart';
 import 'package:companion_for_cacao/features/score/domain/entities/player_score_input_entity.dart';
 import 'package:companion_for_cacao/features/score/domain/entities/score_result_entity.dart';
 import 'package:companion_for_cacao/features/score/domain/entities/score_state_entity.dart';
 import 'package:companion_for_cacao/features/score/domain/entities/temple_entry_entity.dart';
-import 'package:companion_for_cacao/features/score/domain/services/hut_tile_supply.dart';
+import 'package:companion_for_cacao/core/domain/services/hut_tile_supply.dart';
 import 'package:companion_for_cacao/features/score/domain/services/score_calculator_service.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 

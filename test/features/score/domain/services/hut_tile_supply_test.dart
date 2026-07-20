@@ -1,5 +1,5 @@
-import 'package:companion_for_cacao/features/score/domain/entities/hut_type.dart';
-import 'package:companion_for_cacao/features/score/domain/services/hut_tile_supply.dart';
+import 'package:companion_for_cacao/core/domain/entities/hut_type.dart';
+import 'package:companion_for_cacao/core/domain/services/hut_tile_supply.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {

@@ -1,4 +1,4 @@
-import 'package:companion_for_cacao/features/score/domain/entities/hut_type.dart';
+import 'package:companion_for_cacao/core/domain/entities/hut_type.dart';
 
 /// The 12 physical double-sided hut tiles of the Chocolatl Hut Module,
 /// transcribed from the real components (front photo / back photo, tiles

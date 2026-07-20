@@ -1,4 +1,4 @@
-import 'package:companion_for_cacao/features/score/domain/entities/hut_type.dart';
+import 'package:companion_for_cacao/core/domain/entities/hut_type.dart';
 import 'package:flutter/foundation.dart';
 
 /// Everything a single player enters into the score calculator, except
