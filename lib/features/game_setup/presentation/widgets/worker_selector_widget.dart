@@ -7,6 +7,7 @@ import 'package:companion_for_cacao/features/game_setup/domain/entities/worker_s
 import 'package:companion_for_cacao/features/game_setup/domain/services/worker_balance_validator.dart';
 import 'package:companion_for_cacao/features/game_setup/presentation/providers/custom_preset_notifier.dart';
 import 'package:companion_for_cacao/features/game_setup/presentation/providers/game_setup_notifier.dart';
+import 'package:companion_for_cacao/shared/widgets/dialog_button_bar_widget.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -378,33 +379,9 @@ class _WorkerEditorSheetState extends ConsumerState<_WorkerEditorSheet> {
   }
 
   Future<void> _showSaveDialog() async {
-    final controller = TextEditingController();
     final name = await showDialog<String>(
       context: context,
-      builder: (ctx) => AlertDialog(
-        title: const Text('Save as preset'),
-        content: TextField(
-          controller: controller,
-          autofocus: true,
-          decoration: const InputDecoration(
-            labelText: 'Preset name',
-            hintText: 'e.g. Our favorite',
-          ),
-          textCapitalization: TextCapitalization.sentences,
-          onSubmitted: (value) => Navigator.of(ctx).pop(value.trim()),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(ctx).pop(),
-            child: const Text('Cancel'),
-          ),
-          FilledButton(
-            onPressed: () => Navigator.of(ctx).pop(controller.text.trim()),
-            style: FilledButton.styleFrom(backgroundColor: AppColors.greenDark),
-            child: const Text('Save'),
-          ),
-        ],
-      ),
+      builder: (_) => const _SavePresetDialog(),
     );
 
     if (name == null || name.isEmpty) return;
@@ -427,14 +404,11 @@ class _WorkerEditorSheetState extends ConsumerState<_WorkerEditorSheet> {
         title: const Text('Delete preset'),
         content: Text("Delete '${preset.name}'?"),
         actions: [
-          TextButton(
-            onPressed: () => Navigator.of(ctx).pop(false),
-            child: const Text('Cancel'),
-          ),
-          FilledButton(
-            onPressed: () => Navigator.of(ctx).pop(true),
-            style: FilledButton.styleFrom(backgroundColor: AppColors.red),
-            child: const Text('Delete'),
+          DialogButtonBarWidget(
+            onCancel: () => Navigator.of(ctx).pop(false),
+            onConfirm: () => Navigator.of(ctx).pop(true),
+            confirmLabel: 'Delete',
+            isDestructive: true,
           ),
         ],
       ),
@@ -749,9 +723,6 @@ class _WorkerEditorSheetState extends ConsumerState<_WorkerEditorSheet> {
                     onPressed: _apply,
                     icon: const Icon(Icons.check, size: 18),
                     label: const Text('Apply'),
-                    style: FilledButton.styleFrom(
-                      backgroundColor: AppColors.greenDark,
-                    ),
                   ),
                 ],
               ),
@@ -1319,6 +1290,49 @@ class _CustomPresetChip extends StatelessWidget {
         materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
         visualDensity: VisualDensity.compact,
       ),
+    );
+  }
+}
+
+/// Preset-name entry dialog. Owns its text controller so it is disposed with
+/// the dialog's own lifecycle instead of racing the route exit animation.
+class _SavePresetDialog extends StatefulWidget {
+  const _SavePresetDialog();
+
+  @override
+  State<_SavePresetDialog> createState() => _SavePresetDialogState();
+}
+
+class _SavePresetDialogState extends State<_SavePresetDialog> {
+  final TextEditingController _controller = TextEditingController();
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: const Text('Save as preset'),
+      content: TextField(
+        controller: _controller,
+        autofocus: true,
+        decoration: const InputDecoration(
+          labelText: 'Preset name',
+          hintText: 'e.g. Our favorite',
+        ),
+        textCapitalization: TextCapitalization.sentences,
+        onSubmitted: (value) => Navigator.of(context).pop(value.trim()),
+      ),
+      actions: [
+        DialogButtonBarWidget(
+          onCancel: () => Navigator.of(context).pop(),
+          onConfirm: () => Navigator.of(context).pop(_controller.text.trim()),
+          confirmLabel: 'Save',
+        ),
+      ],
     );
   }
 }

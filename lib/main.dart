@@ -70,6 +70,12 @@ class MainApp extends ConsumerWidget {
         textButtonTheme: TextButtonThemeData(
           style: TextButton.styleFrom(foregroundColor: AppColors.greenDarker),
         ),
+        outlinedButtonTheme: OutlinedButtonThemeData(
+          style: OutlinedButton.styleFrom(
+            foregroundColor: AppColors.greenDarker,
+            side: const BorderSide(color: AppColors.greenDarker),
+          ),
+        ),
         scaffoldBackgroundColor: AppColors.greenLight,
         textTheme: TextTheme(
           headlineLarge: AppTextStyles.titleTextStyle,

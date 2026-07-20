@@ -1,3 +1,5 @@
+import 'package:companion_for_cacao/core/utils/string_extensions.dart';
+
 class PlayerEntity {
   PlayerEntity({
     required this.name,
@@ -7,6 +9,10 @@ class PlayerEntity {
   final String name;
   final String color;
   final bool isSelected;
+
+  /// Name to show in the UI: the typed name, or the capitalized color for
+  /// unnamed players.
+  String get displayName => name.isNotEmpty ? name : color.capitalized;
 
   PlayerEntity copyWith({String? name, String? color, bool? isSelected}) {
     return PlayerEntity(

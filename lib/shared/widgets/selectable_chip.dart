@@ -45,6 +45,14 @@ class SelectableChip extends StatelessWidget {
     final effectiveUnselectedBorderColor =
         unselectedBorderColor ?? theme.colorScheme.outlineVariant;
 
+    // Compensate the thinner unselected border with padding so the chip's
+    // outer size is identical in both states and layouts don't shift on
+    // selection.
+    final borderDelta = selectedBorderWidth - unselectedBorderWidth;
+    final effectivePadding = !isSelected && borderDelta > 0
+        ? padding.add(EdgeInsets.all(borderDelta))
+        : padding;
+
     return Container(
       decoration: BoxDecoration(
         color: isSelected ? effectiveSelectedColor : effectiveUnselectedColor,
@@ -71,7 +79,7 @@ class SelectableChip extends StatelessWidget {
         child: InkWell(
           onTap: onTap,
           borderRadius: BorderRadius.circular(borderRadius),
-          child: Padding(padding: padding, child: child),
+          child: Padding(padding: effectivePadding, child: child),
         ),
       ),
     );

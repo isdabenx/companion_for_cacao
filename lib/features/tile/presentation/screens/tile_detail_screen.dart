@@ -4,6 +4,7 @@ import 'package:companion_for_cacao/core/theme/app_colors.dart';
 import 'package:companion_for_cacao/core/theme/app_markdown_style_sheet.dart';
 import 'package:companion_for_cacao/core/theme/app_spacing.dart';
 import 'package:companion_for_cacao/core/theme/app_text_styles.dart';
+import 'package:companion_for_cacao/core/utils/string_extensions.dart';
 import 'package:companion_for_cacao/shared/widgets/container_full_style_widget.dart';
 import 'package:companion_for_cacao/shared/widgets/custom_scaffold_widget.dart';
 import 'package:flutter/material.dart';
@@ -130,7 +131,7 @@ class TileDetailScreen extends ConsumerWidget {
               _buildChip(
                 context,
                 Icons.person_outline,
-                _capitalize(tile.color!.name),
+                tile.color!.name.capitalized,
                 AppColors.findColorByName(tile.color!.name),
                 textColor:
                     tile.color == TileColor.white ||
@@ -190,7 +191,4 @@ class TileDetailScreen extends ConsumerWidget {
       ),
     );
   }
-
-  String _capitalize(String s) =>
-      s.isEmpty ? s : '${s[0].toUpperCase()}${s.substring(1)}';
 }
