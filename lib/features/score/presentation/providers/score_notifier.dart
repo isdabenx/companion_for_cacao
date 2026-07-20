@@ -45,6 +45,9 @@ class ScoreNotifier extends _$ScoreNotifier {
       gemMinesActive: setup.modules.any(
         (m) => m.id == GemMinesModuleHandler.moduleId,
       ),
+      // With the hut throw registered, the calculator offers exactly the
+      // huts in play.
+      availableHutCounts: setup.hutLayout?.availableCounts,
     );
   }
 

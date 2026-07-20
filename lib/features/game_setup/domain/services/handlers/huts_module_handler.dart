@@ -14,6 +14,11 @@ import 'package:companion_for_cacao/features/game_setup/domain/services/module_p
 class HutsModuleHandler implements ModulePreparationHandler {
   static const int moduleId = 4;
 
+  /// Interactive step where the throw result (face-up side of each of the
+  /// 12 hut tiles) can optionally be registered, so the score calculator
+  /// knows the exact hut supply of this game.
+  static const String layoutStepId = 'setup_huts_register_layout';
+
   @override
   List<TileEntity> adjustTiles(
     List<TileEntity> tiles,
@@ -55,7 +60,8 @@ class HutsModuleHandler implements ModulePreparationHandler {
       }
     }
 
-    // Insert the huts market setup step at the end of boardSetup phase
+    // Insert the huts market setup step at the end of boardSetup phase,
+    // followed by the optional interactive throw-registration step.
     if (lastBoardSetupIndex >= 0) {
       preparation.insert(
         lastBoardSetupIndex + 1,
@@ -63,6 +69,17 @@ class HutsModuleHandler implements ModulePreparationHandler {
           id: 'setup_huts_market',
           description:
               'Take the 12 hut tiles, drop them from a low height to randomly determine their face-up side, and sort them by building cost next to the bank as a supply.\n\nVariant: Alternatively, players can agree on a specific selection of huts instead of a random assortment.',
+          phase: PreparationPhase.boardSetup,
+        ),
+      );
+      preparation.insert(
+        lastBoardSetupIndex + 2,
+        PreparationEntity(
+          id: layoutStepId,
+          description:
+              'Optionally register which side of each hut tile landed face '
+              'up. The score calculator will then offer exactly the huts in '
+              'play.',
           phase: PreparationPhase.boardSetup,
         ),
       );

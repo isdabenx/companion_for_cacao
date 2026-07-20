@@ -2,8 +2,10 @@ import 'package:companion_for_cacao/config/constants/game_constants.dart';
 import 'package:companion_for_cacao/core/domain/entities/boardgame_entity.dart';
 import 'package:companion_for_cacao/core/domain/entities/module_entity.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/game_setup_state_entity.dart';
+import 'package:companion_for_cacao/features/game_setup/domain/entities/hut_layout_entity.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/player_entity.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/worker_selection_entity.dart';
+import 'package:companion_for_cacao/features/game_setup/domain/services/handlers/huts_module_handler.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/services/handlers/new_workers_module_handler.dart';
 import 'package:companion_for_cacao/features/game_setup/presentation/providers/game_setup_use_case_providers.dart';
 import 'package:companion_for_cacao/features/tile/tile_public_api.dart';
@@ -140,6 +142,10 @@ class GameSetupNotifier extends _$GameSetupNotifier {
       if (module.id == NewWorkersModuleHandler.moduleId) {
         state = AsyncData(state.value!.copyWith(clearWorkerSelection: true));
       }
+      // Clear the registered hut throw when the Hut Module is removed
+      if (module.id == HutsModuleHandler.moduleId) {
+        state = AsyncData(state.value!.copyWith(clearHutLayout: true));
+      }
     } else {
       addModule(module);
     }
@@ -162,10 +168,13 @@ class GameSetupNotifier extends _$GameSetupNotifier {
 
   void startGame() {
     if (state.value == null) return;
-    // Worker selection is a per-game choice made during preparation: every
-    // new game starts from the default (add all), never from a selection
+    // Worker selection and the hut throw are per-game choices made during
+    // preparation: every new game starts from scratch, never from choices
     // applied in a previous game.
-    final setup = state.value!.copyWith(clearWorkerSelection: true);
+    final setup = state.value!.copyWith(
+      clearWorkerSelection: true,
+      clearHutLayout: true,
+    );
     // A new game also starts without leftover in-play tile filters
     ref.invalidate(tileFilterProvider(TileFilterScope.inPlay));
     final useCase = ref.read(prepareGameUseCaseProvider);
@@ -180,6 +189,7 @@ class GameSetupNotifier extends _$GameSetupNotifier {
         tiles: [],
         isStarted: false,
         clearWorkerSelection: true,
+        clearHutLayout: true,
       ),
     );
   }
@@ -215,6 +225,18 @@ class GameSetupNotifier extends _$GameSetupNotifier {
   void clearWorkerSelection() {
     if (state.value == null) return;
     state = AsyncData(state.value!.copyWith(clearWorkerSelection: true));
+  }
+
+  /// Registers which side of each hut tile landed face up in the throw.
+  void applyHutLayout(HutLayoutEntity layout) {
+    if (state.value == null) return;
+    state = AsyncData(state.value!.copyWith(hutLayout: layout));
+  }
+
+  /// Forgets the registered hut throw (supply becomes unknown again).
+  void clearHutLayout() {
+    if (state.value == null) return;
+    state = AsyncData(state.value!.copyWith(clearHutLayout: true));
   }
 
   void togglePreparationCompletion(String id) {

@@ -104,7 +104,7 @@ void main() {
             mockPreparationSteps,
           );
 
-          expect(result.length, equals(mockPreparationSteps.length + 1));
+          expect(result.length, equals(mockPreparationSteps.length + 2));
 
           final hutsMarketIndex = result.indexWhere(
             (step) => step.id == 'setup_huts_market',
@@ -116,6 +116,23 @@ void main() {
           );
         },
       );
+
+      test('should insert the throw registration step after the market', () {
+        final result = handler.modifyPreparationSteps(
+          mockPlayers,
+          mockTiles,
+          mockPreparationSteps,
+        );
+
+        final layoutIndex = result.indexWhere(
+          (step) => step.id == HutsModuleHandler.layoutStepId,
+        );
+        final marketIndex = result.indexWhere(
+          (step) => step.id == 'setup_huts_market',
+        );
+        expect(layoutIndex, equals(marketIndex + 1));
+        expect(result[layoutIndex].phase, equals(PreparationPhase.boardSetup));
+      });
 
       test(
         'should not insert setup_huts_market if no boardSetup phase exists',
@@ -136,6 +153,10 @@ void main() {
 
           expect(result.length, equals(stepsWithoutBoardSetup.length));
           expect(result.any((step) => step.id == 'setup_huts_market'), isFalse);
+          expect(
+            result.any((step) => step.id == HutsModuleHandler.layoutStepId),
+            isFalse,
+          );
         },
       );
     });

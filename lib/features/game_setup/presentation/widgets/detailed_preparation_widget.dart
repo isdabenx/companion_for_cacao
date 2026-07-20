@@ -3,9 +3,11 @@ import 'package:companion_for_cacao/core/theme/app_colors.dart';
 import 'package:companion_for_cacao/core/theme/app_spacing.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/preparation_entity.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/preparation_phase.dart';
+import 'package:companion_for_cacao/features/game_setup/domain/services/handlers/huts_module_handler.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/services/handlers/new_workers_module_handler.dart';
 import 'package:companion_for_cacao/features/game_setup/presentation/providers/game_setup_notifier.dart';
 import 'package:companion_for_cacao/features/game_setup/presentation/utils/preparation_image_resolver.dart';
+import 'package:companion_for_cacao/features/game_setup/presentation/widgets/hut_layout_selector_widget.dart';
 import 'package:companion_for_cacao/features/game_setup/presentation/widgets/worker_selector_widget.dart';
 import 'package:companion_for_cacao/shared/widgets/container_full_style_widget.dart';
 import 'package:flutter/material.dart';
@@ -70,9 +72,10 @@ class DetailedPreparationWidget extends ConsumerWidget {
 
     PreparationPhase? firstIncompletePhase;
     for (final entry in groupedPreparation.entries) {
-      // The worker selector step has no checkbox — exclude it from counts
+      // Interactive steps have no checkbox — exclude them from counts
       final items = entry.value
           .where((p) => p.id != NewWorkersModuleHandler.selectionStepId)
+          .where((p) => p.id != HutsModuleHandler.layoutStepId)
           .toList();
       final completedCount = items
           .where((p) => completionMap[p.id] ?? p.isCompleted)
@@ -140,6 +143,9 @@ class DetailedPreparationWidget extends ConsumerWidget {
                                 NewWorkersModuleHandler.selectionStepId) {
                               return const WorkerSelectorWidget();
                             }
+                            if (item.id == HutsModuleHandler.layoutStepId) {
+                              return const HutLayoutSelectorWidget();
+                            }
                             return PreparationCard(
                               key: ValueKey(item.id),
                               preparation: item,
@@ -184,9 +190,10 @@ class _PhaseHeaderDelegate extends SliverPersistentHeaderDelegate {
     double shrinkOffset,
     bool overlapsContent,
   ) {
-    // The worker selector step has no checkbox — exclude it from counts
+    // Interactive steps have no checkbox — exclude them from counts
     final countableItems = items
         .where((p) => p.id != NewWorkersModuleHandler.selectionStepId)
+        .where((p) => p.id != HutsModuleHandler.layoutStepId)
         .toList();
     final phaseCompletedCount = countableItems
         .where((p) => completionMap[p.id] ?? p.isCompleted)

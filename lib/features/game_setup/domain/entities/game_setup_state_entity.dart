@@ -1,6 +1,7 @@
 import 'package:companion_for_cacao/core/domain/entities/boardgame_entity.dart';
 import 'package:companion_for_cacao/core/domain/entities/module_entity.dart';
 import 'package:companion_for_cacao/core/domain/entities/tile_entity.dart';
+import 'package:companion_for_cacao/features/game_setup/domain/entities/hut_layout_entity.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/player_entity.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/preparation_entity.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/worker_selection_entity.dart';
@@ -17,6 +18,7 @@ class GameSetupStateEntity {
     this.isStarted = false,
     this.isBigGame = false,
     this.workerSelection,
+    this.hutLayout,
   });
   final List<PlayerEntity> players;
   final List<BoardgameEntity> expansions;
@@ -30,6 +32,10 @@ class GameSetupStateEntity {
   /// Worker tile selection for Module D (The New Workers).
   /// Null when Module D is not active or using default behavior (addAll).
   final WorkerSelectionEntity? workerSelection;
+
+  /// Registered hut throw for the Hut Module (Chocolatl).
+  /// Null when the module is inactive or the throw was not registered.
+  final HutLayoutEntity? hutLayout;
 
   /// Total number of modules across all expansions
   /// (Chocolatl 4 + Diamante 4).
@@ -53,6 +59,8 @@ class GameSetupStateEntity {
     bool? isBigGame,
     WorkerSelectionEntity? workerSelection,
     bool clearWorkerSelection = false,
+    HutLayoutEntity? hutLayout,
+    bool clearHutLayout = false,
   }) {
     return GameSetupStateEntity(
       players: players ?? this.players,
@@ -66,6 +74,7 @@ class GameSetupStateEntity {
       workerSelection: clearWorkerSelection
           ? null
           : (workerSelection ?? this.workerSelection),
+      hutLayout: clearHutLayout ? null : (hutLayout ?? this.hutLayout),
     );
   }
 
@@ -82,7 +91,8 @@ class GameSetupStateEntity {
         listEquals(other.colorOrder, colorOrder) &&
         other.isStarted == isStarted &&
         other.isBigGame == isBigGame &&
-        other.workerSelection == workerSelection;
+        other.workerSelection == workerSelection &&
+        other.hutLayout == hutLayout;
   }
 
   @override
@@ -96,5 +106,6 @@ class GameSetupStateEntity {
     isStarted,
     isBigGame,
     workerSelection,
+    hutLayout,
   );
 }

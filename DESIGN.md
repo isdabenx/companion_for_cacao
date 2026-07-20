@@ -288,7 +288,7 @@ Les 14 cabanes no tenen model de dades (ni JSON ni Drift). Caldria un HutModel o
 2. **Filtre i cerca de rajoles:** Filtrar per tipus, color, expansió i mòdul. Cerca per nom. (COMPLETAT)
 3. **Selector de primer jugador:** Aleatori temàtic ("qui ha menjat xocolata més recentment?"), rotació basada en historial, o manual. (COMPLETAT)
 4. **Rajoles d'expansions completes:** Afegir totes les fitxes de Diamante al JSON i ampliar TileType (Chocolatl ja afegit). (COMPLETAT)
-5. **Registre de la tirada de cabanes (Hut Module):** Pas opcional de preparació per apuntar quina cara de cada una de les 12 rajoles físiques ha quedat cap amunt (parelles a `HutTileSupply.tiles` de la secció 12; mateix patró que el selector de treballadors del mòdul Nous Treballadors: entitat `HutLayoutEntity` dins de `GameSetupStateEntity`). La calculadora de puntuació, en pre-omplir-se des de la partida activa, ofereix només les cabanes realment disponibles; imatges de cada funció ja disponibles al catàleg de rajoles.
+5. **Registre de la tirada de cabanes (Hut Module):** Pas opcional de preparació per apuntar quina cara de cada una de les 12 rajoles físiques ha quedat cap amunt (parelles a `HutTileSupply.tiles` de la secció 12; mateix patró que el selector de treballadors del mòdul Nous Treballadors: entitat `HutLayoutEntity` dins de `GameSetupStateEntity`). La calculadora de puntuació, en pre-omplir-se des de la partida activa, ofereix només les cabanes realment disponibles (recompte exacte per funció en lloc del validador d'assignació). (COMPLETAT)
 
 ### Fase 2 — Diferenciació (Prioritat mitjana)
 5. **Historial de partides:** Registre de cada sessió amb jugadors, puntuacions, guanyador, durada, expansions utilitzades i notes opcionals.

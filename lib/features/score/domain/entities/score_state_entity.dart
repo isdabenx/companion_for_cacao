@@ -33,6 +33,7 @@ class ScoreStateEntity {
     this.inputsByColor = const {},
     this.maskOwners = const [null, null, null, null, null, null, null],
     this.currentStepIndex = 0,
+    this.availableHutCounts,
   });
 
   final List<PlayerEntity> players;
@@ -40,6 +41,11 @@ class ScoreStateEntity {
   final bool gemMinesActive;
   final List<TempleEntryEntity> temples;
   final Map<String, PlayerScoreInputEntity> inputsByColor;
+
+  /// Exact hut supply when the throw was registered during preparation
+  /// (function -> face-up copies). Null when unknown: availability then
+  /// falls back to [HutTileSupply.isRealizable].
+  final Map<HutType, int>? availableHutCounts;
 
   /// Owner color (or null) of each of the 7 Gem Mines mask tiles, aligned
   /// with [ScoreCalculatorService.maskValues]. A physical mask tile can only
@@ -84,10 +90,16 @@ class ScoreStateEntity {
   ];
 
   /// Whether [color] can still build [hut]: not already owned by them, and
-  /// the resulting layout must be realizable with the physical tile supply
-  /// ([HutTileSupply.isRealizable]).
+  /// there must be a physical tile left providing it — checked against the
+  /// registered throw when available, or [HutTileSupply.isRealizable]
+  /// otherwise.
   bool canBuildHut(String color, HutType hut) {
     if (inputOf(color).huts.contains(hut)) return false;
+    final counts = availableHutCounts;
+    if (counts != null) {
+      final built = allBuiltHuts.where((h) => h == hut).length;
+      return built < (counts[hut] ?? 0);
+    }
     return HutTileSupply.isRealizable([...allBuiltHuts, hut]);
   }
 
@@ -122,6 +134,7 @@ class ScoreStateEntity {
     Map<String, PlayerScoreInputEntity>? inputsByColor,
     List<String?>? maskOwners,
     int? currentStepIndex,
+    Map<HutType, int>? availableHutCounts,
   }) {
     return ScoreStateEntity(
       players: players ?? this.players,
@@ -131,6 +144,7 @@ class ScoreStateEntity {
       inputsByColor: inputsByColor ?? this.inputsByColor,
       maskOwners: maskOwners ?? this.maskOwners,
       currentStepIndex: currentStepIndex ?? this.currentStepIndex,
+      availableHutCounts: availableHutCounts ?? this.availableHutCounts,
     );
   }
 
@@ -144,7 +158,8 @@ class ScoreStateEntity {
         listEquals(other.temples, temples) &&
         mapEquals(other.inputsByColor, inputsByColor) &&
         listEquals(other.maskOwners, maskOwners) &&
-        other.currentStepIndex == currentStepIndex;
+        other.currentStepIndex == currentStepIndex &&
+        mapEquals(other.availableHutCounts, availableHutCounts);
   }
 
   @override
@@ -158,5 +173,10 @@ class ScoreStateEntity {
     ),
     Object.hashAll(maskOwners),
     currentStepIndex,
+    availableHutCounts == null
+        ? null
+        : Object.hashAllUnordered(
+            availableHutCounts!.entries.map((e) => Object.hash(e.key, e.value)),
+          ),
   );
 }

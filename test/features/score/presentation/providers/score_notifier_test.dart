@@ -1,5 +1,7 @@
 import 'package:companion_for_cacao/core/domain/entities/module_entity.dart';
+import 'package:companion_for_cacao/core/domain/services/hut_tile_supply.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/game_setup_state_entity.dart';
+import 'package:companion_for_cacao/features/game_setup/domain/entities/hut_layout_entity.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/player_entity.dart';
 import 'package:companion_for_cacao/features/game_setup/presentation/providers/game_setup_notifier.dart';
 import 'package:companion_for_cacao/core/domain/entities/hut_type.dart';
@@ -159,6 +161,56 @@ void main() {
       expect(refreshed.players.map((p) => p.name), ['Alice', 'Bob']);
       expect(refreshed.hutModuleActive, isTrue);
       expect(refreshed.inputOf('yellow').accumulatedGold, 0);
+    });
+
+    test('a registered hut throw fixes the exact available supply', () async {
+      // Throw where every tile shows side A: two Market Crier/Hermit tiles
+      // land as one Market Crier (tile 1) and one Hermit (tile 3), and the
+      // Chief family sides of tiles 7/8 stay face down.
+      final layout = HutLayoutEntity(
+        faceUp: [for (final (sideA, _) in HutTileSupply.tiles) sideA],
+      );
+      final fake = _FakeGameSetupNotifier(
+        GameSetupStateEntity(
+          players: [
+            PlayerEntity(name: 'Alice', color: 'red', isSelected: true),
+            PlayerEntity(name: 'Bob', color: 'white', isSelected: true),
+          ],
+          modules: [
+            ModuleEntity(id: 4, name: 'Huts', description: '', boardgameId: 2),
+          ],
+          hutLayout: layout,
+          isStarted: true,
+        ),
+      );
+      final container = ProviderContainer(
+        overrides: [gameSetupProvider.overrideWith(() => fake)],
+      );
+      addTearDown(container.dispose);
+      await container.read(gameSetupProvider.future);
+
+      final prefilled = container.read(scoreProvider);
+      expect(prefilled.availableHutCounts, layout.availableCounts);
+
+      // Only one Market Crier landed face up: a second copy is refused
+      // even though two physical tiles carry the function.
+      container
+          .read(scoreProvider.notifier)
+          .toggleHut('red', HutType.marketCrier);
+      expect(
+        container.read(scoreProvider).canBuildHut('white', HutType.marketCrier),
+        isFalse,
+      );
+      // Chief's Son landed face down on its only tile: never buildable.
+      expect(
+        container.read(scoreProvider).canBuildHut('white', HutType.chiefsSon),
+        isFalse,
+      );
+      // Hermit (tile 3 side A) is available.
+      expect(
+        container.read(scoreProvider).canBuildHut('white', HutType.hermit),
+        isTrue,
+      );
     });
 
     test('inputs are clamped to their game limits', () {
