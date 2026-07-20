@@ -1,6 +1,7 @@
 import 'package:companion_for_cacao/core/theme/app_spacing.dart';
 import 'package:companion_for_cacao/features/tile/domain/entities/tile_filter_scope.dart';
 import 'package:companion_for_cacao/features/tile/presentation/providers/tile_filter_notifier.dart';
+import 'package:companion_for_cacao/l10n/generated/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -41,7 +42,7 @@ class FilterActiveChip extends ConsumerWidget {
             child: Chip(
               avatar: const Icon(Icons.filter_list, size: 18),
               label: Text(
-                '$filterCount filter${filterCount > 1 ? 's' : ''} active',
+                AppLocalizations.of(context).activeFiltersCount(filterCount),
               ),
               deleteIcon: const Icon(Icons.close, size: 18),
               onDeleted: () {

@@ -1,7 +1,6 @@
 import 'package:collection/collection.dart';
 import 'package:companion_for_cacao/core/domain/entities/boardgame_entity.dart';
 import 'package:companion_for_cacao/core/domain/entities/module_entity.dart';
-import 'package:companion_for_cacao/core/domain/entities/tile_type_extension.dart';
 import 'package:companion_for_cacao/core/utils/app_logger.dart';
 
 enum TileType {
@@ -95,8 +94,6 @@ class TileEntity {
   final int? boardgameId;
   final int? moduleId;
   final int? hutCost;
-
-  String get typeAsString => type?.displayName ?? '';
 
   /// Default sort: huts last, then alphabetical by name.
   static int defaultSort(TileEntity a, TileEntity b) {

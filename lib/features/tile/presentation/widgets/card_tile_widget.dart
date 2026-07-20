@@ -5,6 +5,8 @@ import 'package:companion_for_cacao/features/tile/presentation/widgets/card_tile
 import 'package:companion_for_cacao/features/tile/presentation/widgets/card_tile_boardgame_title_widget.dart';
 import 'package:companion_for_cacao/features/tile/presentation/widgets/card_tile_image_widget.dart';
 import 'package:companion_for_cacao/features/tile/presentation/widgets/card_tile_name_widget.dart';
+import 'package:companion_for_cacao/l10n/generated/app_localizations.dart';
+import 'package:companion_for_cacao/shared/utils/catalog_l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -20,6 +22,9 @@ class CardTileWidget extends ConsumerWidget {
       return const Center(child: CircularProgressIndicator());
     }
 
+    final l10n = AppLocalizations.of(context);
+    final localizedType = tile.type?.localizedName(l10n) ?? '';
+
     final tileColor = tile.color == null
         ? null
         : AppColors.findColorByName(tile.color!.name);
@@ -34,7 +39,7 @@ class CardTileWidget extends ConsumerWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           CardTileImageWidget(
-            tileType: tile.typeAsString,
+            tileType: localizedType,
             filenameImage: tile.filenameImage,
             badgeTypeInImage: tileSettings.badgeTypeInImage,
             quantity: tile.quantity,
@@ -42,17 +47,17 @@ class CardTileWidget extends ConsumerWidget {
           ),
           if (tileSettings.boardgameInTitle && tile.boardgame.value != null)
             CardTileBoardgameTitleWidget(
-              title: tile.boardgame.value!.name,
+              title: tile.boardgame.value!.localizedName(l10n),
               color: borderColor,
             ),
           if (tileSettings.badgeTypeInText || tileSettings.playerColorInCircle)
             CardTileBadgeRowWidget(
-              tileType: tile.typeAsString,
+              tileType: localizedType,
               color: tileColor,
               playerColorInCircle: tileSettings.playerColorInCircle,
               badgeTypeInText: tileSettings.badgeTypeInText,
             ),
-          CardTileNameWidget(name: tile.name),
+          CardTileNameWidget(name: tile.localizedName(l10n)),
         ],
       ),
     );

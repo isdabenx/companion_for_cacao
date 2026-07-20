@@ -22,7 +22,9 @@ void main() {
     });
 
     test('should return true when selectedTileTypes is not empty', () {
-      const filter = TileFilterStateEntity(selectedTileTypes: {'Market'});
+      const filter = TileFilterStateEntity(
+        selectedTileTypes: {TileType.market},
+      );
       expect(filter.hasActiveFilters, isTrue);
     });
 
@@ -30,7 +32,7 @@ void main() {
       const filter = TileFilterStateEntity(
         searchQuery: 'test',
         selectedBoardgameIds: {1, 2},
-        selectedTileTypes: {'Market', 'Plantation'},
+        selectedTileTypes: {TileType.market, TileType.plantation},
       );
       expect(filter.hasActiveFilters, isTrue);
     });
@@ -54,7 +56,11 @@ void main() {
 
     test('should count each tileType separately', () {
       const filter = TileFilterStateEntity(
-        selectedTileTypes: {'Market', 'Plantation', 'Water'},
+        selectedTileTypes: {
+          TileType.market,
+          TileType.plantation,
+          TileType.water,
+        },
       );
       expect(filter.activeFilterCount, 3);
     });
@@ -64,7 +70,7 @@ void main() {
       const filter = TileFilterStateEntity(
         searchQuery: 'test',
         selectedBoardgameIds: {1, 2},
-        selectedTileTypes: {'Market', 'Plantation'},
+        selectedTileTypes: {TileType.market, TileType.plantation},
       );
       expect(filter.activeFilterCount, 5);
     });
@@ -171,7 +177,9 @@ void main() {
 
     group('selectedTileTypes filter', () {
       test('should match tiles of selected type', () {
-        const filter = TileFilterStateEntity(selectedTileTypes: {'Market'});
+        const filter = TileFilterStateEntity(
+          selectedTileTypes: {TileType.market},
+        );
 
         expect(filter.matches(marketTile), isTrue);
         expect(filter.matches(plantationTile), isFalse);
@@ -179,7 +187,7 @@ void main() {
 
       test('should match tiles of multiple selected types', () {
         const filter = TileFilterStateEntity(
-          selectedTileTypes: {'Market', 'Plantation'},
+          selectedTileTypes: {TileType.market, TileType.plantation},
         );
 
         expect(filter.matches(marketTile), isTrue);
@@ -188,7 +196,9 @@ void main() {
       });
 
       test('should not match tiles of unselected types', () {
-        const filter = TileFilterStateEntity(selectedTileTypes: {'Temple'});
+        const filter = TileFilterStateEntity(
+          selectedTileTypes: {TileType.temple},
+        );
 
         expect(filter.matches(marketTile), isFalse);
         expect(filter.matches(waterTile), isFalse);
@@ -200,7 +210,7 @@ void main() {
         const filter = TileFilterStateEntity(
           searchQuery: 'market',
           selectedBoardgameIds: {1},
-          selectedTileTypes: {'Market'},
+          selectedTileTypes: {TileType.market},
         );
 
         expect(filter.matches(marketTile), isTrue);
@@ -213,7 +223,7 @@ void main() {
         const filter = TileFilterStateEntity(
           searchQuery: 'nonexistent',
           selectedBoardgameIds: {1},
-          selectedTileTypes: {'Market'},
+          selectedTileTypes: {TileType.market},
         );
 
         expect(filter.matches(marketTile), isFalse);
@@ -223,7 +233,7 @@ void main() {
         const filter = TileFilterStateEntity(
           searchQuery: 'market',
           selectedBoardgameIds: {2},
-          selectedTileTypes: {'Market'},
+          selectedTileTypes: {TileType.market},
         );
 
         expect(filter.matches(marketTile), isFalse);
@@ -233,7 +243,7 @@ void main() {
         const filter = TileFilterStateEntity(
           searchQuery: 'market',
           selectedBoardgameIds: {1},
-          selectedTileTypes: {'Plantation'},
+          selectedTileTypes: {TileType.plantation},
         );
 
         expect(filter.matches(marketTile), isFalse);
@@ -272,7 +282,9 @@ void main() {
           type: null,
         );
 
-        const filter = TileFilterStateEntity(selectedTileTypes: {'Market'});
+        const filter = TileFilterStateEntity(
+          selectedTileTypes: {TileType.market},
+        );
 
         // Should not match since type is null
         expect(filter.matches(nullTypeTile), isFalse);
@@ -304,9 +316,9 @@ void main() {
 
     test('should create a new instance with updated selectedTileTypes', () {
       const original = TileFilterStateEntity();
-      final updated = original.copyWith(selectedTileTypes: {'Market'});
+      final updated = original.copyWith(selectedTileTypes: {TileType.market});
 
-      expect(updated.selectedTileTypes, equals({'Market'}));
+      expect(updated.selectedTileTypes, equals({TileType.market}));
       expect(updated.searchQuery, equals(original.searchQuery));
       expect(
         updated.selectedBoardgameIds,
@@ -318,7 +330,7 @@ void main() {
       const original = TileFilterStateEntity(
         searchQuery: 'test',
         selectedBoardgameIds: {1},
-        selectedTileTypes: {'Market'},
+        selectedTileTypes: {TileType.market},
       );
       final updated = original.copyWith();
 
@@ -336,12 +348,12 @@ void main() {
       const filter1 = TileFilterStateEntity(
         searchQuery: 'test',
         selectedBoardgameIds: {1, 2},
-        selectedTileTypes: {'Market'},
+        selectedTileTypes: {TileType.market},
       );
       const filter2 = TileFilterStateEntity(
         searchQuery: 'test',
         selectedBoardgameIds: {1, 2},
-        selectedTileTypes: {'Market'},
+        selectedTileTypes: {TileType.market},
       );
 
       expect(filter1, equals(filter2));
@@ -363,8 +375,12 @@ void main() {
     });
 
     test('should not be equal when selectedTileTypes differs', () {
-      const filter1 = TileFilterStateEntity(selectedTileTypes: {'Market'});
-      const filter2 = TileFilterStateEntity(selectedTileTypes: {'Plantation'});
+      const filter1 = TileFilterStateEntity(
+        selectedTileTypes: {TileType.market},
+      );
+      const filter2 = TileFilterStateEntity(
+        selectedTileTypes: {TileType.plantation},
+      );
 
       expect(filter1, isNot(equals(filter2)));
     });

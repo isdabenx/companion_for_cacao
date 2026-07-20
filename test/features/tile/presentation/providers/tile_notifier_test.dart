@@ -204,7 +204,7 @@ void main() {
           .toggleBoardgame(2);
       container
           .read(tileFilterProvider(TileFilterScope.catalog).notifier)
-          .toggleTileType('Watering');
+          .toggleTileType(TileType.watering);
 
       final result = await container.read(filteredTilesProvider.future);
 

@@ -1,3 +1,4 @@
+import 'package:companion_for_cacao/core/domain/entities/tile_entity.dart';
 import 'package:companion_for_cacao/features/tile/domain/entities/tile_filter_scope.dart';
 import 'package:companion_for_cacao/features/tile/domain/entities/tile_filter_state_entity.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -32,8 +33,8 @@ class TileFilterNotifier extends _$TileFilterNotifier {
     state = state.copyWith(selectedBoardgameIds: currentSet);
   }
 
-  void toggleTileType(String type) {
-    final currentSet = Set<String>.from(state.selectedTileTypes);
+  void toggleTileType(TileType type) {
+    final currentSet = Set<TileType>.from(state.selectedTileTypes);
     if (currentSet.contains(type)) {
       currentSet.remove(type);
     } else {

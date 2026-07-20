@@ -193,7 +193,7 @@ void main() {
       // Filter by market type
       container
           .read(tileFilterProvider(TileFilterScope.catalog).notifier)
-          .toggleTileType('Market');
+          .toggleTileType(TileType.market);
 
       final result = await container.read(filteredTilesProvider.future);
 
@@ -218,13 +218,15 @@ void main() {
 
       await container.read(filteredTilesProvider.future);
 
-      // Filter by boardgame ID 2 AND search query "hut"
+      // Filter by boardgame ID 2 AND search query "chief". The query is
+      // matched against the name the user sees: chocolatl.hut_chief is a
+      // catalog id, so it resolves to the localized "Chief".
       container
           .read(tileFilterProvider(TileFilterScope.catalog).notifier)
           .toggleBoardgame(2);
       container
           .read(tileFilterProvider(TileFilterScope.catalog).notifier)
-          .updateSearchQuery('hut');
+          .updateSearchQuery('chief');
 
       final result = await container.read(filteredTilesProvider.future);
 
@@ -350,10 +352,10 @@ void main() {
       // Filter by market and plantation types
       container
           .read(tileFilterProvider(TileFilterScope.catalog).notifier)
-          .toggleTileType('Market');
+          .toggleTileType(TileType.market);
       container
           .read(tileFilterProvider(TileFilterScope.catalog).notifier)
-          .toggleTileType('Plantation');
+          .toggleTileType(TileType.plantation);
 
       final result = await container.read(filteredTilesProvider.future);
 

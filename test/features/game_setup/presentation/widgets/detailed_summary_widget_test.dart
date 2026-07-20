@@ -72,10 +72,11 @@ void main() {
       expect(find.text('Bob'), findsOneWidget);
 
       expect(find.text('Expansions'), findsOneWidget);
-      expect(find.text('Chocolatl'), findsOneWidget); // id != 1
+      // Catalog ids resolve through the ARB: boardgame 2 is Chocolatl.
+      expect(find.text('Cacao: Chocolatl'), findsOneWidget); // id != 1
 
       expect(find.text('Modules'), findsOneWidget);
-      expect(find.text('Huts'), findsOneWidget);
+      expect(find.text('Chocolate Module'), findsOneWidget); // module id 3
 
       // Tiles section should be hidden initially (AnimatedSize hides it)
       // "Show All Tiles" button should be visible
@@ -102,17 +103,18 @@ void main() {
       await tester.tap(find.text('Show All Tiles'));
       await tester.pumpAndSettle();
 
-      // Verify tiles are now visible
+      // Verify tiles are now visible. The tile chip shows the localized
+      // catalog name for its stable id, not the seeded name.
       expect(find.text('Hide Tiles'), findsOneWidget);
       expect(find.text('Jungle'), findsOneWidget);
-      expect(find.text('1-1-1-1'), findsOneWidget);
+      expect(find.text('Single Plantation'), findsOneWidget);
 
       // Tap to hide
       await tester.tap(find.text('Hide Tiles'));
       await tester.pumpAndSettle();
 
       expect(find.text('Show All Tiles'), findsOneWidget);
-      expect(find.text('1-1-1-1'), findsNothing);
+      expect(find.text('Single Plantation'), findsNothing);
     });
   });
 }

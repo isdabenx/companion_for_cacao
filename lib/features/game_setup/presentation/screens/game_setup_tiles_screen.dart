@@ -3,6 +3,7 @@ import 'package:companion_for_cacao/features/game_setup/domain/entities/game_set
 import 'package:companion_for_cacao/features/game_setup/presentation/providers/game_setup_notifier.dart';
 import 'package:companion_for_cacao/features/tile/tile_public_api.dart';
 import 'package:companion_for_cacao/l10n/generated/app_localizations.dart';
+import 'package:companion_for_cacao/shared/utils/catalog_l10n.dart';
 import 'package:companion_for_cacao/shared/widgets/custom_scaffold_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -14,6 +15,7 @@ class GameSetupTilesScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
     // Prefer the live state: applying a worker selection during preparation
     // re-runs the pipeline, and the route extra is only a snapshot taken
     // when the game was started.
@@ -22,7 +24,7 @@ class GameSetupTilesScreen extends ConsumerWidget {
     // left on while browsing the collection never hides in-game tiles.
     final filter = ref.watch(tileFilterProvider(TileFilterScope.inPlay));
     final filteredTiles = liveSetup.tiles
-        .where((t) => filter.matches(t))
+        .where((t) => filter.matches(t, searchableName: t.localizedName(l10n)))
         .toList();
 
     return CustomScaffoldWidget(

@@ -2,6 +2,8 @@ import 'package:companion_for_cacao/core/domain/entities/tile_entity.dart';
 import 'package:companion_for_cacao/features/tile/domain/entities/tile_filter_scope.dart';
 import 'package:companion_for_cacao/features/tile/presentation/providers/tile_use_case_providers.dart';
 import 'package:companion_for_cacao/features/tile/presentation/providers/tile_filter_notifier.dart';
+import 'package:companion_for_cacao/shared/providers/app_localizations_provider.dart';
+import 'package:companion_for_cacao/shared/utils/catalog_l10n.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'tile_notifier.g.dart';
@@ -38,7 +40,13 @@ Future<List<TileEntity>> filteredTiles(Ref ref) async {
   // Watch both dependencies - rebuilds when either changes
   final tiles = await ref.watch(allTilesProvider.future);
   final filter = ref.watch(tileFilterProvider(TileFilterScope.catalog));
+  final l10n = ref.watch(appLocalizationsProvider);
 
-  // Return filtered list
-  return tiles.where((tile) => filter.matches(tile)).toList();
+  // Return filtered list, searching against the names the user sees
+  return tiles
+      .where(
+        (tile) =>
+            filter.matches(tile, searchableName: tile.localizedName(l10n)),
+      )
+      .toList();
 }

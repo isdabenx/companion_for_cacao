@@ -8,6 +8,7 @@ import 'package:companion_for_cacao/core/theme/app_text_styles.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/game_setup_state_entity.dart';
 import 'package:companion_for_cacao/features/tile/tile_public_api.dart';
 import 'package:companion_for_cacao/l10n/generated/app_localizations.dart';
+import 'package:companion_for_cacao/shared/utils/catalog_l10n.dart';
 import 'package:companion_for_cacao/shared/widgets/circle_badge.dart';
 import 'package:companion_for_cacao/shared/widgets/container_full_style_widget.dart';
 import 'package:companion_for_cacao/features/game_setup/presentation/widgets/responsive_grid_builder.dart';
@@ -178,7 +179,7 @@ class _DetailedSummaryWidgetState extends ConsumerState<DetailedSummaryWidget> {
                         (e) => _SmallChip(
                           key: ValueKey('expansion_${e.id}'),
                           icon: Icons.add_circle_outline,
-                          label: e.name,
+                          label: e.localizedName(AppLocalizations.of(context)),
                         ),
                       )
                       .toList(),
@@ -210,7 +211,7 @@ class _DetailedSummaryWidgetState extends ConsumerState<DetailedSummaryWidget> {
                         (m) => _SmallChip(
                           key: ValueKey('module_${m.id}'),
                           icon: Icons.check_circle_outline,
-                          label: m.name,
+                          label: m.localizedName(AppLocalizations.of(context)),
                         ),
                       )
                       .toList(),
@@ -336,7 +337,7 @@ class _DetailedSummaryWidgetState extends ConsumerState<DetailedSummaryWidget> {
       verticalSpacing: 8.0,
       itemBuilder: (context, index) {
         return _TileChip(
-          name: tiles[index].name,
+          name: tiles[index].localizedName(AppLocalizations.of(context)),
           quantity: tiles[index].quantity,
           imagePath: tiles[index].filenameImage,
           color: tiles[index].color != null

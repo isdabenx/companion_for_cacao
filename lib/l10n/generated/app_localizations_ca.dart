@@ -682,4 +682,541 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String get summaryHuts => 'Cabanes';
+
+  @override
+  String get tileMarketSelling4 => 'Mercat, preu de venda 4';
+
+  @override
+  String get boardgameCacao => 'Cacao';
+
+  @override
+  String get boardgameChocolatl => 'Cacao: Xocolatl';
+
+  @override
+  String get boardgameDiamante => 'Cacao: Diamante';
+
+  @override
+  String get expansionNameChocolatl => 'Xocolatl';
+
+  @override
+  String get expansionNameDiamante => 'Diamante';
+
+  @override
+  String get moduleMaps => 'Mapes';
+
+  @override
+  String get moduleWatering => 'Irrigació';
+
+  @override
+  String get moduleChocolate => 'Xocolata';
+
+  @override
+  String get moduleHuts => 'Cabanes';
+
+  @override
+  String get moduleGemMines => 'Les mines de gemmes';
+
+  @override
+  String get moduleTreeOfLife => 'L\'arbre de la vida';
+
+  @override
+  String get moduleEmperorsFavor => 'El favor de l\'ahau';
+
+  @override
+  String get moduleNewWorkers => 'Els nous recol·lectors';
+
+  @override
+  String get moduleDescMaps =>
+      'Dues rajoles de selva addicionals queden cara amunt al tauler de mapes, al costat de la pila de la selva. En omplir espais de selva, pots retornar 1 de les teves fitxes de mapa a la capsa per triar una rajola del tauler de mapes en lloc de la selva explorada.';
+
+  @override
+  String get moduleDescWatering =>
+      'Tres rajoles d\'irrigació substitueixen plantacions: els seus recol·lectors fan retrocedir el teu aiguader i donen 4 fruits de cacau per remans. Un cenot substitueix el mercat com a segona rajola inicial.';
+
+  @override
+  String get moduleDescChocolate =>
+      'Les xocolateres i els mercats de xocolata substitueixen mines d\'or i mercats de preu 3: converteix fruits de cacau en tauletes de xocolata i ven-les per fins a 7 monedes d\'or.';
+
+  @override
+  String get moduleDescHuts =>
+      '12 rajoles de cabana de doble cara esperen al costat de la banca, ordenades per cost. Al final del teu torn en pots construir una pagant or que ja tinguis; al final de la partida cada cabana retorna el seu cost i dona la seva bonificació.';
+
+  @override
+  String get moduleDescGemMines =>
+      'Cinc mines de gemmes substitueixen els temples. Els recol·lectors activats recullen gemmes de la vagoneta; un joc dels 4 colors es canvia immediatament per la màscara de valor més baix. Les màscares i les gemmes sobrants valen or.';
+
+  @override
+  String get moduleDescTreeOfLife =>
+      'Tres arbres de la vida substitueixen les mines d\'or: cada recol·lector adjacent pren 1 moneda d\'or — però la força rau en la serenitat: un costat adjacent sense recol·lectors en pren 3.';
+
+  @override
+  String get moduleDescEmperorsFavor =>
+      'L\'ahau comença al mercat de preu de venda «2». Col·locar una rajola de recol·lectors a la seva fila o columna el mou damunt d\'aquesta i dona 1 moneda d\'or — i 1 més al començament de cada torn teu mentre hi continuï.';
+
+  @override
+  String get moduleDescNewWorkers =>
+      '16 rajoles de recol·lectors amb distribucions noves (0-0-2-2, 0-2-0-2, 0-1-0-3, 0-0-0-4). Acordeu qualsevol combinació amb les rajoles del joc base — tots els jugadors usen el mateix conjunt.';
+
+  @override
+  String tileDescWorker(String distribution, String color) {
+    return 'Rajola de recol·lectors $distribution del jugador $color.';
+  }
+
+  @override
+  String get tileDesc_base_jungle_single_plantation =>
+      'Per cada recol·lector teu activat al costat adjacent de la rajola, pots agafar **1 fruit de cacau** de la reserva. Posa\'ls individualment en 1 magatzem buit del teu tauler de poblat. Cada jugador té 5 magatzems i mai no pot emmagatzemar més de *5 fruits de cacau*; els fruits addicionals que obtinguis es perden.\n\n![Agafa el cacau](resource:assets/images/tiles/description/plantation.webp)';
+
+  @override
+  String get tileDesc_base_jungle_double_plantation =>
+      'Per cada recol·lector teu activat al costat adjacent de la rajola, pots agafar **2 fruits de cacau** de la reserva. Posa\'ls individualment en 1 magatzem buit del teu tauler de poblat. Cada jugador té 5 magatzems i mai no pot emmagatzemar més de *5 fruits de cacau*; els fruits addicionals que obtinguis es perden.\n\n![Agafa el cacau](resource:assets/images/tiles/description/plantation.webp)';
+
+  @override
+  String get tileDesc_base_jungle_market_selling_2 =>
+      'Per cada recol·lector teu activat al costat adjacent de la rajola, pots vendre **1 fruit de cacau** del teu magatzem al preu que indica el mercat. Retorna el fruit de cacau a la reserva i agafa **2 monedes d\'or** de la banca.\n\n![Retorna el cacau](resource:assets/images/tiles/description/market1.webp)\n\n![Agafa les monedes](resource:assets/images/tiles/description/market2.webp)';
+
+  @override
+  String get tileDesc_base_jungle_market_selling_3 =>
+      'Per cada recol·lector teu activat al costat adjacent de la rajola, pots vendre **1 fruit de cacau** del teu magatzem al preu que indica el mercat. Retorna el fruit de cacau a la reserva i agafa **3 monedes d\'or** de la banca.\n\n![Retorna el cacau](resource:assets/images/tiles/description/market1.webp)\n\n![Agafa les monedes](resource:assets/images/tiles/description/market2.webp)';
+
+  @override
+  String get tileDesc_base_jungle_market_selling_4 =>
+      'Per cada recol·lector teu activat al costat adjacent de la rajola, pots vendre **1 fruit de cacau** del teu magatzem al preu que indica el mercat. Retorna el fruit de cacau a la reserva i agafa **4 monedes d\'or** de la banca.\n\n![Retorna el cacau](resource:assets/images/tiles/description/market1.webp)\n\n![Agafa les monedes](resource:assets/images/tiles/description/market2.webp)';
+
+  @override
+  String get tileDesc_base_jungle_gold_mine_value_1 =>
+      'Per cada recol·lector teu activat al costat adjacent de la rajola, pots agafar de la banca el valor indicat, és a dir, **1 moneda d\'or**.\n\n![Agafa les monedes](resource:assets/images/tiles/description/gold_mine.webp)';
+
+  @override
+  String get tileDesc_base_jungle_gold_mine_value_2 =>
+      'Per cada recol·lector teu activat al costat adjacent de la rajola, pots agafar de la banca el valor indicat, és a dir, **2 monedes d\'or**.\n\n![Agafa les monedes](resource:assets/images/tiles/description/gold_mine.webp)';
+
+  @override
+  String get tileDesc_base_jungle_water =>
+      'Per cada recol·lector teu activat al costat adjacent de la rajola, pots avançar l\'aiguader del teu tauler de poblat 1 remans en sentit horari. Si l\'aiguader arriba al remans de valor \"16\", s\'hi atura; els passos que sobrin es perden.\n\nAl final de la partida, sumes a les teves monedes d\'or el valor del remans on és el teu aiguader. Si l\'aiguader encara és en un remans de valor negatiu, has de restar el nombre corresponent.\n\n![Mou l\'aiguader](resource:assets/images/tiles/description/water.webp)';
+
+  @override
+  String get tileDesc_base_jungle_sun_worshiping_site =>
+      'Per cada recol·lector teu activat al costat adjacent de la rajola, pots agafar 1 fitxa de sol de la reserva. Posa-la en un lloc d\'adoració al sol buit del teu tauler de poblat. Cada jugador té 3 llocs d\'adoració al sol i mai no pot tenir més de 3 fitxes de sol. Les fitxes de sol que obtinguis de més es perden.\n\nCap al final de la partida, pots usar les fitxes de sol per \"sobreedificar\" una de les teves **pròpies** rajoles de recol·lectors. Al final de la partida, reps 1 moneda d\'or de la banca per cada fitxa de sol que no hagis usat.\n\n![Agafa una fitxa de sol](resource:assets/images/tiles/description/sun_worshiping_site1.webp)\n\n**SOBREEDIFICAR UNA RAJOLA DE RECOL·LECTORS**\n\nQuan la pila de la selva s\'hagi esgotat cap al final de la partida i no quedin rajoles de selva a la selva explorada, a partir d\'aleshores pots sobreedificar una de les teves **pròpies** rajoles de recol·lectors, en lloc d\'afegir-la a la zona de joc de la manera habitual; per fer-ho, has de retornar 1 fitxa de sol a la reserva. Tria 1 rajola de recol·lectors de la teva mà i posa-la **damunt** d\'una de les teves **pròpies** rajoles col·locades anteriorment. Després, duus a terme les accions de les rajoles de selva adjacents per als recol·lectors activats. Si no tens cap fitxa de sol, no pots sobreedificar i has de col·locar la nova rajola com és habitual.\n\n**Important:** cada rajola de recol·lectors només es pot sobreedificar **una vegada**. ***Exemple:***\n\n*És el torn del vermell. La pila de la selva s\'ha esgotat i la selva explorada és buida. Per tant, pot sobreedificar: retorna a la reserva 1 fitxa de sol d\'un dels seus llocs d\'adoració al sol; després, sobreedifica 1 de les seves rajoles de recol·lectors. Posa la rajola nova damunt de la rajola col·locada en un torn anterior i duu a terme les accions de les rajoles de selva adjacents. Primer, agafa 2 fruits de cacau pel recol·lector de la plantació doble i els posa en dos dels seus magatzems. Després, ven els dos fruits de cacau al mercat per 2x4 = 8 monedes d\'or. Finalment, avança el seu aiguader 1 remans.*';
+
+  @override
+  String get tileDesc_base_jungle_temple =>
+      'Els temples no tenen cap efecte directe durant la partida. Només al final de la partida es puntuen els temples, individualment, un rere l\'altre. El jugador que té més recol·lectors adjacents al temple corresponent rep 6 monedes d\'or de la banca. El jugador amb el segon nombre més alt de recol·lectors adjacents n\'obté 3. Si hi ha empat al primer lloc, les 6 monedes d\'or es reparteixen equitativament entre els jugadors implicats (arrodonint cap avall si cal). En aquest cas, no es dona or pel segon lloc. Si el primer lloc és clar però hi ha empat al segon, les 3 monedes d\'or es reparteixen equitativament entre els jugadors implicats (arrodonint cap avall si cal).\n\n**Atenció:** si alguna rajola de recol·lectors adjacent al temple ha estat sobreedificada, només compten per a la puntuació les rajoles de dalt.\n\n**Nota:** si només hi ha 1 jugador amb recol·lectors adjacents al temple, rep 6 monedes d\'or de la banca, com és habitual; no es dona or pel segon lloc. Cal tenir almenys 1 recol·lector adjacent al temple per puntuar-hi.\n\n***Exemple:***\n\n*El groc i el vermell tenen 2 recol·lectors cadascun en aquest temple. Per tant, es reparteixen les 6 monedes d\'or del primer lloc; cadascun rep 3 monedes d\'or de la banca. El violeta té 1 recol·lector en aquest temple; tanmateix, se\'n va amb les mans buides, perquè en aquest cas el segon lloc no es premia.*\n\n![Temple](resource:assets/images/tiles/description/temple.webp)';
+
+  @override
+  String get tileDesc_chocolatl_jungle_watering =>
+      'Per cada recol·lector teu activat al costat adjacent de la rajola, pots fer retrocedir l\'aiguader del teu tauler de poblat 1 remans en sentit antihorari. Per cada remans que facis retrocedir el teu aiguader, agafes 4 fruits de cacau de la reserva i els poses en magatzems buits del teu tauler de poblat. Si el teu aiguader és al remans de valor “-10”, no pots obtenir cap fruit.\n\n**Atenció:** els fruits de cacau addicionals que obtindries es perden, com és habitual. Per això no té sentit connectar a una rajola d\'irrigació costats de rajola amb més d\'1 recol·lector.';
+
+  @override
+  String get tileDesc_chocolatl_jungle_chocolate_kitchen =>
+      'Per cada recol·lector teu activat al costat adjacent de la rajola, pots convertir 1 fruit de cacau del teu magatzem en 1 tauleta de xocolata. Retorna el fruit de cacau a la reserva. Després, agafa la tauleta de xocolata de la reserva i posa-la en un magatzem buit del teu tauler de poblat.\nCada magatzem pot contenir o bé 1 fruit de cacau o bé 1 tauleta de xocolata.\n\n**FINAL DE LA PARTIDA**\n**Atenció:** les tauletes de xocolata sobrants no donen cap moneda d\'or al final de la partida.';
+
+  @override
+  String get tileDesc_chocolatl_jungle_chocolate_market =>
+      'Per cada recol·lector teu activat al costat adjacent de la rajola, pots vendre 1 fruit de cacau del teu magatzem per 3 monedes d\'or, o 1 tauleta de xocolata del teu magatzem per 7 monedes d\'or. Retorna el fruit de cacau o la tauleta de xocolata a la reserva i agafa de la banca la quantitat d\'or corresponent.\nSi has activat més d\'1 recol·lector, pots triar individualment per a cada recol·lector activat si vols vendre 1 fruit de cacau o 1 tauleta de xocolata.';
+
+  @override
+  String get tileDesc_diamante_jungle_gem_mine =>
+      'Per cada recol·lector teu activat al costat adjacent de la rajola, pots agafar 1 gemma a la teva elecció d\'aquesta mina de gemmes. Posa les gemmes al costat del teu tauler de poblat.\n\nQuan tinguis almenys 1 gemma de cadascun dels 4 colors, **has de canviar immediatament** aquest joc de 4 gemmes per la màscara de valor més baix disponible a la reserva. Retira de la partida les gemmes canviades i torna-les a la capsa.';
+
+  @override
+  String get tileDesc_diamante_jungle_tree_of_life =>
+      'Per cada recol·lector teu activat al costat adjacent de la rajola, pots agafar 1 moneda d\'or de la banca.\n\nPerò la força rau en la serenitat: si no hi ha cap recol·lector representat al costat adjacent de la rajola, pots agafar fins i tot 3 monedes d\'or de la banca.';
+
+  @override
+  String get tileDesc_chocolatl_hut_market_crier =>
+      '**Cost de construcció:** 4 monedes d\'or\n\n**Funció:** durant tota la partida, vens els teus fruits de cacau als mercats adjacents de preu de venda 2 per 3 monedes d\'or en lloc de 2.\n\n**Final de la partida:** suma el cost de construcció (4 monedes d\'or) al teu or total.';
+
+  @override
+  String get tileDesc_chocolatl_hut_hermit =>
+      '**Cost de construcció:** 6 monedes d\'or\n\n**Funció:** 1 moneda d\'or per cada recol·lector teu que no tingui cap rajola de selva adjacent al final de la partida.\n\n**Final de la partida:** suma el cost de construcció (6 monedes d\'or) més la bonificació al teu or total.';
+
+  @override
+  String get tileDesc_chocolatl_hut_road_worker =>
+      '**Cost de construcció:** 6 monedes d\'or\n\n**Funció:** al final de la partida, obtens 1 moneda d\'or per cada rajola de recol·lectors teva a la fila o columna on tinguis més rajoles de recol·lectors.\n\n**Final de la partida:** suma el cost de construcció (6 monedes d\'or) més la bonificació al teu or total.';
+
+  @override
+  String get tileDesc_chocolatl_hut_trader =>
+      '**Cost de construcció:** 6 monedes d\'or\n\n**Funció:** els fruits de cacau sobrants al teu magatzem et donen 1 moneda d\'or cadascun al final de la partida.\n\n**Final de la partida:** suma el cost de construcció (6 monedes d\'or) més la bonificació al teu or total.';
+
+  @override
+  String get tileDesc_chocolatl_hut_farmer =>
+      '**Cost de construcció:** 8 monedes d\'or\n\n**Funció:** sempre que obtinguis exactament 4 fruits de cacau en un mateix torn durant la partida, reps 1 fruit de cacau addicional, sempre que et quedi espai al magatzem.\n\n**Final de la partida:** suma el cost de construcció (8 monedes d\'or) al teu or total.';
+
+  @override
+  String get tileDesc_chocolatl_hut_shaman =>
+      '**Cost de construcció:** 8 monedes d\'or\n\n**Funció:** si sobreedifiques una de les teves rajoles de recol·lectors durant la partida, no has de retornar cap fitxa de sol a la reserva per fer-ho.\n\n**Final de la partida:** suma el cost de construcció (8 monedes d\'or) al teu or total.';
+
+  @override
+  String get tileDesc_chocolatl_hut_monk =>
+      '**Cost de construcció:** 10 monedes d\'or\n\n**Funció:** 1 moneda d\'or al final de la partida per cada temple on tinguis almenys 1 recol·lector adjacent.\n\n**Final de la partida:** suma el cost de construcció (10 monedes d\'or) més la bonificació al teu or total.';
+
+  @override
+  String get tileDesc_chocolatl_hut_master_builder =>
+      '**Cost de construcció:** 10 monedes d\'or\n\n**Funció:** al final de la partida, obtens 1 moneda d\'or per cadascuna de les teves altres cabanes.\n\n**Final de la partida:** suma el cost de construcció (10 monedes d\'or) més la bonificació al teu or total.';
+
+  @override
+  String get tileDesc_chocolatl_hut_foreman =>
+      '**Cost de construcció:** 12 monedes d\'or\n\n**Funció:** quan col·loques una rajola de recol·lectors amb 3 recol·lectors en un costat durant la partida, es compta com si tingués un 4t recol·lector addicional en aquell costat.\n\n**Final de la partida:** suma el cost de construcció (12 monedes d\'or) al teu or total.';
+
+  @override
+  String get tileDesc_chocolatl_hut_fountain_master =>
+      '**Cost de construcció:** 12 monedes d\'or\n\n**Funció:** 4 monedes d\'or al final de la partida si el teu aiguader és al remans de valor “16”.\n\n**Final de la partida:** suma el cost de construcció (12 monedes d\'or) més la bonificació (si escau) al teu or total.';
+
+  @override
+  String get tileDesc_chocolatl_hut_chiefs_daughter =>
+      '**Cost de construcció:** 14 monedes d\'or\n\n**Funció:** 4 monedes d\'or al final de la partida.\n\n**Final de la partida:** suma el cost de construcció (14 monedes d\'or) més la bonificació (4 monedes d\'or) al teu or total.';
+
+  @override
+  String get tileDesc_chocolatl_hut_chiefs_son =>
+      '**Cost de construcció:** 16 monedes d\'or\n\n**Funció:** 4 monedes d\'or al final de la partida.\n\n**Final de la partida:** suma el cost de construcció (16 monedes d\'or) més la bonificació (4 monedes d\'or) al teu or total.';
+
+  @override
+  String get tileDesc_chocolatl_hut_chiefs_wife =>
+      '**Cost de construcció:** 20 monedes d\'or\n\n**Funció:** 5 monedes d\'or al final de la partida.\n\n**Final de la partida:** suma el cost de construcció (20 monedes d\'or) més la bonificació (5 monedes d\'or) al teu or total.';
+
+  @override
+  String get tileDesc_chocolatl_hut_chief =>
+      '**Cost de construcció:** 24 monedes d\'or\n\n**Funció:** 6 monedes d\'or al final de la partida.\n\n**Final de la partida:** suma el cost de construcció (24 monedes d\'or) més la bonificació (6 monedes d\'or) al teu or total.';
+
+  @override
+  String get tileTypePlayer => 'Jugador';
+
+  @override
+  String get tileTypeMarket => 'Mercat';
+
+  @override
+  String get tileTypePlantation => 'Plantació';
+
+  @override
+  String get tileTypeGoldMine => 'Mina d\'or';
+
+  @override
+  String get tileTypeWater => 'Cenot';
+
+  @override
+  String get tileTypeTemple => 'Temple';
+
+  @override
+  String get tileTypeSunWorshipingSite => 'Adoració al sol';
+
+  @override
+  String get tileTypeWatering => 'Irrigació';
+
+  @override
+  String get tileTypeChocolateKitchen => 'Xocolatera';
+
+  @override
+  String get tileTypeChocolateMarket => 'Mercat de xocolata';
+
+  @override
+  String get tileTypeMapTile => 'Rajola de mapa';
+
+  @override
+  String get tileTypeHut => 'Cabana';
+
+  @override
+  String get tileTypeGemMine => 'Mina de gemmes';
+
+  @override
+  String get tileTypeTreeOfLife => 'Arbre de la vida';
+
+  @override
+  String get filterSheetTitle => 'Filtres';
+
+  @override
+  String get clearAllAction => 'Esborra-ho tot';
+
+  @override
+  String get searchTileHint => 'Cerca una rajola pel nom...';
+
+  @override
+  String get tileTypesSection => 'Tipus de rajola';
+
+  @override
+  String get filterTilesTooltip => 'Filtra les rajoles';
+
+  @override
+  String get displaySettingsTooltip => 'Opcions de visualització';
+
+  @override
+  String activeFiltersCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count filtres actius',
+      one: '1 filtre actiu',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String costLabel(int cost) {
+    return 'Cost: $cost';
+  }
+
+  @override
+  String get settingsSheetTitle => 'Opcions';
+
+  @override
+  String get settingsGeneralSection => 'General';
+
+  @override
+  String get settingsBadgesSection => 'Insígnies';
+
+  @override
+  String get settingsPlayerColorsSection => 'Colors de jugador';
+
+  @override
+  String get settingBoardgameTitle => 'Títol del joc';
+
+  @override
+  String get settingShowQuantity => 'Mostra la quantitat';
+
+  @override
+  String get settingCompactLayout => 'Disposició compacta';
+
+  @override
+  String get settingBadgeTypeInText => 'Tipus de rajola en text';
+
+  @override
+  String get settingBadgeTypeInImage => 'Tipus de rajola a la imatge';
+
+  @override
+  String get settingPlayerColorInBorder => 'Color del jugador a la vora';
+
+  @override
+  String get settingPlayerColorInCircle => 'Color del jugador en cercle';
+
+  @override
+  String get scoreStepSetup => 'Jugadors i mòduls';
+
+  @override
+  String get scoreCatGold => 'Or acumulat';
+
+  @override
+  String get scoreCatWater => 'Remansos de l\'aiguader';
+
+  @override
+  String get scoreCatTemples => 'Temples';
+
+  @override
+  String get scoreCatSun => 'Fitxes de sol';
+
+  @override
+  String get scoreCatCacao => 'Cacau sobrant';
+
+  @override
+  String get scoreCatHuts => 'Cabanes';
+
+  @override
+  String get scoreCatGemMines => 'Mines de gemmes';
+
+  @override
+  String get startOverAction => 'Torna a començar';
+
+  @override
+  String get startOverTitle => 'Tornar a començar?';
+
+  @override
+  String get startOverBody =>
+      'Això descarta totes les puntuacions introduïdes i torna a carregar els jugadors i mòduls de la partida configurada.';
+
+  @override
+  String get backAction => 'Enrere';
+
+  @override
+  String get nextAction => 'Següent';
+
+  @override
+  String get resultsAction => 'Resultats';
+
+  @override
+  String get needTwoPlayers => 'Selecciona almenys 2 jugadors';
+
+  @override
+  String get scoreSetupIntro =>
+      'Selecciona els jugadors de la partida acabada.';
+
+  @override
+  String get scoreModulesIntro => 'Mòduls que canvien la puntuació final:';
+
+  @override
+  String get scoreHutModuleSubtitle =>
+      'Xocolatl: les cabanes construïdes retornen el cost i donen bonificacions';
+
+  @override
+  String get scoreGemModuleSubtitle =>
+      'Diamante: les mines de gemmes substitueixen els temples';
+
+  @override
+  String get scoreGoldIntro =>
+      'Compta les monedes d\'or de cada jugador. Toca el número per introduir-lo directament.';
+
+  @override
+  String get scoreWaterIntro =>
+      'Selecciona el remans on ha acabat la partida cada aiguader. Els remansos negatius resten or.';
+
+  @override
+  String get scoreTemplesIntro =>
+      'Afegeix una entrada per temple i compta els recol·lectors adjacents. L\'or s\'atorga automàticament: 6 pel primer lloc, 3 pel segon, i els empats es reparteixen arrodonint cap avall.';
+
+  @override
+  String get scoreSunIntro =>
+      'Les fitxes de sol no usades per sobreedificar valen 1 moneda d\'or cadascuna (màxim 3).';
+
+  @override
+  String get scoreCacaoIntro =>
+      'Els fruits de cacau sobrants no donen or, però decideixen els empats: amb el mateix or, guanya el jugador amb més cacau sobrant.';
+
+  @override
+  String get scoreHutsIntro =>
+      'Marca les cabanes que ha construït cada jugador. Els costos de construcció es retornen i les bonificacions s\'afegeixen automàticament. Les cabanes són rajoles físiques limitades: una cabana en gris no té cap rajola disponible (desselecciona-la del seu propietari per reassignar-la).';
+
+  @override
+  String get scoreGemsIntro =>
+      'Toca una màscara i tria de qui és. Les màscares sumen el seu valor en or.';
+
+  @override
+  String get scoreGemsLeftoverIntro =>
+      'Gemmes sobrants al costat de cada tauler de poblat (1 moneda d\'or cadascuna):';
+
+  @override
+  String get addTempleAction => 'Afegeix un temple';
+
+  @override
+  String get removeTempleTooltip => 'Elimina el temple';
+
+  @override
+  String templeNumber(int number) {
+    return 'Temple $number';
+  }
+
+  @override
+  String hutsCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count cabanes',
+      one: '1 cabana',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String scoreHermitCount(String hutName) {
+    return '$hutName: recol·lectors propis sense cap rajola de selva adjacent';
+  }
+
+  @override
+  String scoreRoadWorkerCount(String hutName) {
+    return '$hutName: rajoles de recol·lectors a la teva millor fila o columna';
+  }
+
+  @override
+  String get assignMaskTooltip => 'Assigna la màscara';
+
+  @override
+  String get nobodyOption => 'Ningú';
+
+  @override
+  String get enterValueTitle => 'Introdueix el valor';
+
+  @override
+  String get okAction => 'D\'acord';
+
+  @override
+  String get finalScoreTitle => 'Puntuació final';
+
+  @override
+  String get winsTheGameSingle => 'guanya la partida!';
+
+  @override
+  String get winsTheGameShared => 'guanyen la partida!';
+
+  @override
+  String get sharedVictorySubtitle =>
+      'Victòria compartida! Empat en or i en cacau sobrant.';
+
+  @override
+  String get tiebreakSubtitle => 'Empat en or resolt pel cacau sobrant.';
+
+  @override
+  String get leftoverCacaoTiebreaker => 'Cacau sobrant (desempat)';
+
+  @override
+  String get homeIntro =>
+      'Companion for Cacao és una aplicació mòbil desenvolupada amb Flutter pensada per ajudar els jugadors del joc de taula Cacao i les seves expansions. L\'objectiu és oferir eines digitals que millorin l\'experiència de joc facilitant el recompte de punts, la consulta de regles i la gestió de la partida.';
+
+  @override
+  String get homeCompletedFeaturesTitle => 'Funcionalitats completades';
+
+  @override
+  String get homePendingFeaturesTitle => 'Funcionalitats pendents';
+
+  @override
+  String get homeCompletedFeatures =>
+      '🏠 Menú principal: accés ràpid a totes les funcionalitats.\n🗂 Base de dades de rajoles: catàleg complet de rajoles.\n🔍 Filtre de rajoles: cerca i filtra per múltiples criteris.\n🌴 Joc base Cacao: suport complet i preparació de la partida.\n🍫 Expansió Xocolatl: suport complet amb els 4 mòduls.\n🚀 Expansió Diamante: suport complet amb els 4 mòduls.\n🎲 Tauler de partida: resum, preparació i rajoles en joc.\n🌟 Variant Big Game: integració de tots els mòduls i expansions.\n📖 Manuals integrats: consulta les regles del joc.\n🏆 Calculadora de puntuació: puntuació final automàtica amb les regles oficials de desempat.\n🌐 Multi idioma: català, castellà i anglès.\n📊 Interfície adaptativa: disseny optimitzat per a diferents mides de pantalla.\n🔄 Actualitzador automàtic: detecció automàtica de versions noves.';
+
+  @override
+  String get homePendingFeatures =>
+      '🕒 Temporitzador de torns: controla la durada de cada torn.\n📜 Historial de partides: registre de partides acabades i estadístiques de jugadors.\n⚙️ Configuració personalitzada: ajusta l\'experiència de joc.';
+
+  @override
+  String get homeContactTitle => 'Contacte';
+
+  @override
+  String get homeContactBody =>
+      'Per a suggeriments, millores, informes d\'errors o qualsevol altra consulta, pots visitar el nostre repositori de GitHub. L\'aplicació és de codi obert i sempre busquem col·laboradors que ajudin a millorar-la.';
+
+  @override
+  String get homeVisitRepo => 'Visita el nostre repositori de GitHub:';
+
+  @override
+  String get homeGithubBody =>
+      'A GitHub pots obrir «issues» per informar d\'errors, proposar funcionalitats noves o fins i tot enviar «pull requests» amb les teves pròpies contribucions. Treballem per millorar l\'aplicació constantment i agraïm qualsevol ajuda!';
+
+  @override
+  String get rulesBaseGame => 'Joc base';
+
+  @override
+  String get rulesInstructions => 'Instruccions';
+
+  @override
+  String get rulesOverview => 'Referència ràpida';
+
+  @override
+  String rulesExpansionHeader(String name) {
+    return 'Expansió: $name';
+  }
+
+  @override
+  String rulesExpansionRules(String name) {
+    return 'Regles de $name';
+  }
+
+  @override
+  String get openMenuTooltip => 'Obre el menú';
+
+  @override
+  String get quantityAll => 'TOTES';
+
+  @override
+  String get errorGenericRetry => 'Alguna cosa ha fallat. Torna-ho a provar.';
+
+  @override
+  String get pageNotFoundTitle => 'Pàgina no trobada';
+
+  @override
+  String routeNotFound(String uri) {
+    return 'Ruta no trobada: $uri';
+  }
+
+  @override
+  String get invalidDataMessage => 'Dades no vàlides per a aquesta pantalla.';
+
+  @override
+  String get retryAction => 'Reintenta';
+
+  @override
+  String get playerNameHint => 'Nom';
 }

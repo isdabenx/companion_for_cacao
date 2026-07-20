@@ -5,6 +5,8 @@ import 'package:companion_for_cacao/core/theme/app_markdown_style_sheet.dart';
 import 'package:companion_for_cacao/core/theme/app_spacing.dart';
 import 'package:companion_for_cacao/core/theme/app_text_styles.dart';
 import 'package:companion_for_cacao/core/utils/string_extensions.dart';
+import 'package:companion_for_cacao/l10n/generated/app_localizations.dart';
+import 'package:companion_for_cacao/shared/utils/catalog_l10n.dart';
 import 'package:companion_for_cacao/shared/widgets/container_full_style_widget.dart';
 import 'package:companion_for_cacao/shared/widgets/custom_scaffold_widget.dart';
 import 'package:flutter/material.dart';
@@ -26,7 +28,7 @@ class TileDetailScreen extends ConsumerWidget {
 
     return CustomScaffoldWidget(
       showBackButton: true,
-      title: tile.typeAsString,
+      title: tile.type?.localizedName(AppLocalizations.of(context)) ?? '',
       body: ContainerFullStyleWidget(
         child: isLandscape
             ? Row(
@@ -86,10 +88,11 @@ class TileDetailScreen extends ConsumerWidget {
   }
 
   Widget _buildTileContent(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return Column(
       children: [
         SelectableText(
-          tile.name,
+          tile.localizedName(l10n),
           style: AppTextStyles.titleTextStyle,
           textAlign: TextAlign.center,
         ),
@@ -109,21 +112,21 @@ class TileDetailScreen extends ConsumerWidget {
               _buildChip(
                 context,
                 Icons.extension_outlined,
-                tile.boardgame.value!.name,
+                tile.boardgame.value!.localizedName(l10n),
                 AppColors.greenDark,
               ),
             if (tile.module.value != null)
               _buildChip(
                 context,
                 Icons.view_module_outlined,
-                tile.module.value!.name,
+                tile.module.value!.localizedName(l10n),
                 AppColors.greenDarker,
               ),
             if (tile.hutCost != null && tile.hutCost! > 0)
               _buildChip(
                 context,
                 Icons.monetization_on,
-                'Cost: ${tile.hutCost}',
+                l10n.costLabel(tile.hutCost!),
                 AppColors.gold,
                 textColor: AppColors.brown,
               ),
@@ -131,7 +134,7 @@ class TileDetailScreen extends ConsumerWidget {
               _buildChip(
                 context,
                 Icons.person_outline,
-                tile.color!.name.capitalized,
+                tile.color!.localizedName(l10n).capitalized,
                 AppColors.findColorByName(tile.color!.name),
                 textColor:
                     tile.color == TileColor.white ||
@@ -145,7 +148,7 @@ class TileDetailScreen extends ConsumerWidget {
         Divider(color: AppColors.brown.withValues(alpha: 0.5)),
         AppSpacing.verticalL,
         MarkdownBody(
-          data: tile.description,
+          data: tile.localizedDescription(l10n),
           selectable: true,
           styleSheet: AppMarkdownStyleSheet.styleSheet,
         ),

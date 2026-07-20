@@ -11,7 +11,7 @@ class TileFilterStateEntity {
 
   final String searchQuery;
   final Set<int> selectedBoardgameIds;
-  final Set<String> selectedTileTypes;
+  final Set<TileType> selectedTileTypes;
 
   /// Returns true if any filter is currently active
   bool get hasActiveFilters =>
@@ -28,9 +28,13 @@ class TileFilterStateEntity {
     return count;
   }
 
-  bool matches(TileEntity tile) {
+  /// [searchableName] lets the caller match the search query against the
+  /// tile name the user actually sees (the localized one); it falls back
+  /// to the seeded [TileEntity.name].
+  bool matches(TileEntity tile, {String? searchableName}) {
     if (searchQuery.isNotEmpty) {
-      if (!tile.name.toLowerCase().contains(searchQuery.toLowerCase())) {
+      final name = searchableName ?? tile.name;
+      if (!name.toLowerCase().contains(searchQuery.toLowerCase())) {
         return false;
       }
     }
@@ -42,7 +46,7 @@ class TileFilterStateEntity {
     }
 
     if (selectedTileTypes.isNotEmpty) {
-      if (!selectedTileTypes.contains(tile.typeAsString)) {
+      if (tile.type == null || !selectedTileTypes.contains(tile.type)) {
         return false;
       }
     }
@@ -53,7 +57,7 @@ class TileFilterStateEntity {
   TileFilterStateEntity copyWith({
     String? searchQuery,
     Set<int>? selectedBoardgameIds,
-    Set<String>? selectedTileTypes,
+    Set<TileType>? selectedTileTypes,
   }) {
     return TileFilterStateEntity(
       searchQuery: searchQuery ?? this.searchQuery,

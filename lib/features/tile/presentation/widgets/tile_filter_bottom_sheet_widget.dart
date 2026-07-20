@@ -2,13 +2,14 @@ import 'dart:async';
 
 import 'package:companion_for_cacao/core/domain/entities/boardgame_entity.dart';
 import 'package:companion_for_cacao/core/domain/entities/tile_entity.dart';
-import 'package:companion_for_cacao/core/domain/entities/tile_type_extension.dart';
 import 'package:companion_for_cacao/core/theme/app_colors.dart';
 import 'package:companion_for_cacao/core/theme/app_spacing.dart';
 import 'package:companion_for_cacao/core/theme/app_text_styles.dart';
 import 'package:companion_for_cacao/features/tile/domain/entities/tile_filter_scope.dart';
 import 'package:companion_for_cacao/features/tile/presentation/providers/tile_filter_notifier.dart';
+import 'package:companion_for_cacao/l10n/generated/app_localizations.dart';
 import 'package:companion_for_cacao/shared/providers/boardgame_notifier.dart';
+import 'package:companion_for_cacao/shared/utils/catalog_l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -44,6 +45,7 @@ class _TileFilterBottomSheetWidgetState
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     // Use ref.select to only rebuild when selectedBoardgameIds changes
     final selectedBoardgameIds = ref.watch(
       tileFilterProvider(
@@ -74,7 +76,7 @@ class _TileFilterBottomSheetWidgetState
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  'FILTERS',
+                  l10n.filterSheetTitle.toUpperCase(),
                   style: AppTextStyles.boardgameTitlePlain.copyWith(
                     fontSize: 22,
                   ),
@@ -86,7 +88,7 @@ class _TileFilterBottomSheetWidgetState
                         .clearFilters();
                   },
                   child: Text(
-                    'CLEAR ALL',
+                    l10n.clearAllAction.toUpperCase(),
                     style: AppTextStyles.bodyMedium.copyWith(
                       color: AppColors.brown.withValues(alpha: 0.6),
                       fontWeight: FontWeight.bold,
@@ -98,7 +100,7 @@ class _TileFilterBottomSheetWidgetState
             AppSpacing.verticalL,
             TextField(
               decoration: InputDecoration(
-                hintText: 'Search tile by name...',
+                hintText: l10n.searchTileHint,
                 hintStyle: AppTextStyles.bodyMedium.copyWith(
                   color: AppColors.brown.withValues(alpha: 0.5),
                 ),
@@ -119,7 +121,7 @@ class _TileFilterBottomSheetWidgetState
             ),
             AppSpacing.verticalXl,
             Text(
-              'EXPANSIONS',
+              l10n.expansionsSection.toUpperCase(),
               style: AppTextStyles.bodyMedium.copyWith(
                 fontWeight: FontWeight.w800,
                 fontSize: 14,
@@ -141,13 +143,13 @@ class _TileFilterBottomSheetWidgetState
                     ref,
                     selectedBoardgameIds,
                     boardgame.id,
-                    boardgame.name,
+                    boardgame.localizedName(l10n),
                   ),
               ],
             ),
             AppSpacing.verticalXl,
             Text(
-              'TILE TYPES',
+              l10n.tileTypesSection.toUpperCase(),
               style: AppTextStyles.bodyMedium.copyWith(
                 fontWeight: FontWeight.w800,
                 fontSize: 14,
@@ -163,7 +165,8 @@ class _TileFilterBottomSheetWidgetState
                 return _buildTypeChip(
                   ref,
                   selectedTileTypes,
-                  type.displayName,
+                  type,
+                  type.localizedName(l10n),
                   chipKey: ValueKey('tile_type_${type.name}'),
                 );
               }).toList(),
@@ -208,15 +211,16 @@ class _TileFilterBottomSheetWidgetState
 
   Widget _buildTypeChip(
     WidgetRef ref,
-    Set<String> selectedTileTypes,
-    String type, {
+    Set<TileType> selectedTileTypes,
+    TileType type,
+    String label, {
     Key? chipKey,
   }) {
     final isSelected = selectedTileTypes.contains(type);
     return FilterChip(
       key: chipKey,
       label: Text(
-        type,
+        label,
         style: AppTextStyles.bodyMedium.copyWith(
           color: isSelected ? AppColors.white : AppColors.brown,
         ),

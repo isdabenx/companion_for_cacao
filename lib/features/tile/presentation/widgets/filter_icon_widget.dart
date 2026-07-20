@@ -2,6 +2,7 @@ import 'package:companion_for_cacao/core/theme/app_spacing.dart';
 import 'package:companion_for_cacao/features/tile/domain/entities/tile_filter_scope.dart';
 import 'package:companion_for_cacao/features/tile/presentation/providers/tile_filter_notifier.dart';
 import 'package:companion_for_cacao/features/tile/presentation/widgets/tile_filter_bottom_sheet_widget.dart';
+import 'package:companion_for_cacao/l10n/generated/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -23,7 +24,7 @@ class FilterIconWidget extends ConsumerWidget {
     );
 
     return IconButton(
-      tooltip: 'Filter tiles',
+      tooltip: AppLocalizations.of(context).filterTilesTooltip,
       icon: Stack(
         clipBehavior: Clip.none,
         children: [

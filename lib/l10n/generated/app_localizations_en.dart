@@ -673,4 +673,540 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get summaryHuts => 'Huts';
+
+  @override
+  String get tileMarketSelling4 => 'Market, selling price 4';
+
+  @override
+  String get boardgameCacao => 'Cacao';
+
+  @override
+  String get boardgameChocolatl => 'Cacao: Chocolatl';
+
+  @override
+  String get boardgameDiamante => 'Cacao: Diamante';
+
+  @override
+  String get expansionNameChocolatl => 'Chocolatl';
+
+  @override
+  String get expansionNameDiamante => 'Diamante';
+
+  @override
+  String get moduleMaps => 'Map Module';
+
+  @override
+  String get moduleWatering => 'Watering Module';
+
+  @override
+  String get moduleChocolate => 'Chocolate Module';
+
+  @override
+  String get moduleHuts => 'Hut Module';
+
+  @override
+  String get moduleGemMines => 'The Gem Mines';
+
+  @override
+  String get moduleTreeOfLife => 'The Tree of Life';
+
+  @override
+  String get moduleEmperorsFavor => 'The Favor of the Emperor';
+
+  @override
+  String get moduleNewWorkers => 'The New Workers';
+
+  @override
+  String get moduleDescMaps =>
+      'Two extra jungle tiles lie face up on the map board next to the draw pile. When refilling jungle spaces, you may return 1 of your map tiles to the box to pick a tile from the map board instead of the display.';
+
+  @override
+  String get moduleDescWatering =>
+      'Three watering tiles replace plantations: their workers move your water carrier backwards, granting 4 cacao fruits per water field. A water tile replaces the market as the second starting tile.';
+
+  @override
+  String get moduleDescChocolate =>
+      'Chocolate kitchens and chocolate markets replace gold mines and price-3 markets: turn cacao fruits into chocolate bars and sell them for up to 7 gold.';
+
+  @override
+  String get moduleDescHuts =>
+      '12 double-sided hut tiles wait next to the bank, sorted by cost. At the end of your turn you may build one, paying gold you already own; at game end each hut refunds its cost and grants its bonus.';
+
+  @override
+  String get moduleDescGemMines =>
+      'Five gem mines replace the temples. Activated workers collect gems from the mine car; a set of the 4 colors trades immediately for the lowest-value mask. Masks and leftover gems are worth gold.';
+
+  @override
+  String get moduleDescTreeOfLife =>
+      'Three Trees of Life replace the gold mines: each adjacent worker takes 1 gold — but strength lies in serenity: an adjacent edge with no workers takes 3 gold.';
+
+  @override
+  String get moduleDescEmperorsFavor =>
+      'The Emperor starts on the market with selling price 2. Placing a worker tile in his row or column moves him onto it and pays 1 gold — and 1 more at the start of each of your turns while he still stands there.';
+
+  @override
+  String get moduleDescNewWorkers =>
+      '16 worker tiles with new distributions (0-0-2-2, 0-2-0-2, 0-1-0-3, 0-0-0-4). Agree on any mix with the base tiles — every player uses the same set.';
+
+  @override
+  String tileDescWorker(String distribution, String color) {
+    return 'Worker tile $distribution for the $color player.';
+  }
+
+  @override
+  String get tileDesc_base_jungle_single_plantation =>
+      'For each of your activated workers on the adjacent edge of the tile, you may take **1 cacao fruit** from the supply. You put them individually on 1 unoccupied storage space on your village board. Each player has 5 storage spaces and may never store more than *5 cacao* fruits; any additional fruits that you acquire go to waste.\n\n![Take cacao](resource:assets/images/tiles/description/plantation.webp)';
+
+  @override
+  String get tileDesc_base_jungle_double_plantation =>
+      'For each of your activated workers on the adjacent edge of the tile, you may take **2 cacao fruits** from the supply. You put them individually on 1 unoccupied storage space on your village board. Each player has 5 storage spaces and may never store more than *5 cacao* fruits; any additional fruits that you acquire go to waste.\n\n![Take cacao](resource:assets/images/tiles/description/plantation.webp)';
+
+  @override
+  String get tileDesc_base_jungle_market_selling_2 =>
+      'For each of your activated workers on the adjacent edge of the tile, you may sell **1 cacao** fruit from your storage at the price indicated on the market. You put the cacao fruit back in the supply and then take **2 gold** from the bank.\n\n![Put the cacao](resource:assets/images/tiles/description/market1.webp)\n\n![Take money](resource:assets/images/tiles/description/market2.webp)';
+
+  @override
+  String get tileDesc_base_jungle_market_selling_3 =>
+      'For each of your activated workers on the adjacent edge of the tile, you may sell **1 cacao** fruit from your storage at the price indicated on the market. You put the cacao fruit back in the supply and then take **3 gold** from the bank.\n\n![Put the cacao](resource:assets/images/tiles/description/market1.webp)\n\n![Take money](resource:assets/images/tiles/description/market2.webp)';
+
+  @override
+  String get tileDesc_base_jungle_market_selling_4 =>
+      'For each of your activated workers on the adjacent edge of the tile, you may sell **1 cacao** fruit from your storage at the price indicated on the market. You put the cacao fruit back in the supply and then take **4 gold** from the bank.\n\n![Put the cacao](resource:assets/images/tiles/description/market1.webp)\n\n![Take money](resource:assets/images/tiles/description/market2.webp)';
+
+  @override
+  String get tileDesc_base_jungle_gold_mine_value_1 =>
+      'For each of your activated workers on the adjacent edge of the tile, you may take the value indicated – that is, either **1 gold** – from the bank.\n\n![Take money](resource:assets/images/tiles/description/gold_mine.webp)';
+
+  @override
+  String get tileDesc_base_jungle_gold_mine_value_2 =>
+      'For each of your activated workers on the adjacent edge of the tile, you may take the value indicated – that is, either **2 gold** – from the bank.\n\n![Take money](resource:assets/images/tiles/description/gold_mine.webp)';
+
+  @override
+  String get tileDesc_base_jungle_water =>
+      'For each of your activated workers on the adjacent edge of the tile, you may move the water carrier on your village board 1 water field ahead in a clockwise direction. If the water carrier reaches the water field with the value \"16,\" he stops there; any possible further steps go to waste. \n\nAt the end of the game, you add to your gold coins the value of the water field on which your water carrier is standing. If the water carrier is still standing on a field with a negative value, you have to deduct the applicable number.\n\n![Move the water carrier](resource:assets/images/tiles/description/water.webp)';
+
+  @override
+  String get tileDesc_base_jungle_sun_worshiping_site =>
+      'For each of your activated workers on the adjacent edge of the tile, you may take 1 sun token from the supply. You put it on an unoccupied sun-worshiping place on your village board. Each player has 3 sun-worshiping places and may never own more than 3 sun tokens. Sun tokens that you might get beyond that go to waste. \n\nTowards the end of the game, you can use sun tokens to \"overbuild\" one of your **own** worker tiles. At the end of the game, you get 1 gold from the bank for each sun token you have not used.\n\n![Take sun token](resource:assets/images/tiles/description/sun_worshiping_site1.webp) \n\n**OVERBUILDING A WORKER TILE**\n\n When the jungle draw pile has been depleted towards the end of the game and there are no jungle tiles left in the jungle display, you may, from now on, overbuild one of your **own** worker tiles, instead of adding it to the playing area in the usual way; for this, you have to put 1 sun token back in the supply. Choose 1 worker tile from your hand and put it **on top** of one of your **own** worker tiles that you placed earlier. After that, you carry out the actions of the adjacent jungle tiles for the activated workers. If you don\'t own any sun token, you cannot overbuild and have to place the new worker tile as usual.\n\n **Important:** Each worker tile may be overbuilt only **once**. ***Example:***\n\n *It is Red\'s turn. The jungle draw pile has been depleted and the jungle display is empty. Therefore, he is allowed to overbuild: He puts 1 sun token from one of his sun-worshiping places back in the supply; after that, he overbuilds 1 of his own worker tiles. He puts the new worker tile on top of the tile placed on an earlier turn and carries out the actions of the adjacent jungle tiles. First, he takes 2 cacao fruits for the worker at the double plantation and places them on two of his storage spaces. After that, he sells the two cacao fruits at the market for 2x4 = 8 gold. Finally, he moves his water carrier 1 space ahead.*';
+
+  @override
+  String get tileDesc_base_jungle_temple =>
+      'The temples have no direct effect during the game. Only at the end of the game are the temples scored, individually, one after another. The player who has the most workers adjacent to the respective temple receives 6 gold from the bank. The player with the second most adjacent workers obtains 3 gold. If there is a tie for first place, 6 gold are evenly distributed among the players involved (and rounded down, if necessary). In this case, there is no gold awarded for second place. In case first place is clear but there is a tie for second place, 3 gold are evenly distributed among the players involved (and rounded down, if necessary). \n\n**Attention:** If any worker tiles adjacent to the temple have been overbuilt, only the worker tiles on top count for the scoring. \n\n**Note:** If there is only 1 player with workers adjacent to the temple, he gets 6 gold from the bank, as usual; no gold is awarded for second place. You need to have at least 1 worker adjacent to the temple in order to score for it. \n\n***Example:***\n\n *Yellow and Red both have 2 workers at this temple. Consequently, they share 6 gold for first place; each of them gets 3 gold from the bank. Purple has 1 worker at this temple. However, he goes away empty-handed, since second place is not awarded in this case.*\n\n![Temple](resource:assets/images/tiles/description/temple.webp)';
+
+  @override
+  String get tileDesc_chocolatl_jungle_watering =>
+      'For each of your activated workers on the adjacent edge of the tile, you may move back the water carrier on your village board 1 water field in an anti-clockwise direction. For each water field that you move your water carrier back, you take 4 cacao fruits from the supply and put them on unoccupied storage spaces on your village board. If your water carrier is standing on the water field with the value “-10”, you can\'t get any fruit.\n\n**Attention:** Any additional cacao fruit that you would get goes to waste, as usual. Therefore, it doesn’t make sense to connect tile edges that have more than 1 worker to a watering tile.';
+
+  @override
+  String get tileDesc_chocolatl_jungle_chocolate_kitchen =>
+      'For each of your activated workers on the adjacent edge of the tile, you may turn 1 cacao fruit from your storage into 1 chocolate bar. Put the cacao fruit back into the supply. After that, you take the chocolate bar from the supply and put it on an unoccupied storage space on your village board.\nEach storage space may be used either for 1 cacao fruit or for 1 chocolate bar.\n\n**END GAME**\n**Attention:** Leftover chocolate bars don\'t give you any gold at the end of the game.';
+
+  @override
+  String get tileDesc_chocolatl_jungle_chocolate_market =>
+      'For each of your activated workers on the adjacent edge of the tile, you may sell 1 cacao fruit from your storage for 3 gold, or 1 chocolate bar from your storage for 7 gold. Put the cacao fruit or the chocolate bar back into the supply and then take the applicable amount of gold from the bank.\nIf you have activated more than 1 worker, you may choose for each of the activated workers individually whether you want to sell 1 cacao fruit or 1 chocolate bar.';
+
+  @override
+  String get tileDesc_diamante_jungle_gem_mine =>
+      'For each of your activated workers on the adjacent edge of the tile, you may take 1 gem of your choice from this gem mine. Place the gems next to your village board.\n\nAs soon as you have at least 1 gem in each of the 4 colours, you **must immediately** exchange this set of 4 gems for the mask with the lowest value available from the supply. Remove the exchanged gems from the game and put them back into the box.';
+
+  @override
+  String get tileDesc_diamante_jungle_tree_of_life =>
+      'For each of your activated workers on the adjacent edge of the tile, you may take 1 gold from the bank.\n\nBut strength lies in serenity: If there are no workers depicted on the adjacent edge of the tile, you may even take 3 gold from the bank.';
+
+  @override
+  String get tileDesc_chocolatl_hut_market_crier =>
+      '**Building Cost:** 4 gold\n\n**Function:** Throughout the game, you sell your cacao fruits at adjacent markets with a selling price of 2 for 3 gold instead of for 2.\n\n**End of Game:** Add the building cost (4 gold) to your total gold.';
+
+  @override
+  String get tileDesc_chocolatl_hut_hermit =>
+      '**Building Cost:** 6 gold\n\n**Function:** 1 gold for each of your workers that doesn\'t have an adjacent jungle tile at the end of the game.\n\n**End of Game:** Add the building cost (6 gold) plus the bonus to your total gold.';
+
+  @override
+  String get tileDesc_chocolatl_hut_road_worker =>
+      '**Building Cost:** 6 gold\n\n**Function:** At the end of the game, you obtain 1 gold for each of your worker tiles in the row or column where you have the most of your worker tiles.\n\n**End of Game:** Add the building cost (6 gold) plus the bonus to your total gold.';
+
+  @override
+  String get tileDesc_chocolatl_hut_trader =>
+      '**Building Cost:** 6 gold\n\n**Function:** Leftover cacao fruits in your own storage give you 1 gold each at the end of the game.\n\n**End of Game:** Add the building cost (6 gold) plus the bonus to your total gold.';
+
+  @override
+  String get tileDesc_chocolatl_hut_farmer =>
+      '**Building Cost:** 8 gold\n\n**Function:** Whenever you get exactly 4 cacao fruits on one turn during the game, you receive 1 more cacao fruit, provided you have enough space left in your storage.\n\n**End of Game:** Add the building cost (8 gold) to your total gold.';
+
+  @override
+  String get tileDesc_chocolatl_hut_shaman =>
+      '**Building Cost:** 8 gold\n\n**Function:** If you overbuild one of your worker tiles during the game, you don\'t have to put any sun token back into the supply for this.\n\n**End of Game:** Add the building cost (8 gold) to your total gold.';
+
+  @override
+  String get tileDesc_chocolatl_hut_monk =>
+      '**Building Cost:** 10 gold\n\n**Function:** 1 gold at the end of the game for each temple you have at least 1 worker adjacent to.\n\n**End of Game:** Add the building cost (10 gold) plus the bonus to your total gold.';
+
+  @override
+  String get tileDesc_chocolatl_hut_master_builder =>
+      '**Building Cost:** 10 gold\n\n**Function:** At the end of the game, you obtain 1 gold for each of your other huts.\n\n**End of Game:** Add the building cost (10 gold) plus the bonus to your total gold.';
+
+  @override
+  String get tileDesc_chocolatl_hut_foreman =>
+      '**Building Cost:** 12 gold\n\n**Function:**  When you play a worker tile with 3 workers on one edge during the game, it is counted as having an additional 4th worker on that edge.\n\n**End of Game:** Add the building cost (12 gold) to your total gold.';
+
+  @override
+  String get tileDesc_chocolatl_hut_fountain_master =>
+      '**Building Cost:** 12 gold\n\n**Function:** 4 gold at the end of the game if your own water carrier is standing on the water field with the value “16”.\n\n**End of Game:** Add the building cost (12 gold) plus the bonus (if applicable) to your total gold.';
+
+  @override
+  String get tileDesc_chocolatl_hut_chiefs_daughter =>
+      '**Building Cost:** 14 gold\n\n**Function:** 4 gold at the end of the game.\n\n**End of Game:** Add the building cost (14 gold) plus the bonus (4 gold) to your total gold.';
+
+  @override
+  String get tileDesc_chocolatl_hut_chiefs_son =>
+      '**Building Cost:** 16 gold\n\n**Function:** 4 gold at the end of the game.\n\n**End of Game:** Add the building cost (16 gold) plus the bonus (4 gold) to your total gold.';
+
+  @override
+  String get tileDesc_chocolatl_hut_chiefs_wife =>
+      '**Building Cost:** 20 gold\n\n**Function:** 5 gold at the end of the game.\n\n**End of Game:** Add the building cost (20 gold) plus the bonus (5 gold) to your total gold.';
+
+  @override
+  String get tileDesc_chocolatl_hut_chief =>
+      '**Building Cost:** 24 gold\n\n**Function:** 6 gold at the end of the game.\n\n**End of Game:** Add the building cost (24 gold) plus the bonus (6 gold) to your total gold.';
+
+  @override
+  String get tileTypePlayer => 'Player';
+
+  @override
+  String get tileTypeMarket => 'Market';
+
+  @override
+  String get tileTypePlantation => 'Plantation';
+
+  @override
+  String get tileTypeGoldMine => 'Gold Mine';
+
+  @override
+  String get tileTypeWater => 'Water';
+
+  @override
+  String get tileTypeTemple => 'Temple';
+
+  @override
+  String get tileTypeSunWorshipingSite => 'Sun-Worshiping Site';
+
+  @override
+  String get tileTypeWatering => 'Watering';
+
+  @override
+  String get tileTypeChocolateKitchen => 'Chocolate Kitchen';
+
+  @override
+  String get tileTypeChocolateMarket => 'Chocolate Market';
+
+  @override
+  String get tileTypeMapTile => 'Map Tile';
+
+  @override
+  String get tileTypeHut => 'Hut';
+
+  @override
+  String get tileTypeGemMine => 'Gem Mine';
+
+  @override
+  String get tileTypeTreeOfLife => 'Tree of Life';
+
+  @override
+  String get filterSheetTitle => 'Filters';
+
+  @override
+  String get clearAllAction => 'Clear all';
+
+  @override
+  String get searchTileHint => 'Search tile by name...';
+
+  @override
+  String get tileTypesSection => 'Tile types';
+
+  @override
+  String get filterTilesTooltip => 'Filter tiles';
+
+  @override
+  String get displaySettingsTooltip => 'Display settings';
+
+  @override
+  String activeFiltersCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count filters active',
+      one: '1 filter active',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String costLabel(int cost) {
+    return 'Cost: $cost';
+  }
+
+  @override
+  String get settingsSheetTitle => 'Settings';
+
+  @override
+  String get settingsGeneralSection => 'General';
+
+  @override
+  String get settingsBadgesSection => 'Badges';
+
+  @override
+  String get settingsPlayerColorsSection => 'Player colors';
+
+  @override
+  String get settingBoardgameTitle => 'Boardgame title';
+
+  @override
+  String get settingShowQuantity => 'Show quantity';
+
+  @override
+  String get settingCompactLayout => 'Compact layout';
+
+  @override
+  String get settingBadgeTypeInText => 'Badge tile type in text';
+
+  @override
+  String get settingBadgeTypeInImage => 'Badge tile type in image';
+
+  @override
+  String get settingPlayerColorInBorder => 'Player color in border';
+
+  @override
+  String get settingPlayerColorInCircle => 'Player color in circle';
+
+  @override
+  String get scoreStepSetup => 'Players & Modules';
+
+  @override
+  String get scoreCatGold => 'Accumulated Gold';
+
+  @override
+  String get scoreCatWater => 'Water Track';
+
+  @override
+  String get scoreCatTemples => 'Temples';
+
+  @override
+  String get scoreCatSun => 'Sun Tokens';
+
+  @override
+  String get scoreCatCacao => 'Leftover Cacao';
+
+  @override
+  String get scoreCatHuts => 'Huts';
+
+  @override
+  String get scoreCatGemMines => 'Gem Mines';
+
+  @override
+  String get startOverAction => 'Start over';
+
+  @override
+  String get startOverTitle => 'Start over?';
+
+  @override
+  String get startOverBody =>
+      'This discards all entered scores and reloads players and modules from the current game setup.';
+
+  @override
+  String get backAction => 'Back';
+
+  @override
+  String get nextAction => 'Next';
+
+  @override
+  String get resultsAction => 'Results';
+
+  @override
+  String get needTwoPlayers => 'Select at least 2 players';
+
+  @override
+  String get scoreSetupIntro => 'Select the players of the finished game.';
+
+  @override
+  String get scoreModulesIntro => 'Modules that change the final scoring:';
+
+  @override
+  String get scoreHutModuleSubtitle =>
+      'Chocolatl: built huts refund their cost and give bonuses';
+
+  @override
+  String get scoreGemModuleSubtitle =>
+      'Diamante: gem mines replace the temples';
+
+  @override
+  String get scoreGoldIntro =>
+      'Count the gold coins each player has. Tap the number for direct entry.';
+
+  @override
+  String get scoreWaterIntro =>
+      'Select the water field where each water carrier ended the game. Negative fields subtract gold.';
+
+  @override
+  String get scoreTemplesIntro =>
+      'Add one entry per temple and count the workers adjacent to it. Gold is awarded automatically: 6 for first place, 3 for second, ties split rounded down.';
+
+  @override
+  String get scoreSunIntro =>
+      'Sun tokens not used for overbuilding are worth 1 gold each (maximum 3).';
+
+  @override
+  String get scoreCacaoIntro =>
+      'Leftover cacao fruits give no gold, but they decide ties: with equal gold, the player with most cacao left wins.';
+
+  @override
+  String get scoreHutsIntro =>
+      'Mark the huts each player built. Building costs are refunded and bonuses added automatically. Huts are limited physical tiles: a grayed-out hut has no tile left (deselect it from its owner to reassign it).';
+
+  @override
+  String get scoreGemsIntro =>
+      'Tap a mask tile and pick who owns it. Masks add their value in gold.';
+
+  @override
+  String get scoreGemsLeftoverIntro =>
+      'Leftover gems next to each village board (1 gold each):';
+
+  @override
+  String get addTempleAction => 'Add temple';
+
+  @override
+  String get removeTempleTooltip => 'Remove temple';
+
+  @override
+  String templeNumber(int number) {
+    return 'Temple $number';
+  }
+
+  @override
+  String hutsCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count huts',
+      one: '1 hut',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String scoreHermitCount(String hutName) {
+    return '$hutName: own workers with no adjacent jungle tile';
+  }
+
+  @override
+  String scoreRoadWorkerCount(String hutName) {
+    return '$hutName: worker tiles in your best row or column';
+  }
+
+  @override
+  String get assignMaskTooltip => 'Assign mask';
+
+  @override
+  String get nobodyOption => 'Nobody';
+
+  @override
+  String get enterValueTitle => 'Enter value';
+
+  @override
+  String get okAction => 'OK';
+
+  @override
+  String get finalScoreTitle => 'Final Score';
+
+  @override
+  String get winsTheGameSingle => 'wins the game!';
+
+  @override
+  String get winsTheGameShared => 'win the game!';
+
+  @override
+  String get sharedVictorySubtitle =>
+      'Shared victory! Tied on gold and leftover cacao.';
+
+  @override
+  String get tiebreakSubtitle => 'Tie on gold broken by leftover cacao fruits.';
+
+  @override
+  String get leftoverCacaoTiebreaker => 'Leftover cacao (tiebreaker)';
+
+  @override
+  String get homeIntro =>
+      'Companion for Cacao is a mobile application developed with Flutter designed to assist players of the Cacao board game and its expansions. The goal is to provide digital tools that enhance the gaming experience by facilitating score tracking, rule consultation, and game management.';
+
+  @override
+  String get homeCompletedFeaturesTitle => 'Completed Features';
+
+  @override
+  String get homePendingFeaturesTitle => 'Pending Features';
+
+  @override
+  String get homeCompletedFeatures =>
+      '🏠 Main Menu: Quick access to all functionalities.\n🗂 Tile Database: Comprehensive catalog of tiles.\n🔍 Tile Filtering: Search and filter by multiple criteria.\n🌴 Cacao Base Game: Full support and game setup.\n🍫 Chocolatl Expansion: Full support including all 4 modules.\n🚀 Diamante Expansion: Full support including all 4 modules.\n🎲 Game Dashboard: Summary, preparation, and tiles in play.\n🌟 Big Game Variant: Integration of all modules and expansions.\n📖 Integrated Manuals: Read the game rules.\n🏆 Score Calculator: Automatic final scoring with official tie rules.\n🌐 Multi-language Support: Catalan, Spanish and English.\n📊 Adaptive UI: Optimized design for different screen sizes.\n🔄 Auto-Updater: Automatic detection of new versions.';
+
+  @override
+  String get homePendingFeatures =>
+      '🕒 Turn Timer: Control the duration of each turn.\n📜 Game History: Record of finished games and player stats.\n⚙️ Custom Settings: Adjust the game experience.';
+
+  @override
+  String get homeContactTitle => 'Contact Me';
+
+  @override
+  String get homeContactBody =>
+      'For suggestions, improvements, bug reports, or any other inquiries, you can visit our GitHub repository. The application is open-source and we are always looking for contributors to help improve it.';
+
+  @override
+  String get homeVisitRepo => 'Visit our GitHub repository:';
+
+  @override
+  String get homeGithubBody =>
+      'On GitHub, you can open \"issues\" to report bugs, suggest new features, or even submit \"pull requests\" with your own contributions. We strive to constantly improve the app and appreciate any help!';
+
+  @override
+  String get rulesBaseGame => 'Base Game';
+
+  @override
+  String get rulesInstructions => 'Instructions';
+
+  @override
+  String get rulesOverview => 'Overview';
+
+  @override
+  String rulesExpansionHeader(String name) {
+    return 'Expansion: $name';
+  }
+
+  @override
+  String rulesExpansionRules(String name) {
+    return '$name Rules';
+  }
+
+  @override
+  String get openMenuTooltip => 'Open menu';
+
+  @override
+  String get quantityAll => 'ALL';
+
+  @override
+  String get errorGenericRetry => 'Something went wrong. Please try again.';
+
+  @override
+  String get pageNotFoundTitle => 'Page Not Found';
+
+  @override
+  String routeNotFound(String uri) {
+    return 'Route not found: $uri';
+  }
+
+  @override
+  String get invalidDataMessage => 'Invalid data for this screen.';
+
+  @override
+  String get retryAction => 'Retry';
+
+  @override
+  String get playerNameHint => 'Name';
 }

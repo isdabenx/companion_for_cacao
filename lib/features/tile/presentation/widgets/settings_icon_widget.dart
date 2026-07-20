@@ -5,6 +5,7 @@ import 'package:companion_for_cacao/core/theme/app_colors.dart';
 import 'package:companion_for_cacao/core/theme/app_spacing.dart';
 import 'package:companion_for_cacao/core/theme/app_text_styles.dart';
 import 'package:companion_for_cacao/features/tile/presentation/widgets/settings_item_widget.dart';
+import 'package:companion_for_cacao/l10n/generated/app_localizations.dart';
 import 'package:flutter/material.dart';
 
 class SettingsIconWidget extends StatelessWidget {
@@ -13,7 +14,7 @@ class SettingsIconWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return IconButton(
-      tooltip: 'Display settings',
+      tooltip: AppLocalizations.of(context).displaySettingsTooltip,
       icon: const Icon(Icons.settings),
       onPressed: () {
         unawaited(
@@ -23,6 +24,7 @@ class SettingsIconWidget extends StatelessWidget {
             useSafeArea: true,
             showDragHandle: true,
             builder: (context) {
+              final l10n = AppLocalizations.of(context);
               return SingleChildScrollView(
                 child: Padding(
                   padding: const EdgeInsets.only(
@@ -39,7 +41,7 @@ class SettingsIconWidget extends StatelessWidget {
                           vertical: AppSpacing.s,
                         ),
                         child: Text(
-                          'SETTINGS',
+                          l10n.settingsSheetTitle.toUpperCase(),
                           style: AppTextStyles.boardgameTitlePlain.copyWith(
                             fontSize: 22,
                           ),
@@ -51,7 +53,7 @@ class SettingsIconWidget extends StatelessWidget {
                           vertical: AppSpacing.s,
                         ),
                         child: Text(
-                          'GENERAL',
+                          l10n.settingsGeneralSection.toUpperCase(),
                           style: AppTextStyles.bodyMedium.copyWith(
                             fontWeight: FontWeight.w800,
                             fontSize: 14,
@@ -60,16 +62,16 @@ class SettingsIconWidget extends StatelessWidget {
                           ),
                         ),
                       ),
-                      const SettingsItemWidget(
-                        title: 'Boardgame title',
+                      SettingsItemWidget(
+                        title: l10n.settingBoardgameTitle,
                         settingsName: TileSettings.boardgameInTitle,
                       ),
-                      const SettingsItemWidget(
-                        title: 'Show quantity',
+                      SettingsItemWidget(
+                        title: l10n.settingShowQuantity,
                         settingsName: TileSettings.showQuantity,
                       ),
-                      const SettingsItemWidget(
-                        title: 'Compact layout',
+                      SettingsItemWidget(
+                        title: l10n.settingCompactLayout,
                         settingsName: TileSettings.compactTileLayout,
                       ),
                       const Divider(height: 32),
@@ -78,7 +80,7 @@ class SettingsIconWidget extends StatelessWidget {
                           vertical: AppSpacing.s,
                         ),
                         child: Text(
-                          'BADGES',
+                          l10n.settingsBadgesSection.toUpperCase(),
                           style: AppTextStyles.bodyMedium.copyWith(
                             fontWeight: FontWeight.w800,
                             fontSize: 14,
@@ -87,12 +89,12 @@ class SettingsIconWidget extends StatelessWidget {
                           ),
                         ),
                       ),
-                      const SettingsItemWidget(
-                        title: 'Badge tile type in text',
+                      SettingsItemWidget(
+                        title: l10n.settingBadgeTypeInText,
                         settingsName: TileSettings.badgeTypeInText,
                       ),
-                      const SettingsItemWidget(
-                        title: 'Badge tile type in image',
+                      SettingsItemWidget(
+                        title: l10n.settingBadgeTypeInImage,
                         settingsName: TileSettings.badgeTypeInImage,
                       ),
                       const Divider(height: 32),
@@ -101,7 +103,7 @@ class SettingsIconWidget extends StatelessWidget {
                           vertical: AppSpacing.s,
                         ),
                         child: Text(
-                          'PLAYER COLORS',
+                          l10n.settingsPlayerColorsSection.toUpperCase(),
                           style: AppTextStyles.bodyMedium.copyWith(
                             fontWeight: FontWeight.w800,
                             fontSize: 14,
@@ -110,12 +112,12 @@ class SettingsIconWidget extends StatelessWidget {
                           ),
                         ),
                       ),
-                      const SettingsItemWidget(
-                        title: 'Player color in border',
+                      SettingsItemWidget(
+                        title: l10n.settingPlayerColorInBorder,
                         settingsName: TileSettings.playerColorInBorder,
                       ),
-                      const SettingsItemWidget(
-                        title: 'Player color in circle',
+                      SettingsItemWidget(
+                        title: l10n.settingPlayerColorInCircle,
                         settingsName: TileSettings.playerColorInCircle,
                       ),
                     ],
