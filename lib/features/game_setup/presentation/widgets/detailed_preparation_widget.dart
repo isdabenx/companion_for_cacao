@@ -68,6 +68,9 @@ class DetailedPreparationWidget extends ConsumerWidget {
       ),
     );
     final expansionMap = ref.watch(phaseExpansionProvider);
+    final hutLayoutRegistered = ref.watch(
+      gameSetupProvider.select((s) => s.value?.hutLayout != null),
+    );
     final groupedPreparation = groupBy(preparation, (p) => p.phase);
 
     PreparationPhase? firstIncompletePhase;
@@ -80,7 +83,15 @@ class DetailedPreparationWidget extends ConsumerWidget {
       final completedCount = items
           .where((p) => completionMap[p.id] ?? p.isCompleted)
           .length;
-      if (items.isNotEmpty && completedCount < items.length) {
+      // While the hut throw is still unregistered, keep its phase treated
+      // as incomplete so checking the last checkbox doesn't collapse the
+      // section and hide the registration card. Applying the layout (or
+      // moving on manually — the step is optional) releases the flow.
+      final hasPendingHutLayout =
+          !hutLayoutRegistered &&
+          entry.value.any((p) => p.id == HutsModuleHandler.layoutStepId);
+      if ((items.isNotEmpty && completedCount < items.length) ||
+          hasPendingHutLayout) {
         firstIncompletePhase = entry.key;
         break;
       }
