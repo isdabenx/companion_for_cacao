@@ -20,7 +20,7 @@ class InitializationRepositoryImpl implements InitializationRepository {
   /// [AppDatabase.schemaVersion] + drift migrations; those don't need a
   /// bump here — seeding also re-runs whenever a seed table is empty
   /// (e.g. after a migration recreates it).
-  static const int _currentDbVersion = 5;
+  static const int _currentDbVersion = 6;
 
   @override
   Future<void> initialize() async {

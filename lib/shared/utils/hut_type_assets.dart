@@ -16,9 +16,9 @@ extension HutTypeAssets on HutType {
       HutType.masterBuilder => 'hut_master_builder',
       HutType.foreman => 'hut_foreman',
       HutType.fountainMaster => 'hut_fountain_master',
-      HutType.chiefsDaughter => 'hut_chief_s_daughter',
-      HutType.chiefsSon => 'hut_chief_s_son',
-      HutType.chiefsWife => 'hut_chief_s_wife',
+      HutType.chiefsDaughter => 'hut_chiefs_daughter',
+      HutType.chiefsSon => 'hut_chiefs_son',
+      HutType.chiefsWife => 'hut_chiefs_wife',
       HutType.chief => 'hut_chief',
     };
   }

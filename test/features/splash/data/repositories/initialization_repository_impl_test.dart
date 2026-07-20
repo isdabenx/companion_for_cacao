@@ -72,7 +72,7 @@ void main() {
       test(
         'should not re-seed if database is already populated and version is current',
         () async {
-          SharedPreferences.setMockInitialValues({'db_seed_version': 5});
+          SharedPreferences.setMockInitialValues({'db_seed_version': 6});
 
           _mockAssetBundle(
             boardgames:
@@ -109,7 +109,7 @@ void main() {
 
           final prefs = await SharedPreferences.getInstance();
           final version = prefs.getInt('db_seed_version');
-          expect(version, equals(5));
+          expect(version, equals(6));
 
           // Verify old data is still there (not re-seeded)
           final db = repository.getDatabase();
@@ -121,7 +121,7 @@ void main() {
 
       test('should re-seed when a seed table is empty even at current version '
           '(self-healing after a drift migration recreates a table)', () async {
-        SharedPreferences.setMockInitialValues({'db_seed_version': 5});
+        SharedPreferences.setMockInitialValues({'db_seed_version': 6});
 
         _mockAssetBundle(
           boardgames:
@@ -182,7 +182,7 @@ void main() {
 
           final prefs = await SharedPreferences.getInstance();
           final version = prefs.getInt('db_seed_version');
-          expect(version, equals(5));
+          expect(version, equals(6));
 
           final db = repository.getDatabase();
           final boardgames = await db.getAllBoardgames();
@@ -206,7 +206,7 @@ void main() {
 
         final prefs = await SharedPreferences.getInstance();
         final version = prefs.getInt('db_seed_version');
-        expect(version, equals(5));
+        expect(version, equals(6));
       });
 
       test('should preserve version key logic correctly', () async {
@@ -223,7 +223,7 @@ void main() {
 
         final prefs = await SharedPreferences.getInstance();
         expect(prefs.containsKey('db_seed_version'), isTrue);
-        expect(prefs.getInt('db_seed_version'), equals(5));
+        expect(prefs.getInt('db_seed_version'), equals(6));
       });
     });
 
@@ -319,7 +319,7 @@ void main() {
           await repository.initialize();
 
           final prefs = await SharedPreferences.getInstance();
-          expect(prefs.getInt('db_seed_version'), equals(5));
+          expect(prefs.getInt('db_seed_version'), equals(6));
         },
       );
     });
