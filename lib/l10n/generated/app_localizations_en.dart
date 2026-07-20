@@ -618,6 +618,18 @@ class AppLocalizationsEn extends AppLocalizations {
   String get forgetThrowAction => 'Forget throw';
 
   @override
+  String get guidedModeTooltip => 'Guided mode: one step at a time';
+
+  @override
+  String get listModeTooltip => 'Checklist mode';
+
+  @override
+  String get guidedBack => 'Back';
+
+  @override
+  String get guidedNext => 'Next';
+
+  @override
   String get hutMarketCrier => 'Market Crier';
 
   @override

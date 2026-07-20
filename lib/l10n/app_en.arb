@@ -312,6 +312,10 @@
   "hutRegisterAction": "Register which huts landed face up",
   "hutRegisteredEdit": "Throw registered · tap to edit",
   "forgetThrowAction": "Forget throw",
+  "guidedModeTooltip": "Guided mode: one step at a time",
+  "listModeTooltip": "Checklist mode",
+  "guidedBack": "Back",
+  "guidedNext": "Next",
 
   "hutMarketCrier": "Market Crier",
   "hutHermit": "Hermit",

@@ -626,6 +626,18 @@ class AppLocalizationsEs extends AppLocalizations {
   String get forgetThrowAction => 'Olvidar la tirada';
 
   @override
+  String get guidedModeTooltip => 'Modo guiado: un paso cada vez';
+
+  @override
+  String get listModeTooltip => 'Modo lista';
+
+  @override
+  String get guidedBack => 'Atrás';
+
+  @override
+  String get guidedNext => 'Siguiente';
+
+  @override
   String get hutMarketCrier => 'El voceador del mercado';
 
   @override

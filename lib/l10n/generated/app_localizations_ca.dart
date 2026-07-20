@@ -627,6 +627,18 @@ class AppLocalizationsCa extends AppLocalizations {
   String get forgetThrowAction => 'Oblida la tirada';
 
   @override
+  String get guidedModeTooltip => 'Mode guiat: un pas cada vegada';
+
+  @override
+  String get listModeTooltip => 'Mode llista';
+
+  @override
+  String get guidedBack => 'Enrere';
+
+  @override
+  String get guidedNext => 'Següent';
+
+  @override
   String get hutMarketCrier => 'El pregoner del mercat';
 
   @override

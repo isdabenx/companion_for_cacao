@@ -8,6 +8,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 /// single place — the notifier that owns the state.
 class SettingsRepositoryImpl implements SettingsRepository {
   static const String _hasSeenPreparationKey = 'has_seen_preparation';
+  static const String _guidedPreparationKey = 'prefers_guided_preparation';
 
   @override
   Future<bool> hasSeenPreparation() async {
@@ -19,6 +20,18 @@ class SettingsRepositoryImpl implements SettingsRepository {
   Future<void> markPreparationSeen() async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setBool(_hasSeenPreparationKey, true);
+  }
+
+  @override
+  Future<bool> prefersGuidedPreparation() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getBool(_guidedPreparationKey) ?? false;
+  }
+
+  @override
+  Future<void> setPrefersGuidedPreparation({required bool value}) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool(_guidedPreparationKey, value);
   }
 
   @override

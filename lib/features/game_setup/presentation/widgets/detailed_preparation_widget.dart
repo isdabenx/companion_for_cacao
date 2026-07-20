@@ -11,12 +11,14 @@ import 'package:companion_for_cacao/features/game_setup/domain/services/handlers
 import 'package:companion_for_cacao/features/game_setup/domain/services/handlers/new_workers_module_handler.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/services/preparation_steps.dart';
 import 'package:companion_for_cacao/features/game_setup/presentation/providers/game_setup_notifier.dart';
+import 'package:companion_for_cacao/features/game_setup/presentation/utils/preparation_render_units.dart';
 import 'package:companion_for_cacao/features/game_setup/presentation/widgets/hut_layout_selector_widget.dart';
 import 'package:companion_for_cacao/features/game_setup/presentation/widgets/preparation_celebration_overlay.dart';
 import 'package:companion_for_cacao/features/game_setup/presentation/widgets/preparation_group_card.dart';
 import 'package:companion_for_cacao/features/game_setup/presentation/widgets/preparation_step_row.dart';
 import 'package:companion_for_cacao/features/game_setup/presentation/widgets/worker_selector_widget.dart';
 import 'package:companion_for_cacao/shared/utils/player_display_l10n.dart';
+import 'package:companion_for_cacao/shared/utils/preparation_phase_l10n.dart';
 import 'package:companion_for_cacao/shared/widgets/container_full_style_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -82,22 +84,6 @@ Future<bool> preparationFirstRun(Ref ref) async {
     if (isDone) completed++;
   }
   return (completed, preparation.length);
-}
-
-/// How one list entry renders: a group card or a standalone step.
-sealed class _RenderUnit {
-  const _RenderUnit();
-}
-
-class _GroupUnit extends _RenderUnit {
-  const _GroupUnit(this.groupId, this.steps);
-  final String groupId;
-  final List<PreparationEntity> steps;
-}
-
-class _StepUnit extends _RenderUnit {
-  const _StepUnit(this.step);
-  final PreparationEntity step;
 }
 
 class DetailedPreparationWidget extends ConsumerStatefulWidget {
@@ -172,42 +158,6 @@ class _DetailedPreparationWidgetState
         curve: Curves.easeOutCubic,
       );
     });
-  }
-
-  String _getPhaseName(AppLocalizations l10n, PreparationPhase phase) {
-    switch (phase) {
-      case PreparationPhase.tilePool:
-        return l10n.phaseTilePool;
-      case PreparationPhase.playerSetup:
-        return l10n.phasePlayerSetup;
-      case PreparationPhase.boardSetup:
-        return l10n.phaseBoardSetup;
-      case PreparationPhase.supplies:
-        return l10n.phaseSupplies;
-    }
-  }
-
-  /// Collapses grouped steps into group cards, keeping every other step
-  /// standalone. A group renders at the position of its first member.
-  List<_RenderUnit> _buildUnits(List<PreparationEntity> items) {
-    final units = <_RenderUnit>[];
-    final seenGroups = <String>{};
-    for (final item in items) {
-      final groupId = item.groupId;
-      if (groupId == null) {
-        units.add(_StepUnit(item));
-        continue;
-      }
-      if (seenGroups.add(groupId)) {
-        units.add(
-          _GroupUnit(
-            groupId,
-            items.where((s) => s.groupId == groupId).toList(),
-          ),
-        );
-      }
-    }
-    return units;
   }
 
   @override
@@ -285,9 +235,8 @@ class _DetailedPreparationWidgetState
                           pinned: true,
                           delegate: _PhaseHeaderDelegate(
                             phase: entry.key,
-                            phaseName: _getPhaseName(
+                            phaseName: entry.key.localizedName(
                               AppLocalizations.of(context),
-                              entry.key,
                             ),
                             items: entry.value,
                             completionMap: completionMap,
@@ -318,7 +267,7 @@ class _DetailedPreparationWidgetState
                               );
                             }
 
-                            final units = _buildUnits(entry.value);
+                            final units = buildRenderUnits(entry.value);
 
                             return SliverList(
                               delegate: SliverChildBuilderDelegate((
@@ -327,7 +276,7 @@ class _DetailedPreparationWidgetState
                               ) {
                                 final unit = units[index];
                                 switch (unit) {
-                                  case _GroupUnit(:final groupId, :final steps):
+                                  case GroupUnit(:final groupId, :final steps):
                                     if (groupId ==
                                         PreparationGroups.returnToBox) {
                                       return ReturnToBoxCard(
@@ -351,7 +300,7 @@ class _DetailedPreparationWidgetState
                                       steps: steps,
                                       initiallyExpandedRows: isFirstRun,
                                     );
-                                  case _StepUnit(:final step):
+                                  case StepUnit(:final step):
                                     // Interactive worker selection step
                                     if (step.id ==
                                         NewWorkersModuleHandler

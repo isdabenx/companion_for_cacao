@@ -9,4 +9,9 @@ abstract class SettingsRepository {
   /// instructions without any interaction (spec-fase-ux1 §4).
   Future<bool> hasSeenPreparation();
   Future<void> markPreparationSeen();
+
+  /// Whether the preparation opens in guided (page-by-page) mode instead
+  /// of the checklist. Defaults to the list (spec-fase-ux2 §4).
+  Future<bool> prefersGuidedPreparation();
+  Future<void> setPrefersGuidedPreparation({required bool value});
 }

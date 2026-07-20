@@ -201,6 +201,10 @@
   "hutRegisterAction": "Registra quines cabanes han quedat cara amunt",
   "hutRegisteredEdit": "Tirada registrada · toca per editar",
   "forgetThrowAction": "Oblida la tirada",
+  "guidedModeTooltip": "Mode guiat: un pas cada vegada",
+  "listModeTooltip": "Mode llista",
+  "guidedBack": "Enrere",
+  "guidedNext": "Següent",
 
   "hutMarketCrier": "El pregoner del mercat",
   "hutHermit": "El remeier",

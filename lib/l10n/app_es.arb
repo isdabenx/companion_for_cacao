@@ -201,6 +201,10 @@
   "hutRegisterAction": "Registra qué bohíos han quedado boca arriba",
   "hutRegisteredEdit": "Tirada registrada · toca para editar",
   "forgetThrowAction": "Olvidar la tirada",
+  "guidedModeTooltip": "Modo guiado: un paso cada vez",
+  "listModeTooltip": "Modo lista",
+  "guidedBack": "Atrás",
+  "guidedNext": "Siguiente",
 
   "hutMarketCrier": "El voceador del mercado",
   "hutHermit": "El curandero",

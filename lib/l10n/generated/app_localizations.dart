@@ -1138,6 +1138,30 @@ abstract class AppLocalizations {
   /// **'Forget throw'**
   String get forgetThrowAction;
 
+  /// No description provided for @guidedModeTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Guided mode: one step at a time'**
+  String get guidedModeTooltip;
+
+  /// No description provided for @listModeTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Checklist mode'**
+  String get listModeTooltip;
+
+  /// No description provided for @guidedBack.
+  ///
+  /// In en, this message translates to:
+  /// **'Back'**
+  String get guidedBack;
+
+  /// No description provided for @guidedNext.
+  ///
+  /// In en, this message translates to:
+  /// **'Next'**
+  String get guidedNext;
+
   /// No description provided for @hutMarketCrier.
   ///
   /// In en, this message translates to:
