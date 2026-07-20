@@ -29,7 +29,14 @@ Els passos generats conserven l'idioma de generació fins a la següent regenera
 | **i18n-B** | Resta d'UI (menú, home, Game Setup, dashboard, tiles, score, sheets de workers/cabanes) |
 | **i18n-C** | Catàleg per id estable (`tileName_<id>`, `tileDesc_<id>`) + descripcions de mòduls + revisió completa ca/es |
 
-## 5. Tests
+## 5. Terminologia (fonts canòniques per idioma)
+
+- **Anglès**: els PDF d'Abacusspiele inclosos a `assets/rules/` (font original de l'app).
+- **Castellà**: la **traducció oficial de Devir** (Marc Figueras i Marià Pitarque, Devir Iberia). Termes clau que difereixen d'una traducció literal de l'anglès: *recolectores* (workers), *aguador* (water carrier), *remansos* del riu (water fields), *aldea* (village board), *losetas de selva* (jungle tiles), *pila de la selva* i *selva explorada* (draw pile / display), *cenote* (water tile), *mercado de precio de venta «2»*, *irrigación* (watering), *chocolatera* (chocolate kitchen), *tabletas de chocolate*, *bohíos* (huts). Expansions: **Xocolatl** (no "Chocolatl") amb mòduls *Mapas / Irrigación / Chocolate / Bohíos*; **Diamante** amb *Las minas de gemas / El árbol de la vida / El favor del **ahau** / Los nuevos recolectores*. Fonts: PDF oficial de Xocolatl (quejuegosdemesa.com), fitxes de producte Devir i ressenya Misut Meeple. Pendents de confirmar amb el PDF oficial de Diamante: *vagoneta* i el redactat exacte dels seus passos.
+- **Català**: no hi ha edició oficial. La font canònica és el **glossari propi del projecte (DESIGN.md)**: rajoles, portador d'aigua, tauler de poblat, fitxes de sol, jungla, El Reg, Cuina de xocolata, Les Cabanes, El Favor de l'Emperador, Nous Treballadors. On el DESIGN.md no defineixi un terme, s'adapta del castellà oficial de Devir.
+- **PR-B/C**: els noms d'expansions i mòduls que mostra el Game Setup han d'usar aquests noms oficials per idioma (via ARB, no `modules.json`).
+
+## 6. Tests
 
 - Handlers: intactes (default anglès de l'ARB — si l'ARB anglès canvia, els tests ho detecten: única font de veritat).
 - Widget tests de preparació: afegir `localizationsDelegates` al MaterialApp de test on calgui.
