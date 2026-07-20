@@ -1,4 +1,5 @@
 import 'package:companion_for_cacao/core/domain/entities/boardgame_entity.dart';
+import 'package:companion_for_cacao/core/domain/entities/module_entity.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/game_setup_state_entity.dart';
 import 'package:companion_for_cacao/features/game_setup/presentation/providers/game_setup_notifier.dart';
 import 'package:companion_for_cacao/features/game_setup/presentation/widgets/game_setup_widget.dart';
@@ -21,14 +22,20 @@ void main() {
       ),
     ];
 
-    testWidgets('should display Stepper with 3 steps', (tester) async {
+    Future<void> pump(
+      WidgetTester tester, {
+      bool isStarted = false,
+      GameSetupStateEntity? state,
+    }) async {
       final container = ProviderContainer(
         overrides: [
           boardgameProvider.overrideWith(
             () => FakeBoardgameNotifier(testBoardgames),
           ),
           gameSetupProvider.overrideWith(
-            () => FakeGameSetupNotifier(isStarted: false),
+            () => FakeGameSetupNotifier(
+              state ?? GameSetupStateEntity(players: [], isStarted: isStarted),
+            ),
           ),
         ],
       );
@@ -45,200 +52,94 @@ void main() {
       );
 
       await tester.pumpAndSettle();
+    }
 
-      expect(find.byType(Stepper), findsOneWidget);
+    testWidgets('shows all three sections at once on a single page', (
+      tester,
+    ) async {
+      await pump(tester);
+
+      expect(find.byType(Stepper), findsNothing);
       expect(find.text('Players'), findsOneWidget);
       expect(find.text('Expansions'), findsOneWidget);
       expect(find.text('Modules'), findsOneWidget);
     });
 
     testWidgets('should display Start Game button', (tester) async {
-      final container = ProviderContainer(
-        overrides: [
-          boardgameProvider.overrideWith(
-            () => FakeBoardgameNotifier(testBoardgames),
-          ),
-          gameSetupProvider.overrideWith(
-            () => FakeGameSetupNotifier(isStarted: false),
-          ),
-        ],
-      );
-
-      await tester.pumpWidget(
-        UncontrolledProviderScope(
-          container: container,
-          child: const MaterialApp(
-            localizationsDelegates: AppLocalizations.localizationsDelegates,
-            supportedLocales: AppLocalizations.supportedLocales,
-            home: Scaffold(body: GameSetupWidget()),
-          ),
-        ),
-      );
-
-      await tester.pumpAndSettle();
+      await pump(tester);
 
       expect(find.text('Start Game'), findsOneWidget);
       expect(find.byType(FilledButton), findsOneWidget);
     });
 
-    testWidgets('should navigate to different steps', (tester) async {
-      final container = ProviderContainer(
-        overrides: [
-          boardgameProvider.overrideWith(
-            () => FakeBoardgameNotifier(testBoardgames),
-          ),
-          gameSetupProvider.overrideWith(
-            () => FakeGameSetupNotifier(isStarted: false),
-          ),
-        ],
-      );
-
-      await tester.pumpWidget(
-        UncontrolledProviderScope(
-          container: container,
-          child: const MaterialApp(
-            localizationsDelegates: AppLocalizations.localizationsDelegates,
-            supportedLocales: AppLocalizations.supportedLocales,
-            home: Scaffold(body: GameSetupWidget()),
-          ),
-        ),
-      );
-
-      await tester.pumpAndSettle();
-
-      // Tap on Expansions step header
-      await tester.tap(find.text('Expansions'));
-      await tester.pumpAndSettle();
-
-      // Tap on Modules step header
-      await tester.tap(find.text('Modules'));
-      await tester.pumpAndSettle();
-
-      // Tap on Players step header
-      await tester.tap(find.text('Players'));
-      await tester.pumpAndSettle();
-
-      // All steps should still be visible
-      expect(find.text('Players'), findsOneWidget);
-      expect(find.text('Expansions'), findsOneWidget);
-      expect(find.text('Modules'), findsOneWidget);
-    });
-
-    testWidgets('Stepper should be interactive when isStarted is false', (
+    testWidgets('groups modules under the expansion they come from', (
       tester,
     ) async {
-      final container = ProviderContainer(
-        overrides: [
-          boardgameProvider.overrideWith(
-            () => FakeBoardgameNotifier(testBoardgames),
-          ),
-          gameSetupProvider.overrideWith(
-            () => FakeGameSetupNotifier(isStarted: false),
-          ),
-        ],
+      await tester.binding.setSurfaceSize(const Size(800, 1800));
+      addTearDown(() => tester.binding.setSurfaceSize(null));
+
+      final chocolatl = BoardgameEntity(
+        id: 2,
+        name: 'Cacao: Chocolatl',
+        description: '',
+        filenameImage: '',
+        modules: [ModuleEntity(id: 4, name: 'Huts', description: '')],
+      );
+      await pump(
+        tester,
+        state: GameSetupStateEntity(players: [], expansions: [chocolatl]),
       );
 
-      await tester.pumpWidget(
-        UncontrolledProviderScope(
-          container: container,
-          child: const MaterialApp(
-            localizationsDelegates: AppLocalizations.localizationsDelegates,
-            supportedLocales: AppLocalizations.supportedLocales,
-            home: Scaffold(body: GameSetupWidget()),
-          ),
-        ),
-      );
+      // The expansion name (localized, English here) heads its module group,
+      // and the module resolves by stable id ("Hut Module"), not by the
+      // seeded name.
+      expect(find.text('Cacao: Chocolatl'), findsOneWidget);
+      expect(find.text('Hut Module'), findsOneWidget);
+    });
 
-      await tester.pumpAndSettle();
+    testWidgets('page is interactive when isStarted is false', (tester) async {
+      await pump(tester);
 
-      // Find the Column that contains the IgnorePointer and Stepper
-      final columnFinder = find.descendant(
-        of: find.byType(GameSetupWidget),
-        matching: find.byType(Column),
-      );
-
-      expect(columnFinder, findsWidgets);
-
-      // Find the IgnorePointer that's a direct child of the Column's Expanded
       final ignorePointerWidgets = tester.widgetList<IgnorePointer>(
         find.byType(IgnorePointer),
       );
-
-      // The IgnorePointer wrapping the Stepper should have ignoring: false
-      final stepperIgnorePointer = ignorePointerWidgets.firstWhere(
+      final pageIgnorePointer = ignorePointerWidgets.firstWhere(
         (widget) => widget.child is Opacity,
       );
+      expect(pageIgnorePointer.ignoring, isFalse);
 
-      expect(stepperIgnorePointer.ignoring, isFalse);
-
-      // Find the Opacity widget
       final opacityWidgets = tester.widgetList<Opacity>(find.byType(Opacity));
-
-      final stepperOpacity = opacityWidgets.firstWhere(
-        (widget) => widget.child is Stepper,
+      final pageOpacity = opacityWidgets.firstWhere(
+        (widget) => widget.child is ListView,
       );
-
-      expect(stepperOpacity.opacity, equals(1.0));
+      expect(pageOpacity.opacity, equals(1.0));
     });
 
-    testWidgets('Stepper should be blocked when isStarted is true', (
-      tester,
-    ) async {
-      final container = ProviderContainer(
-        overrides: [
-          boardgameProvider.overrideWith(
-            () => FakeBoardgameNotifier(testBoardgames),
-          ),
-          gameSetupProvider.overrideWith(
-            () => FakeGameSetupNotifier(isStarted: true),
-          ),
-        ],
-      );
+    testWidgets('page is blocked when isStarted is true', (tester) async {
+      await pump(tester, isStarted: true);
 
-      await tester.pumpWidget(
-        UncontrolledProviderScope(
-          container: container,
-          child: const MaterialApp(
-            localizationsDelegates: AppLocalizations.localizationsDelegates,
-            supportedLocales: AppLocalizations.supportedLocales,
-            home: Scaffold(body: GameSetupWidget()),
-          ),
-        ),
-      );
-
-      await tester.pumpAndSettle();
-
-      // Find the IgnorePointer widgets
       final ignorePointerWidgets = tester.widgetList<IgnorePointer>(
         find.byType(IgnorePointer),
       );
-
-      // The IgnorePointer wrapping the Stepper should have ignoring: true
-      final stepperIgnorePointer = ignorePointerWidgets.firstWhere(
+      final pageIgnorePointer = ignorePointerWidgets.firstWhere(
         (widget) => widget.child is Opacity,
       );
+      expect(pageIgnorePointer.ignoring, isTrue);
 
-      expect(stepperIgnorePointer.ignoring, isTrue);
-
-      // Find the Opacity widgets
       final opacityWidgets = tester.widgetList<Opacity>(find.byType(Opacity));
-
-      final stepperOpacity = opacityWidgets.firstWhere(
-        (widget) => widget.child is Stepper,
+      final pageOpacity = opacityWidgets.firstWhere(
+        (widget) => widget.child is ListView,
       );
-
-      expect(stepperOpacity.opacity, equals(0.6));
+      expect(pageOpacity.opacity, equals(0.6));
     });
   });
 }
 
 class FakeGameSetupNotifier extends GameSetupNotifier {
-  FakeGameSetupNotifier({required this.isStarted});
+  FakeGameSetupNotifier(this.initial);
 
-  final bool isStarted;
+  final GameSetupStateEntity initial;
 
   @override
-  Future<GameSetupStateEntity> build() async {
-    return GameSetupStateEntity(players: [], isStarted: isStarted);
-  }
+  Future<GameSetupStateEntity> build() async => initial;
 }

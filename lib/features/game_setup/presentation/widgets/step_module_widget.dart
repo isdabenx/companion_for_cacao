@@ -5,6 +5,7 @@ import 'package:companion_for_cacao/core/theme/app_text_styles.dart';
 import 'package:companion_for_cacao/features/game_setup/presentation/providers/game_setup_notifier.dart';
 import 'package:companion_for_cacao/features/game_setup/presentation/widgets/select_module_widget.dart';
 import 'package:companion_for_cacao/l10n/generated/app_localizations.dart';
+import 'package:companion_for_cacao/shared/utils/catalog_l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -13,13 +14,12 @@ class StepModuleWidget extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final modules = ref.watch(
+    // Expansions that bring modules, so each group can say where its
+    // modules come from.
+    final expansionsWithModules = ref.watch(
       gameSetupProvider.select(
         (s) =>
-            s.value?.expansions
-                .map((e) => e.modules)
-                .expand((element) => element)
-                .toList() ??
+            s.value?.expansions.where((e) => e.modules.isNotEmpty).toList() ??
             [],
       ),
     );
@@ -33,31 +33,40 @@ class StepModuleWidget extends ConsumerWidget {
       gameSetupProvider.select((s) => s.value?.canEnableBigGame ?? false),
     );
 
+    final l10n = AppLocalizations.of(context);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(AppLocalizations.of(context).selectModulesHint),
-        Column(
-          children: [
-            if (modules.isEmpty)
-              Row(
-                children: [
-                  Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.only(top: AppSpacing.l),
-                      child: Text(
-                        AppLocalizations.of(context).noExpansionWithModules,
-                        style: AppTextStyles.boardgameTitle,
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
+        Text(l10n.selectModulesHint),
+        if (expansionsWithModules.isEmpty)
+          Row(
+            children: [
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.only(top: AppSpacing.l),
+                  child: Text(
+                    l10n.noExpansionWithModules,
+                    style: AppTextStyles.boardgameTitle,
+                    textAlign: TextAlign.center,
                   ),
-                ],
+                ),
               ),
-            for (final ModuleEntity module in modules)
-              SelectModuleWidget(module: module),
-          ],
-        ),
+            ],
+          ),
+        for (final expansion in expansionsWithModules) ...[
+          Padding(
+            padding: const EdgeInsets.only(
+              top: AppSpacing.m,
+              bottom: AppSpacing.xs,
+            ),
+            child: Text(
+              expansion.localizedName(l10n),
+              style: AppTextStyles.sectionSublabel,
+            ),
+          ),
+          for (final ModuleEntity module in expansion.modules)
+            SelectModuleWidget(module: module),
+        ],
         if (showBigGameToggle)
           Padding(
             padding: const EdgeInsets.only(top: AppSpacing.m),

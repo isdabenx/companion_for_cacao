@@ -5,7 +5,6 @@ import 'package:companion_for_cacao/core/theme/app_colors.dart';
 import 'package:companion_for_cacao/core/theme/app_spacing.dart';
 import 'package:companion_for_cacao/core/theme/app_text_styles.dart';
 import 'package:companion_for_cacao/features/game_setup/presentation/providers/game_setup_notifier.dart';
-import 'package:companion_for_cacao/features/game_setup/presentation/providers/game_setup_step_provider.dart';
 import 'package:companion_for_cacao/l10n/generated/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -31,7 +30,6 @@ class StartButtonWidget extends ConsumerWidget {
 
   void _onClearSetupPressed(BuildContext context, WidgetRef ref) {
     ref.read(gameSetupProvider.notifier).clearAll();
-    ref.read(gameSetupStepProvider.notifier).setStep(0);
   }
 
   @override

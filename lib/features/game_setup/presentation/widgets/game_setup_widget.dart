@@ -2,7 +2,6 @@ import 'package:companion_for_cacao/core/theme/app_colors.dart';
 import 'package:companion_for_cacao/core/theme/app_spacing.dart';
 import 'package:companion_for_cacao/core/theme/app_text_styles.dart';
 import 'package:companion_for_cacao/features/game_setup/presentation/providers/game_setup_notifier.dart';
-import 'package:companion_for_cacao/features/game_setup/presentation/providers/game_setup_step_provider.dart';
 import 'package:companion_for_cacao/features/game_setup/presentation/widgets/start_button_widget.dart';
 import 'package:companion_for_cacao/features/game_setup/presentation/widgets/step_expansion_widget.dart';
 import 'package:companion_for_cacao/features/game_setup/presentation/widgets/step_module_widget.dart';
@@ -11,20 +10,19 @@ import 'package:companion_for_cacao/l10n/generated/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+/// The whole game setup on one scrollable page: players, expansions and
+/// modules are always visible — there is no forced order between them, so
+/// no stepper hiding the sections you are not on.
 class GameSetupWidget extends ConsumerWidget {
   const GameSetupWidget({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final currentStep = ref.watch(gameSetupStepProvider);
     final gameSetupAsync = ref.watch(gameSetupProvider);
     final isStarted = ref.watch(
       gameSetupProvider.select((s) => s.value?.isStarted ?? false),
     );
     final screenHeight = MediaQuery.sizeOf(context).height;
-    final selectedCount = ref.watch(
-      gameSetupProvider.select((s) => s.value?.players.length ?? 0),
-    );
 
     // Adaptive heights
     const double baseHeightAllExpansions = 180;
@@ -46,97 +44,31 @@ class GameSetupWidget extends ConsumerWidget {
               ignoring: isStarted,
               child: Opacity(
                 opacity: isStarted ? 0.6 : 1.0,
-                child: Stepper(
-                  stepIconMargin: EdgeInsets.zero,
-                  connectorColor: const WidgetStatePropertyAll(
-                    AppColors.greenDarker,
+                child: ListView(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: AppSpacing.l,
+                    vertical: AppSpacing.m,
                   ),
-                  currentStep: currentStep,
-                  onStepTapped: (step) {
-                    ref.read(gameSetupStepProvider.notifier).setStep(step);
-                  },
-                  controlsBuilder: (_, details) => const SizedBox.shrink(),
-                  steps: [
-                    Step(
-                      title: Row(
-                        children: [
-                          Text(
-                            AppLocalizations.of(context).playersSection,
-                            style: AppTextStyles.sectionTitlePlain,
-                          ),
-                          AppSpacing.horizontalS,
-                          // Player count badge
-                          Container(
-                            constraints: const BoxConstraints(minWidth: 52),
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: AppSpacing.s,
-                              vertical: 2,
-                            ),
-                            decoration: BoxDecoration(
-                              color: AppColors.greenDarker.withValues(
-                                alpha: 0.1,
-                              ),
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Icon(
-                                  Icons.people,
-                                  size: 14,
-                                  color: AppColors.greenDarker,
-                                ),
-                                const SizedBox(width: AppSpacing.xs),
-                                Text(
-                                  '$selectedCount/4',
-                                  style: AppTextStyles.badgeCount,
-                                ),
-                              ],
-                            ),
-                          ),
-                          if (selectedCount < 2) ...[
-                            const SizedBox(width: 6),
-                            Container(
-                              constraints: const BoxConstraints(minWidth: 48),
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 6,
-                                vertical: 2,
-                              ),
-                              decoration: BoxDecoration(
-                                color: AppColors.gold.withValues(alpha: 0.3),
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                              child: Text(
-                                AppLocalizations.of(
-                                  context,
-                                ).needMorePlayers(2 - selectedCount),
-                                textAlign: TextAlign.center,
-                                style: AppTextStyles.warningText,
-                              ),
-                            ),
-                          ],
-                        ],
-                      ),
-                      content: const StepPlayerWidget(),
+                  children: [
+                    const _PlayersSectionHeader(),
+                    AppSpacing.verticalS,
+                    const StepPlayerWidget(),
+                    AppSpacing.verticalL,
+                    _SectionHeader(
+                      title: AppLocalizations.of(context).expansionsSection,
                     ),
-                    Step(
-                      title: Text(
-                        AppLocalizations.of(context).expansionsSection,
-                        style: AppTextStyles.sectionTitlePlain,
-                      ),
-                      content: StepExpansionWidget(
-                        heightAllExpansions: heightAllExpansions,
-                        heightExpansion: heightExpansion,
-                        widthExpansion: widthExpansion,
-                      ),
+                    AppSpacing.verticalS,
+                    StepExpansionWidget(
+                      heightAllExpansions: heightAllExpansions,
+                      heightExpansion: heightExpansion,
+                      widthExpansion: widthExpansion,
                     ),
-                    Step(
-                      title: Text(
-                        AppLocalizations.of(context).modulesSection,
-                        style: AppTextStyles.sectionTitlePlain,
-                      ),
-                      content: const StepModuleWidget(),
+                    AppSpacing.verticalL,
+                    _SectionHeader(
+                      title: AppLocalizations.of(context).modulesSection,
                     ),
+                    AppSpacing.verticalS,
+                    const StepModuleWidget(),
                   ],
                 ),
               ),
@@ -147,6 +79,77 @@ class GameSetupWidget extends ConsumerWidget {
       ),
       loading: () => const Center(child: CircularProgressIndicator()),
       error: (e, _) => Center(child: Text('Error: $e')),
+    );
+  }
+}
+
+class _SectionHeader extends StatelessWidget {
+  const _SectionHeader({required this.title, this.trailing});
+
+  final String title;
+  final List<Widget>? trailing;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Text(title, style: AppTextStyles.sectionTitlePlain),
+        if (trailing != null) ...[AppSpacing.horizontalS, ...trailing!],
+      ],
+    );
+  }
+}
+
+/// The players header keeps its live count badge and the "need more
+/// players" nudge next to the title.
+class _PlayersSectionHeader extends ConsumerWidget {
+  const _PlayersSectionHeader();
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final selectedCount = ref.watch(
+      gameSetupProvider.select((s) => s.value?.players.length ?? 0),
+    );
+
+    return _SectionHeader(
+      title: AppLocalizations.of(context).playersSection,
+      trailing: [
+        Container(
+          constraints: const BoxConstraints(minWidth: 52),
+          padding: const EdgeInsets.symmetric(
+            horizontal: AppSpacing.s,
+            vertical: 2,
+          ),
+          decoration: BoxDecoration(
+            color: AppColors.greenDarker.withValues(alpha: 0.1),
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(Icons.people, size: 14, color: AppColors.greenDarker),
+              const SizedBox(width: AppSpacing.xs),
+              Text('$selectedCount/4', style: AppTextStyles.badgeCount),
+            ],
+          ),
+        ),
+        if (selectedCount < 2) ...[
+          const SizedBox(width: 6),
+          Container(
+            constraints: const BoxConstraints(minWidth: 48),
+            padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+            decoration: BoxDecoration(
+              color: AppColors.gold.withValues(alpha: 0.3),
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Text(
+              AppLocalizations.of(context).needMorePlayers(2 - selectedCount),
+              textAlign: TextAlign.center,
+              style: AppTextStyles.warningText,
+            ),
+          ),
+        ],
+      ],
     );
   }
 }
