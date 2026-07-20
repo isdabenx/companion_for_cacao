@@ -11,11 +11,12 @@ import 'package:companion_for_cacao/shared/widgets/selectable_chip.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-/// Inline card in the preparation flow to register the hut throw: which
-/// side of each of the 12 physical hut tiles landed face up. Optional —
-/// when registered, the score calculator offers exactly the huts in play.
-class HutLayoutSelectorWidget extends ConsumerWidget {
-  const HutLayoutSelectorWidget({super.key});
+/// Compact action row hosted inside the hut-throw preparation card:
+/// register which side of each of the 12 physical hut tiles landed face
+/// up. Optional — when registered, the score calculator offers exactly
+/// the huts in play.
+class HutThrowRegisterRow extends ConsumerWidget {
+  const HutThrowRegisterRow({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -23,79 +24,45 @@ class HutLayoutSelectorWidget extends ConsumerWidget {
       gameSetupProvider.select((s) => s.value?.hutLayout),
     );
 
-    // Match PreparationCard margins so the row aligns with the other cards
-    return Padding(
-      padding: const EdgeInsets.symmetric(
-        horizontal: AppSpacing.l,
-        vertical: 6,
-      ),
-      child: Material(
-        color: AppColors.cream,
-        borderRadius: BorderRadius.circular(12),
-        elevation: 1,
-        child: InkWell(
-          borderRadius: BorderRadius.circular(12),
-          onTap: () => _openEditor(context, ref, layout),
-          child: Container(
-            padding: const EdgeInsets.symmetric(
-              horizontal: AppSpacing.m,
-              vertical: AppSpacing.s,
-            ),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(12),
-              border: Border.all(
-                color: AppColors.greenDark.withValues(alpha: 0.3),
+    return Material(
+      color: AppColors.greenLight.withValues(alpha: 0.6),
+      borderRadius: BorderRadius.circular(8),
+      child: InkWell(
+        borderRadius: BorderRadius.circular(8),
+        onTap: () => _openEditor(context, ref, layout),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(
+            horizontal: AppSpacing.s,
+            vertical: AppSpacing.xs,
+          ),
+          child: Row(
+            children: [
+              Icon(
+                layout == null ? Icons.app_registration : Icons.check_circle,
+                color: layout == null
+                    ? AppColors.greenDarker
+                    : AppColors.greenDark,
+                size: 18,
               ),
-            ),
-            child: Row(
-              children: [
-                const Icon(
-                  Icons.cottage_outlined,
-                  color: AppColors.brown,
-                  size: 20,
-                ),
-                const SizedBox(width: AppSpacing.s),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Hut throw (optional)',
-                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          fontWeight: FontWeight.bold,
-                          color: AppColors.brown,
-                        ),
-                      ),
-                      const SizedBox(height: 2),
-                      Text(
-                        layout == null
-                            ? 'Not registered · score calculator will allow '
-                                  'any combination'
-                            : 'Registered · exact hut supply known',
-                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          color: AppColors.brown.withValues(alpha: 0.7),
-                          fontSize: 11,
-                        ),
-                      ),
-                    ],
+              const SizedBox(width: AppSpacing.s),
+              Expanded(
+                child: Text(
+                  layout == null
+                      ? 'Register throw result (optional)'
+                      : 'Throw registered · exact hut supply known',
+                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                    color: AppColors.brown,
+                    fontWeight: FontWeight.w600,
                   ),
                 ),
-                const SizedBox(width: AppSpacing.s),
-                Icon(
-                  layout == null ? Icons.help_outline : Icons.check_circle,
-                  color: layout == null
-                      ? AppColors.brown.withValues(alpha: 0.4)
-                      : AppColors.greenDark,
-                  size: 18,
-                ),
-                const SizedBox(width: AppSpacing.s),
-                const Icon(
-                  Icons.edit_outlined,
-                  color: AppColors.greenDarker,
-                  size: 18,
-                ),
-              ],
-            ),
+              ),
+              const SizedBox(width: AppSpacing.s),
+              const Icon(
+                Icons.edit_outlined,
+                color: AppColors.greenDarker,
+                size: 16,
+              ),
+            ],
           ),
         ),
       ),

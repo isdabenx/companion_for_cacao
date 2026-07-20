@@ -22,18 +22,17 @@ void main() {
       overrides: [
         gameSetupProvider.overrideWith(() => _FakeGameSetupNotifier(setup)),
       ],
-      child: const MaterialApp(home: Scaffold(body: HutLayoutSelectorWidget())),
+      child: const MaterialApp(home: Scaffold(body: HutThrowRegisterRow())),
     );
   }
 
-  group('HutLayoutSelectorWidget', () {
+  group('HutThrowRegisterRow', () {
     testWidgets('shows the unregistered state by default', (tester) async {
       await tester.pumpWidget(wrap(GameSetupStateEntity()));
       await tester.pumpAndSettle();
 
-      expect(find.text('Hut throw (optional)'), findsOneWidget);
-      expect(find.textContaining('Not registered'), findsOneWidget);
-      expect(find.byIcon(Icons.help_outline), findsOneWidget);
+      expect(find.text('Register throw result (optional)'), findsOneWidget);
+      expect(find.byIcon(Icons.app_registration), findsOneWidget);
     });
 
     testWidgets('shows the registered state when a layout exists', (
@@ -45,7 +44,7 @@ void main() {
       await tester.pumpWidget(wrap(GameSetupStateEntity(hutLayout: layout)));
       await tester.pumpAndSettle();
 
-      expect(find.textContaining('Registered'), findsOneWidget);
+      expect(find.textContaining('Throw registered'), findsOneWidget);
       expect(find.byIcon(Icons.check_circle), findsOneWidget);
     });
 
@@ -55,7 +54,7 @@ void main() {
       await tester.pumpWidget(wrap(GameSetupStateEntity()));
       await tester.pumpAndSettle();
 
-      await tester.tap(find.text('Hut throw (optional)'));
+      await tester.tap(find.byType(HutThrowRegisterRow));
       await tester.pumpAndSettle();
 
       expect(find.text('Register the hut throw'), findsOneWidget);
@@ -80,7 +79,7 @@ void main() {
       await tester.pumpWidget(wrap(GameSetupStateEntity(hutLayout: layout)));
       await tester.pumpAndSettle();
 
-      await tester.tap(find.text('Hut throw (optional)'));
+      await tester.tap(find.byType(HutThrowRegisterRow));
       await tester.pumpAndSettle();
 
       // Complete layout: counter full and Apply enabled.

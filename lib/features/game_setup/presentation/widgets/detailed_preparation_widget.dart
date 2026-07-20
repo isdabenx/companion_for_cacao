@@ -68,30 +68,18 @@ class DetailedPreparationWidget extends ConsumerWidget {
       ),
     );
     final expansionMap = ref.watch(phaseExpansionProvider);
-    final hutLayoutRegistered = ref.watch(
-      gameSetupProvider.select((s) => s.value?.hutLayout != null),
-    );
     final groupedPreparation = groupBy(preparation, (p) => p.phase);
 
     PreparationPhase? firstIncompletePhase;
     for (final entry in groupedPreparation.entries) {
-      // Interactive steps have no checkbox — exclude them from counts
+      // The worker selector step has no checkbox — exclude it from counts
       final items = entry.value
           .where((p) => p.id != NewWorkersModuleHandler.selectionStepId)
-          .where((p) => p.id != HutsModuleHandler.layoutStepId)
           .toList();
       final completedCount = items
           .where((p) => completionMap[p.id] ?? p.isCompleted)
           .length;
-      // While the hut throw is still unregistered, keep its phase treated
-      // as incomplete so checking the last checkbox doesn't collapse the
-      // section and hide the registration card. Applying the layout (or
-      // moving on manually — the step is optional) releases the flow.
-      final hasPendingHutLayout =
-          !hutLayoutRegistered &&
-          entry.value.any((p) => p.id == HutsModuleHandler.layoutStepId);
-      if ((items.isNotEmpty && completedCount < items.length) ||
-          hasPendingHutLayout) {
+      if (items.isNotEmpty && completedCount < items.length) {
         firstIncompletePhase = entry.key;
         break;
       }
@@ -154,12 +142,14 @@ class DetailedPreparationWidget extends ConsumerWidget {
                                 NewWorkersModuleHandler.selectionStepId) {
                               return const WorkerSelectorWidget();
                             }
-                            if (item.id == HutsModuleHandler.layoutStepId) {
-                              return const HutLayoutSelectorWidget();
-                            }
                             return PreparationCard(
                               key: ValueKey(item.id),
                               preparation: item,
+                              // The hut-throw card hosts the optional
+                              // registration action for the score calculator.
+                              footer: item.id == HutsModuleHandler.marketStepId
+                                  ? const HutThrowRegisterRow()
+                                  : null,
                             );
                           }, childCount: items.length),
                         );
@@ -201,10 +191,9 @@ class _PhaseHeaderDelegate extends SliverPersistentHeaderDelegate {
     double shrinkOffset,
     bool overlapsContent,
   ) {
-    // Interactive steps have no checkbox — exclude them from counts
+    // The worker selector step has no checkbox — exclude it from counts
     final countableItems = items
         .where((p) => p.id != NewWorkersModuleHandler.selectionStepId)
-        .where((p) => p.id != HutsModuleHandler.layoutStepId)
         .toList();
     final phaseCompletedCount = countableItems
         .where((p) => completionMap[p.id] ?? p.isCompleted)
@@ -287,9 +276,14 @@ class _PhaseHeaderDelegate extends SliverPersistentHeaderDelegate {
 }
 
 class PreparationCard extends ConsumerWidget {
-  const PreparationCard({required this.preparation, super.key});
+  const PreparationCard({required this.preparation, this.footer, super.key});
 
   final PreparationEntity preparation;
+
+  /// Optional extra content under the description (e.g. the hut-throw
+  /// registration row). Handles its own taps, independent of the card's
+  /// completion toggle.
+  final Widget? footer;
 
   void _showImageDialog(BuildContext context, String imagePath) {
     showDialog<void>(
@@ -409,76 +403,84 @@ class PreparationCard extends ConsumerWidget {
               : null,
           child: Padding(
             padding: AppSpacing.allM,
-            child: Row(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
               children: [
-                if (preparation.color != null)
-                  Container(
-                    width: 12,
-                    height: 40,
-                    margin: const EdgeInsets.only(right: AppSpacing.m),
-                    decoration: BoxDecoration(
-                      color: AppColors.findColorByName(preparation.color!),
-                      borderRadius: BorderRadius.circular(6),
-                      border: Border.all(color: AppColors.grey, width: 1),
-                    ),
-                  ),
-                if (preparation.imageKey != null)
-                  GestureDetector(
-                    onTap: () => _showImageDialog(
-                      context,
-                      preparation.imageKey!.toAssetPath(),
-                    ),
-                    child: Hero(
-                      tag: 'prep_image_${preparation.id}',
-                      child: Container(
-                        width: 48,
-                        height: 48,
+                Row(
+                  children: [
+                    if (preparation.color != null)
+                      Container(
+                        width: 12,
+                        height: 40,
                         margin: const EdgeInsets.only(right: AppSpacing.m),
                         decoration: BoxDecoration(
-                          color: AppColors.white,
-                          shape: BoxShape.circle,
-                          boxShadow: [
-                            BoxShadow(
-                              color: AppColors.brown.withValues(alpha: 0.15),
-                              blurRadius: 4,
-                              offset: const Offset(0, 2),
-                            ),
-                          ],
+                          color: AppColors.findColorByName(preparation.color!),
+                          borderRadius: BorderRadius.circular(6),
+                          border: Border.all(color: AppColors.grey, width: 1),
                         ),
-                        child: ClipOval(
-                          child: Padding(
-                            padding: const EdgeInsets.all(6.0),
-                            child: Image.asset(
-                              preparation.imageKey!.toAssetPath(),
-                              fit: BoxFit.contain,
-                              errorBuilder: (context, error, stackTrace) {
-                                return const Icon(
-                                  Icons.image_not_supported_outlined,
-                                  color: AppColors.brown,
-                                  size: 24,
-                                );
-                              },
+                      ),
+                    if (preparation.imageKey != null)
+                      GestureDetector(
+                        onTap: () => _showImageDialog(
+                          context,
+                          preparation.imageKey!.toAssetPath(),
+                        ),
+                        child: Hero(
+                          tag: 'prep_image_${preparation.id}',
+                          child: Container(
+                            width: 48,
+                            height: 48,
+                            margin: const EdgeInsets.only(right: AppSpacing.m),
+                            decoration: BoxDecoration(
+                              color: AppColors.white,
+                              shape: BoxShape.circle,
+                              boxShadow: [
+                                BoxShadow(
+                                  color: AppColors.brown.withValues(
+                                    alpha: 0.15,
+                                  ),
+                                  blurRadius: 4,
+                                  offset: const Offset(0, 2),
+                                ),
+                              ],
+                            ),
+                            child: ClipOval(
+                              child: Padding(
+                                padding: const EdgeInsets.all(6.0),
+                                child: Image.asset(
+                                  preparation.imageKey!.toAssetPath(),
+                                  fit: BoxFit.contain,
+                                  errorBuilder: (context, error, stackTrace) {
+                                    return const Icon(
+                                      Icons.image_not_supported_outlined,
+                                      color: AppColors.brown,
+                                      size: 24,
+                                    );
+                                  },
+                                ),
+                              ),
                             ),
                           ),
                         ),
                       ),
+                    Expanded(
+                      child: Text(
+                        preparation.description,
+                        style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                          fontWeight: FontWeight.w600,
+                          color: AppColors.brown,
+                        ),
+                      ),
                     ),
-                  ),
-                Expanded(
-                  child: Text(
-                    preparation.description,
-                    style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                      fontWeight: FontWeight.w600,
+                    AppSpacing.horizontalM,
+                    Icon(
+                      isCompleted ? Icons.check_circle : Icons.circle_outlined,
                       color: AppColors.brown,
+                      size: 28,
                     ),
-                  ),
+                  ],
                 ),
-                AppSpacing.horizontalM,
-                Icon(
-                  isCompleted ? Icons.check_circle : Icons.circle_outlined,
-                  color: AppColors.brown,
-                  size: 28,
-                ),
+                if (footer != null) ...[AppSpacing.verticalS, footer!],
               ],
             ),
           ),
