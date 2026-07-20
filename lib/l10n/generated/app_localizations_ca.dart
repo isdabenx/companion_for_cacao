@@ -15,56 +15,55 @@ class AppLocalizationsCa extends AppLocalizations {
   String get colorRed => 'vermell';
 
   @override
-  String get colorPurple => 'lila';
+  String get colorPurple => 'violeta';
 
   @override
   String get colorYellow => 'groc';
 
   @override
-  String get villageBoardLabel => 'Agafa el teu tauler de poblat';
+  String get villageBoardLabel => 'Agafa el tauler del teu poblat';
 
   @override
   String villageBoardDetail(String color) {
-    return 'Agafa el tauler de poblat de color $color i posa-te\'l al davant. Hi aniran la teva pila de treballadors i el track del portador d\'aigua.';
+    return 'Agafa el tauler de poblat de color $color i posa-te\'l al davant. Hi ha els teus magatzems i els remansos de l\'aiguader.';
   }
 
   @override
-  String get waterCarrierLabel =>
-      'Posa el portador d\'aigua a la casella \"-10\"';
+  String get waterCarrierLabel => 'Posa l\'aiguader al remans \"-10\"';
 
   @override
   String waterCarrierDetail(String color) {
-    return 'Agafa el portador d\'aigua de color $color i col·loca\'l a la casella d\'aigua amb valor \"-10\" del teu tauler de poblat.';
+    return 'Agafa l\'aiguader de color $color i col·loca\'l al remans de valor \"-10\" del tauler del teu poblat.';
   }
 
   @override
-  String get ownTilesLabel => 'Agafa totes les teves rajoles de treballador';
+  String get ownTilesLabel => 'Agafa totes les teves rajoles de recol·lectors';
 
   @override
   String ownTilesDetail(String color) {
-    return 'Reuneix totes les rajoles de treballador amb el dors de color $color; són la teva reserva personal per a tota la partida.';
+    return 'Reuneix totes les rajoles de recol·lectors amb el revers de color $color; són la teva reserva personal per a tota la partida.';
   }
 
   @override
   String removeWorkerLabel(String distribution) {
-    return 'Torna una rajola de treballador $distribution a la capsa';
+    return 'Torna una rajola de recol·lectors $distribution a la capsa';
   }
 
   @override
   String removeWorkerDetail(String distribution) {
-    return 'Busca entre les teves rajoles de treballador una de les $distribution i torna-la a la capsa del joc.';
+    return 'Busca entre les teves rajoles de recol·lectors una de les $distribution i torna-la a la capsa del joc.';
   }
 
   @override
   String get removeWorkerRationale =>
-      'Amb 3 o més jugadors cadascú usa menys rajoles de treballador perquè la jungla no s\'esgoti abans que acabi la partida.';
+      'Amb 3 o més jugadors cadascú usa menys rajoles de recol·lectors perquè la selva no s\'esgoti abans que acabi la partida.';
 
   @override
-  String get shuffleWorkersLabel => 'Barreja els treballadors i roba\'n 3';
+  String get shuffleWorkersLabel => 'Barreja els recol·lectors i roba\'n 3';
 
   @override
   String get shuffleWorkersDetail =>
-      'Cada jugador barreja les seves rajoles de treballador i les posa com a pila de robatori cap per avall al costat del seu tauler de poblat. Després, roba les 3 rajoles superiors de la seva pila i les pren a la mà.';
+      'Cada jugador barreja les seves rajoles de recol·lectors i les posa cap per avall formant una pila al costat del tauler del seu poblat. A continuació, roba les 3 rajoles superiors de la seva pila i les pren a la mà.';
 
   @override
   String get initialTilesMarketLabel =>
@@ -72,28 +71,28 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String get initialTilesMarketDetail =>
-      'De les rajoles de jungla, agafa la \"plantació simple\" i el \"mercat de preu 2\" i posa-les cara amunt al mig de la taula, en diagonal l\'una respecte de l\'altra; formen les rajoles inicials de la zona de joc.';
+      'De les rajoles de selva, busca la \"plantació simple\" i el \"mercat de preu de venda 2\" i posa-les cara amunt al mig de la taula, en diagonal l\'una respecte de l\'altra; són les rajoles inicials de la zona de joc.';
 
   @override
-  String get junglePileLabel => 'Munta la pila de jungla';
+  String get junglePileLabel => 'Munta la pila de la selva';
 
   @override
   String get junglePileDetail =>
-      'Barreja les rajoles de jungla restants i posa-les com a pila de robatori cap per avall.';
+      'Barreja les rajoles de selva restants i posa-les cap per avall formant la pila de la selva.';
 
   @override
-  String get jungleDisplayLabel => 'Gira 2 rajoles de jungla';
+  String get jungleDisplayLabel => 'Descobreix la selva explorada';
 
   @override
   String get jungleDisplayDetail =>
-      'Roba les 2 rajoles superiors de la pila de jungla i posa-les al costat de la pila com a mostra de jungla cara amunt.';
+      'Roba les 2 rajoles superiors de la pila de la selva i posa-les cara amunt al costat de la pila: formen la selva explorada.';
 
   @override
   String get resourcesBankLabel => 'Prepara el cacau, els sols i la banca';
 
   @override
   String get resourcesBankDetail =>
-      'Posa els fruits de cacau i les fitxes de sol com a piles de reserva separades. Posa-hi al costat les monedes d\'or com a banca.';
+      'Posa els fruits del cacau i les fitxes de sol formant reserves separades. Posa-hi al costat les monedes d\'or formant la banca.';
 
   @override
   String removeTilesLabel(int quantity, String tileName) {
@@ -105,8 +104,8 @@ class AppLocalizationsCa extends AppLocalizations {
     String _temp0 = intl.Intl.pluralLogic(
       quantity,
       locale: localeName,
-      other: 'Aparta ${quantity}x $tileName i torna-ho a la capsa.',
-      one: 'Aparta ${quantity}x $tileName i torna-ho a la capsa.',
+      other: 'Busca ${quantity}x $tileName i deixa-les a la capsa.',
+      one: 'Busca ${quantity}x $tileName i deixa-la a la capsa.',
     );
     return '$_temp0';
   }
@@ -118,22 +117,22 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String removeAllTilesDetail(String tileName) {
-    return 'Aparta totes les rajoles de $tileName i torna-les a la capsa.';
+    return 'Busca totes les rajoles de $tileName i deixa-les a la capsa.';
   }
 
   @override
   String addTilesLabel(int quantity, String tileName) {
-    return 'Afegeix ${quantity}x $tileName a la jungla';
+    return 'Afegeix ${quantity}x $tileName a la selva';
   }
 
   @override
   String addTilesDetail(int quantity, String tileName) {
-    return 'Afegeix ${quantity}x $tileName a les rajoles de jungla abans de muntar la pila de robatori.';
+    return 'Afegeix ${quantity}x $tileName a les rajoles de selva abans de muntar la pila de la selva.';
   }
 
   @override
   String get twoPlayerRemovalRationale =>
-      'Amb 2 jugadors la jungla es redueix perquè la zona de joc quedi recollida i la partida mantingui el ritme.';
+      'Amb 2 jugadors la selva es redueix perquè la zona de joc quedi recollida i la partida mantingui el ritme.';
 
   @override
   String get bigGame3pRemovalRationale =>
@@ -146,31 +145,31 @@ class AppLocalizationsCa extends AppLocalizations {
   String get tileDoublePlantation => 'Plantació doble';
 
   @override
-  String get tileMarketSelling2 => 'Mercat de preu 2';
+  String get tileMarketSelling2 => 'Mercat, preu de venda 2';
 
   @override
-  String get tileMarketSelling3 => 'Mercat de preu 3';
+  String get tileMarketSelling3 => 'Mercat, preu de venda 3';
 
   @override
-  String get tileGoldMineV1 => 'Mina d\'or de valor 1';
+  String get tileGoldMineV1 => 'Mina d\'or, valor 1';
 
   @override
-  String get tileGoldMineV2 => 'Mina d\'or de valor 2';
+  String get tileGoldMineV2 => 'Mina d\'or, valor 2';
 
   @override
-  String get tileWater => 'Aigua';
+  String get tileWater => 'Cenot';
 
   @override
-  String get tileSunWorshipingSite => 'Lloc d\'adoració del sol';
+  String get tileSunWorshipingSite => 'Adoració al sol';
 
   @override
   String get tileTemple => 'Temple';
 
   @override
-  String get tileWatering => 'Reg';
+  String get tileWatering => 'Irrigació';
 
   @override
-  String get tileChocolateKitchen => 'Cuina de xocolata';
+  String get tileChocolateKitchen => 'Xocolatera';
 
   @override
   String get tileChocolateMarket => 'Mercat de xocolata';
@@ -179,7 +178,7 @@ class AppLocalizationsCa extends AppLocalizations {
   String get tileGemMine => 'Mina de gemmes';
 
   @override
-  String get tileTreeOfLife => 'Arbre de la Vida';
+  String get tileTreeOfLife => 'Arbre de la vida';
 
   @override
   String get mapTokensLabel => 'Agafa 2 fitxes de mapa';
@@ -195,22 +194,22 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String get mapTokensSurplusDetail =>
-      'Torna les fitxes de mapa sobrants a la capsa.';
+      'Les fitxes de mapa sobrants es tornen a la capsa.';
 
   @override
-  String get mapBoardLabel => 'Col·loca el tauler de mapa';
+  String get mapBoardLabel => 'Col·loca el tauler de mapes';
 
   @override
   String get mapBoardDetail =>
-      'Col·loca el tauler de mapa just al costat de la pila de jungla.';
+      'Després de preparar la pila de la selva, col·loca el tauler de mapes al seu costat.';
 
   @override
   String get jungleDisplayMapLabel =>
-      'Gira 4 rajoles de jungla (tauler de mapa + mostra)';
+      'Descobreix 4 rajoles de selva (tauler de mapes + selva explorada)';
 
   @override
   String get jungleDisplayMapDetail =>
-      'Roba les 4 rajoles superiors de la pila de jungla. Posa les dues primeres cara amunt als espais marcats del tauler de mapa. Posa les altres dues com a mostra de jungla cara amunt al costat del tauler de mapa.';
+      'Pren les quatre rajoles superiors de la pila de la selva. Posa les dues primeres, cara amunt, a les caselles del tauler de mapes; les altres dues formen la selva explorada, com és habitual.';
 
   @override
   String get initialTilesWaterLabel =>
@@ -218,29 +217,29 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String get initialTilesWaterDetail =>
-      'De les rajoles de jungla, agafa la \"plantació simple\" i l\'\"aigua\" i posa-les cara amunt al mig de la taula, en diagonal l\'una respecte de l\'altra; formen les rajoles inicials de la zona de joc.';
+      'Com a rajoles inicials, posa una plantació simple (com sempre) i, en lloc del mercat de preu de venda \"2\", un cenot.';
 
   @override
   String get initialTilesWaterRationale =>
-      'El mòdul de Reg canvia el mercat inicial per una rajola d\'aigua.';
+      'El mòdul d\'irrigació canvia el mercat inicial per un cenot.';
 
   @override
-  String get chocolateBarsLabel => 'Prepara les 20 rajoles de xocolata';
+  String get chocolateBarsLabel => 'Prepara les 20 tauletes de xocolata';
 
   @override
   String get chocolateBarsDetail =>
-      'Posa les 20 rajoles de xocolata com a pila de reserva separada al costat dels fruits de cacau.';
+      'Deixa les tauletes de xocolata formant una reserva al costat dels fruits del cacau.';
 
   @override
-  String get hutsMarketLabel => 'Llança les 12 rajoles de cabana';
+  String get hutsMarketLabel => 'Deixa caure les 12 rajoles de cabana';
 
   @override
   String get hutsMarketDetail =>
-      'Agafa les 12 rajoles de cabana, deixa-les caure des de poca alçada per determinar a l\'atzar quina cara queda amunt, i ordena-les per cost de construcció al costat de la banca com a reserva.';
+      'Sosté les 12 rajoles de cabana amb les mans, a una certa alçada sobre la taula, i deixa-les caure. Les cares que mostrin seran les que s\'usin en aquesta partida. Després, vigilant de no girar-ne cap, col·loca-les al costat de la banca, ordenades segons el seu cost.';
 
   @override
   String get hutsMarketRationale =>
-      'Variant: alternativament, els jugadors poden acordar una selecció concreta de cabanes en lloc d\'un assortiment aleatori.';
+      'Variant: en lloc de determinar a l\'atzar les funcions disponibles, els jugadors poden acordar inicialment, per a cada cabana, quina de les seves dues cares s\'usa.';
 
   @override
   String get gemsRemoveLabel => 'Torna 8 gemmes a la capsa';
@@ -277,38 +276,38 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String get gemMinesReminderDetail =>
-      'Quan una rajola de mina de gemmes es posi a la mostra de jungla o al tauler de mapa, treu 6 gemmes de la vagoneta i posa-les sobre la rajola de mina.';
+      'Quan una rajola de mina de gemmes es posi a la selva explorada o al tauler de mapes, treu 6 gemmes de la vagoneta i posa-les sobre la rajola de mina.';
 
   @override
   String get treeOfLife0004Label =>
-      'Afegeix la teva rajola de treballador 0-0-0-4';
+      'Afegeix la teva rajola de recol·lectors 0-0-0-4';
 
   @override
   String treeOfLife0004Detail(String color) {
-    return 'Mòdul Arbre de la Vida: el jugador $color agafa la seva rajola de treballador 0-0-0-4 del mòdul Nous Treballadors i l\'afegeix a les seves rajoles.';
+    return 'Mòdul L\'arbre de la vida: el jugador $color agafa la seva rajola de recol·lectors 0-0-0-4 del mòdul Els nous recol·lectors i l\'afegeix a les seves rajoles.';
   }
 
   @override
   String get treeOfLife0004Rationale =>
-      'Amb 2 jugadors l\'Arbre de la Vida requereix la rajola 0-0-0-4 perquè tots els arbres es puguin collir del tot (reglament de Diamante).';
+      'Amb 2 jugadors L\'arbre de la vida requereix la rajola 0-0-0-4 perquè tots els arbres es puguin collir del tot (reglament de Diamante).';
 
   @override
-  String get emperorLabel => 'Col·loca la figura de l\'Emperador';
+  String get emperorLabel => 'Col·loca la figura de l\'ahau';
 
   @override
   String get emperorOnMarketDetail =>
-      'Després de posar les rajoles inicials, col·loca la figura de l\'Emperador sobre el mercat de preu 2.';
+      'Després de posar les rajoles inicials, posa la figura de l\'ahau sobre el mercat de preu de venda \"2\".';
 
   @override
   String get emperorOnWaterDetail =>
-      'Després de posar les rajoles inicials, col·loca la figura de l\'Emperador sobre la rajola d\'aigua.';
+      'Després de posar les rajoles inicials, posa la figura de l\'ahau sobre el cenot.';
 
   @override
-  String get newWorkersSelectionLabel => 'Tria les rajoles de treballador';
+  String get newWorkersSelectionLabel => 'Tria les rajoles de recol·lectors';
 
   @override
   String get newWorkersSelectionDetail =>
-      'Selecciona quines rajoles de treballador voleu usar en aquesta partida.';
+      'Selecciona quines rajoles de recol·lectors voleu usar en aquesta partida.';
 
   @override
   String get returnToBoxTitle => 'Torna a la capsa';
@@ -322,7 +321,7 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String get allSetMessage =>
-      'La taula està preparada. Que guanyi el millor plantador de cacau!';
+      'La taula està preparada. Que guanyi el millor cultivador de cacau!';
 
   @override
   String get drawFirstPlayerAction => 'Sortejar-lo a l\'atzar';
