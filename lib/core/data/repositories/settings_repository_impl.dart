@@ -7,6 +7,20 @@ import 'package:shared_preferences/shared_preferences.dart';
 /// policy (fall back to defaults, surface, retry…) is decided in a
 /// single place — the notifier that owns the state.
 class SettingsRepositoryImpl implements SettingsRepository {
+  static const String _hasSeenPreparationKey = 'has_seen_preparation';
+
+  @override
+  Future<bool> hasSeenPreparation() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getBool(_hasSeenPreparationKey) ?? false;
+  }
+
+  @override
+  Future<void> markPreparationSeen() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool(_hasSeenPreparationKey, true);
+  }
+
   @override
   Future<TileSettingsEntity> getTileSettings() async {
     final prefs = await SharedPreferences.getInstance();

@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:companion_for_cacao/core/theme/app_colors.dart';
 import 'package:companion_for_cacao/core/theme/app_spacing.dart';
+import 'package:companion_for_cacao/features/game_setup/domain/content/preparation_copy.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/custom_preset_entity.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/worker_selection_entity.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/services/worker_balance_validator.dart';
@@ -68,84 +69,114 @@ class WorkerSelectorWidget extends ConsumerWidget {
       jungleTileCount: jungleTileCount,
     );
 
-    // Match PreparationCard margins and completed styling (dimmed, flat)
-    // so the card behaves like the other steps once its choice is applied.
-    return Padding(
-      padding: const EdgeInsets.symmetric(
-        horizontal: AppSpacing.l,
-        vertical: 6,
-      ),
-      child: Opacity(
-        opacity: hasSelection ? 0.6 : 1.0,
-        child: Material(
-          color: AppColors.cream,
+    // Same anatomy as every other preparation card (thumb + label +
+    // check), with the choice summary and edit action in a green footer
+    // — the same pattern the hut-throw card uses.
+    return Opacity(
+      opacity: hasSelection ? 0.6 : 1.0,
+      child: Card(
+        color: AppColors.cream,
+        elevation: hasSelection ? 0 : 2,
+        margin: const EdgeInsets.symmetric(
+          horizontal: AppSpacing.l,
+          vertical: 6,
+        ),
+        shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12),
-          elevation: hasSelection ? 0 : 1,
-          child: InkWell(
-            borderRadius: BorderRadius.circular(12),
-            onTap: () => _openEditor(context, ref, gameState),
-            child: Container(
-              padding: const EdgeInsets.symmetric(
-                horizontal: AppSpacing.m,
-                vertical: AppSpacing.s,
-              ),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(12),
-                border: Border.all(
-                  color: AppColors.greenDark.withValues(alpha: 0.3),
-                  width: 1,
-                ),
-              ),
-              child: Row(
-                children: [
-                  const Icon(
-                    Icons.people_outline,
-                    color: AppColors.brown,
-                    size: 20,
-                  ),
-                  const SizedBox(width: AppSpacing.s),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'The New Workers',
-                          style: Theme.of(context).textTheme.bodySmall
-                              ?.copyWith(
-                                fontWeight: FontWeight.bold,
-                                color: AppColors.brown,
-                              ),
+          side: BorderSide(
+            color: AppColors.brown.withValues(alpha: 0.2),
+            width: 1,
+          ),
+        ),
+        child: InkWell(
+          borderRadius: BorderRadius.circular(12),
+          onTap: () => _openEditor(context, ref, gameState),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: AppSpacing.m,
+              vertical: AppSpacing.s,
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Row(
+                  children: [
+                    Container(
+                      width: 42,
+                      height: 42,
+                      decoration: BoxDecoration(
+                        color: AppColors.white,
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: const Icon(
+                        Icons.people_outline,
+                        color: AppColors.brown,
+                      ),
+                    ),
+                    const SizedBox(width: AppSpacing.m),
+                    Expanded(
+                      child: Text(
+                        PreparationCopy.newWorkersSelectionLabel,
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          fontWeight: FontWeight.w700,
+                          color: AppColors.brown,
                         ),
-                        const SizedBox(height: 2),
-                        Text(
-                          '$label · $tilesPerPlayer tiles/player',
-                          style: Theme.of(context).textTheme.bodySmall
-                              ?.copyWith(
-                                color: AppColors.brown.withValues(alpha: 0.7),
-                                fontSize: 11,
-                              ),
+                      ),
+                    ),
+                    const SizedBox(width: AppSpacing.s),
+                    // The step completes by applying a selection in the
+                    // editor (mirrors the checkbox of regular cards).
+                    Icon(
+                      hasSelection ? Icons.check_circle : Icons.circle_outlined,
+                      color: AppColors.brown,
+                      size: 26,
+                    ),
+                  ],
+                ),
+                const SizedBox(height: AppSpacing.s),
+                Material(
+                  color: AppColors.greenLight.withValues(alpha: 0.6),
+                  borderRadius: BorderRadius.circular(8),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: AppSpacing.s,
+                      vertical: AppSpacing.xs,
+                    ),
+                    child: Row(
+                      children: [
+                        Icon(
+                          hasSelection
+                              ? Icons.check_circle
+                              : Icons.app_registration,
+                          color: hasSelection
+                              ? AppColors.greenDark
+                              : AppColors.greenDarker,
+                          size: 18,
+                        ),
+                        const SizedBox(width: AppSpacing.s),
+                        Expanded(
+                          child: Text(
+                            '$label · $tilesPerPlayer tiles/player',
+                            style: Theme.of(context).textTheme.bodySmall
+                                ?.copyWith(
+                                  color: AppColors.brown,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                          ),
+                        ),
+                        const SizedBox(width: AppSpacing.s),
+                        _BalanceBadge(isValid: balance.isValid),
+                        const SizedBox(width: AppSpacing.s),
+                        const Icon(
+                          Icons.edit_outlined,
+                          color: AppColors.greenDarker,
+                          size: 16,
                         ),
                       ],
                     ),
                   ),
-                  const SizedBox(width: AppSpacing.s),
-                  _BalanceBadge(isValid: balance.isValid),
-                  const SizedBox(width: AppSpacing.s),
-                  // The step completes by applying a selection in the editor
-                  // (mirrors the checkbox of regular preparation cards).
-                  Icon(
-                    hasSelection ? Icons.check_circle : Icons.circle_outlined,
-                    color: AppColors.brown,
-                    size: 20,
-                  ),
-                  const SizedBox(width: AppSpacing.s),
-                  Icon(
-                    Icons.edit_outlined,
-                    color: AppColors.greenDarker,
-                    size: 18,
-                  ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
         ),

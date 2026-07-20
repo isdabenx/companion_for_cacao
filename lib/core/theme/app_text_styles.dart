@@ -134,6 +134,16 @@ class AppTextStyles {
     color: AppColors.greenDarker,
   );
 
+  /// Progress counters ("3/8"): always the readable body font with
+  /// tabular figures — the decorative header font is for titles only.
+  static TextStyle phaseCounter = const TextStyle(
+    fontFamily: AppFonts.bodyFont,
+    fontSize: 15,
+    fontWeight: FontWeight.bold,
+    color: AppColors.brown,
+    fontFeatures: [FontFeature.tabularFigures()],
+  );
+
   static TextStyle warningText = _bodyBase.copyWith(fontSize: 10);
 
   // ============================================

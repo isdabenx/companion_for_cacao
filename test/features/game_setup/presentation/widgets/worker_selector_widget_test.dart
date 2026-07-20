@@ -97,7 +97,9 @@ void main() {
       );
       await tester.pumpAndSettle();
 
-      expect(find.text('The New Workers'), findsOneWidget);
+      // The card title is the step label from the copy catalog (UX-1);
+      // 'The New Workers' now only appears inside the editor sheet.
+      expect(find.text('Choose the worker tiles'), findsOneWidget);
       expect(find.text('Add all (default) · 15 tiles/player'), findsOneWidget);
     });
 

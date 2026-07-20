@@ -238,4 +238,12 @@ abstract final class PreparationCopy {
   static const String newWorkersSelectionLabel = 'Choose the worker tiles';
   static const String newWorkersSelectionDetail =
       'Select which worker tiles you want to use for this game.';
+
+  // ---------------------------------------------------------------------
+  // Preparation screen UI (group cards)
+  // ---------------------------------------------------------------------
+
+  static const String returnToBoxTitle = 'Return to the box';
+  static const String returnToBoxSubtitle =
+      'These tiles are not used in this game';
 }

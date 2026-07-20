@@ -314,6 +314,26 @@ class GameSetupNotifier extends _$GameSetupNotifier {
     );
   }
 
+  /// Toggles a whole preparation group (e.g. a player's corner card):
+  /// if every member is completed, unchecks them all; otherwise checks
+  /// them all. Group completion itself stays derived from the members.
+  void toggleGroupCompletion(String groupId) {
+    if (state.value == null) return;
+    final members = state.value!.preparation.where((p) => p.groupId == groupId);
+    if (members.isEmpty) return;
+    final allCompleted = members.every((p) => p.isCompleted);
+    state = AsyncData(
+      state.value!.copyWith(
+        preparation: state.value!.preparation.map((prep) {
+          if (prep.groupId == groupId) {
+            return prep.copyWith(isCompleted: !allCompleted);
+          }
+          return prep;
+        }).toList(),
+      ),
+    );
+  }
+
   void updatePlayerName(String color, String newName) {
     if (state.value == null) return;
     state = AsyncData(
