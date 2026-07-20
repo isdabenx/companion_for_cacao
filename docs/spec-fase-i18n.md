@@ -1,6 +1,6 @@
 # Especificació — Fase i18n (català, castellà, anglès)
 
-> Estat: en curs · Predecessor: Fase UX-1 (feta) · Es fa ABANS d'UX-2 perquè el contingut nou d'UX-2 neixi localitzat (decisió del roadmap: "traduir una sola vegada").
+> Estat: **completada** (A `3619470` · B `7ed6b1c` · C `3d58b60`/`ad56d43`/`9e873a4`, 2026-07-20) · Predecessor: Fase UX-1 (feta) · S'ha fet ABANS d'UX-2 perquè el contingut nou d'UX-2 neixi localitzat (decisió del roadmap: "traduir una sola vegada").
 
 ## 1. Estratègia
 
