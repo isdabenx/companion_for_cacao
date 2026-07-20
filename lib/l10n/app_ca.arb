@@ -197,7 +197,7 @@
   "errorSavingPresets": "Error en desar els ajustos personalitzats",
 
   "hutRegisterTitle": "Registra la tirada de cabanes",
-  "hutRegisterHint": "Per a cada rajola física, tria la cara que ha quedat amunt.",
+  "hutRegisterHint": "Toca una rajola per triar la cara que ha quedat amunt; torna-la a tocar per girar-la.",
   "hutRegisterAction": "Registra quines cabanes han quedat cara amunt",
   "hutRegisteredEdit": "Tirada registrada · toca per editar",
   "forgetThrowAction": "Oblida la tirada",

@@ -71,9 +71,44 @@ void main() {
       );
       expect(apply.onPressed, isNull);
 
-      // Choosing a side updates the counter.
-      await tester.tap(find.text('Market Crier (4)').first);
-      await tester.pump();
+      // Deciding a tile updates the counter.
+      await tester.tap(find.byKey(const ValueKey('hut_tile_0')));
+      await tester.pumpAndSettle();
+      expect(find.text('1 / ${HutTileSupply.tiles.length}'), findsOneWidget);
+    });
+
+    testWidgets('tapping a tile cycles undecided, side A, side B, side A', (
+      tester,
+    ) async {
+      await tester.pumpWidget(wrap(GameSetupStateEntity()));
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.byType(HutThrowRegisterRow));
+      await tester.pumpAndSettle();
+
+      final cell = find.byKey(const ValueKey('hut_tile_0'));
+      final (sideA, sideB) = HutTileSupply.tiles[0];
+      Finder cost(int value) =>
+          find.descendant(of: cell, matching: find.text('($value)'));
+
+      // Undecided: both sides listed small, no cost shown.
+      expect(cost(sideA.cost), findsNothing);
+      expect(cost(sideB.cost), findsNothing);
+
+      await tester.tap(cell);
+      await tester.pumpAndSettle();
+      expect(cost(sideA.cost), findsOneWidget);
+
+      await tester.tap(cell);
+      await tester.pumpAndSettle();
+      expect(cost(sideB.cost), findsOneWidget);
+      expect(cost(sideA.cost), findsNothing);
+
+      await tester.tap(cell);
+      await tester.pumpAndSettle();
+      expect(cost(sideA.cost), findsOneWidget);
+
+      // Flipping the same tile never adds to the counter past one.
       expect(find.text('1 / ${HutTileSupply.tiles.length}'), findsOneWidget);
     });
 

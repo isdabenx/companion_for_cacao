@@ -1117,7 +1117,7 @@ abstract class AppLocalizations {
   /// No description provided for @hutRegisterHint.
   ///
   /// In en, this message translates to:
-  /// **'For each physical tile, pick the side that landed face up.'**
+  /// **'Tap a tile to pick its face-up side; tap it again to flip it over.'**
   String get hutRegisterHint;
 
   /// No description provided for @hutRegisterAction.

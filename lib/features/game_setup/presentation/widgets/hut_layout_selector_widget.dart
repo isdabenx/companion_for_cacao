@@ -9,8 +9,8 @@ import 'package:companion_for_cacao/l10n/generated/app_localizations.dart';
 import 'package:companion_for_cacao/shared/utils/hut_type_assets.dart';
 import 'package:companion_for_cacao/shared/utils/hut_type_l10n.dart';
 import 'package:companion_for_cacao/shared/widgets/safe_asset_image.dart';
-import 'package:companion_for_cacao/shared/widgets/selectable_chip.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 /// Opens the hut-throw editor sheet. Registering the throw is what marks
@@ -115,6 +115,17 @@ class _HutLayoutEditorSheetState extends State<_HutLayoutEditorSheet> {
 
   bool get _isComplete => _chosenCount == _faceUp.length;
 
+  /// Tapping a tile picks side A first; every further tap flips it over.
+  /// A registered throw never goes back to undecided — "forget throw"
+  /// clears the whole layout instead.
+  void _flipTile(int index) {
+    final (sideA, sideB) = HutTileSupply.tiles[index];
+    HapticFeedback.selectionClick();
+    setState(() {
+      _faceUp[index] = _faceUp[index] == sideA ? sideB : sideA;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final maxHeight = MediaQuery.sizeOf(context).height * 0.85;
@@ -156,37 +167,24 @@ class _HutLayoutEditorSheetState extends State<_HutLayoutEditorSheet> {
               ),
               AppSpacing.verticalM,
               Flexible(
-                child: ListView.separated(
+                child: GridView.builder(
                   shrinkWrap: true,
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 3,
+                    mainAxisSpacing: AppSpacing.s,
+                    crossAxisSpacing: AppSpacing.s,
+                    childAspectRatio: 0.8,
+                  ),
                   itemCount: HutTileSupply.tiles.length,
-                  separatorBuilder: (_, _) => AppSpacing.verticalS,
                   itemBuilder: (context, index) {
                     final (sideA, sideB) = HutTileSupply.tiles[index];
-                    return Row(
-                      children: [
-                        SizedBox(
-                          width: 24,
-                          child: Text(
-                            '${index + 1}',
-                            style: AppTextStyles.badgeCount,
-                          ),
-                        ),
-                        Expanded(
-                          child: _SideChip(
-                            hut: sideA,
-                            isSelected: _faceUp[index] == sideA,
-                            onTap: () => setState(() => _faceUp[index] = sideA),
-                          ),
-                        ),
-                        AppSpacing.horizontalS,
-                        Expanded(
-                          child: _SideChip(
-                            hut: sideB,
-                            isSelected: _faceUp[index] == sideB,
-                            onTap: () => setState(() => _faceUp[index] = sideB),
-                          ),
-                        ),
-                      ],
+                    return _HutTileFlipCell(
+                      key: ValueKey('hut_tile_$index'),
+                      index: index,
+                      sideA: sideA,
+                      sideB: sideB,
+                      faceUp: _faceUp[index],
+                      onFlip: () => _flipTile(index),
                     );
                   },
                 ),
@@ -230,47 +228,182 @@ class _HutLayoutEditorSheetState extends State<_HutLayoutEditorSheet> {
   }
 }
 
-/// One side of a physical hut tile: image, name and cost.
-class _SideChip extends StatelessWidget {
-  const _SideChip({
-    required this.hut,
-    required this.isSelected,
-    required this.onTap,
+/// One physical hut tile in the throw grid. Undecided cells show both
+/// sides small; a decided cell shows the face-up side big. Tapping flips
+/// the tile with a horizontal card-flip animation, mirroring the physical
+/// gesture of turning the tile over on the table.
+class _HutTileFlipCell extends StatelessWidget {
+  const _HutTileFlipCell({
+    required this.index,
+    required this.sideA,
+    required this.sideB,
+    required this.faceUp,
+    required this.onFlip,
+    super.key,
   });
 
-  final HutType hut;
-  final bool isSelected;
-  final VoidCallback onTap;
+  final int index;
+  final HutType sideA;
+  final HutType sideB;
+  final HutType? faceUp;
+  final VoidCallback onFlip;
+
+  /// Card-flip illusion without 3D: the outgoing face squashes to a
+  /// vertical edge during the first half, the incoming face grows from
+  /// it during the second half.
+  static Widget _flipTransition(Widget child, Animation<double> animation) {
+    final flip = CurvedAnimation(
+      parent: animation,
+      curve: const Interval(0.5, 1.0, curve: Curves.easeOut),
+    );
+    return AnimatedBuilder(
+      animation: flip,
+      child: child,
+      builder: (_, child) => Transform.scale(scaleX: flip.value, child: child),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
-    return SelectableChip(
-      isSelected: isSelected,
-      selectedColor: AppColors.greenDark.withValues(alpha: 0.2),
-      selectedBorderColor: AppColors.greenDark,
-      padding: const EdgeInsets.symmetric(
-        horizontal: AppSpacing.s,
-        vertical: AppSpacing.xs,
-      ),
-      onTap: onTap,
-      child: Row(
-        children: [
-          SafeAssetImage(
-            assetPath: hut.imageAsset,
-            width: 28,
-            height: 28,
-            fit: BoxFit.contain,
-          ),
-          AppSpacing.horizontalS,
-          Expanded(
-            child: Text(
-              '${hut.localizedName(AppLocalizations.of(context))} (${hut.cost})',
-              overflow: TextOverflow.ellipsis,
-              style: AppTextStyles.tileNameSmall,
+    final l10n = AppLocalizations.of(context);
+    final chosen = faceUp;
+    final isChosen = chosen != null;
+    final duration = MediaQuery.disableAnimationsOf(context)
+        ? Duration.zero
+        : const Duration(milliseconds: 300);
+
+    return Semantics(
+      button: true,
+      label: isChosen
+          ? chosen.localizedName(l10n)
+          : '${sideA.localizedName(l10n)} / ${sideB.localizedName(l10n)}',
+      child: Material(
+        color: isChosen
+            ? AppColors.greenDark.withValues(alpha: 0.12)
+            : AppColors.white.withValues(alpha: 0.5),
+        borderRadius: BorderRadius.circular(12),
+        child: InkWell(
+          borderRadius: BorderRadius.circular(12),
+          onTap: onFlip,
+          child: Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(
+                color: isChosen
+                    ? AppColors.greenDark
+                    : AppColors.brown.withValues(alpha: 0.25),
+                width: isChosen ? 1.5 : 1,
+              ),
+            ),
+            padding: const EdgeInsets.all(AppSpacing.xs),
+            child: Stack(
+              children: [
+                Positioned(
+                  top: 0,
+                  left: 2,
+                  child: Text('${index + 1}', style: AppTextStyles.badgeCount),
+                ),
+                Positioned.fill(
+                  child: AnimatedSwitcher(
+                    duration: duration,
+                    transitionBuilder: _flipTransition,
+                    child: isChosen
+                        ? _ChosenFace(key: ValueKey(chosen), hut: chosen)
+                        : _UndecidedFaces(
+                            key: const ValueKey('undecided'),
+                            sideA: sideA,
+                            sideB: sideB,
+                          ),
+                  ),
+                ),
+              ],
             ),
           ),
-        ],
+        ),
       ),
+    );
+  }
+}
+
+/// The face-up side of a decided tile: image front and center, name and
+/// cost below.
+class _ChosenFace extends StatelessWidget {
+  const _ChosenFace({required this.hut, super.key});
+
+  final HutType hut;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Expanded(
+          child: SafeAssetImage(assetPath: hut.imageAsset, fit: BoxFit.contain),
+        ),
+        const SizedBox(height: AppSpacing.xxs),
+        Text(
+          hut.localizedName(AppLocalizations.of(context)),
+          maxLines: 2,
+          textAlign: TextAlign.center,
+          overflow: TextOverflow.ellipsis,
+          style: AppTextStyles.tileNameSmall,
+        ),
+        Text('(${hut.cost})', style: AppTextStyles.sectionSublabel),
+      ],
+    );
+  }
+}
+
+/// Both sides of a tile nobody has decided yet, small, so the player can
+/// find the matching physical tile before the first tap.
+class _UndecidedFaces extends StatelessWidget {
+  const _UndecidedFaces({required this.sideA, required this.sideB, super.key});
+
+  final HutType sideA;
+  final HutType sideB;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        _MiniSide(hut: sideA),
+        Divider(
+          height: AppSpacing.s,
+          thickness: 1,
+          color: AppColors.brown.withValues(alpha: 0.15),
+        ),
+        _MiniSide(hut: sideB),
+      ],
+    );
+  }
+}
+
+class _MiniSide extends StatelessWidget {
+  const _MiniSide({required this.hut});
+
+  final HutType hut;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        SafeAssetImage(
+          assetPath: hut.imageAsset,
+          width: 22,
+          height: 22,
+          fit: BoxFit.contain,
+        ),
+        const SizedBox(width: AppSpacing.xs),
+        Expanded(
+          child: Text(
+            hut.localizedName(AppLocalizations.of(context)),
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+            style: AppTextStyles.sectionSublabel,
+          ),
+        ),
+      ],
     );
   }
 }

@@ -614,7 +614,7 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String get hutRegisterHint =>
-      'Per a cada rajola física, tria la cara que ha quedat amunt.';
+      'Toca una rajola per triar la cara que ha quedat amunt; torna-la a tocar per girar-la.';
 
   @override
   String get hutRegisterAction =>

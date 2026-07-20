@@ -614,7 +614,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get hutRegisterHint =>
-      'Para cada loseta física, elige la cara que ha quedado boca arriba.';
+      'Toca una loseta para elegir la cara que ha quedado boca arriba; vuelve a tocarla para girarla.';
 
   @override
   String get hutRegisterAction => 'Registra qué bohíos han quedado boca arriba';

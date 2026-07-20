@@ -606,7 +606,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get hutRegisterHint =>
-      'For each physical tile, pick the side that landed face up.';
+      'Tap a tile to pick its face-up side; tap it again to flip it over.';
 
   @override
   String get hutRegisterAction => 'Register which huts landed face up';

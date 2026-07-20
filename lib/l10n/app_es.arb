@@ -197,7 +197,7 @@
   "errorSavingPresets": "Error al guardar los ajustes personalizados",
 
   "hutRegisterTitle": "Registra la tirada de bohíos",
-  "hutRegisterHint": "Para cada loseta física, elige la cara que ha quedado boca arriba.",
+  "hutRegisterHint": "Toca una loseta para elegir la cara que ha quedado boca arriba; vuelve a tocarla para girarla.",
   "hutRegisterAction": "Registra qué bohíos han quedado boca arriba",
   "hutRegisteredEdit": "Tirada registrada · toca para editar",
   "forgetThrowAction": "Olvidar la tirada",

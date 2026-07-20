@@ -308,7 +308,7 @@
   "errorSavingPresets": "Error saving custom presets",
 
   "hutRegisterTitle": "Register the hut throw",
-  "hutRegisterHint": "For each physical tile, pick the side that landed face up.",
+  "hutRegisterHint": "Tap a tile to pick its face-up side; tap it again to flip it over.",
   "hutRegisterAction": "Register which huts landed face up",
   "hutRegisteredEdit": "Throw registered · tap to edit",
   "forgetThrowAction": "Forget throw",
