@@ -5,8 +5,10 @@ import 'package:companion_for_cacao/features/game_setup/domain/entities/game_set
 import 'package:companion_for_cacao/features/game_setup/domain/entities/player_entity.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/preparation_entity.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/preparation_phase.dart';
+import 'package:companion_for_cacao/core/domain/entities/hut_type.dart';
 import 'package:companion_for_cacao/core/domain/services/hut_tile_supply.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/hut_layout_entity.dart';
+import 'package:companion_for_cacao/shared/utils/hut_type_assets.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/worker_selection_entity.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/use_cases/prepare_game_use_case.dart';
 import 'package:companion_for_cacao/features/game_setup/presentation/providers/game_setup_notifier.dart';
@@ -18,6 +20,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
 import '../../../../support/fakes.dart';
+import '../../../../support/tile_fixtures.dart';
 
 class MockPrepareGameUseCase extends Mock implements PrepareGameUseCase {}
 
@@ -697,6 +700,74 @@ void main() {
         expect(state.preparation.last.isCompleted, isTrue);
       },
     );
+
+    test('registering the hut throw narrows the tiles in play to the '
+        'face-up huts', () async {
+      final preparedState = GameSetupStateEntity(
+        players: [PlayerEntity(name: 'Alice', color: 'red', isSelected: true)],
+        expansions: [baseGame],
+        tiles: [
+          makeTile(
+            id: 'base.jungle_single_plantation',
+            name: 'Single Plantation',
+            quantity: 8,
+            type: TileType.plantation,
+          ),
+          makeTile(
+            id: HutType.marketCrier.tileId,
+            name: 'Market Crier',
+            quantity: 1,
+            type: TileType.hut,
+          ),
+          makeTile(
+            id: HutType.chiefsSon.tileId,
+            name: "Chief's Son",
+            quantity: 1,
+            type: TileType.hut,
+          ),
+        ],
+      );
+      when(
+        () => mockPrepareGameUseCase.execute(any()),
+      ).thenReturn(preparedState);
+
+      final container = createContainer(
+        prepareGameUseCase: mockPrepareGameUseCase,
+      );
+      addTearDown(container.dispose);
+      await container.read(gameSetupProvider.future);
+
+      final notifier = container.read(gameSetupProvider.notifier);
+      notifier.addPlayer('Alice', 'red');
+      notifier.startGame();
+
+      // Every tile landed on side A: Market Crier is face up, Chief's Son
+      // (a side B) is face down.
+      notifier.applyHutLayout(
+        HutLayoutEntity(
+          faceUp: [for (final (sideA, _) in HutTileSupply.tiles) sideA],
+        ),
+      );
+      var state = await container.read(gameSetupProvider.future);
+      expect(
+        state.tiles.map((t) => t.id),
+        isNot(contains(HutType.chiefsSon.tileId)),
+      );
+      expect(
+        state.tiles.map((t) => t.id),
+        contains(HutType.marketCrier.tileId),
+      );
+      // Non-hut tiles are untouched.
+      expect(
+        state.tiles.map((t) => t.id),
+        contains('base.jungle_single_plantation'),
+      );
+
+      // Forgetting the throw restores the full pipeline tile list.
+      notifier.clearHutLayout();
+      state = await container.read(gameSetupProvider.future);
+      expect(state.tiles.map((t) => t.id), contains(HutType.chiefsSon.tileId));
+    });
 
     test('hut layout can be registered, forgotten, and never leaks into '
         'the next game', () async {

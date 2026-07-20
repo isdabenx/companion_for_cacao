@@ -1,10 +1,11 @@
 import 'package:companion_for_cacao/config/constants/assets.dart';
 import 'package:companion_for_cacao/core/domain/entities/hut_type.dart';
 
-/// Tile image of each hut function (same art as the tile catalog).
+/// Catalog identity of each hut function: the slug shared by its tile id
+/// in tiles.json and its image filename.
 extension HutTypeAssets on HutType {
-  String get imageAsset {
-    final filename = switch (this) {
+  String get slug {
+    return switch (this) {
       HutType.marketCrier => 'hut_market_crier',
       HutType.hermit => 'hut_hermit',
       HutType.roadWorker => 'hut_road_worker',
@@ -20,6 +21,11 @@ extension HutTypeAssets on HutType {
       HutType.chiefsWife => 'hut_chief_s_wife',
       HutType.chief => 'hut_chief',
     };
-    return '${Assets.imagesTilePath}chocolatl/$filename.webp';
   }
+
+  /// Id of this function's tile in the catalog (tiles.json / drift).
+  String get tileId => 'chocolatl.$slug';
+
+  /// Tile image of this function (same art as the tile catalog).
+  String get imageAsset => '${Assets.imagesTilePath}chocolatl/$slug.webp';
 }

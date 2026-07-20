@@ -1,7 +1,9 @@
 import 'package:collection/collection.dart';
 import 'package:companion_for_cacao/config/constants/game_constants.dart';
 import 'package:companion_for_cacao/core/domain/entities/boardgame_entity.dart';
+import 'package:companion_for_cacao/core/domain/entities/hut_type.dart';
 import 'package:companion_for_cacao/core/domain/entities/module_entity.dart';
+import 'package:companion_for_cacao/core/domain/entities/tile_entity.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/game_setup_state_entity.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/hut_layout_entity.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/player_entity.dart';
@@ -11,6 +13,7 @@ import 'package:companion_for_cacao/features/game_setup/domain/services/handlers
 import 'package:companion_for_cacao/features/game_setup/presentation/providers/game_setup_use_case_providers.dart';
 import 'package:companion_for_cacao/features/tile/tile_public_api.dart';
 import 'package:companion_for_cacao/shared/providers/boardgame_notifier.dart';
+import 'package:companion_for_cacao/shared/utils/hut_type_assets.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'game_setup_notifier.g.dart';
@@ -214,12 +217,20 @@ class GameSetupNotifier extends _$GameSetupNotifier {
   void applyWorkerSelection(WorkerSelectionEntity selection) {
     if (state.value == null) return;
     final previous = state.value!;
-    final updated = previous.copyWith(workerSelection: selection);
+    state = AsyncData(
+      _rerunPipeline(previous, previous.copyWith(workerSelection: selection)),
+    );
+  }
+
+  /// Re-runs the preparation pipeline for [updated] mid-game, carrying over
+  /// the completion of steps the user had already checked (matched by id)
+  /// and re-applying the registered hut throw to the tiles in play.
+  GameSetupStateEntity _rerunPipeline(
+    GameSetupStateEntity previous,
+    GameSetupStateEntity updated,
+  ) {
     final useCase = ref.read(prepareGameUseCaseProvider);
     final result = useCase.execute(updated);
-    // The pipeline regenerates the preparation list from scratch: carry
-    // over the completion of steps the user had already checked (matched
-    // by id), so re-applying a selection doesn't wipe their progress.
     final preparation = [
       for (final step in result.preparation)
         step.copyWith(
@@ -230,13 +241,34 @@ class GameSetupNotifier extends _$GameSetupNotifier {
               step.isCompleted,
         ),
     ];
-    state = AsyncData(
+    return _applyHutLayoutToTiles(
       result.copyWith(
         preparation: preparation,
         isStarted: true,
-        workerSelection: selection,
+        workerSelection: updated.workerSelection,
+        hutLayout: updated.hutLayout,
+        clearWorkerSelection: updated.workerSelection == null,
+        clearHutLayout: updated.hutLayout == null,
       ),
     );
+  }
+
+  /// With a hut throw registered, the tiles in play show exactly the huts
+  /// on the table: face-down functions are dropped and face-up ones carry
+  /// their real count (e.g. Market Crier x2 when both copies landed up).
+  GameSetupStateEntity _applyHutLayoutToTiles(GameSetupStateEntity setup) {
+    final layout = setup.hutLayout;
+    if (layout == null) return setup;
+    final counts = layout.availableCounts;
+    final hutByTileId = {for (final hut in HutType.values) hut.tileId: hut};
+    final tiles = <TileEntity>[
+      for (final tile in setup.tiles)
+        if (!hutByTileId.containsKey(tile.id))
+          tile
+        else if ((counts[hutByTileId[tile.id]] ?? 0) > 0)
+          tile.copyWith(quantity: counts[hutByTileId[tile.id]]),
+    ];
+    return setup.copyWith(tiles: tiles);
   }
 
   /// Clears the worker tile selection (reverts to default addAll behavior).
@@ -248,16 +280,24 @@ class GameSetupNotifier extends _$GameSetupNotifier {
   /// Registers which side of each hut tile landed face up in the throw.
   /// The hut-throw preparation step derives its completion from this (see
   /// DetailedPreparationWidget), so registering IS completing the step.
+  /// The tiles in play are refreshed to show exactly the face-up huts.
   void applyHutLayout(HutLayoutEntity layout) {
     if (state.value == null) return;
-    state = AsyncData(state.value!.copyWith(hutLayout: layout));
+    final previous = state.value!;
+    state = AsyncData(
+      _rerunPipeline(previous, previous.copyWith(hutLayout: layout)),
+    );
   }
 
   /// Forgets the registered hut throw (supply becomes unknown again),
-  /// which also reopens its preparation step.
+  /// which also reopens its preparation step and restores the full hut
+  /// list in the tiles in play.
   void clearHutLayout() {
     if (state.value == null) return;
-    state = AsyncData(state.value!.copyWith(clearHutLayout: true));
+    final previous = state.value!;
+    state = AsyncData(
+      _rerunPipeline(previous, previous.copyWith(clearHutLayout: true)),
+    );
   }
 
   void togglePreparationCompletion(String id) {
