@@ -84,7 +84,7 @@ class PreparationGroupCard extends ConsumerWidget {
               child: Row(
                 children: [
                   if (colorName != null) ...[
-                    _PlayerAvatar(colorName: colorName!, title: title),
+                    PlayerAvatar(colorName: colorName!, title: title),
                     AppSpacing.horizontalM,
                   ],
                   Expanded(
@@ -142,25 +142,31 @@ class PreparationGroupCard extends ConsumerWidget {
   }
 }
 
-class _PlayerAvatar extends StatelessWidget {
-  const _PlayerAvatar({required this.colorName, required this.title});
+/// Round player badge: the player color with the display-name initial.
+/// The letter color adapts to the badge luminance, so identity never
+/// relies on color alone (color-blind friendly).
+class PlayerAvatar extends StatelessWidget {
+  const PlayerAvatar({
+    required this.colorName,
+    required this.title,
+    this.size = 34,
+    super.key,
+  });
 
   final String colorName;
   final String title;
+  final double size;
 
   @override
   Widget build(BuildContext context) {
     final color = AppColors.findColorByName(colorName);
-    // Dark colors get a light initial and vice versa, so the letter is
-    // readable regardless of the player color (also matters for
-    // color-blind users: the name and initial carry the identity).
     final onColor = color.computeLuminance() > 0.5
         ? AppColors.brown
         : AppColors.white;
 
     return Container(
-      width: 34,
-      height: 34,
+      width: size,
+      height: size,
       decoration: BoxDecoration(
         color: color,
         shape: BoxShape.circle,
@@ -175,7 +181,7 @@ class _PlayerAvatar extends StatelessWidget {
         style: TextStyle(
           color: onColor,
           fontWeight: FontWeight.w800,
-          fontSize: 15,
+          fontSize: size * 0.44,
         ),
       ),
     );

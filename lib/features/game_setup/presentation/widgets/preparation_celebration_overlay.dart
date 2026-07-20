@@ -6,6 +6,7 @@ import 'package:companion_for_cacao/core/theme/app_spacing.dart';
 import 'package:companion_for_cacao/core/theme/app_text_styles.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/content/preparation_copy.dart';
 import 'package:companion_for_cacao/features/game_setup/presentation/providers/game_setup_notifier.dart';
+import 'package:companion_for_cacao/features/game_setup/presentation/widgets/preparation_group_card.dart';
 import 'package:confetti/confetti.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -67,17 +68,20 @@ class _PreparationCelebrationOverlayState
   Widget build(BuildContext context) {
     // First player = position 1 of the order dragged in Game Setup;
     // watching keeps the pill in sync when a redraw rotates the order.
-    final firstPlayerName = ref.watch(
-      gameSetupProvider.select((s) {
+    // The record carries (displayName, color) so the pill can wear the
+    // player color — at the table, the color IS the identity.
+    final firstPlayer = ref.watch(
+      gameSetupProvider.select<(String, String)?>((s) {
         final state = s.value;
         if (state == null) return null;
         final selected = state.players.where((p) => p.isSelected).toList();
         if (selected.isEmpty) return null;
         for (final color in state.colorOrder) {
           final player = selected.where((p) => p.color == color).firstOrNull;
-          if (player != null) return player.displayName;
+          if (player != null) return (player.displayName, player.color);
         }
-        return selected.first.displayName;
+        final fallback = selected.first;
+        return (fallback.displayName, fallback.color);
       }),
     );
 
@@ -136,25 +140,45 @@ class _PreparationCelebrationOverlayState
                       ).textTheme.bodyMedium?.copyWith(color: AppColors.brown),
                     ),
                     AppSpacing.verticalL,
-                    if (firstPlayerName != null) ...[
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: AppSpacing.l,
-                          vertical: AppSpacing.s,
-                        ),
-                        decoration: BoxDecoration(
-                          color: AppColors.gold.withValues(alpha: 0.25),
-                          borderRadius: BorderRadius.circular(999),
-                          border: Border.all(color: AppColors.gold),
-                        ),
-                        child: Text(
-                          PreparationCopy.startsFirst(firstPlayerName),
-                          style: Theme.of(context).textTheme.titleMedium
-                              ?.copyWith(
-                                color: AppColors.brown,
-                                fontWeight: FontWeight.bold,
+                    if (firstPlayer != null) ...[
+                      Builder(
+                        builder: (context) {
+                          final (name, colorName) = firstPlayer;
+                          final tint = AppColors.findColorByName(colorName);
+                          return Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: AppSpacing.m,
+                              vertical: AppSpacing.xs,
+                            ),
+                            decoration: BoxDecoration(
+                              color: Color.alphaBlend(
+                                tint.withValues(alpha: 0.18),
+                                AppColors.cream,
                               ),
-                        ),
+                              borderRadius: BorderRadius.circular(999),
+                              border: Border.all(color: tint, width: 1.5),
+                            ),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                PlayerAvatar(
+                                  colorName: colorName,
+                                  title: name,
+                                  size: 28,
+                                ),
+                                AppSpacing.horizontalS,
+                                Text(
+                                  PreparationCopy.startsFirst(name),
+                                  style: Theme.of(context).textTheme.titleMedium
+                                      ?.copyWith(
+                                        color: AppColors.brown,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                ),
+                              ],
+                            ),
+                          );
+                        },
                       ),
                       AppSpacing.verticalM,
                     ],
