@@ -1,0 +1,187 @@
+{
+  "@@locale": "en",
+
+  "colorWhite": "white",
+  "colorRed": "red",
+  "colorPurple": "purple",
+  "colorYellow": "yellow",
+
+  "villageBoardLabel": "Take your village board",
+  "villageBoardDetail": "Take the village board of color {color} and place it in front of you. Your worker draw pile and water carrier track live there.",
+  "@villageBoardDetail": {
+    "placeholders": {
+      "color": { "type": "String" }
+    }
+  },
+
+  "waterCarrierLabel": "Put your water carrier on the \"-10\" field",
+  "waterCarrierDetail": "Take the water carrier of color {color} and place it on the water field with the value \"-10\" of your village board.",
+  "@waterCarrierDetail": {
+    "placeholders": {
+      "color": { "type": "String" }
+    }
+  },
+
+  "ownTilesLabel": "Take all your worker tiles",
+  "ownTilesDetail": "Gather all worker tiles with the {color} back; they are your personal supply for the whole game.",
+  "@ownTilesDetail": {
+    "placeholders": {
+      "color": { "type": "String" }
+    }
+  },
+
+  "removeWorkerLabel": "Return one {distribution} worker tile to the box",
+  "@removeWorkerLabel": {
+    "placeholders": {
+      "distribution": { "type": "String" }
+    }
+  },
+  "removeWorkerDetail": "Search your worker tiles for one of the {distribution} tiles and return it to the game box.",
+  "@removeWorkerDetail": {
+    "placeholders": {
+      "distribution": { "type": "String" }
+    }
+  },
+  "removeWorkerRationale": "With 3 or more players each player uses fewer worker tiles so the jungle does not run out before the game ends.",
+
+  "shuffleWorkersLabel": "Shuffle your workers and draw 3",
+  "shuffleWorkersDetail": "Each player mixes their worker tiles and puts them as a face-down worker draw pile next to their village board. After that, they draw the 3 top worker tiles from their worker draw pile and take them into their hand.",
+
+  "initialTilesMarketLabel": "Place the 2 starting tiles diagonally",
+  "initialTilesMarketDetail": "From the jungle tiles, get \"single plantation\" and \"market, selling price 2\" and place them face up in the middle of the table diagonally to one another; they form the starting tiles of the playing area.",
+
+  "junglePileLabel": "Build the jungle draw pile",
+  "junglePileDetail": "Mix the remaining jungle tiles and lay them out as a face-down jungle draw pile.",
+
+  "jungleDisplayLabel": "Reveal 2 jungle tiles",
+  "jungleDisplayDetail": "Draw the 2 top jungle tiles from the jungle draw pile and place them next to the pile as a face-up jungle display.",
+
+  "resourcesBankLabel": "Lay out cacao, suns and the bank",
+  "resourcesBankDetail": "Lay out the cacao fruits and the sun tokens as separate supply piles. Put the gold coins next to them to serve as the bank.",
+
+  "removeTilesLabel": "Return {quantity}x {tileName} to the box",
+  "@removeTilesLabel": {
+    "placeholders": {
+      "quantity": { "type": "int" },
+      "tileName": { "type": "String" }
+    }
+  },
+  "removeTilesDetail": "{quantity, plural, =1{Sort out {quantity}x {tileName} and put it back in the box.} other{Sort out {quantity}x {tileName} and put them back in the box.}}",
+  "@removeTilesDetail": {
+    "placeholders": {
+      "quantity": { "type": "num" },
+      "tileName": { "type": "String" }
+    }
+  },
+  "removeAllTilesLabel": "Return all {tileName} tiles to the box",
+  "@removeAllTilesLabel": {
+    "placeholders": {
+      "tileName": { "type": "String" }
+    }
+  },
+  "removeAllTilesDetail": "Sort out all {tileName} tiles and put them back in the box.",
+  "@removeAllTilesDetail": {
+    "placeholders": {
+      "tileName": { "type": "String" }
+    }
+  },
+  "addTilesLabel": "Add {quantity}x {tileName} to the jungle tiles",
+  "@addTilesLabel": {
+    "placeholders": {
+      "quantity": { "type": "int" },
+      "tileName": { "type": "String" }
+    }
+  },
+  "addTilesDetail": "Add {quantity}x {tileName} tiles to the jungle tiles before building the draw pile.",
+  "@addTilesDetail": {
+    "placeholders": {
+      "quantity": { "type": "int" },
+      "tileName": { "type": "String" }
+    }
+  },
+
+  "twoPlayerRemovalRationale": "With 2 players the jungle is reduced so the playing area stays tight and the game keeps its pace.",
+  "bigGame3pRemovalRationale": "The Big Game with 3 players removes a few tiles so the huge tile pool stays balanced.",
+
+  "tileSinglePlantation": "Single Plantation",
+  "tileDoublePlantation": "Double Plantation",
+  "tileMarketSelling2": "Market, selling price 2",
+  "tileMarketSelling3": "Market, selling price 3",
+  "tileGoldMineV1": "Gold Mine, value 1",
+  "tileGoldMineV2": "Gold Mine, value 2",
+  "tileWater": "Water",
+  "tileSunWorshipingSite": "Sun-Worshiping Site",
+  "tileTemple": "Temple",
+  "tileWatering": "Watering",
+  "tileChocolateKitchen": "Chocolate Kitchen",
+  "tileChocolateMarket": "Chocolate Market",
+  "tileGemMine": "Gem Mine",
+  "tileTreeOfLife": "Tree of Life",
+
+  "mapTokensLabel": "Take 2 map tiles",
+  "mapTokensDetail": "Player {color} takes 2 map tiles.",
+  "@mapTokensDetail": {
+    "placeholders": {
+      "color": { "type": "String" }
+    }
+  },
+  "mapTokensSurplusLabel": "Return the surplus map tiles to the box",
+  "mapTokensSurplusDetail": "Put the surplus map tiles back into the box.",
+  "mapBoardLabel": "Place the map board",
+  "mapBoardDetail": "Place the map board directly next to the jungle draw pile.",
+  "jungleDisplayMapLabel": "Reveal 4 jungle tiles (map board + display)",
+  "jungleDisplayMapDetail": "Draw the 4 top jungle tiles from the jungle draw pile. Lay the first two tiles face up on the marked spaces of the map board. Place the other two tiles as a face-up jungle display next to the map board.",
+
+  "initialTilesWaterLabel": "Place the 2 starting tiles diagonally",
+  "initialTilesWaterDetail": "From the jungle tiles, get \"single plantation\" and \"water\" tiles and place them face up in the middle of the table diagonally to one another; they form the starting tiles of the playing area.",
+  "initialTilesWaterRationale": "The Watering module swaps the starting market for a water tile.",
+
+  "chocolateBarsLabel": "Lay out the 20 chocolate bars",
+  "chocolateBarsDetail": "Lay out the 20 chocolate bars as a separate supply pile next to the cacao fruits.",
+
+  "hutsMarketLabel": "Throw the 12 hut tiles",
+  "hutsMarketDetail": "Take the 12 hut tiles, drop them from a low height to randomly determine their face-up side, and sort them by building cost next to the bank as a supply.",
+  "hutsMarketRationale": "Variant: alternatively, players can agree on a specific selection of huts instead of a random assortment.",
+
+  "gemsRemoveLabel": "Return 8 gems to the box",
+  "gemsRemoveDetail": "Remove 8 gems (2 of each color) and put them back into the box.",
+  "mineCarLabel": "Fill and shake the mine car",
+  "mineCarAllDetail": "Fill all 32 gems into the mine car and mix them by shaking. Place the mine car next to the playing area.",
+  "mineCarRemainingDetail": "Fill the remaining gems into the mine car and mix them by shaking. Place the mine car next to the playing area.",
+  "masksLabel": "Sort the masks as a supply",
+  "masksAllDetail": "Sort the 7 masks by their values in an ascending, overlapping row as a supply.",
+  "masksWithout12Detail": "Sort the masks (without the value 12 mask) by their values in an ascending, overlapping row as a supply.",
+  "gemMinesReminderLabel": "Rule reminder: gems on new mines",
+  "gemMinesReminderDetail": "As soon as a gem mine tile is placed in the jungle display or onto the map board, shake out 6 gems from the mine car and put them on the gem mine tile.",
+
+  "treeOfLife0004Label": "Add your 0-0-0-4 worker tile",
+  "treeOfLife0004Detail": "Tree of Life Module: Player {color} takes their 0-0-0-4 worker tile from the New Workers Module and adds it to their worker tiles.",
+  "@treeOfLife0004Detail": {
+    "placeholders": {
+      "color": { "type": "String" }
+    }
+  },
+  "treeOfLife0004Rationale": "With 2 players the Tree of Life requires the 0-0-0-4 tile so every tree can be fully harvested (Diamante rulebook).",
+
+  "emperorLabel": "Place the Emperor figure",
+  "emperorOnMarketDetail": "After laying out the starting tiles, place the Emperor figure on the market, selling price 2.",
+  "emperorOnWaterDetail": "After laying out the starting tiles, place the Emperor figure on the water tile.",
+
+  "newWorkersSelectionLabel": "Choose the worker tiles",
+  "newWorkersSelectionDetail": "Select which worker tiles you want to use for this game.",
+
+  "returnToBoxTitle": "Return to the box",
+  "returnToBoxSubtitle": "These tiles are not used in this game",
+
+  "allSetTitle": "All set!",
+  "allSetMessage": "The table is ready. May the best cacao farmer win!",
+  "drawFirstPlayerAction": "Draw randomly instead",
+  "drawAgainAction": "Draw again",
+  "startsFirst": "{name} starts!",
+  "@startsFirst": {
+    "placeholders": {
+      "name": { "type": "String" }
+    }
+  },
+  "backToGameAction": "Back to the game"
+}

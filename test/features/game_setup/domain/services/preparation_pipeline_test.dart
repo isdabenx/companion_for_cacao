@@ -7,6 +7,7 @@ import 'package:companion_for_cacao/features/game_setup/domain/entities/preparat
 import 'package:companion_for_cacao/features/game_setup/domain/entities/preparation_phase.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/services/base_game_handler.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/services/module_preparation_handler.dart';
+import 'package:companion_for_cacao/features/game_setup/domain/content/preparation_l10n.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/services/preparation_pipeline.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/services/tile_adjustments.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -15,6 +16,9 @@ import '../../../../support/preparation_fixtures.dart';
 import '../../../../support/tile_fixtures.dart';
 
 class MockBaseGameHandler with TileAdjustments implements BaseGameHandler {
+  @override
+  PreparationL10n get copy => PreparationL10n.en();
+
   @override
   List<BoardgameEntity> get activeExpansions => [];
 

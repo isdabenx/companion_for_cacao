@@ -1,0 +1,113 @@
+{
+  "@@locale": "es",
+
+  "colorWhite": "blanco",
+  "colorRed": "rojo",
+  "colorPurple": "lila",
+  "colorYellow": "amarillo",
+
+  "villageBoardLabel": "Coge tu tablero de poblado",
+  "villageBoardDetail": "Coge el tablero de poblado de color {color} y ponlo delante de ti. Ahí irán tu pila de trabajadores y el track del portador de agua.",
+
+  "waterCarrierLabel": "Pon el portador de agua en la casilla \"-10\"",
+  "waterCarrierDetail": "Coge el portador de agua de color {color} y colócalo en la casilla de agua con valor \"-10\" de tu tablero de poblado.",
+
+  "ownTilesLabel": "Coge todas tus losetas de trabajador",
+  "ownTilesDetail": "Reúne todas las losetas de trabajador con el dorso de color {color}; son tu reserva personal para toda la partida.",
+
+  "removeWorkerLabel": "Devuelve una loseta de trabajador {distribution} a la caja",
+  "removeWorkerDetail": "Busca entre tus losetas de trabajador una de las {distribution} y devuélvela a la caja del juego.",
+  "removeWorkerRationale": "Con 3 o más jugadores cada uno usa menos losetas de trabajador para que la jungla no se agote antes de acabar la partida.",
+
+  "shuffleWorkersLabel": "Baraja tus trabajadores y roba 3",
+  "shuffleWorkersDetail": "Cada jugador baraja sus losetas de trabajador y las coloca como pila de robo boca abajo junto a su tablero de poblado. Después roba las 3 losetas superiores de su pila y las toma en la mano.",
+
+  "initialTilesMarketLabel": "Coloca las 2 losetas iniciales en diagonal",
+  "initialTilesMarketDetail": "De las losetas de jungla, coge la \"plantación simple\" y el \"mercado de precio 2\" y colócalas boca arriba en el centro de la mesa, en diagonal una respecto de la otra; forman las losetas iniciales de la zona de juego.",
+
+  "junglePileLabel": "Monta la pila de jungla",
+  "junglePileDetail": "Mezcla las losetas de jungla restantes y colócalas como pila de robo boca abajo.",
+
+  "jungleDisplayLabel": "Revela 2 losetas de jungla",
+  "jungleDisplayDetail": "Roba las 2 losetas superiores de la pila de jungla y colócalas junto a la pila como muestra de jungla boca arriba.",
+
+  "resourcesBankLabel": "Prepara el cacao, los soles y la banca",
+  "resourcesBankDetail": "Coloca los frutos de cacao y las fichas de sol como pilas de reserva separadas. Pon al lado las monedas de oro como banca.",
+
+  "removeTilesLabel": "Devuelve {quantity}x {tileName} a la caja",
+  "removeTilesDetail": "{quantity, plural, =1{Aparta {quantity}x {tileName} y devuélvelo a la caja.} other{Aparta {quantity}x {tileName} y devuélvelo a la caja.}}",
+  "removeAllTilesLabel": "Devuelve todas las losetas de {tileName} a la caja",
+  "removeAllTilesDetail": "Aparta todas las losetas de {tileName} y devuélvelas a la caja.",
+  "addTilesLabel": "Añade {quantity}x {tileName} a la jungla",
+  "addTilesDetail": "Añade {quantity}x {tileName} a las losetas de jungla antes de montar la pila de robo.",
+
+  "twoPlayerRemovalRationale": "Con 2 jugadores la jungla se reduce para que la zona de juego quede recogida y la partida mantenga el ritmo.",
+  "bigGame3pRemovalRationale": "El Big Game con 3 jugadores retira unas cuantas losetas para que el gran conjunto de losetas quede equilibrado.",
+
+  "tileSinglePlantation": "Plantación simple",
+  "tileDoublePlantation": "Plantación doble",
+  "tileMarketSelling2": "Mercado de precio 2",
+  "tileMarketSelling3": "Mercado de precio 3",
+  "tileGoldMineV1": "Mina de oro de valor 1",
+  "tileGoldMineV2": "Mina de oro de valor 2",
+  "tileWater": "Agua",
+  "tileSunWorshipingSite": "Lugar de adoración del sol",
+  "tileTemple": "Templo",
+  "tileWatering": "Riego",
+  "tileChocolateKitchen": "Cocina de chocolate",
+  "tileChocolateMarket": "Mercado de chocolate",
+  "tileGemMine": "Mina de gemas",
+  "tileTreeOfLife": "Árbol de la Vida",
+
+  "mapTokensLabel": "Coge 2 fichas de mapa",
+  "mapTokensDetail": "El jugador {color} coge 2 fichas de mapa.",
+  "mapTokensSurplusLabel": "Devuelve las fichas de mapa sobrantes a la caja",
+  "mapTokensSurplusDetail": "Devuelve las fichas de mapa sobrantes a la caja.",
+  "mapBoardLabel": "Coloca el tablero de mapa",
+  "mapBoardDetail": "Coloca el tablero de mapa justo al lado de la pila de jungla.",
+  "jungleDisplayMapLabel": "Revela 4 losetas de jungla (tablero de mapa + muestra)",
+  "jungleDisplayMapDetail": "Roba las 4 losetas superiores de la pila de jungla. Coloca las dos primeras boca arriba en los espacios marcados del tablero de mapa. Coloca las otras dos como muestra de jungla boca arriba junto al tablero de mapa.",
+
+  "initialTilesWaterLabel": "Coloca las 2 losetas iniciales en diagonal",
+  "initialTilesWaterDetail": "De las losetas de jungla, coge la \"plantación simple\" y el \"agua\" y colócalas boca arriba en el centro de la mesa, en diagonal una respecto de la otra; forman las losetas iniciales de la zona de juego.",
+  "initialTilesWaterRationale": "El módulo de Riego cambia el mercado inicial por una loseta de agua.",
+
+  "chocolateBarsLabel": "Prepara las 20 losetas de chocolate",
+  "chocolateBarsDetail": "Coloca las 20 losetas de chocolate como pila de reserva separada junto a los frutos de cacao.",
+
+  "hutsMarketLabel": "Lanza las 12 losetas de cabaña",
+  "hutsMarketDetail": "Coge las 12 losetas de cabaña, déjalas caer desde poca altura para determinar al azar qué cara queda arriba, y ordénalas por coste de construcción junto a la banca como reserva.",
+  "hutsMarketRationale": "Variante: alternativamente, los jugadores pueden acordar una selección concreta de cabañas en lugar de un surtido aleatorio.",
+
+  "gemsRemoveLabel": "Devuelve 8 gemas a la caja",
+  "gemsRemoveDetail": "Retira 8 gemas (2 de cada color) y devuélvelas a la caja.",
+  "mineCarLabel": "Llena y agita la vagoneta",
+  "mineCarAllDetail": "Mete las 32 gemas en la vagoneta y mézclalas agitándola. Coloca la vagoneta junto a la zona de juego.",
+  "mineCarRemainingDetail": "Mete las gemas restantes en la vagoneta y mézclalas agitándola. Coloca la vagoneta junto a la zona de juego.",
+  "masksLabel": "Ordena las máscaras como reserva",
+  "masksAllDetail": "Ordena las 7 máscaras por su valor en una fila ascendente y solapada como reserva.",
+  "masksWithout12Detail": "Ordena las máscaras (sin la de valor 12) por su valor en una fila ascendente y solapada como reserva.",
+  "gemMinesReminderLabel": "Recordatorio de regla: gemas en las minas nuevas",
+  "gemMinesReminderDetail": "En cuanto una loseta de mina de gemas se coloque en la muestra de jungla o en el tablero de mapa, saca 6 gemas de la vagoneta y ponlas sobre la loseta de mina.",
+
+  "treeOfLife0004Label": "Añade tu loseta de trabajador 0-0-0-4",
+  "treeOfLife0004Detail": "Módulo Árbol de la Vida: el jugador {color} coge su loseta de trabajador 0-0-0-4 del módulo Nuevos Trabajadores y la añade a sus losetas.",
+  "treeOfLife0004Rationale": "Con 2 jugadores el Árbol de la Vida requiere la loseta 0-0-0-4 para que todos los árboles puedan cosecharse por completo (reglamento de Diamante).",
+
+  "emperorLabel": "Coloca la figura del Emperador",
+  "emperorOnMarketDetail": "Después de colocar las losetas iniciales, pon la figura del Emperador sobre el mercado de precio 2.",
+  "emperorOnWaterDetail": "Después de colocar las losetas iniciales, pon la figura del Emperador sobre la loseta de agua.",
+
+  "newWorkersSelectionLabel": "Elige las losetas de trabajador",
+  "newWorkersSelectionDetail": "Selecciona qué losetas de trabajador queréis usar en esta partida.",
+
+  "returnToBoxTitle": "Devolver a la caja",
+  "returnToBoxSubtitle": "Estas losetas no se usan en esta partida",
+
+  "allSetTitle": "¡Todo listo!",
+  "allSetMessage": "La mesa está preparada. ¡Que gane el mejor plantador de cacao!",
+  "drawFirstPlayerAction": "Sortearlo al azar",
+  "drawAgainAction": "Volver a sortear",
+  "startsFirst": "¡Empieza {name}!",
+  "backToGameAction": "Volver a la partida"
+}

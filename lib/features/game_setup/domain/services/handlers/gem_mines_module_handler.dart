@@ -1,6 +1,6 @@
 import 'package:companion_for_cacao/core/domain/entities/boardgame_entity.dart';
 import 'package:companion_for_cacao/core/domain/entities/tile_entity.dart';
-import 'package:companion_for_cacao/features/game_setup/domain/content/preparation_copy.dart';
+import 'package:companion_for_cacao/features/game_setup/domain/content/preparation_l10n.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/player_entity.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/preparation_entity.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/preparation_phase.dart';
@@ -10,6 +10,12 @@ import 'package:companion_for_cacao/features/game_setup/domain/services/preparat
 
 class GemMinesModuleHandler implements ModulePreparationHandler {
   static const int moduleId = 5;
+
+  GemMinesModuleHandler({PreparationL10n? l10n})
+    : copy = l10n ?? PreparationL10n.en();
+
+  /// Localized step content; defaults to English so tests need no wiring.
+  final PreparationL10n copy;
 
   @override
   List<TileEntity> adjustTiles(
@@ -54,10 +60,10 @@ class GemMinesModuleHandler implements ModulePreparationHandler {
     // Big Game: skip tile substitution steps, only add supplies
     if (isBigGame) {
       preparation.add(
-        const PreparationEntity(
+        PreparationEntity(
           id: 'setup_gem_mines_mine_car',
-          label: PreparationCopy.mineCarLabel,
-          detail: PreparationCopy.mineCarAllDetail,
+          label: copy.mineCarLabel,
+          detail: copy.mineCarAllDetail,
           tableZone: TableZone.supplies,
           phase: PreparationPhase.supplies,
           imageKey: 'resources_mine_car',
@@ -65,10 +71,10 @@ class GemMinesModuleHandler implements ModulePreparationHandler {
       );
 
       preparation.add(
-        const PreparationEntity(
+        PreparationEntity(
           id: 'setup_gem_mines_masks',
-          label: PreparationCopy.masksLabel,
-          detail: PreparationCopy.masksAllDetail,
+          label: copy.masksLabel,
+          detail: copy.masksAllDetail,
           tableZone: TableZone.supplies,
           phase: PreparationPhase.supplies,
           imageKey: 'resources_masks',
@@ -76,10 +82,10 @@ class GemMinesModuleHandler implements ModulePreparationHandler {
       );
 
       preparation.add(
-        const PreparationEntity(
+        PreparationEntity(
           id: 'setup_gem_mines_rule_reminder',
-          label: PreparationCopy.gemMinesReminderLabel,
-          detail: PreparationCopy.gemMinesReminderDetail,
+          label: copy.gemMinesReminderLabel,
+          detail: copy.gemMinesReminderDetail,
           tableZone: TableZone.supplies,
           phase: PreparationPhase.supplies,
         ),
@@ -110,11 +116,11 @@ class GemMinesModuleHandler implements ModulePreparationHandler {
     // Add gem mine supplies steps
     if (players.length == 2) {
       preparation.add(
-        const PreparationEntity(
+        PreparationEntity(
           id: 'setup_gem_mines_remove_gems',
-          label: PreparationCopy.gemsRemoveLabel,
-          detail: PreparationCopy.gemsRemoveDetail,
-          rationale: PreparationCopy.twoPlayerRemovalRationale,
+          label: copy.gemsRemoveLabel,
+          detail: copy.gemsRemoveDetail,
+          rationale: copy.twoPlayerRemovalRationale,
           tableZone: TableZone.box,
           quantity: 8,
           phase: PreparationPhase.supplies,
@@ -126,10 +132,10 @@ class GemMinesModuleHandler implements ModulePreparationHandler {
     preparation.add(
       PreparationEntity(
         id: 'setup_gem_mines_mine_car',
-        label: PreparationCopy.mineCarLabel,
+        label: copy.mineCarLabel,
         detail: players.length == 2
-            ? PreparationCopy.mineCarRemainingDetail
-            : PreparationCopy.mineCarAllDetail,
+            ? copy.mineCarRemainingDetail
+            : copy.mineCarAllDetail,
         tableZone: TableZone.supplies,
         phase: PreparationPhase.supplies,
         imageKey: 'resources_mine_car',
@@ -139,10 +145,10 @@ class GemMinesModuleHandler implements ModulePreparationHandler {
     preparation.add(
       PreparationEntity(
         id: 'setup_gem_mines_masks',
-        label: PreparationCopy.masksLabel,
+        label: copy.masksLabel,
         detail: players.length == 2
-            ? PreparationCopy.masksWithout12Detail
-            : PreparationCopy.masksAllDetail,
+            ? copy.masksWithout12Detail
+            : copy.masksAllDetail,
         tableZone: TableZone.supplies,
         phase: PreparationPhase.supplies,
         imageKey: 'resources_masks',
@@ -150,10 +156,10 @@ class GemMinesModuleHandler implements ModulePreparationHandler {
     );
 
     preparation.add(
-      const PreparationEntity(
+      PreparationEntity(
         id: 'setup_gem_mines_rule_reminder',
-        label: PreparationCopy.gemMinesReminderLabel,
-        detail: PreparationCopy.gemMinesReminderDetail,
+        label: copy.gemMinesReminderLabel,
+        detail: copy.gemMinesReminderDetail,
         tableZone: TableZone.supplies,
         phase: PreparationPhase.supplies,
       ),
@@ -168,19 +174,18 @@ class GemMinesModuleHandler implements ModulePreparationHandler {
       // "All temples" has no fixed quantity: the label says it (see spec).
       PreparationEntity(
         id: 'setup_gem_mines_remove_temples',
-        label: PreparationCopy.removeAllTilesLabel(PreparationCopy.tileTemple),
-        detail: PreparationCopy.removeAllTilesDetail(
-          PreparationCopy.tileTemple,
-        ),
+        label: copy.removeAllTilesLabel(copy.tileTemple),
+        detail: copy.removeAllTilesDetail(copy.tileTemple),
         tableZone: TableZone.box,
         groupId: PreparationGroups.returnToBox,
         imageKey: 'jungle_temple',
         phase: PreparationPhase.boardSetup,
       ),
       PreparationSteps.addition(
+        copy: copy,
         id: 'setup_gem_mines_add_gem_mines',
         quantity: playerCount == 2 ? 4 : 5,
-        tileName: PreparationCopy.tileGemMine,
+        tileName: copy.tileGemMine,
         imageKey: 'jungle_gem_mine',
       ),
     ];

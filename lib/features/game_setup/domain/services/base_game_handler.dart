@@ -1,6 +1,6 @@
 import 'package:companion_for_cacao/core/domain/entities/boardgame_entity.dart';
 import 'package:companion_for_cacao/core/domain/entities/tile_entity.dart';
-import 'package:companion_for_cacao/features/game_setup/domain/content/preparation_copy.dart';
+import 'package:companion_for_cacao/features/game_setup/domain/content/preparation_l10n.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/player_entity.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/preparation_actor.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/preparation_entity.dart';
@@ -40,7 +40,11 @@ class BaseGameHandler with TileAdjustments implements ModulePreparationHandler {
     required this.baseGame,
     required this.activeExpansions,
     required this.selectedColors,
-  });
+    PreparationL10n? l10n,
+  }) : copy = l10n ?? PreparationL10n.en();
+
+  /// Localized step content; defaults to English so tests need no wiring.
+  final PreparationL10n copy;
 
   final BoardgameEntity baseGame;
   final List<BoardgameEntity> activeExpansions;
@@ -182,8 +186,8 @@ class BaseGameHandler with TileAdjustments implements ModulePreparationHandler {
         ..add(
           PreparationEntity(
             id: 'setup_village_board_$color',
-            label: PreparationCopy.villageBoardLabel,
-            detail: PreparationCopy.villageBoardDetail(color),
+            label: copy.villageBoardLabel,
+            detail: copy.villageBoardDetail(color),
             actor: PreparationActor.player,
             tableZone: TableZone.playerArea,
             groupId: PreparationGroups.player(color),
@@ -198,8 +202,8 @@ class BaseGameHandler with TileAdjustments implements ModulePreparationHandler {
         ..add(
           PreparationEntity(
             id: 'setup_water_carrier_$color',
-            label: PreparationCopy.waterCarrierLabel,
-            detail: PreparationCopy.waterCarrierDetail(color),
+            label: copy.waterCarrierLabel,
+            detail: copy.waterCarrierDetail(color),
             actor: PreparationActor.player,
             tableZone: TableZone.playerArea,
             groupId: PreparationGroups.player(color),
@@ -212,8 +216,8 @@ class BaseGameHandler with TileAdjustments implements ModulePreparationHandler {
         ..add(
           PreparationEntity(
             id: 'setup_tiles_$color',
-            label: PreparationCopy.ownTilesLabel,
-            detail: PreparationCopy.ownTilesDetail(color),
+            label: copy.ownTilesLabel,
+            detail: copy.ownTilesDetail(color),
             actor: PreparationActor.player,
             tableZone: TableZone.playerArea,
             groupId: PreparationGroups.player(color),
@@ -237,9 +241,9 @@ class BaseGameHandler with TileAdjustments implements ModulePreparationHandler {
           preparation.add(
             PreparationEntity(
               id: 'setup_remove_worker_1_${player.color}',
-              label: PreparationCopy.removeWorkerLabel('1-1-1-1'),
-              detail: PreparationCopy.removeWorkerDetail('1-1-1-1'),
-              rationale: PreparationCopy.removeWorkerRationale,
+              label: copy.removeWorkerLabel('1-1-1-1'),
+              detail: copy.removeWorkerDetail('1-1-1-1'),
+              rationale: copy.removeWorkerRationale,
               actor: PreparationActor.player,
               tableZone: TableZone.box,
               groupId: PreparationGroups.player(player.color),
@@ -263,9 +267,9 @@ class BaseGameHandler with TileAdjustments implements ModulePreparationHandler {
             preparation.add(
               PreparationEntity(
                 id: 'setup_remove_worker_2_${player.color}',
-                label: PreparationCopy.removeWorkerLabel('2-1-0-1'),
-                detail: PreparationCopy.removeWorkerDetail('2-1-0-1'),
-                rationale: PreparationCopy.removeWorkerRationale,
+                label: copy.removeWorkerLabel('2-1-0-1'),
+                detail: copy.removeWorkerDetail('2-1-0-1'),
+                rationale: copy.removeWorkerRationale,
                 actor: PreparationActor.player,
                 tableZone: TableZone.box,
                 groupId: PreparationGroups.player(player.color),
@@ -283,20 +287,20 @@ class BaseGameHandler with TileAdjustments implements ModulePreparationHandler {
 
     preparation
       ..add(
-        const PreparationEntity(
+        PreparationEntity(
           id: 'setup_shuffle_workers',
-          label: PreparationCopy.shuffleWorkersLabel,
-          detail: PreparationCopy.shuffleWorkersDetail,
+          label: copy.shuffleWorkersLabel,
+          detail: copy.shuffleWorkersDetail,
           actor: PreparationActor.allPlayers,
           tableZone: TableZone.playerArea,
           phase: PreparationPhase.playerSetup,
         ),
       )
       ..add(
-        const PreparationEntity(
+        PreparationEntity(
           id: 'setup_initial_tiles_plantation_market',
-          label: PreparationCopy.initialTilesMarketLabel,
-          detail: PreparationCopy.initialTilesMarketDetail,
+          label: copy.initialTilesMarketLabel,
+          detail: copy.initialTilesMarketDetail,
           tableZone: TableZone.startingArea,
           imageKey: 'initial_tiles_cacao',
           phase: PreparationPhase.boardSetup,
@@ -313,28 +317,28 @@ class BaseGameHandler with TileAdjustments implements ModulePreparationHandler {
 
     preparation
       ..add(
-        const PreparationEntity(
+        PreparationEntity(
           id: 'setup_jungle_draw_pile',
-          label: PreparationCopy.junglePileLabel,
-          detail: PreparationCopy.junglePileDetail,
+          label: copy.junglePileLabel,
+          detail: copy.junglePileDetail,
           tableZone: TableZone.junglePile,
           phase: PreparationPhase.boardSetup,
         ),
       )
       ..add(
-        const PreparationEntity(
+        PreparationEntity(
           id: 'setup_jungle_display',
-          label: PreparationCopy.jungleDisplayLabel,
-          detail: PreparationCopy.jungleDisplayDetail,
+          label: copy.jungleDisplayLabel,
+          detail: copy.jungleDisplayDetail,
           tableZone: TableZone.jungleDisplay,
           phase: PreparationPhase.boardSetup,
         ),
       )
       ..add(
-        const PreparationEntity(
+        PreparationEntity(
           id: 'setup_resources_bank',
-          label: PreparationCopy.resourcesBankLabel,
-          detail: PreparationCopy.resourcesBankDetail,
+          label: copy.resourcesBankLabel,
+          detail: copy.resourcesBankDetail,
           tableZone: TableZone.supplies,
           imageKey: 'resources_cacao',
           phase: PreparationPhase.supplies,
@@ -376,46 +380,52 @@ class BaseGameHandler with TileAdjustments implements ModulePreparationHandler {
   List<PreparationEntity> _twoPlayerJungleTileRemovals() {
     return [
       PreparationSteps.removal(
+        copy: copy,
         id: 'setup_jungle_tiles_2p_removal_single_plantation',
         quantity: 2,
-        tileName: PreparationCopy.tileSinglePlantation,
+        tileName: copy.tileSinglePlantation,
         imageKey: 'jungle_single_plantation',
-        rationale: PreparationCopy.twoPlayerRemovalRationale,
+        rationale: copy.twoPlayerRemovalRationale,
       ),
       PreparationSteps.removal(
+        copy: copy,
         id: 'setup_jungle_tiles_2p_removal_market_selling_3',
         quantity: 1,
-        tileName: PreparationCopy.tileMarketSelling3,
+        tileName: copy.tileMarketSelling3,
         imageKey: 'jungle_market_selling_3',
-        rationale: PreparationCopy.twoPlayerRemovalRationale,
+        rationale: copy.twoPlayerRemovalRationale,
       ),
       PreparationSteps.removal(
+        copy: copy,
         id: 'setup_jungle_tiles_2p_removal_gold_mine_value_1',
         quantity: 1,
-        tileName: PreparationCopy.tileGoldMineV1,
+        tileName: copy.tileGoldMineV1,
         imageKey: 'jungle_gold_mine_v1',
-        rationale: PreparationCopy.twoPlayerRemovalRationale,
+        rationale: copy.twoPlayerRemovalRationale,
       ),
       PreparationSteps.removal(
+        copy: copy,
         id: 'setup_jungle_tiles_2p_removal_water',
         quantity: 1,
-        tileName: PreparationCopy.tileWater,
+        tileName: copy.tileWater,
         imageKey: 'jungle_water',
-        rationale: PreparationCopy.twoPlayerRemovalRationale,
+        rationale: copy.twoPlayerRemovalRationale,
       ),
       PreparationSteps.removal(
+        copy: copy,
         id: 'setup_jungle_tiles_2p_removal_sun_worshiping_site',
         quantity: 1,
-        tileName: PreparationCopy.tileSunWorshipingSite,
+        tileName: copy.tileSunWorshipingSite,
         imageKey: 'jungle_sun_worshiping_site',
-        rationale: PreparationCopy.twoPlayerRemovalRationale,
+        rationale: copy.twoPlayerRemovalRationale,
       ),
       PreparationSteps.removal(
+        copy: copy,
         id: 'setup_jungle_tiles_2p_removal_temple',
         quantity: 1,
-        tileName: PreparationCopy.tileTemple,
+        tileName: copy.tileTemple,
         imageKey: 'jungle_temple',
-        rationale: PreparationCopy.twoPlayerRemovalRationale,
+        rationale: copy.twoPlayerRemovalRationale,
       ),
     ];
   }
@@ -423,39 +433,44 @@ class BaseGameHandler with TileAdjustments implements ModulePreparationHandler {
   List<PreparationEntity> _bigGame3pJungleTileRemovals() {
     return [
       PreparationSteps.removal(
+        copy: copy,
         id: 'setup_big_game_3p_removal_single_plantation',
         quantity: 2,
-        tileName: PreparationCopy.tileSinglePlantation,
+        tileName: copy.tileSinglePlantation,
         imageKey: 'jungle_single_plantation',
-        rationale: PreparationCopy.bigGame3pRemovalRationale,
+        rationale: copy.bigGame3pRemovalRationale,
       ),
       PreparationSteps.removal(
+        copy: copy,
         id: 'setup_big_game_3p_removal_gold_mine_v1',
         quantity: 2,
-        tileName: PreparationCopy.tileGoldMineV1,
+        tileName: copy.tileGoldMineV1,
         imageKey: 'jungle_gold_mine_v1',
-        rationale: PreparationCopy.bigGame3pRemovalRationale,
+        rationale: copy.bigGame3pRemovalRationale,
       ),
       PreparationSteps.removal(
+        copy: copy,
         id: 'setup_big_game_3p_removal_market_selling_2',
         quantity: 1,
-        tileName: PreparationCopy.tileMarketSelling2,
+        tileName: copy.tileMarketSelling2,
         imageKey: 'jungle_market_selling_2',
-        rationale: PreparationCopy.bigGame3pRemovalRationale,
+        rationale: copy.bigGame3pRemovalRationale,
       ),
       PreparationSteps.removal(
+        copy: copy,
         id: 'setup_big_game_3p_removal_market_selling_3',
         quantity: 1,
-        tileName: PreparationCopy.tileMarketSelling3,
+        tileName: copy.tileMarketSelling3,
         imageKey: 'jungle_market_selling_3',
-        rationale: PreparationCopy.bigGame3pRemovalRationale,
+        rationale: copy.bigGame3pRemovalRationale,
       ),
       PreparationSteps.removal(
+        copy: copy,
         id: 'setup_big_game_3p_removal_watering',
         quantity: 1,
-        tileName: PreparationCopy.tileWatering,
+        tileName: copy.tileWatering,
         imageKey: 'jungle_watering',
-        rationale: PreparationCopy.bigGame3pRemovalRationale,
+        rationale: copy.bigGame3pRemovalRationale,
       ),
     ];
   }

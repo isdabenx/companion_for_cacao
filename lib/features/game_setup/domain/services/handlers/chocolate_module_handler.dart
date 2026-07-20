@@ -1,6 +1,6 @@
 import 'package:companion_for_cacao/core/domain/entities/boardgame_entity.dart';
 import 'package:companion_for_cacao/core/domain/entities/tile_entity.dart';
-import 'package:companion_for_cacao/features/game_setup/domain/content/preparation_copy.dart';
+import 'package:companion_for_cacao/features/game_setup/domain/content/preparation_l10n.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/player_entity.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/preparation_entity.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/preparation_phase.dart';
@@ -37,6 +37,12 @@ class ChocolateModuleHandler
     with TileAdjustments
     implements ModulePreparationHandler {
   static const int moduleId = 3;
+
+  ChocolateModuleHandler({PreparationL10n? l10n})
+    : copy = l10n ?? PreparationL10n.en();
+
+  /// Localized step content; defaults to English so tests need no wiring.
+  final PreparationL10n copy;
 
   @override
   List<TileEntity> adjustTiles(
@@ -130,10 +136,10 @@ class ChocolateModuleHandler
     if (resourceBankIndex >= 0) {
       preparation.insert(
         resourceBankIndex + 1,
-        const PreparationEntity(
+        PreparationEntity(
           id: 'setup_chocolate_bars',
-          label: PreparationCopy.chocolateBarsLabel,
-          detail: PreparationCopy.chocolateBarsDetail,
+          label: copy.chocolateBarsLabel,
+          detail: copy.chocolateBarsDetail,
           tableZone: TableZone.supplies,
           quantity: 20,
           phase: PreparationPhase.supplies,
@@ -180,26 +186,14 @@ class ChocolateModuleHandler
       // of the base removal step; only quantity and texts change.
       if (step.id == 'setup_jungle_tiles_2p_removal_gold_mine_value_1') {
         preparation[i] = step.copyWith(
-          label: PreparationCopy.removeTilesLabel(
-            2,
-            PreparationCopy.tileGoldMineV1,
-          ),
-          detail: PreparationCopy.removeTilesDetail(
-            2,
-            PreparationCopy.tileGoldMineV1,
-          ),
+          label: copy.removeTilesLabel(2, copy.tileGoldMineV1),
+          detail: copy.removeTilesDetail(2, copy.tileGoldMineV1),
           quantity: 2,
         );
       } else if (step.id == 'setup_jungle_tiles_2p_removal_market_selling_3') {
         preparation[i] = step.copyWith(
-          label: PreparationCopy.removeTilesLabel(
-            3,
-            PreparationCopy.tileMarketSelling3,
-          ),
-          detail: PreparationCopy.removeTilesDetail(
-            3,
-            PreparationCopy.tileMarketSelling3,
-          ),
+          label: copy.removeTilesLabel(3, copy.tileMarketSelling3),
+          detail: copy.removeTilesDetail(3, copy.tileMarketSelling3),
           quantity: 3,
         );
       }
@@ -217,54 +211,62 @@ class ChocolateModuleHandler
     if (playerCount == 2) {
       return [
         PreparationSteps.removal(
+          copy: copy,
           id: 'setup_chocolate_remove_gold_mine_v2',
           quantity: 1,
-          tileName: PreparationCopy.tileGoldMineV2,
+          tileName: copy.tileGoldMineV2,
           imageKey: 'jungle_gold_mine_v2',
         ),
         PreparationSteps.addition(
+          copy: copy,
           id: 'setup_chocolate_add_kitchen',
           quantity: 2,
-          tileName: PreparationCopy.tileChocolateKitchen,
+          tileName: copy.tileChocolateKitchen,
           imageKey: 'jungle_chocolate_kitchen',
         ),
         PreparationSteps.addition(
+          copy: copy,
           id: 'setup_chocolate_add_market',
           quantity: 2,
-          tileName: PreparationCopy.tileChocolateMarket,
+          tileName: copy.tileChocolateMarket,
           imageKey: 'jungle_chocolate_market',
         ),
       ];
     } else if (playerCount >= 3) {
       return [
         PreparationSteps.removal(
+          copy: copy,
           id: 'setup_chocolate_remove_gold_mine_v1',
           quantity: 2,
-          tileName: PreparationCopy.tileGoldMineV1,
+          tileName: copy.tileGoldMineV1,
           imageKey: 'jungle_gold_mine_v1',
         ),
         PreparationSteps.removal(
+          copy: copy,
           id: 'setup_chocolate_remove_gold_mine_v2',
           quantity: 1,
-          tileName: PreparationCopy.tileGoldMineV2,
+          tileName: copy.tileGoldMineV2,
           imageKey: 'jungle_gold_mine_v2',
         ),
         PreparationSteps.removal(
+          copy: copy,
           id: 'setup_chocolate_remove_market_selling_3',
           quantity: 3,
-          tileName: PreparationCopy.tileMarketSelling3,
+          tileName: copy.tileMarketSelling3,
           imageKey: 'jungle_market_selling_3',
         ),
         PreparationSteps.addition(
+          copy: copy,
           id: 'setup_chocolate_add_kitchen',
           quantity: 3,
-          tileName: PreparationCopy.tileChocolateKitchen,
+          tileName: copy.tileChocolateKitchen,
           imageKey: 'jungle_chocolate_kitchen',
         ),
         PreparationSteps.addition(
+          copy: copy,
           id: 'setup_chocolate_add_market',
           quantity: 3,
-          tileName: PreparationCopy.tileChocolateMarket,
+          tileName: copy.tileChocolateMarket,
           imageKey: 'jungle_chocolate_market',
         ),
       ];

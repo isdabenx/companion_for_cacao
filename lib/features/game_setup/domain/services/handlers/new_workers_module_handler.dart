@@ -1,6 +1,6 @@
 import 'package:companion_for_cacao/core/domain/entities/boardgame_entity.dart';
 import 'package:companion_for_cacao/core/domain/entities/tile_entity.dart';
-import 'package:companion_for_cacao/features/game_setup/domain/content/preparation_copy.dart';
+import 'package:companion_for_cacao/features/game_setup/domain/content/preparation_l10n.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/player_entity.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/preparation_actor.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/preparation_entity.dart';
@@ -10,7 +10,11 @@ import 'package:companion_for_cacao/features/game_setup/domain/entities/worker_s
 import 'package:companion_for_cacao/features/game_setup/domain/services/module_preparation_handler.dart';
 
 class NewWorkersModuleHandler implements ModulePreparationHandler {
-  NewWorkersModuleHandler({this.workerSelection});
+  NewWorkersModuleHandler({this.workerSelection, PreparationL10n? l10n})
+    : copy = l10n ?? PreparationL10n.en();
+
+  /// Localized step content; defaults to English so tests need no wiring.
+  final PreparationL10n copy;
 
   static const int moduleId = 8;
 
@@ -159,10 +163,10 @@ class NewWorkersModuleHandler implements ModulePreparationHandler {
 
     preparation.insert(
       insertIndex,
-      const PreparationEntity(
+      PreparationEntity(
         id: selectionStepId,
-        label: PreparationCopy.newWorkersSelectionLabel,
-        detail: PreparationCopy.newWorkersSelectionDetail,
+        label: copy.newWorkersSelectionLabel,
+        detail: copy.newWorkersSelectionDetail,
         actor: PreparationActor.allPlayers,
         tableZone: TableZone.playerArea,
         phase: PreparationPhase.playerSetup,

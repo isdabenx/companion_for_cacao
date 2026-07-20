@@ -4,7 +4,7 @@ import 'package:collection/collection.dart';
 import 'package:companion_for_cacao/core/theme/app_colors.dart';
 import 'package:companion_for_cacao/core/theme/app_spacing.dart';
 import 'package:companion_for_cacao/core/theme/app_text_styles.dart';
-import 'package:companion_for_cacao/features/game_setup/domain/content/preparation_copy.dart';
+import 'package:companion_for_cacao/l10n/generated/app_localizations.dart';
 import 'package:companion_for_cacao/features/game_setup/presentation/providers/game_setup_notifier.dart';
 import 'package:companion_for_cacao/features/game_setup/presentation/widgets/preparation_group_card.dart';
 import 'package:confetti/confetti.dart';
@@ -127,13 +127,13 @@ class _PreparationCelebrationOverlayState
                     ),
                     AppSpacing.verticalM,
                     Text(
-                      PreparationCopy.allSetTitle,
+                      AppLocalizations.of(context).allSetTitle,
                       style: AppTextStyles.titleTextStyle,
                       textAlign: TextAlign.center,
                     ),
                     AppSpacing.verticalS,
                     Text(
-                      PreparationCopy.allSetMessage,
+                      AppLocalizations.of(context).allSetMessage,
                       textAlign: TextAlign.center,
                       style: Theme.of(
                         context,
@@ -168,7 +168,9 @@ class _PreparationCelebrationOverlayState
                                 ),
                                 AppSpacing.horizontalS,
                                 Text(
-                                  PreparationCopy.startsFirst(name),
+                                  AppLocalizations.of(
+                                    context,
+                                  ).startsFirst(name),
                                   style: Theme.of(context).textTheme.titleMedium
                                       ?.copyWith(
                                         color: AppColors.brown,
@@ -184,7 +186,9 @@ class _PreparationCelebrationOverlayState
                     ],
                     FilledButton(
                       onPressed: () => Navigator.of(context).maybePop(),
-                      child: Text(PreparationCopy.backToGameAction),
+                      child: Text(
+                        AppLocalizations.of(context).backToGameAction,
+                      ),
                     ),
                     AppSpacing.verticalS,
                     // Random draw stays available for groups that did not
@@ -195,8 +199,10 @@ class _PreparationCelebrationOverlayState
                       icon: const Icon(Icons.casino_outlined, size: 16),
                       label: Text(
                         _redrawn
-                            ? PreparationCopy.drawAgainAction
-                            : PreparationCopy.drawFirstPlayerAction,
+                            ? AppLocalizations.of(context).drawAgainAction
+                            : AppLocalizations.of(
+                                context,
+                              ).drawFirstPlayerAction,
                       ),
                     ),
                   ],

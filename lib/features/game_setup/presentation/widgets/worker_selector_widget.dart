@@ -2,7 +2,7 @@ import 'dart:math';
 
 import 'package:companion_for_cacao/core/theme/app_colors.dart';
 import 'package:companion_for_cacao/core/theme/app_spacing.dart';
-import 'package:companion_for_cacao/features/game_setup/domain/content/preparation_copy.dart';
+import 'package:companion_for_cacao/l10n/generated/app_localizations.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/custom_preset_entity.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/worker_selection_entity.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/services/worker_balance_validator.dart';
@@ -116,7 +116,7 @@ class WorkerSelectorWidget extends ConsumerWidget {
                     const SizedBox(width: AppSpacing.m),
                     Expanded(
                       child: Text(
-                        PreparationCopy.newWorkersSelectionLabel,
+                        AppLocalizations.of(context).newWorkersSelectionLabel,
                         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                           fontWeight: FontWeight.w700,
                           color: AppColors.brown,

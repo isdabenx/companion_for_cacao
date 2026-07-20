@@ -1,6 +1,6 @@
 import 'package:companion_for_cacao/core/domain/entities/boardgame_entity.dart';
 import 'package:companion_for_cacao/core/domain/entities/tile_entity.dart';
-import 'package:companion_for_cacao/features/game_setup/domain/content/preparation_copy.dart';
+import 'package:companion_for_cacao/features/game_setup/domain/content/preparation_l10n.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/player_entity.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/preparation_actor.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/preparation_entity.dart';
@@ -16,6 +16,12 @@ class TreeOfLifeModuleHandler
     with TileAdjustments
     implements ModulePreparationHandler {
   static const int moduleId = 6;
+
+  TreeOfLifeModuleHandler({PreparationL10n? l10n})
+    : copy = l10n ?? PreparationL10n.en();
+
+  /// Localized step content; defaults to English so tests need no wiring.
+  final PreparationL10n copy;
 
   @override
   List<TileEntity> adjustTiles(
@@ -178,9 +184,9 @@ class TreeOfLifeModuleHandler
             .firstOrNull;
         return PreparationEntity(
           id: 'setup_tree_of_life_add_0004_${player.color}',
-          label: PreparationCopy.treeOfLife0004Label,
-          detail: PreparationCopy.treeOfLife0004Detail(player.color),
-          rationale: PreparationCopy.treeOfLife0004Rationale,
+          label: copy.treeOfLife0004Label,
+          detail: copy.treeOfLife0004Detail(player.color),
+          rationale: copy.treeOfLife0004Rationale,
           actor: PreparationActor.player,
           tableZone: TableZone.playerArea,
           groupId: PreparationGroups.player(player.color),
@@ -223,14 +229,8 @@ class TreeOfLifeModuleHandler
       // copyWith keeps the structured fields of the base removal step.
       if (step.id == 'setup_jungle_tiles_2p_removal_gold_mine_value_1') {
         preparation[i] = step.copyWith(
-          label: PreparationCopy.removeTilesLabel(
-            2,
-            PreparationCopy.tileGoldMineV1,
-          ),
-          detail: PreparationCopy.removeTilesDetail(
-            2,
-            PreparationCopy.tileGoldMineV1,
-          ),
+          label: copy.removeTilesLabel(2, copy.tileGoldMineV1),
+          detail: copy.removeTilesDetail(2, copy.tileGoldMineV1),
           quantity: 2,
         );
       }
@@ -254,9 +254,10 @@ class TreeOfLifeModuleHandler
       // Gold mines already handled by Chocolate handler
       return [
         PreparationSteps.addition(
+          copy: copy,
           id: 'setup_tree_of_life_add_tiles',
           quantity: playerCount == 2 ? 2 : 3,
-          tileName: PreparationCopy.tileTreeOfLife,
+          tileName: copy.tileTreeOfLife,
           imageKey: 'jungle_tree_of_life',
         ),
       ];
@@ -266,36 +267,41 @@ class TreeOfLifeModuleHandler
       // Gold mine v1 handled by _modifyBaseStepsFor2Players (1→2)
       return [
         PreparationSteps.removal(
+          copy: copy,
           id: 'setup_tree_of_life_remove_gold_mine_v2',
           quantity: 1,
-          tileName: PreparationCopy.tileGoldMineV2,
+          tileName: copy.tileGoldMineV2,
           imageKey: 'jungle_gold_mine_v2',
         ),
         PreparationSteps.addition(
+          copy: copy,
           id: 'setup_tree_of_life_add_tiles',
           quantity: 2,
-          tileName: PreparationCopy.tileTreeOfLife,
+          tileName: copy.tileTreeOfLife,
           imageKey: 'jungle_tree_of_life',
         ),
       ];
     } else if (playerCount >= 3) {
       return [
         PreparationSteps.removal(
+          copy: copy,
           id: 'setup_tree_of_life_remove_gold_mine_v1',
           quantity: 2,
-          tileName: PreparationCopy.tileGoldMineV1,
+          tileName: copy.tileGoldMineV1,
           imageKey: 'jungle_gold_mine_v1',
         ),
         PreparationSteps.removal(
+          copy: copy,
           id: 'setup_tree_of_life_remove_gold_mine_v2',
           quantity: 1,
-          tileName: PreparationCopy.tileGoldMineV2,
+          tileName: copy.tileGoldMineV2,
           imageKey: 'jungle_gold_mine_v2',
         ),
         PreparationSteps.addition(
+          copy: copy,
           id: 'setup_tree_of_life_add_tiles',
           quantity: 3,
-          tileName: PreparationCopy.tileTreeOfLife,
+          tileName: copy.tileTreeOfLife,
           imageKey: 'jungle_tree_of_life',
         ),
       ];

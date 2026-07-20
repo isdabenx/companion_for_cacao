@@ -1,6 +1,6 @@
 import 'package:companion_for_cacao/core/domain/entities/boardgame_entity.dart';
 import 'package:companion_for_cacao/core/domain/entities/tile_entity.dart';
-import 'package:companion_for_cacao/features/game_setup/domain/content/preparation_copy.dart';
+import 'package:companion_for_cacao/features/game_setup/domain/content/preparation_l10n.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/player_entity.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/preparation_actor.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/preparation_entity.dart';
@@ -22,6 +22,12 @@ import 'package:companion_for_cacao/features/game_setup/domain/services/preparat
 ///   place 4 jungle tiles on the map board (2 on marked spaces, 2 as display).
 class MapModuleHandler implements ModulePreparationHandler {
   static const int moduleId = 1;
+
+  MapModuleHandler({PreparationL10n? l10n})
+    : copy = l10n ?? PreparationL10n.en();
+
+  /// Localized step content; defaults to English so tests need no wiring.
+  final PreparationL10n copy;
 
   @override
   List<TileEntity> adjustTiles(
@@ -56,8 +62,8 @@ class MapModuleHandler implements ModulePreparationHandler {
         modifiedSteps.add(
           PreparationEntity(
             id: 'setup_map_tokens_$color',
-            label: PreparationCopy.mapTokensLabel,
-            detail: PreparationCopy.mapTokensDetail(color),
+            label: copy.mapTokensLabel,
+            detail: copy.mapTokensDetail(color),
             actor: PreparationActor.player,
             tableZone: TableZone.playerArea,
             groupId: PreparationGroups.player(color),
@@ -75,10 +81,10 @@ class MapModuleHandler implements ModulePreparationHandler {
     if (players.length < 4 && lastMapTokenIndex >= 0) {
       modifiedSteps.insert(
         lastMapTokenIndex + 1,
-        const PreparationEntity(
+        PreparationEntity(
           id: 'setup_map_tokens_surplus',
-          label: PreparationCopy.mapTokensSurplusLabel,
-          detail: PreparationCopy.mapTokensSurplusDetail,
+          label: copy.mapTokensSurplusLabel,
+          detail: copy.mapTokensSurplusDetail,
           tableZone: TableZone.box,
           phase: PreparationPhase.playerSetup,
           imageKey: 'map_token',
@@ -93,20 +99,20 @@ class MapModuleHandler implements ModulePreparationHandler {
           modifiedSteps[i].phase == PreparationPhase.boardSetup) {
         // Replace with two new steps
         finalSteps.add(
-          const PreparationEntity(
+          PreparationEntity(
             id: 'setup_map_board',
-            label: PreparationCopy.mapBoardLabel,
-            detail: PreparationCopy.mapBoardDetail,
+            label: copy.mapBoardLabel,
+            detail: copy.mapBoardDetail,
             tableZone: TableZone.jungleDisplay,
             phase: PreparationPhase.boardSetup,
             imageKey: 'map_board',
           ),
         );
         finalSteps.add(
-          const PreparationEntity(
+          PreparationEntity(
             id: 'setup_jungle_display_map',
-            label: PreparationCopy.jungleDisplayMapLabel,
-            detail: PreparationCopy.jungleDisplayMapDetail,
+            label: copy.jungleDisplayMapLabel,
+            detail: copy.jungleDisplayMapDetail,
             tableZone: TableZone.jungleDisplay,
             phase: PreparationPhase.boardSetup,
           ),

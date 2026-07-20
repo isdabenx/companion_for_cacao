@@ -27,6 +27,9 @@ dependencies:
   reorderable_grid: ^1.0.13
   collection: ^1.19.1
   confetti: ^0.8.0
+  flutter_localizations:
+    sdk: flutter
+  intl: any
 
 dev_dependencies:
   ansicolor: ^2.0.3
@@ -42,6 +45,7 @@ dev_dependencies:
   mocktail: ^1.0.5
 
 flutter:
+  generate: true
   uses-material-design: true
   assets:
     - assets/images/

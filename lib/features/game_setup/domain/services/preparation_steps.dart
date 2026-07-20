@@ -1,4 +1,4 @@
-import 'package:companion_for_cacao/features/game_setup/domain/content/preparation_copy.dart';
+import 'package:companion_for_cacao/features/game_setup/domain/content/preparation_l10n.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/preparation_entity.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/preparation_phase.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/table_zone.dart';
@@ -18,6 +18,7 @@ abstract final class PreparationSteps {
   /// A "return Nx TILE to the box" removal, grouped into the shared
   /// return-to-box card of the board-setup phase.
   static PreparationEntity removal({
+    required PreparationL10n copy,
     required String id,
     required int quantity,
     required String tileName,
@@ -26,8 +27,8 @@ abstract final class PreparationSteps {
   }) {
     return PreparationEntity(
       id: id,
-      label: PreparationCopy.removeTilesLabel(quantity, tileName),
-      detail: PreparationCopy.removeTilesDetail(quantity, tileName),
+      label: copy.removeTilesLabel(quantity, tileName),
+      detail: copy.removeTilesDetail(quantity, tileName),
       rationale: rationale,
       tableZone: TableZone.box,
       groupId: PreparationGroups.returnToBox,
@@ -39,6 +40,7 @@ abstract final class PreparationSteps {
 
   /// An "add Nx TILE to the jungle tiles" module substitution step.
   static PreparationEntity addition({
+    required PreparationL10n copy,
     required String id,
     required int quantity,
     required String tileName,
@@ -47,8 +49,8 @@ abstract final class PreparationSteps {
   }) {
     return PreparationEntity(
       id: id,
-      label: PreparationCopy.addTilesLabel(quantity, tileName),
-      detail: PreparationCopy.addTilesDetail(quantity, tileName),
+      label: copy.addTilesLabel(quantity, tileName),
+      detail: copy.addTilesDetail(quantity, tileName),
       rationale: rationale,
       tableZone: TableZone.junglePile,
       quantity: quantity,

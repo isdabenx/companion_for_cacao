@@ -11,6 +11,7 @@ import 'package:companion_for_cacao/features/game_setup/domain/entities/worker_s
 import 'package:companion_for_cacao/features/game_setup/domain/repositories/custom_preset_repository.dart';
 import 'package:companion_for_cacao/features/game_setup/presentation/providers/game_setup_notifier.dart';
 import 'package:companion_for_cacao/features/game_setup/presentation/widgets/worker_selector_widget.dart';
+import 'package:companion_for_cacao/l10n/generated/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -67,7 +68,11 @@ void main() {
         gameSetupProvider.overrideWith(() => FakeGameSetupNotifier(state)),
         customPresetRepositoryProvider.overrideWithValue(mockPresetRepository),
       ],
-      child: const MaterialApp(home: Scaffold(body: WorkerSelectorWidget())),
+      child: const MaterialApp(
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
+        home: Scaffold(body: WorkerSelectorWidget()),
+      ),
     );
   }
 

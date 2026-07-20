@@ -1,6 +1,6 @@
 import 'package:companion_for_cacao/core/domain/entities/boardgame_entity.dart';
 import 'package:companion_for_cacao/core/domain/entities/tile_entity.dart';
-import 'package:companion_for_cacao/features/game_setup/domain/content/preparation_copy.dart';
+import 'package:companion_for_cacao/features/game_setup/domain/content/preparation_l10n.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/player_entity.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/preparation_entity.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/preparation_phase.dart';
@@ -15,6 +15,12 @@ import 'package:companion_for_cacao/features/game_setup/domain/services/module_p
 /// - 12 hut tiles are randomly placed and sorted by building cost next to the bank.
 class HutsModuleHandler implements ModulePreparationHandler {
   static const int moduleId = 4;
+
+  HutsModuleHandler({PreparationL10n? l10n})
+    : copy = l10n ?? PreparationL10n.en();
+
+  /// Localized step content; defaults to English so tests need no wiring.
+  final PreparationL10n copy;
 
   /// Step where the hut tiles are thrown. Its preparation card also hosts
   /// the optional throw-registration action, so the score calculator can
@@ -66,11 +72,11 @@ class HutsModuleHandler implements ModulePreparationHandler {
     if (lastBoardSetupIndex >= 0) {
       preparation.insert(
         lastBoardSetupIndex + 1,
-        const PreparationEntity(
+        PreparationEntity(
           id: marketStepId,
-          label: PreparationCopy.hutsMarketLabel,
-          detail: PreparationCopy.hutsMarketDetail,
-          rationale: PreparationCopy.hutsMarketRationale,
+          label: copy.hutsMarketLabel,
+          detail: copy.hutsMarketDetail,
+          rationale: copy.hutsMarketRationale,
           tableZone: TableZone.supplies,
           phase: PreparationPhase.boardSetup,
         ),

@@ -1,6 +1,6 @@
 import 'package:companion_for_cacao/core/domain/entities/boardgame_entity.dart';
 import 'package:companion_for_cacao/core/domain/entities/tile_entity.dart';
-import 'package:companion_for_cacao/features/game_setup/domain/content/preparation_copy.dart';
+import 'package:companion_for_cacao/features/game_setup/domain/content/preparation_l10n.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/player_entity.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/preparation_entity.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/services/module_preparation_handler.dart';
@@ -32,6 +32,12 @@ class WateringModuleHandler
     with TileAdjustments
     implements ModulePreparationHandler {
   static const int moduleId = 2;
+
+  WateringModuleHandler({PreparationL10n? l10n})
+    : copy = l10n ?? PreparationL10n.en();
+
+  /// Localized step content; defaults to English so tests need no wiring.
+  final PreparationL10n copy;
 
   @override
   List<TileEntity> adjustTiles(
@@ -109,9 +115,9 @@ class WateringModuleHandler
       // base step; only the identity and texts change.
       preparation[initialTilesIndex] = preparation[initialTilesIndex].copyWith(
         id: 'setup_initial_tiles_plantation_water',
-        label: PreparationCopy.initialTilesWaterLabel,
-        detail: PreparationCopy.initialTilesWaterDetail,
-        rationale: PreparationCopy.initialTilesWaterRationale,
+        label: copy.initialTilesWaterLabel,
+        detail: copy.initialTilesWaterDetail,
+        rationale: copy.initialTilesWaterRationale,
         imageKey: 'initial_single_plantation_water',
       );
     }
@@ -140,36 +146,41 @@ class WateringModuleHandler
     if (playerCount == 2) {
       return [
         PreparationSteps.removal(
+          copy: copy,
           id: 'setup_watering_remove_double_plantation',
           quantity: 2,
-          tileName: PreparationCopy.tileDoublePlantation,
+          tileName: copy.tileDoublePlantation,
           imageKey: 'jungle_double_plantation',
         ),
         PreparationSteps.addition(
+          copy: copy,
           id: 'setup_watering_add_watering_tiles',
           quantity: 2,
-          tileName: PreparationCopy.tileWatering,
+          tileName: copy.tileWatering,
           imageKey: 'jungle_watering',
         ),
       ];
     } else if (playerCount >= 3) {
       return [
         PreparationSteps.removal(
+          copy: copy,
           id: 'setup_watering_remove_single_plantation',
           quantity: 1,
-          tileName: PreparationCopy.tileSinglePlantation,
+          tileName: copy.tileSinglePlantation,
           imageKey: 'jungle_single_plantation',
         ),
         PreparationSteps.removal(
+          copy: copy,
           id: 'setup_watering_remove_double_plantation',
           quantity: 2,
-          tileName: PreparationCopy.tileDoublePlantation,
+          tileName: copy.tileDoublePlantation,
           imageKey: 'jungle_double_plantation',
         ),
         PreparationSteps.addition(
+          copy: copy,
           id: 'setup_watering_add_watering_tiles',
           quantity: 3,
-          tileName: PreparationCopy.tileWatering,
+          tileName: copy.tileWatering,
           imageKey: 'jungle_watering',
         ),
       ];
