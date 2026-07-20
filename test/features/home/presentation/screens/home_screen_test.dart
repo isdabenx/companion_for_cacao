@@ -1,4 +1,5 @@
 import 'package:companion_for_cacao/features/home/presentation/screens/home_screen.dart';
+import 'package:companion_for_cacao/l10n/generated/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -87,7 +88,13 @@ void main() {
 
   group('HomeScreen', () {
     Future<void> pumpHomeScreen(WidgetTester tester) async {
-      await tester.pumpWidget(const MaterialApp(home: HomeScreen()));
+      await tester.pumpWidget(
+        const MaterialApp(
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+          home: HomeScreen(),
+        ),
+      );
       await tester.pump(const Duration(milliseconds: 100));
     }
 

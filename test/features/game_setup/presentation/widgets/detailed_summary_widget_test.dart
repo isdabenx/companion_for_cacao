@@ -4,6 +4,7 @@ import 'package:companion_for_cacao/core/domain/entities/tile_entity.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/game_setup_state_entity.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/player_entity.dart';
 import 'package:companion_for_cacao/features/game_setup/presentation/widgets/detailed_summary_widget.dart';
+import 'package:companion_for_cacao/l10n/generated/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -56,6 +57,8 @@ void main() {
       await tester.pumpWidget(
         ProviderScope(
           child: MaterialApp(
+            localizationsDelegates: AppLocalizations.localizationsDelegates,
+            supportedLocales: AppLocalizations.supportedLocales,
             home: Scaffold(
               body: DetailedSummaryWidget(gameSetup: dummyGameSetup),
             ),
@@ -86,6 +89,8 @@ void main() {
       await tester.pumpWidget(
         ProviderScope(
           child: MaterialApp(
+            localizationsDelegates: AppLocalizations.localizationsDelegates,
+            supportedLocales: AppLocalizations.supportedLocales,
             home: Scaffold(
               body: DetailedSummaryWidget(gameSetup: dummyGameSetup),
             ),

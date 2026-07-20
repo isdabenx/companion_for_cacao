@@ -336,4 +336,350 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String get backToGameAction => 'Torna a la partida';
+
+  @override
+  String get menuHome => 'Inici';
+
+  @override
+  String get menuGameSetup => 'Nova partida';
+
+  @override
+  String get menuTiles => 'Rajoles';
+
+  @override
+  String get menuScores => 'Puntuacions';
+
+  @override
+  String get menuRules => 'Regles';
+
+  @override
+  String get titlePreparation => 'Preparació';
+
+  @override
+  String get titleGameDashboard => 'Tauler de partida';
+
+  @override
+  String get phaseTilePool => 'Rajoles en joc';
+
+  @override
+  String get phasePlayerSetup => 'Preparació dels jugadors';
+
+  @override
+  String get phaseBoardSetup => 'Preparació de la taula';
+
+  @override
+  String get phaseSupplies => 'Reserves';
+
+  @override
+  String get playersSection => 'Jugadors';
+
+  @override
+  String get expansionsSection => 'Expansions';
+
+  @override
+  String get modulesSection => 'Mòduls';
+
+  @override
+  String needMorePlayers(int count) {
+    return 'En falten $count+';
+  }
+
+  @override
+  String get tapColorHint =>
+      'Toca un color per afegir un jugador. Mantén premut i arrossega per reordenar.';
+
+  @override
+  String get selectExpansionsHint => 'Selecciona les expansions amb què jugueu';
+
+  @override
+  String get selectModulesHint => 'Selecciona els mòduls amb què jugueu';
+
+  @override
+  String get noExpansionWithModules =>
+      'No hi ha cap expansió amb mòduls seleccionada';
+
+  @override
+  String get noModules => 'Sense mòduls';
+
+  @override
+  String get startGame => 'Comença la partida';
+
+  @override
+  String get resumeGame => 'Reprèn la partida';
+
+  @override
+  String get clearSetup => 'Neteja-ho tot';
+
+  @override
+  String get gameVariant => 'Variant de joc';
+
+  @override
+  String get bigGame => 'Big Game';
+
+  @override
+  String get bigGameHint =>
+      'Usa totes les rajoles de tots els mòduls, sense substitucions';
+
+  @override
+  String get showAllTiles => 'Mostra totes les rajoles';
+
+  @override
+  String get hideTiles => 'Amaga les rajoles';
+
+  @override
+  String get tilesInPlay => 'Rajoles en joc';
+
+  @override
+  String get scoreCalculator => 'Calculadora de puntuació';
+
+  @override
+  String get noPlayersSelected => 'Cap jugador seleccionat';
+
+  @override
+  String get noTiles => 'Sense rajoles';
+
+  @override
+  String get baseGameOnly => 'Només el joc base';
+
+  @override
+  String playerPosition(int position) {
+    return 'Jugador $position';
+  }
+
+  @override
+  String get closeAction => 'Tanca';
+
+  @override
+  String get workerSheetTitle => 'Els nous recol·lectors';
+
+  @override
+  String get workerChooseIntro =>
+      'Tria quines rajoles de recol·lectors usarà cada jugador. Tots els jugadors usen el mateix conjunt.';
+
+  @override
+  String get workerHowItWorks => 'Com funciona?';
+
+  @override
+  String get workerHelpBody =>
+      '• Els nous recol·lectors afegeix 4 rajoles de recol·lectors noves amb distribucions diferents de les del joc base.\n• Pots usar un ajust ràpid o regular manualment la quantitat de cada rajola.\n• L\'equilibri entre recol·lectors i rajoles de selva importa: si la diferència queda fora del marge indicat, la partida pot quedar desequilibrada.\n• Per defecte, el joc recomana mantenir 11 rajoles per jugador, però en pots afegir més per a una partida més llarga.';
+
+  @override
+  String get workerPresetsSection => 'Ajustos ràpids';
+
+  @override
+  String get workerRandomSection => 'Atzar';
+
+  @override
+  String get workerPresetBaseOnly => 'Només base';
+
+  @override
+  String get workerPresetReplace => 'Substitueix';
+
+  @override
+  String get workerPresetBase0004 => 'Base + 0-0-0-4';
+
+  @override
+  String get workerPresetAddAll => 'Afegeix-les totes';
+
+  @override
+  String get workerAddAllDefault => 'Afegeix-les totes (per defecte)';
+
+  @override
+  String get workerManual => 'Manual';
+
+  @override
+  String get workerSurprise => 'Sorpresa';
+
+  @override
+  String get workerSurpriseChip => 'Sorpresa +2';
+
+  @override
+  String get workerSurpriseTooltip =>
+      'Base + 2 rajoles noves triades a l\'atzar. Torna a tocar per a una parella diferent.';
+
+  @override
+  String get workerDescBaseOnly =>
+      'Usa només les rajoles del joc base (11 per jugador). Les rajoles noves de Diamante no s\'hi afegeixen.';
+
+  @override
+  String get workerDescReplace =>
+      'Substitueix 4 rajoles base (1-1-1-1) per les 4 noves de Diamante. Total: 11 per jugador.';
+
+  @override
+  String get workerDescBase0004 =>
+      'Afegeix només la rajola 0-0-0-4 a les 11 de base. Total: 12 per jugador. Recomanat per la comunitat (BGG).';
+
+  @override
+  String get workerDescAddAll =>
+      'Afegeix les 4 rajoles noves de Diamante a les 11 de base. Total: 15 per jugador.';
+
+  @override
+  String get workerDescManual =>
+      'Selecció manual: regula la quantitat de cada rajola individualment.';
+
+  @override
+  String get workerDescSurprise =>
+      'Sorpresa: rajoles base + 2 noves de Diamante triades a l\'atzar. Torna a tocar per a una parella diferent.';
+
+  @override
+  String workerCustomPreset(String name) {
+    return 'Ajust personalitzat: $name';
+  }
+
+  @override
+  String workerSummaryLine(String label, int count) {
+    return '$label · $count rajoles/jugador';
+  }
+
+  @override
+  String get workerBaseTiles => 'Rajoles base';
+
+  @override
+  String get workerNewTiles => 'Rajoles noves (Diamante)';
+
+  @override
+  String get workerBalanceOk => 'L\'equilibri és correcte';
+
+  @override
+  String get workerBalanceOut => 'Fora del marge recomanat';
+
+  @override
+  String get workerBalanceValid => 'Vàlid';
+
+  @override
+  String get workerBalanceOutShort => 'Fora de marge';
+
+  @override
+  String get workerBalanceHint =>
+      'El reglament recomana aquest marge per mantenir la partida equilibrada, però pots aplicar la selecció igualment.';
+
+  @override
+  String get workerBalanceWorkersWord => 'recol·lectors';
+
+  @override
+  String get workerBalanceJungleWord => 'selva';
+
+  @override
+  String workerBalanceRange(int min, int max) {
+    return '(marge: $min–$max)';
+  }
+
+  @override
+  String workerTilesPerPlayerLine(int count) {
+    return 'Rajoles per jugador: $count';
+  }
+
+  @override
+  String get workerLockedTooltip =>
+      'Obligatòria amb L\'arbre de la vida (2 jugadors)';
+
+  @override
+  String get resetAction => 'Restableix';
+
+  @override
+  String get applyAction => 'Aplica';
+
+  @override
+  String get saveAction => 'Desa';
+
+  @override
+  String get deleteAction => 'Elimina';
+
+  @override
+  String get savePresetTitle => 'Desa com a ajust';
+
+  @override
+  String get presetNameLabel => 'Nom de l\'ajust';
+
+  @override
+  String get presetNameHint => 'p. ex. El nostre preferit';
+
+  @override
+  String get deletePresetTitle => 'Eliminar l\'ajust';
+
+  @override
+  String deletePresetConfirm(String name) {
+    return 'Vols eliminar \'$name\'?';
+  }
+
+  @override
+  String get errorLoadingPresets =>
+      'Error en carregar els ajustos personalitzats';
+
+  @override
+  String get errorSavingPresets => 'Error en desar els ajustos personalitzats';
+
+  @override
+  String get hutRegisterTitle => 'Registra la tirada de cabanes';
+
+  @override
+  String get hutRegisterHint =>
+      'Per a cada rajola física, tria la cara que ha quedat amunt.';
+
+  @override
+  String get hutRegisterAction =>
+      'Registra quines cabanes han quedat cara amunt';
+
+  @override
+  String get hutRegisteredEdit => 'Tirada registrada · toca per editar';
+
+  @override
+  String get forgetThrowAction => 'Oblida la tirada';
+
+  @override
+  String get hutMarketCrier => 'El pregoner del mercat';
+
+  @override
+  String get hutHermit => 'El remeier';
+
+  @override
+  String get hutRoadWorker => 'El cuidador de sacbeobs';
+
+  @override
+  String get hutTrader => 'El comerciant';
+
+  @override
+  String get hutFarmer => 'L\'agricultor';
+
+  @override
+  String get hutShaman => 'El xaman';
+
+  @override
+  String get hutMonk => 'L\'uay';
+
+  @override
+  String get hutMasterBuilder => 'El constructor';
+
+  @override
+  String get hutForeman => 'El capatàs';
+
+  @override
+  String get hutFountainMaster => 'El bruixot saurí';
+
+  @override
+  String get hutChiefsDaughter => 'La filla del cap';
+
+  @override
+  String get hutChiefsSon => 'El fill del cap';
+
+  @override
+  String get hutChiefsWife => 'La dona del cap';
+
+  @override
+  String get hutChief => 'El cap';
+
+  @override
+  String get menuTitle => 'Menú';
+
+  @override
+  String get summaryTiles => 'Rajoles';
+
+  @override
+  String get summaryWorkers => 'Recol·lectors';
+
+  @override
+  String get summaryJungle => 'Selva';
+
+  @override
+  String get summaryHuts => 'Cabanes';
 }

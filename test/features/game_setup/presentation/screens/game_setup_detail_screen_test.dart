@@ -5,6 +5,7 @@ import 'package:companion_for_cacao/features/game_setup/domain/entities/game_set
 import 'package:companion_for_cacao/features/game_setup/domain/entities/player_entity.dart';
 import 'package:companion_for_cacao/features/game_setup/presentation/screens/game_setup_detail_screen.dart';
 import 'package:companion_for_cacao/features/game_setup/presentation/widgets/detailed_summary_widget.dart';
+import 'package:companion_for_cacao/l10n/generated/app_localizations.dart';
 import 'package:companion_for_cacao/shared/providers/boardgame_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -70,6 +71,8 @@ void main() {
             ),
           ],
           child: MaterialApp(
+            localizationsDelegates: AppLocalizations.localizationsDelegates,
+            supportedLocales: AppLocalizations.supportedLocales,
             home: InheritedGoRouter(
               goRouter: mockGoRouter,
               child: Scaffold(

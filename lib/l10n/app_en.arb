@@ -183,5 +183,154 @@
       "name": { "type": "String" }
     }
   },
-  "backToGameAction": "Back to the game"
+  "backToGameAction": "Back to the game",
+
+  "menuHome": "Home",
+  "menuGameSetup": "Game Setup",
+  "menuTiles": "Tiles",
+  "menuScores": "Scores",
+  "menuRules": "Rules",
+  "titlePreparation": "Preparation",
+  "titleGameDashboard": "Game Dashboard",
+
+  "phaseTilePool": "Tile Pool",
+  "phasePlayerSetup": "Player Setup",
+  "phaseBoardSetup": "Board Setup",
+  "phaseSupplies": "Supplies",
+
+  "playersSection": "Players",
+  "expansionsSection": "Expansions",
+  "modulesSection": "Modules",
+  "needMorePlayers": "Need {count}+",
+  "@needMorePlayers": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "tapColorHint": "Tap a color to add a player. Hold and drag to reorder.",
+  "selectExpansionsHint": "Select the expansions you're playing with",
+  "selectModulesHint": "Select the modules you're playing with",
+  "noExpansionWithModules": "No expansion with modules are selected",
+  "noModules": "No modules",
+  "startGame": "Start Game",
+  "resumeGame": "Resume Game",
+  "clearSetup": "Clear Setup",
+  "gameVariant": "Game Variant",
+  "bigGame": "Big Game",
+  "bigGameHint": "Use all tiles from all modules without substitutions",
+  "showAllTiles": "Show All Tiles",
+  "hideTiles": "Hide Tiles",
+  "tilesInPlay": "Tiles in Play",
+  "scoreCalculator": "Score Calculator",
+  "noPlayersSelected": "No players selected",
+  "noTiles": "No tiles",
+  "baseGameOnly": "Base game only",
+  "playerPosition": "Player {position}",
+  "@playerPosition": {
+    "placeholders": {
+      "position": { "type": "int" }
+    }
+  },
+  "closeAction": "Close",
+
+  "workerSheetTitle": "The New Workers",
+  "workerChooseIntro": "Choose which worker tiles each player will use. All players use the same set.",
+  "workerHowItWorks": "How does it work?",
+  "workerHelpBody": "• The New Workers adds 4 new worker tiles with distributions different from the base game ones.\n• You can use a quick preset or manually adjust the quantity of each tile.\n• The balance between workers and jungle tiles matters: if the difference falls outside the indicated range, the game may feel unbalanced.\n• By default, the game recommends keeping 11 tiles per player, but you can add more for a longer game.",
+  "workerPresetsSection": "Presets",
+  "workerRandomSection": "Random",
+  "workerPresetBaseOnly": "Base only",
+  "workerPresetReplace": "Replace",
+  "workerPresetBase0004": "Base + 0-0-0-4",
+  "workerPresetAddAll": "Add all",
+  "workerAddAllDefault": "Add all (default)",
+  "workerManual": "Manual",
+  "workerSurprise": "Surprise",
+  "workerSurpriseChip": "Surprise +2",
+  "workerSurpriseTooltip": "Base + 2 new tiles picked at random. Tap again for a different pair.",
+  "workerDescBaseOnly": "Uses only the base game tiles (11 per player). The new Diamante tiles are not added.",
+  "workerDescReplace": "Replaces 4 base tiles (1-1-1-1) with the 4 new Diamante ones. Total: 11 per player.",
+  "workerDescBase0004": "Adds only the 0-0-0-4 tile to the 11 base tiles. Total: 12 per player. Recommended by the community (BGG).",
+  "workerDescAddAll": "Adds the 4 new Diamante tiles to the 11 base ones. Total: 15 per player.",
+  "workerDescManual": "Manual selection: adjust the quantity of each tile individually.",
+  "workerDescSurprise": "Surprise: base tiles + 2 new Diamante tiles picked at random. Tap again for a different pair.",
+  "workerCustomPreset": "Custom preset: {name}",
+  "@workerCustomPreset": {
+    "placeholders": {
+      "name": { "type": "String" }
+    }
+  },
+  "workerSummaryLine": "{label} · {count} tiles/player",
+  "@workerSummaryLine": {
+    "placeholders": {
+      "label": { "type": "String" },
+      "count": { "type": "int" }
+    }
+  },
+  "workerBaseTiles": "Base tiles",
+  "workerNewTiles": "New tiles (Diamante)",
+  "workerBalanceOk": "Balance is fine",
+  "workerBalanceOut": "Outside recommended range",
+  "workerBalanceValid": "Valid",
+  "workerBalanceOutShort": "Out of range",
+  "workerBalanceHint": "The rulebook recommends this margin to keep the game balanced, but you can still apply the selection.",
+  "workerBalanceWorkersWord": "workers",
+  "workerBalanceJungleWord": "jungle",
+  "workerBalanceRange": "(range: {min}–{max})",
+  "@workerBalanceRange": {
+    "placeholders": {
+      "min": { "type": "int" },
+      "max": { "type": "int" }
+    }
+  },
+  "workerTilesPerPlayerLine": "Tiles per player: {count}",
+  "@workerTilesPerPlayerLine": {
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "workerLockedTooltip": "Required by Tree of Life (2 players)",
+  "resetAction": "Reset",
+  "applyAction": "Apply",
+  "saveAction": "Save",
+  "deleteAction": "Delete",
+  "savePresetTitle": "Save as preset",
+  "presetNameLabel": "Preset name",
+  "presetNameHint": "e.g. Our favorite",
+  "deletePresetTitle": "Delete preset",
+  "deletePresetConfirm": "Delete '{name}'?",
+  "@deletePresetConfirm": {
+    "placeholders": {
+      "name": { "type": "String" }
+    }
+  },
+  "errorLoadingPresets": "Error loading custom presets",
+  "errorSavingPresets": "Error saving custom presets",
+
+  "hutRegisterTitle": "Register the hut throw",
+  "hutRegisterHint": "For each physical tile, pick the side that landed face up.",
+  "hutRegisterAction": "Register which huts landed face up",
+  "hutRegisteredEdit": "Throw registered · tap to edit",
+  "forgetThrowAction": "Forget throw",
+
+  "hutMarketCrier": "Market Crier",
+  "hutHermit": "Hermit",
+  "hutRoadWorker": "Road Worker",
+  "hutTrader": "Trader",
+  "hutFarmer": "Farmer",
+  "hutShaman": "Shaman",
+  "hutMonk": "Monk",
+  "hutMasterBuilder": "Master Builder",
+  "hutForeman": "Foreman",
+  "hutFountainMaster": "Fountain Master",
+  "hutChiefsDaughter": "Chief's Daughter",
+  "hutChiefsSon": "Chief's Son",
+  "hutChiefsWife": "Chief's Wife",
+  "hutChief": "Chief",
+
+  "menuTitle": "Menu",
+  "summaryTiles": "Tiles",
+  "summaryWorkers": "Workers",
+  "summaryJungle": "Jungle",
+  "summaryHuts": "Huts"
 }

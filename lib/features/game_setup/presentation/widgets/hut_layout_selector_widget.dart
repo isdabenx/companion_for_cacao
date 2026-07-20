@@ -5,7 +5,9 @@ import 'package:companion_for_cacao/core/theme/app_spacing.dart';
 import 'package:companion_for_cacao/core/theme/app_text_styles.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/hut_layout_entity.dart';
 import 'package:companion_for_cacao/features/game_setup/presentation/providers/game_setup_notifier.dart';
+import 'package:companion_for_cacao/l10n/generated/app_localizations.dart';
 import 'package:companion_for_cacao/shared/utils/hut_type_assets.dart';
+import 'package:companion_for_cacao/shared/utils/hut_type_l10n.dart';
 import 'package:companion_for_cacao/shared/widgets/safe_asset_image.dart';
 import 'package:companion_for_cacao/shared/widgets/selectable_chip.dart';
 import 'package:flutter/material.dart';
@@ -67,8 +69,8 @@ class HutThrowRegisterRow extends ConsumerWidget {
               Expanded(
                 child: Text(
                   layout == null
-                      ? 'Register which huts landed face up'
-                      : 'Throw registered · tap to edit',
+                      ? AppLocalizations.of(context).hutRegisterAction
+                      : AppLocalizations.of(context).hutRegisteredEdit,
                   style: Theme.of(context).textTheme.bodySmall?.copyWith(
                     color: AppColors.brown,
                     fontWeight: FontWeight.w600,
@@ -135,7 +137,7 @@ class _HutLayoutEditorSheetState extends State<_HutLayoutEditorSheet> {
                 children: [
                   Expanded(
                     child: Text(
-                      'Register the hut throw',
+                      AppLocalizations.of(context).hutRegisterTitle,
                       style: AppTextStyles.sectionTitlePlain.copyWith(
                         fontSize: 18,
                       ),
@@ -149,7 +151,7 @@ class _HutLayoutEditorSheetState extends State<_HutLayoutEditorSheet> {
               ),
               AppSpacing.verticalS,
               Text(
-                'For each physical tile, pick the side that landed face up.',
+                AppLocalizations.of(context).hutRegisterHint,
                 style: AppTextStyles.instruction,
               ),
               AppSpacing.verticalM,
@@ -198,9 +200,9 @@ class _HutLayoutEditorSheetState extends State<_HutLayoutEditorSheet> {
                         widget.onClear();
                         Navigator.of(context).pop();
                       },
-                      child: const Text(
-                        'Forget throw',
-                        style: TextStyle(color: AppColors.red),
+                      child: Text(
+                        AppLocalizations.of(context).forgetThrowAction,
+                        style: const TextStyle(color: AppColors.red),
                       ),
                     ),
                   const Spacer(),
@@ -216,7 +218,7 @@ class _HutLayoutEditorSheetState extends State<_HutLayoutEditorSheet> {
                           }
                         : null,
                     icon: const Icon(Icons.check, size: 18),
-                    label: const Text('Apply'),
+                    label: Text(AppLocalizations.of(context).applyAction),
                   ),
                 ],
               ),
@@ -262,7 +264,7 @@ class _SideChip extends StatelessWidget {
           AppSpacing.horizontalS,
           Expanded(
             child: Text(
-              '${hut.label} (${hut.cost})',
+              '${hut.localizedName(AppLocalizations.of(context))} (${hut.cost})',
               overflow: TextOverflow.ellipsis,
               style: AppTextStyles.tileNameSmall,
             ),

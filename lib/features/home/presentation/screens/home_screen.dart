@@ -6,6 +6,7 @@ import 'package:companion_for_cacao/core/theme/app_text_styles.dart';
 import 'package:companion_for_cacao/shared/widgets/container_full_style_widget.dart';
 import 'package:companion_for_cacao/shared/widgets/custom_scaffold_widget.dart';
 import 'package:companion_for_cacao/shared/widgets/header_widget.dart';
+import 'package:companion_for_cacao/l10n/generated/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:upgrader/upgrader.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -39,7 +40,7 @@ class HomeScreen extends StatelessWidget {
 
     return UpgradeAlert(
       child: CustomScaffoldWidget(
-        title: 'Home',
+        title: AppLocalizations.of(context).menuHome,
         body: ContainerFullStyleWidget(
           child: SingleChildScrollView(
             child: Column(

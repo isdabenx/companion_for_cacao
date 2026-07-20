@@ -20,12 +20,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 class WorkerSelectorWidget extends ConsumerWidget {
   const WorkerSelectorWidget({super.key});
 
-  static String _presetLabel(WorkerPresetType preset) {
+  static String _presetLabel(AppLocalizations l10n, WorkerPresetType preset) {
     return switch (preset) {
-      WorkerPresetType.baseOnly => 'Base only',
-      WorkerPresetType.replaceWithNew => 'Replace',
-      WorkerPresetType.baseWith0004 => 'Base + 0-0-0-4',
-      WorkerPresetType.addAll => 'Add all',
+      WorkerPresetType.baseOnly => l10n.workerPresetBaseOnly,
+      WorkerPresetType.replaceWithNew => l10n.workerPresetReplace,
+      WorkerPresetType.baseWith0004 => l10n.workerPresetBase0004,
+      WorkerPresetType.addAll => l10n.workerPresetAddAll,
     };
   }
 
@@ -38,21 +38,22 @@ class WorkerSelectorWidget extends ConsumerWidget {
     final hasSelection = selection != null;
 
     // Determine label: check if manual selection matches a custom preset
+    final l10n = AppLocalizations.of(context);
     final customPresetsAsync = ref.watch(customPresetProvider);
     final customPresets = customPresetsAsync.value ?? [];
     String label;
     if (!hasSelection) {
-      label = 'Add all (default)';
+      label = l10n.workerAddAllDefault;
     } else if (selection.mode == WorkerSelectionMode.preset) {
-      label = _presetLabel(selection.presetType);
+      label = _presetLabel(l10n, selection.presetType);
     } else if (selection.isSurprise) {
-      label = 'Surprise';
+      label = l10n.workerSurprise;
     } else {
       // Manual mode — check if it matches a custom preset
       final matchingPreset = customPresets
           .where((p) => mapEquals(p.tileQuantities, selection.tileQuantities))
           .firstOrNull;
-      label = matchingPreset != null ? matchingPreset.name : 'Manual';
+      label = matchingPreset != null ? matchingPreset.name : l10n.workerManual;
     }
 
     final tilesPerPlayer = hasSelection
@@ -156,7 +157,7 @@ class WorkerSelectorWidget extends ConsumerWidget {
                         const SizedBox(width: AppSpacing.s),
                         Expanded(
                           child: Text(
-                            '$label · $tilesPerPlayer tiles/player',
+                            l10n.workerSummaryLine(label, tilesPerPlayer),
                             style: Theme.of(context).textTheme.bodySmall
                                 ?.copyWith(
                                   color: AppColors.brown,
@@ -446,13 +447,15 @@ class _WorkerEditorSheetState extends ConsumerState<_WorkerEditorSheet> {
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: const Text('Delete preset'),
-        content: Text("Delete '${preset.name}'?"),
+        title: Text(AppLocalizations.of(ctx).deletePresetTitle),
+        content: Text(
+          AppLocalizations.of(ctx).deletePresetConfirm(preset.name),
+        ),
         actions: [
           DialogButtonBarWidget(
             onCancel: () => Navigator.of(ctx).pop(false),
             onConfirm: () => Navigator.of(ctx).pop(true),
-            confirmLabel: 'Delete',
+            confirmLabel: AppLocalizations.of(ctx).deleteAction,
             isDestructive: true,
           ),
         ],
@@ -470,35 +473,28 @@ class _WorkerEditorSheetState extends ConsumerState<_WorkerEditorSheet> {
   }
 
   static String _presetDescription(
+    AppLocalizations l10n,
     WorkerSelectionMode mode,
     WorkerPresetType preset, {
     bool isSurprise = false,
   }) {
     if (mode == WorkerSelectionMode.manual) {
       if (isSurprise) {
-        return 'Surprise: base tiles + 2 new Diamante tiles picked at '
-            'random. Tap again for a different pair.';
+        return l10n.workerDescSurprise;
       }
-      return 'Manual selection: adjust the quantity of each tile individually.';
+      return l10n.workerDescManual;
     }
     return switch (preset) {
-      WorkerPresetType.baseOnly =>
-        'Uses only the base game tiles (11 per player). '
-            'The new Diamante tiles are not added.',
-      WorkerPresetType.replaceWithNew =>
-        'Replaces 4 base tiles (1-1-1-1) with the 4 new Diamante ones. '
-            'Total: 11 per player.',
-      WorkerPresetType.baseWith0004 =>
-        'Adds only the 0-0-0-4 tile to the 11 base tiles. Total: 12 per '
-            'player. Recommended by the community (BGG).',
-      WorkerPresetType.addAll =>
-        'Adds the 4 new Diamante tiles to the 11 base ones. '
-            'Total: 15 per player.',
+      WorkerPresetType.baseOnly => l10n.workerDescBaseOnly,
+      WorkerPresetType.replaceWithNew => l10n.workerDescReplace,
+      WorkerPresetType.baseWith0004 => l10n.workerDescBase0004,
+      WorkerPresetType.addAll => l10n.workerDescAddAll,
     };
   }
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     final tilesPerPlayer = _quantities.values.fold(0, (sum, q) => sum + q);
     final balance = WorkerBalanceValidator.validate(
       playerCount: widget.playerCount,
@@ -545,7 +541,7 @@ class _WorkerEditorSheetState extends ConsumerState<_WorkerEditorSheet> {
                   const SizedBox(width: AppSpacing.s),
                   Expanded(
                     child: Text(
-                      'The New Workers',
+                      l10n.workerSheetTitle,
                       style: Theme.of(context).textTheme.titleMedium?.copyWith(
                         fontWeight: FontWeight.bold,
                         color: AppColors.brown,
@@ -570,8 +566,7 @@ class _WorkerEditorSheetState extends ConsumerState<_WorkerEditorSheet> {
                 children: [
                   // Description
                   Text(
-                    'Choose which worker tiles each player will use. '
-                    'All players use the same set.',
+                    l10n.workerChooseIntro,
                     style: Theme.of(context).textTheme.bodySmall?.copyWith(
                       color: AppColors.brown.withValues(alpha: 0.7),
                     ),
@@ -584,7 +579,7 @@ class _WorkerEditorSheetState extends ConsumerState<_WorkerEditorSheet> {
 
                   // Presets
                   Text(
-                    'Presets',
+                    l10n.workerPresetsSection,
                     style: Theme.of(context).textTheme.labelMedium?.copyWith(
                       color: AppColors.brown.withValues(alpha: 0.7),
                     ),
@@ -596,14 +591,14 @@ class _WorkerEditorSheetState extends ConsumerState<_WorkerEditorSheet> {
                     children: [
                       if (_isBaseOnlyAvailable)
                         _PresetChip(
-                          label: 'Base only',
+                          label: l10n.workerPresetBaseOnly,
                           isSelected:
                               _mode == WorkerSelectionMode.preset &&
                               _presetType == WorkerPresetType.baseOnly,
                           onTap: () => _applyPreset(WorkerPresetType.baseOnly),
                         ),
                       _PresetChip(
-                        label: 'Replace',
+                        label: l10n.workerPresetReplace,
                         isSelected:
                             _mode == WorkerSelectionMode.preset &&
                             _presetType == WorkerPresetType.replaceWithNew,
@@ -611,7 +606,7 @@ class _WorkerEditorSheetState extends ConsumerState<_WorkerEditorSheet> {
                             _applyPreset(WorkerPresetType.replaceWithNew),
                       ),
                       _PresetChip(
-                        label: 'Base + 0-0-0-4',
+                        label: l10n.workerPresetBase0004,
                         isSelected:
                             _mode == WorkerSelectionMode.preset &&
                             _presetType == WorkerPresetType.baseWith0004,
@@ -619,7 +614,7 @@ class _WorkerEditorSheetState extends ConsumerState<_WorkerEditorSheet> {
                             _applyPreset(WorkerPresetType.baseWith0004),
                       ),
                       _PresetChip(
-                        label: 'Add all',
+                        label: l10n.workerPresetAddAll,
                         isSelected:
                             _mode == WorkerSelectionMode.preset &&
                             _presetType == WorkerPresetType.addAll,
@@ -641,7 +636,7 @@ class _WorkerEditorSheetState extends ConsumerState<_WorkerEditorSheet> {
                             size: 16,
                             color: AppColors.greenDarker,
                           ),
-                          label: const Text('Save'),
+                          label: Text(l10n.saveAction),
                           onPressed: _showSaveDialog,
                           backgroundColor: AppColors.greenNormal.withValues(
                             alpha: 0.2,
@@ -665,7 +660,7 @@ class _WorkerEditorSheetState extends ConsumerState<_WorkerEditorSheet> {
                   // Random — an action that generates a manual selection,
                   // visually separated from the fixed presets.
                   Text(
-                    'Random',
+                    l10n.workerRandomSection,
                     style: Theme.of(context).textTheme.labelMedium?.copyWith(
                       color: AppColors.brown.withValues(alpha: 0.7),
                     ),
@@ -681,10 +676,8 @@ class _WorkerEditorSheetState extends ConsumerState<_WorkerEditorSheet> {
                           alpha: _isSurprise ? 1.0 : 0.7,
                         ),
                       ),
-                      label: const Text('Surprise +2'),
-                      tooltip:
-                          'Base + 2 new tiles picked at random. '
-                          'Tap again for a different pair.',
+                      label: Text(l10n.workerSurpriseChip),
+                      tooltip: l10n.workerSurpriseTooltip,
                       selected: _isSurprise,
                       showCheckmark: false,
                       // Each tap reshuffles, even when already selected
@@ -708,8 +701,17 @@ class _WorkerEditorSheetState extends ConsumerState<_WorkerEditorSheet> {
                   const SizedBox(height: AppSpacing.s),
                   Text(
                     _selectedCustomPresetId != null
-                        ? 'Custom preset: ${customPresets.where((p) => p.id == _selectedCustomPresetId).firstOrNull?.name ?? ''}'
+                        ? l10n.workerCustomPreset(
+                            customPresets
+                                    .where(
+                                      (p) => p.id == _selectedCustomPresetId,
+                                    )
+                                    .firstOrNull
+                                    ?.name ??
+                                '',
+                          )
                         : _presetDescription(
+                            l10n,
                             _mode,
                             _presetType,
                             isSurprise: _isSurprise,
@@ -758,7 +760,7 @@ class _WorkerEditorSheetState extends ConsumerState<_WorkerEditorSheet> {
                     style: TextButton.styleFrom(
                       foregroundColor: AppColors.brown.withValues(alpha: 0.7),
                     ),
-                    child: const Text('Reset'),
+                    child: Text(l10n.resetAction),
                   ),
                   const Spacer(),
                   FilledButton.icon(
@@ -767,7 +769,7 @@ class _WorkerEditorSheetState extends ConsumerState<_WorkerEditorSheet> {
                     // indicator warns when out of range.
                     onPressed: _apply,
                     icon: const Icon(Icons.check, size: 18),
-                    label: const Text('Apply'),
+                    label: Text(l10n.applyAction),
                   ),
                 ],
               ),
@@ -794,7 +796,7 @@ class _HelpSection extends StatelessWidget {
         dense: true,
         visualDensity: VisualDensity.compact,
         title: Text(
-          'How does it work?',
+          AppLocalizations.of(context).workerHowItWorks,
           style: Theme.of(context).textTheme.labelSmall?.copyWith(
             color: AppColors.greenDarker,
             fontWeight: FontWeight.w600,
@@ -809,15 +811,7 @@ class _HelpSection extends StatelessWidget {
         collapsedIconColor: AppColors.greenDarker,
         children: [
           Text(
-            '• The New Workers adds 4 new worker tiles with '
-            'distributions different from the base game ones.\n'
-            '• You can use a quick preset or manually adjust '
-            'the quantity of each tile.\n'
-            '• The balance between workers and jungle tiles '
-            'matters: if the difference falls outside the indicated '
-            'range, the game may feel unbalanced.\n'
-            '• By default, the game recommends keeping 11 tiles '
-            'per player, but you can add more for a longer game.',
+            AppLocalizations.of(context).workerHelpBody,
             style: Theme.of(context).textTheme.bodySmall?.copyWith(
               color: AppColors.brown.withValues(alpha: 0.7),
               height: 1.4,
@@ -856,7 +850,7 @@ class _TileGrid extends StatelessWidget {
       children: [
         // Base tiles section
         Text(
-          'Base tiles',
+          AppLocalizations.of(context).workerBaseTiles,
           style: Theme.of(context).textTheme.labelSmall?.copyWith(
             color: AppColors.brown.withValues(alpha: 0.6),
             fontWeight: FontWeight.w600,
@@ -887,7 +881,7 @@ class _TileGrid extends StatelessWidget {
         const SizedBox(height: AppSpacing.s),
         // New tiles section
         Text(
-          'New tiles (Diamante)',
+          AppLocalizations.of(context).workerNewTiles,
           style: Theme.of(context).textTheme.labelSmall?.copyWith(
             color: AppColors.brown.withValues(alpha: 0.6),
             fontWeight: FontWeight.w600,
@@ -1007,7 +1001,7 @@ class _TileQuantityCard extends StatelessWidget {
                 if (isLocked) ...[
                   const SizedBox(width: 4),
                   Tooltip(
-                    message: 'Required by Tree of Life (2 players)',
+                    message: AppLocalizations.of(context).workerLockedTooltip,
                     child: Icon(
                       Icons.lock_outline,
                       size: 14,
@@ -1111,6 +1105,7 @@ class _BalanceIndicator extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     final color = balance.isValid ? AppColors.greenDark : AppColors.warning;
 
     return Container(
@@ -1137,8 +1132,8 @@ class _BalanceIndicator extends StatelessWidget {
               Expanded(
                 child: Text(
                   balance.isValid
-                      ? 'Balance is fine'
-                      : 'Outside recommended range',
+                      ? l10n.workerBalanceOk
+                      : l10n.workerBalanceOut,
                   style: Theme.of(context).textTheme.bodySmall?.copyWith(
                     fontWeight: FontWeight.bold,
                     color: color,
@@ -1150,8 +1145,7 @@ class _BalanceIndicator extends StatelessWidget {
           if (!balance.isValid) ...[
             const SizedBox(height: AppSpacing.xxs),
             Text(
-              'The rulebook recommends this margin to keep the game '
-              'balanced, but you can still apply the selection.',
+              l10n.workerBalanceHint,
               style: Theme.of(context).textTheme.bodySmall?.copyWith(
                 color: AppColors.brown.withValues(alpha: 0.7),
                 fontSize: 11,
@@ -1171,12 +1165,12 @@ class _BalanceIndicator extends StatelessWidget {
                   text: '${balance.totalWorkers}',
                   style: const TextStyle(fontWeight: FontWeight.bold),
                 ),
-                const TextSpan(text: ' workers − '),
+                TextSpan(text: ' ${l10n.workerBalanceWorkersWord} − '),
                 TextSpan(
                   text: '${balance.totalJungle}',
                   style: const TextStyle(fontWeight: FontWeight.bold),
                 ),
-                const TextSpan(text: ' jungle = '),
+                TextSpan(text: ' ${l10n.workerBalanceJungleWord} = '),
                 TextSpan(
                   text: '${balance.difference}',
                   style: TextStyle(
@@ -1187,7 +1181,7 @@ class _BalanceIndicator extends StatelessWidget {
                 ),
                 TextSpan(
                   text:
-                      '  (range: ${balance.minDifference}–${balance.maxDifference})',
+                      '  ${l10n.workerBalanceRange(balance.minDifference, balance.maxDifference)}',
                   style: TextStyle(
                     color: AppColors.brown.withValues(alpha: 0.6),
                     fontSize: 11,
@@ -1199,7 +1193,7 @@ class _BalanceIndicator extends StatelessWidget {
           if (tilesPerPlayer != null) ...[
             const SizedBox(height: AppSpacing.xxs),
             Text(
-              'Tiles per player: $tilesPerPlayer',
+              l10n.workerTilesPerPlayerLine(tilesPerPlayer!),
               style: Theme.of(context).textTheme.bodySmall?.copyWith(
                 color: AppColors.brown.withValues(alpha: 0.6),
                 fontSize: 11,
@@ -1244,7 +1238,9 @@ class _BalanceBadge extends StatelessWidget {
           ),
           const SizedBox(width: 3),
           Text(
-            isValid ? 'Valid' : 'Out of range',
+            isValid
+                ? AppLocalizations.of(context).workerBalanceValid
+                : AppLocalizations.of(context).workerBalanceOutShort,
             style: Theme.of(context).textTheme.bodySmall?.copyWith(
               fontSize: 10,
               fontWeight: FontWeight.bold,
@@ -1359,14 +1355,15 @@ class _SavePresetDialogState extends State<_SavePresetDialog> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return AlertDialog(
-      title: const Text('Save as preset'),
+      title: Text(l10n.savePresetTitle),
       content: TextField(
         controller: _controller,
         autofocus: true,
-        decoration: const InputDecoration(
-          labelText: 'Preset name',
-          hintText: 'e.g. Our favorite',
+        decoration: InputDecoration(
+          labelText: l10n.presetNameLabel,
+          hintText: l10n.presetNameHint,
         ),
         textCapitalization: TextCapitalization.sentences,
         onSubmitted: (value) => Navigator.of(context).pop(value.trim()),
@@ -1375,7 +1372,7 @@ class _SavePresetDialogState extends State<_SavePresetDialog> {
         DialogButtonBarWidget(
           onCancel: () => Navigator.of(context).pop(),
           onConfirm: () => Navigator.of(context).pop(_controller.text.trim()),
-          confirmLabel: 'Save',
+          confirmLabel: l10n.saveAction,
         ),
       ],
     );

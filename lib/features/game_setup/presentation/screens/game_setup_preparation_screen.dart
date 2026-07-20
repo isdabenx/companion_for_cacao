@@ -2,6 +2,7 @@ import 'package:companion_for_cacao/core/theme/app_colors.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/game_setup_state_entity.dart';
 import 'package:companion_for_cacao/features/game_setup/presentation/providers/game_setup_notifier.dart';
 import 'package:companion_for_cacao/features/game_setup/presentation/widgets/detailed_preparation_widget.dart';
+import 'package:companion_for_cacao/l10n/generated/app_localizations.dart';
 import 'package:companion_for_cacao/shared/widgets/custom_scaffold_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -21,7 +22,7 @@ class GameSetupPreparationScreen extends ConsumerWidget {
     final progress = total == 0 ? 0.0 : completed / total;
 
     return CustomScaffoldWidget(
-      title: 'Preparation',
+      title: AppLocalizations.of(context).titlePreparation,
       showBackButton: true,
       body: Column(
         children: [

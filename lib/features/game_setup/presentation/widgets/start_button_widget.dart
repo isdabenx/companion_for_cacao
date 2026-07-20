@@ -6,6 +6,7 @@ import 'package:companion_for_cacao/core/theme/app_spacing.dart';
 import 'package:companion_for_cacao/core/theme/app_text_styles.dart';
 import 'package:companion_for_cacao/features/game_setup/presentation/providers/game_setup_notifier.dart';
 import 'package:companion_for_cacao/features/game_setup/presentation/providers/game_setup_step_provider.dart';
+import 'package:companion_for_cacao/l10n/generated/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -126,7 +127,9 @@ class StartButtonWidget extends ConsumerWidget {
                 : _onStartButtonPressed(context, ref)
           : null,
       child: Text(
-        isStarted ? 'Resume Game' : 'Start Game',
+        isStarted
+            ? AppLocalizations.of(context).resumeGame
+            : AppLocalizations.of(context).startGame,
         style: AppTextStyles.boardgameTitlePlain.copyWith(
           color: AppColors.white,
         ),
@@ -139,7 +142,7 @@ class StartButtonWidget extends ConsumerWidget {
       onPressed: () => _onClearSetupPressed(context, ref),
       icon: const Icon(Icons.clear_all, size: 20),
       label: Text(
-        'Clear Setup',
+        AppLocalizations.of(context).clearSetup,
         style: AppTextStyles.boardgameTitlePlain.copyWith(color: AppColors.red),
       ),
       style: OutlinedButton.styleFrom(

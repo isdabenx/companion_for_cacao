@@ -1,5 +1,6 @@
 import 'package:companion_for_cacao/core/theme/app_colors.dart';
 import 'package:companion_for_cacao/core/theme/app_spacing.dart';
+import 'package:companion_for_cacao/l10n/generated/app_localizations.dart';
 import 'package:flutter/material.dart';
 
 /// Fullscreen zoom dialog for a preparation step image, shared by every
@@ -68,7 +69,7 @@ void showPreparationImageDialog(
                   child: IconButton(
                     icon: const Icon(Icons.close, color: AppColors.brown),
                     onPressed: () => Navigator.of(context).pop(),
-                    tooltip: 'Close',
+                    tooltip: AppLocalizations.of(context).closeAction,
                   ),
                 ),
               ),

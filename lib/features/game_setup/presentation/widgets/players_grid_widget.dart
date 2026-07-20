@@ -3,6 +3,7 @@ import 'package:companion_for_cacao/core/theme/app_spacing.dart';
 import 'package:companion_for_cacao/core/theme/app_text_styles.dart';
 import 'package:companion_for_cacao/features/game_setup/presentation/providers/game_setup_notifier.dart';
 import 'package:companion_for_cacao/features/game_setup/presentation/widgets/player_chip_widget.dart';
+import 'package:companion_for_cacao/l10n/generated/app_localizations.dart';
 import 'package:companion_for_cacao/shared/widgets/selectable_chip.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -29,7 +30,7 @@ class PlayersGridWidget extends ConsumerWidget {
       children: [
         // Instruction text
         Text(
-          'Tap a color to add a player. Hold and drag to reorder.',
+          AppLocalizations.of(context).tapColorHint,
           style: AppTextStyles.instruction,
         ),
         AppSpacing.verticalM,

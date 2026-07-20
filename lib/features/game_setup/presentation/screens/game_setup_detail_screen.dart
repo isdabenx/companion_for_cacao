@@ -5,6 +5,7 @@ import 'package:companion_for_cacao/core/theme/app_text_styles.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/game_setup_state_entity.dart';
 import 'package:companion_for_cacao/features/game_setup/presentation/providers/game_setup_notifier.dart';
 import 'package:companion_for_cacao/features/game_setup/presentation/widgets/detailed_summary_widget.dart';
+import 'package:companion_for_cacao/l10n/generated/app_localizations.dart';
 import 'package:companion_for_cacao/shared/widgets/custom_scaffold_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -23,7 +24,7 @@ class GameSetupDetailScreen extends ConsumerWidget {
     final liveSetup = ref.watch(gameSetupProvider).value ?? gameSetup;
 
     return CustomScaffoldWidget(
-      title: 'Game Dashboard',
+      title: AppLocalizations.of(context).titleGameDashboard,
       showBackButton: true,
       body: ListView(
         padding: const EdgeInsets.symmetric(vertical: AppSpacing.xs),
@@ -33,7 +34,7 @@ class GameSetupDetailScreen extends ConsumerWidget {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: AppSpacing.s),
             child: _DashboardCard(
-              title: 'Preparation',
+              title: AppLocalizations.of(context).titlePreparation,
               icon: Icons.list_alt,
               onTap: () => context.push(
                 AppRoutes.gameSetupPreparation,
@@ -45,7 +46,7 @@ class GameSetupDetailScreen extends ConsumerWidget {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: AppSpacing.s),
             child: _DashboardCard(
-              title: 'Tiles in Play',
+              title: AppLocalizations.of(context).tilesInPlay,
               icon: Icons.grid_view,
               onTap: () =>
                   context.push(AppRoutes.gameSetupTiles, extra: liveSetup),
@@ -55,7 +56,7 @@ class GameSetupDetailScreen extends ConsumerWidget {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: AppSpacing.s),
             child: _DashboardCard(
-              title: 'Score Calculator',
+              title: AppLocalizations.of(context).scoreCalculator,
               icon: Icons.calculate,
               // Prefilled from this game: starting a game resets any older
               // scoring session (see ScoreNotifier.build).

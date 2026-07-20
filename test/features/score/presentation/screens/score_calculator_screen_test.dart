@@ -6,6 +6,7 @@ import 'package:companion_for_cacao/features/score/presentation/providers/score_
 import 'package:companion_for_cacao/features/score/presentation/screens/score_calculator_screen.dart';
 import 'package:companion_for_cacao/features/score/presentation/screens/score_result_screen.dart';
 import 'package:companion_for_cacao/features/score/presentation/widgets/count_stepper_widget.dart';
+import 'package:companion_for_cacao/l10n/generated/app_localizations.dart';
 import 'package:companion_for_cacao/shared/providers/boardgame_notifier.dart';
 import 'package:companion_for_cacao/shared/widgets/safe_asset_image.dart';
 import 'package:flutter/material.dart';
@@ -41,6 +42,8 @@ void main() {
         ),
       ],
       child: MaterialApp(
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
         home: InheritedGoRouter(goRouter: mockGoRouter, child: child),
       ),
     );

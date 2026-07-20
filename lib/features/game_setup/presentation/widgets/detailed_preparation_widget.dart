@@ -173,16 +173,16 @@ class _DetailedPreparationWidgetState
     });
   }
 
-  String _getPhaseName(PreparationPhase phase) {
+  String _getPhaseName(AppLocalizations l10n, PreparationPhase phase) {
     switch (phase) {
       case PreparationPhase.tilePool:
-        return 'Tile Pool';
+        return l10n.phaseTilePool;
       case PreparationPhase.playerSetup:
-        return 'Player Setup';
+        return l10n.phasePlayerSetup;
       case PreparationPhase.boardSetup:
-        return 'Board Setup';
+        return l10n.phaseBoardSetup;
       case PreparationPhase.supplies:
-        return 'Supplies';
+        return l10n.phaseSupplies;
     }
   }
 
@@ -282,7 +282,10 @@ class _DetailedPreparationWidgetState
                           pinned: true,
                           delegate: _PhaseHeaderDelegate(
                             phase: entry.key,
-                            phaseName: _getPhaseName(entry.key),
+                            phaseName: _getPhaseName(
+                              AppLocalizations.of(context),
+                              entry.key,
+                            ),
                             items: entry.value,
                             completionMap: completionMap,
                             isExpanded:

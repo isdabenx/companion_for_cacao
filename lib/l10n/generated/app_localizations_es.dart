@@ -334,4 +334,351 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get backToGameAction => 'Volver a la partida';
+
+  @override
+  String get menuHome => 'Inicio';
+
+  @override
+  String get menuGameSetup => 'Nueva partida';
+
+  @override
+  String get menuTiles => 'Losetas';
+
+  @override
+  String get menuScores => 'Puntuaciones';
+
+  @override
+  String get menuRules => 'Reglas';
+
+  @override
+  String get titlePreparation => 'Preparación';
+
+  @override
+  String get titleGameDashboard => 'Panel de partida';
+
+  @override
+  String get phaseTilePool => 'Losetas en juego';
+
+  @override
+  String get phasePlayerSetup => 'Preparación de los jugadores';
+
+  @override
+  String get phaseBoardSetup => 'Preparación de la mesa';
+
+  @override
+  String get phaseSupplies => 'Reservas';
+
+  @override
+  String get playersSection => 'Jugadores';
+
+  @override
+  String get expansionsSection => 'Expansiones';
+
+  @override
+  String get modulesSection => 'Módulos';
+
+  @override
+  String needMorePlayers(int count) {
+    return 'Faltan $count+';
+  }
+
+  @override
+  String get tapColorHint =>
+      'Toca un color para añadir un jugador. Mantén pulsado y arrastra para reordenar.';
+
+  @override
+  String get selectExpansionsHint =>
+      'Selecciona las expansiones con las que jugáis';
+
+  @override
+  String get selectModulesHint => 'Selecciona los módulos con los que jugáis';
+
+  @override
+  String get noExpansionWithModules =>
+      'No hay ninguna expansión con módulos seleccionada';
+
+  @override
+  String get noModules => 'Sin módulos';
+
+  @override
+  String get startGame => 'Empezar la partida';
+
+  @override
+  String get resumeGame => 'Reanudar la partida';
+
+  @override
+  String get clearSetup => 'Limpiar todo';
+
+  @override
+  String get gameVariant => 'Variante de juego';
+
+  @override
+  String get bigGame => 'Big Game';
+
+  @override
+  String get bigGameHint =>
+      'Usa todas las losetas de todos los módulos, sin sustituciones';
+
+  @override
+  String get showAllTiles => 'Mostrar todas las losetas';
+
+  @override
+  String get hideTiles => 'Ocultar las losetas';
+
+  @override
+  String get tilesInPlay => 'Losetas en juego';
+
+  @override
+  String get scoreCalculator => 'Calculadora de puntuación';
+
+  @override
+  String get noPlayersSelected => 'Ningún jugador seleccionado';
+
+  @override
+  String get noTiles => 'Sin losetas';
+
+  @override
+  String get baseGameOnly => 'Solo el juego base';
+
+  @override
+  String playerPosition(int position) {
+    return 'Jugador $position';
+  }
+
+  @override
+  String get closeAction => 'Cerrar';
+
+  @override
+  String get workerSheetTitle => 'Los nuevos recolectores';
+
+  @override
+  String get workerChooseIntro =>
+      'Elige qué losetas de recolectores usará cada jugador. Todos los jugadores usan el mismo conjunto.';
+
+  @override
+  String get workerHowItWorks => '¿Cómo funciona?';
+
+  @override
+  String get workerHelpBody =>
+      '• Los nuevos recolectores añade 4 losetas de recolectores nuevas con distribuciones diferentes a las del juego base.\n• Puedes usar un ajuste rápido o regular manualmente la cantidad de cada loseta.\n• El equilibrio entre recolectores y losetas de selva importa: si la diferencia queda fuera del margen indicado, la partida puede quedar desequilibrada.\n• Por defecto, el juego recomienda mantener 11 losetas por jugador, pero puedes añadir más para una partida más larga.';
+
+  @override
+  String get workerPresetsSection => 'Ajustes rápidos';
+
+  @override
+  String get workerRandomSection => 'Azar';
+
+  @override
+  String get workerPresetBaseOnly => 'Solo base';
+
+  @override
+  String get workerPresetReplace => 'Sustituir';
+
+  @override
+  String get workerPresetBase0004 => 'Base + 0-0-0-4';
+
+  @override
+  String get workerPresetAddAll => 'Añadirlas todas';
+
+  @override
+  String get workerAddAllDefault => 'Añadirlas todas (por defecto)';
+
+  @override
+  String get workerManual => 'Manual';
+
+  @override
+  String get workerSurprise => 'Sorpresa';
+
+  @override
+  String get workerSurpriseChip => 'Sorpresa +2';
+
+  @override
+  String get workerSurpriseTooltip =>
+      'Base + 2 losetas nuevas elegidas al azar. Vuelve a tocar para una pareja diferente.';
+
+  @override
+  String get workerDescBaseOnly =>
+      'Usa solo las losetas del juego base (11 por jugador). Las losetas nuevas de Diamante no se añaden.';
+
+  @override
+  String get workerDescReplace =>
+      'Sustituye 4 losetas base (1-1-1-1) por las 4 nuevas de Diamante. Total: 11 por jugador.';
+
+  @override
+  String get workerDescBase0004 =>
+      'Añade solo la loseta 0-0-0-4 a las 11 de base. Total: 12 por jugador. Recomendado por la comunidad (BGG).';
+
+  @override
+  String get workerDescAddAll =>
+      'Añade las 4 losetas nuevas de Diamante a las 11 de base. Total: 15 por jugador.';
+
+  @override
+  String get workerDescManual =>
+      'Selección manual: regula la cantidad de cada loseta individualmente.';
+
+  @override
+  String get workerDescSurprise =>
+      'Sorpresa: losetas base + 2 nuevas de Diamante elegidas al azar. Vuelve a tocar para una pareja diferente.';
+
+  @override
+  String workerCustomPreset(String name) {
+    return 'Ajuste personalizado: $name';
+  }
+
+  @override
+  String workerSummaryLine(String label, int count) {
+    return '$label · $count losetas/jugador';
+  }
+
+  @override
+  String get workerBaseTiles => 'Losetas base';
+
+  @override
+  String get workerNewTiles => 'Losetas nuevas (Diamante)';
+
+  @override
+  String get workerBalanceOk => 'El equilibrio es correcto';
+
+  @override
+  String get workerBalanceOut => 'Fuera del margen recomendado';
+
+  @override
+  String get workerBalanceValid => 'Válido';
+
+  @override
+  String get workerBalanceOutShort => 'Fuera de margen';
+
+  @override
+  String get workerBalanceHint =>
+      'El reglamento recomienda este margen para mantener la partida equilibrada, pero puedes aplicar la selección igualmente.';
+
+  @override
+  String get workerBalanceWorkersWord => 'recolectores';
+
+  @override
+  String get workerBalanceJungleWord => 'selva';
+
+  @override
+  String workerBalanceRange(int min, int max) {
+    return '(margen: $min–$max)';
+  }
+
+  @override
+  String workerTilesPerPlayerLine(int count) {
+    return 'Losetas por jugador: $count';
+  }
+
+  @override
+  String get workerLockedTooltip =>
+      'Obligatoria con El árbol de la vida (2 jugadores)';
+
+  @override
+  String get resetAction => 'Restablecer';
+
+  @override
+  String get applyAction => 'Aplicar';
+
+  @override
+  String get saveAction => 'Guardar';
+
+  @override
+  String get deleteAction => 'Eliminar';
+
+  @override
+  String get savePresetTitle => 'Guardar como ajuste';
+
+  @override
+  String get presetNameLabel => 'Nombre del ajuste';
+
+  @override
+  String get presetNameHint => 'p. ej. Nuestro favorito';
+
+  @override
+  String get deletePresetTitle => 'Eliminar el ajuste';
+
+  @override
+  String deletePresetConfirm(String name) {
+    return '¿Eliminar \'$name\'?';
+  }
+
+  @override
+  String get errorLoadingPresets =>
+      'Error al cargar los ajustes personalizados';
+
+  @override
+  String get errorSavingPresets =>
+      'Error al guardar los ajustes personalizados';
+
+  @override
+  String get hutRegisterTitle => 'Registra la tirada de bohíos';
+
+  @override
+  String get hutRegisterHint =>
+      'Para cada loseta física, elige la cara que ha quedado boca arriba.';
+
+  @override
+  String get hutRegisterAction => 'Registra qué bohíos han quedado boca arriba';
+
+  @override
+  String get hutRegisteredEdit => 'Tirada registrada · toca para editar';
+
+  @override
+  String get forgetThrowAction => 'Olvidar la tirada';
+
+  @override
+  String get hutMarketCrier => 'El voceador del mercado';
+
+  @override
+  String get hutHermit => 'El curandero';
+
+  @override
+  String get hutRoadWorker => 'El cuidador de sacbeob';
+
+  @override
+  String get hutTrader => 'El comerciante';
+
+  @override
+  String get hutFarmer => 'El agricultor';
+
+  @override
+  String get hutShaman => 'El chamán';
+
+  @override
+  String get hutMonk => 'El uay';
+
+  @override
+  String get hutMasterBuilder => 'El constructor';
+
+  @override
+  String get hutForeman => 'El capataz';
+
+  @override
+  String get hutFountainMaster => 'El brujo rabdomante';
+
+  @override
+  String get hutChiefsDaughter => 'La hija del jefe';
+
+  @override
+  String get hutChiefsSon => 'El hijo del jefe';
+
+  @override
+  String get hutChiefsWife => 'La mujer del jefe';
+
+  @override
+  String get hutChief => 'El jefe';
+
+  @override
+  String get menuTitle => 'Menú';
+
+  @override
+  String get summaryTiles => 'Losetas';
+
+  @override
+  String get summaryWorkers => 'Recolectores';
+
+  @override
+  String get summaryJungle => 'Selva';
+
+  @override
+  String get summaryHuts => 'Bohíos';
 }

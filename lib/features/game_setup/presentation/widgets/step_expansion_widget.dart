@@ -1,6 +1,7 @@
 import 'package:companion_for_cacao/config/constants/game_constants.dart';
 import 'package:companion_for_cacao/core/theme/app_spacing.dart';
 import 'package:companion_for_cacao/features/game_setup/presentation/widgets/select_expansion_widget.dart';
+import 'package:companion_for_cacao/l10n/generated/app_localizations.dart';
 import 'package:companion_for_cacao/shared/providers/boardgame_notifier.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -23,9 +24,9 @@ class StepExpansionWidget extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Padding(
-          padding: EdgeInsets.only(bottom: AppSpacing.s),
-          child: Text("Select the expansions you're playing with"),
+        Padding(
+          padding: const EdgeInsets.only(bottom: AppSpacing.s),
+          child: Text(AppLocalizations.of(context).selectExpansionsHint),
         ),
         SizedBox(
           height: heightAllExpansions,

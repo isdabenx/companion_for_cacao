@@ -7,6 +7,7 @@ import 'package:companion_for_cacao/features/game_setup/presentation/widgets/sta
 import 'package:companion_for_cacao/features/game_setup/presentation/widgets/step_expansion_widget.dart';
 import 'package:companion_for_cacao/features/game_setup/presentation/widgets/step_module_widget.dart';
 import 'package:companion_for_cacao/features/game_setup/presentation/widgets/step_player_widget.dart';
+import 'package:companion_for_cacao/l10n/generated/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -60,7 +61,7 @@ class GameSetupWidget extends ConsumerWidget {
                       title: Row(
                         children: [
                           Text(
-                            'Players',
+                            AppLocalizations.of(context).playersSection,
                             style: AppTextStyles.sectionTitlePlain,
                           ),
                           AppSpacing.horizontalS,
@@ -106,7 +107,9 @@ class GameSetupWidget extends ConsumerWidget {
                                 borderRadius: BorderRadius.circular(8),
                               ),
                               child: Text(
-                                'Need ${2 - selectedCount}+',
+                                AppLocalizations.of(
+                                  context,
+                                ).needMorePlayers(2 - selectedCount),
                                 textAlign: TextAlign.center,
                                 style: AppTextStyles.warningText,
                               ),
@@ -118,7 +121,7 @@ class GameSetupWidget extends ConsumerWidget {
                     ),
                     Step(
                       title: Text(
-                        'Expansions',
+                        AppLocalizations.of(context).expansionsSection,
                         style: AppTextStyles.sectionTitlePlain,
                       ),
                       content: StepExpansionWidget(
@@ -129,7 +132,7 @@ class GameSetupWidget extends ConsumerWidget {
                     ),
                     Step(
                       title: Text(
-                        'Modules',
+                        AppLocalizations.of(context).modulesSection,
                         style: AppTextStyles.sectionTitlePlain,
                       ),
                       content: const StepModuleWidget(),

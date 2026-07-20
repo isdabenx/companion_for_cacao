@@ -330,4 +330,347 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get backToGameAction => 'Back to the game';
+
+  @override
+  String get menuHome => 'Home';
+
+  @override
+  String get menuGameSetup => 'Game Setup';
+
+  @override
+  String get menuTiles => 'Tiles';
+
+  @override
+  String get menuScores => 'Scores';
+
+  @override
+  String get menuRules => 'Rules';
+
+  @override
+  String get titlePreparation => 'Preparation';
+
+  @override
+  String get titleGameDashboard => 'Game Dashboard';
+
+  @override
+  String get phaseTilePool => 'Tile Pool';
+
+  @override
+  String get phasePlayerSetup => 'Player Setup';
+
+  @override
+  String get phaseBoardSetup => 'Board Setup';
+
+  @override
+  String get phaseSupplies => 'Supplies';
+
+  @override
+  String get playersSection => 'Players';
+
+  @override
+  String get expansionsSection => 'Expansions';
+
+  @override
+  String get modulesSection => 'Modules';
+
+  @override
+  String needMorePlayers(int count) {
+    return 'Need $count+';
+  }
+
+  @override
+  String get tapColorHint =>
+      'Tap a color to add a player. Hold and drag to reorder.';
+
+  @override
+  String get selectExpansionsHint =>
+      'Select the expansions you\'re playing with';
+
+  @override
+  String get selectModulesHint => 'Select the modules you\'re playing with';
+
+  @override
+  String get noExpansionWithModules => 'No expansion with modules are selected';
+
+  @override
+  String get noModules => 'No modules';
+
+  @override
+  String get startGame => 'Start Game';
+
+  @override
+  String get resumeGame => 'Resume Game';
+
+  @override
+  String get clearSetup => 'Clear Setup';
+
+  @override
+  String get gameVariant => 'Game Variant';
+
+  @override
+  String get bigGame => 'Big Game';
+
+  @override
+  String get bigGameHint =>
+      'Use all tiles from all modules without substitutions';
+
+  @override
+  String get showAllTiles => 'Show All Tiles';
+
+  @override
+  String get hideTiles => 'Hide Tiles';
+
+  @override
+  String get tilesInPlay => 'Tiles in Play';
+
+  @override
+  String get scoreCalculator => 'Score Calculator';
+
+  @override
+  String get noPlayersSelected => 'No players selected';
+
+  @override
+  String get noTiles => 'No tiles';
+
+  @override
+  String get baseGameOnly => 'Base game only';
+
+  @override
+  String playerPosition(int position) {
+    return 'Player $position';
+  }
+
+  @override
+  String get closeAction => 'Close';
+
+  @override
+  String get workerSheetTitle => 'The New Workers';
+
+  @override
+  String get workerChooseIntro =>
+      'Choose which worker tiles each player will use. All players use the same set.';
+
+  @override
+  String get workerHowItWorks => 'How does it work?';
+
+  @override
+  String get workerHelpBody =>
+      '• The New Workers adds 4 new worker tiles with distributions different from the base game ones.\n• You can use a quick preset or manually adjust the quantity of each tile.\n• The balance between workers and jungle tiles matters: if the difference falls outside the indicated range, the game may feel unbalanced.\n• By default, the game recommends keeping 11 tiles per player, but you can add more for a longer game.';
+
+  @override
+  String get workerPresetsSection => 'Presets';
+
+  @override
+  String get workerRandomSection => 'Random';
+
+  @override
+  String get workerPresetBaseOnly => 'Base only';
+
+  @override
+  String get workerPresetReplace => 'Replace';
+
+  @override
+  String get workerPresetBase0004 => 'Base + 0-0-0-4';
+
+  @override
+  String get workerPresetAddAll => 'Add all';
+
+  @override
+  String get workerAddAllDefault => 'Add all (default)';
+
+  @override
+  String get workerManual => 'Manual';
+
+  @override
+  String get workerSurprise => 'Surprise';
+
+  @override
+  String get workerSurpriseChip => 'Surprise +2';
+
+  @override
+  String get workerSurpriseTooltip =>
+      'Base + 2 new tiles picked at random. Tap again for a different pair.';
+
+  @override
+  String get workerDescBaseOnly =>
+      'Uses only the base game tiles (11 per player). The new Diamante tiles are not added.';
+
+  @override
+  String get workerDescReplace =>
+      'Replaces 4 base tiles (1-1-1-1) with the 4 new Diamante ones. Total: 11 per player.';
+
+  @override
+  String get workerDescBase0004 =>
+      'Adds only the 0-0-0-4 tile to the 11 base tiles. Total: 12 per player. Recommended by the community (BGG).';
+
+  @override
+  String get workerDescAddAll =>
+      'Adds the 4 new Diamante tiles to the 11 base ones. Total: 15 per player.';
+
+  @override
+  String get workerDescManual =>
+      'Manual selection: adjust the quantity of each tile individually.';
+
+  @override
+  String get workerDescSurprise =>
+      'Surprise: base tiles + 2 new Diamante tiles picked at random. Tap again for a different pair.';
+
+  @override
+  String workerCustomPreset(String name) {
+    return 'Custom preset: $name';
+  }
+
+  @override
+  String workerSummaryLine(String label, int count) {
+    return '$label · $count tiles/player';
+  }
+
+  @override
+  String get workerBaseTiles => 'Base tiles';
+
+  @override
+  String get workerNewTiles => 'New tiles (Diamante)';
+
+  @override
+  String get workerBalanceOk => 'Balance is fine';
+
+  @override
+  String get workerBalanceOut => 'Outside recommended range';
+
+  @override
+  String get workerBalanceValid => 'Valid';
+
+  @override
+  String get workerBalanceOutShort => 'Out of range';
+
+  @override
+  String get workerBalanceHint =>
+      'The rulebook recommends this margin to keep the game balanced, but you can still apply the selection.';
+
+  @override
+  String get workerBalanceWorkersWord => 'workers';
+
+  @override
+  String get workerBalanceJungleWord => 'jungle';
+
+  @override
+  String workerBalanceRange(int min, int max) {
+    return '(range: $min–$max)';
+  }
+
+  @override
+  String workerTilesPerPlayerLine(int count) {
+    return 'Tiles per player: $count';
+  }
+
+  @override
+  String get workerLockedTooltip => 'Required by Tree of Life (2 players)';
+
+  @override
+  String get resetAction => 'Reset';
+
+  @override
+  String get applyAction => 'Apply';
+
+  @override
+  String get saveAction => 'Save';
+
+  @override
+  String get deleteAction => 'Delete';
+
+  @override
+  String get savePresetTitle => 'Save as preset';
+
+  @override
+  String get presetNameLabel => 'Preset name';
+
+  @override
+  String get presetNameHint => 'e.g. Our favorite';
+
+  @override
+  String get deletePresetTitle => 'Delete preset';
+
+  @override
+  String deletePresetConfirm(String name) {
+    return 'Delete \'$name\'?';
+  }
+
+  @override
+  String get errorLoadingPresets => 'Error loading custom presets';
+
+  @override
+  String get errorSavingPresets => 'Error saving custom presets';
+
+  @override
+  String get hutRegisterTitle => 'Register the hut throw';
+
+  @override
+  String get hutRegisterHint =>
+      'For each physical tile, pick the side that landed face up.';
+
+  @override
+  String get hutRegisterAction => 'Register which huts landed face up';
+
+  @override
+  String get hutRegisteredEdit => 'Throw registered · tap to edit';
+
+  @override
+  String get forgetThrowAction => 'Forget throw';
+
+  @override
+  String get hutMarketCrier => 'Market Crier';
+
+  @override
+  String get hutHermit => 'Hermit';
+
+  @override
+  String get hutRoadWorker => 'Road Worker';
+
+  @override
+  String get hutTrader => 'Trader';
+
+  @override
+  String get hutFarmer => 'Farmer';
+
+  @override
+  String get hutShaman => 'Shaman';
+
+  @override
+  String get hutMonk => 'Monk';
+
+  @override
+  String get hutMasterBuilder => 'Master Builder';
+
+  @override
+  String get hutForeman => 'Foreman';
+
+  @override
+  String get hutFountainMaster => 'Fountain Master';
+
+  @override
+  String get hutChiefsDaughter => 'Chief\'s Daughter';
+
+  @override
+  String get hutChiefsSon => 'Chief\'s Son';
+
+  @override
+  String get hutChiefsWife => 'Chief\'s Wife';
+
+  @override
+  String get hutChief => 'Chief';
+
+  @override
+  String get menuTitle => 'Menu';
+
+  @override
+  String get summaryTiles => 'Tiles';
+
+  @override
+  String get summaryWorkers => 'Workers';
+
+  @override
+  String get summaryJungle => 'Jungle';
+
+  @override
+  String get summaryHuts => 'Huts';
 }

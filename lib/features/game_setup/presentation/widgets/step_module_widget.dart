@@ -4,6 +4,7 @@ import 'package:companion_for_cacao/core/theme/app_spacing.dart';
 import 'package:companion_for_cacao/core/theme/app_text_styles.dart';
 import 'package:companion_for_cacao/features/game_setup/presentation/providers/game_setup_notifier.dart';
 import 'package:companion_for_cacao/features/game_setup/presentation/widgets/select_module_widget.dart';
+import 'package:companion_for_cacao/l10n/generated/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -35,7 +36,7 @@ class StepModuleWidget extends ConsumerWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text("Select the modules you're playing with"),
+        Text(AppLocalizations.of(context).selectModulesHint),
         Column(
           children: [
             if (modules.isEmpty)
@@ -45,7 +46,7 @@ class StepModuleWidget extends ConsumerWidget {
                     child: Padding(
                       padding: const EdgeInsets.only(top: AppSpacing.l),
                       child: Text(
-                        'No expansion with modules are selected',
+                        AppLocalizations.of(context).noExpansionWithModules,
                         style: AppTextStyles.boardgameTitle,
                         textAlign: TextAlign.center,
                       ),
@@ -62,9 +63,12 @@ class StepModuleWidget extends ConsumerWidget {
             padding: const EdgeInsets.only(top: AppSpacing.m),
             child: ListTile(
               contentPadding: EdgeInsets.zero,
-              title: Text('Big Game', style: AppTextStyles.bodyMedium),
+              title: Text(
+                AppLocalizations.of(context).bigGame,
+                style: AppTextStyles.bodyMedium,
+              ),
               subtitle: Text(
-                'Use all tiles from all modules without substitutions',
+                AppLocalizations.of(context).bigGameHint,
                 style: AppTextStyles.sectionSublabel,
               ),
               trailing: Switch(

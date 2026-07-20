@@ -7,6 +7,7 @@ import 'package:companion_for_cacao/core/theme/app_spacing.dart';
 import 'package:companion_for_cacao/core/theme/app_text_styles.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/game_setup_state_entity.dart';
 import 'package:companion_for_cacao/features/tile/tile_public_api.dart';
+import 'package:companion_for_cacao/l10n/generated/app_localizations.dart';
 import 'package:companion_for_cacao/shared/widgets/circle_badge.dart';
 import 'package:companion_for_cacao/shared/widgets/container_full_style_widget.dart';
 import 'package:companion_for_cacao/features/game_setup/presentation/widgets/responsive_grid_builder.dart';
@@ -77,7 +78,9 @@ class _DetailedSummaryWidgetState extends ConsumerState<DetailedSummaryWidget> {
               color: AppColors.brown,
             ),
             label: Text(
-              _isExpanded ? 'Hide Tiles' : 'Show All Tiles',
+              _isExpanded
+                  ? AppLocalizations.of(context).hideTiles
+                  : AppLocalizations.of(context).showAllTiles,
               style: AppTextStyles.boardgameTitlePlain.copyWith(
                 color: AppColors.brown,
                 fontSize: 16,
@@ -109,12 +112,19 @@ class _DetailedSummaryWidgetState extends ConsumerState<DetailedSummaryWidget> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _sectionHeader(context, Icons.people_outline, 'Players'),
+        _sectionHeader(
+          context,
+          Icons.people_outline,
+          AppLocalizations.of(context).playersSection,
+        ),
         AppSpacing.verticalS,
         Padding(
           padding: const EdgeInsets.only(left: AppSpacing.s),
           child: widget.gameSetup.players.isEmpty
-              ? _emptyText(context, 'No players selected')
+              ? _emptyText(
+                  context,
+                  AppLocalizations.of(context).noPlayersSelected,
+                )
               : _buildPlayersGrid(),
         ),
       ],
@@ -150,12 +160,16 @@ class _DetailedSummaryWidgetState extends ConsumerState<DetailedSummaryWidget> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _sectionHeader(context, Icons.extension_outlined, 'Expansions'),
+        _sectionHeader(
+          context,
+          Icons.extension_outlined,
+          AppLocalizations.of(context).expansionsSection,
+        ),
         AppSpacing.verticalS,
         Padding(
           padding: const EdgeInsets.only(left: AppSpacing.s),
           child: expansions.isEmpty
-              ? _emptyText(context, 'Base game only')
+              ? _emptyText(context, AppLocalizations.of(context).baseGameOnly)
               : Wrap(
                   spacing: 8,
                   runSpacing: 6,
@@ -178,12 +192,16 @@ class _DetailedSummaryWidgetState extends ConsumerState<DetailedSummaryWidget> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _sectionHeader(context, Icons.widgets_outlined, 'Modules'),
+        _sectionHeader(
+          context,
+          Icons.widgets_outlined,
+          AppLocalizations.of(context).modulesSection,
+        ),
         AppSpacing.verticalS,
         Padding(
           padding: const EdgeInsets.only(left: AppSpacing.s),
           child: widget.gameSetup.modules.isEmpty
-              ? _emptyText(context, 'No modules')
+              ? _emptyText(context, AppLocalizations.of(context).noModules)
               : Wrap(
                   spacing: 8,
                   runSpacing: 6,
@@ -206,7 +224,11 @@ class _DetailedSummaryWidgetState extends ConsumerState<DetailedSummaryWidget> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _sectionHeader(context, Icons.star_outline, 'Game Variant'),
+        _sectionHeader(
+          context,
+          Icons.star_outline,
+          AppLocalizations.of(context).gameVariant,
+        ),
         AppSpacing.verticalS,
         Padding(
           padding: const EdgeInsets.only(left: AppSpacing.s),
@@ -239,12 +261,12 @@ class _DetailedSummaryWidgetState extends ConsumerState<DetailedSummaryWidget> {
         _sectionHeader(
           context,
           Icons.grid_view_rounded,
-          'Tiles',
+          AppLocalizations.of(context).summaryTiles,
           subtitle: '($totalTiles)',
         ),
         AppSpacing.verticalS,
         if (widget.gameSetup.tiles.isEmpty)
-          _emptyText(context, 'No tiles')
+          _emptyText(context, AppLocalizations.of(context).noTiles)
         else ...[
           if (workerTiles.isNotEmpty) ...[
             Padding(
@@ -252,7 +274,10 @@ class _DetailedSummaryWidgetState extends ConsumerState<DetailedSummaryWidget> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('Workers', style: AppTextStyles.sectionSublabel),
+                  Text(
+                    AppLocalizations.of(context).summaryWorkers,
+                    style: AppTextStyles.sectionSublabel,
+                  ),
                   AppSpacing.verticalS,
                   _buildTileGrid(workerTiles, showColorCircle: false),
                   AppSpacing.verticalS,
@@ -266,7 +291,10 @@ class _DetailedSummaryWidgetState extends ConsumerState<DetailedSummaryWidget> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('Jungle', style: AppTextStyles.sectionSublabel),
+                  Text(
+                    AppLocalizations.of(context).summaryJungle,
+                    style: AppTextStyles.sectionSublabel,
+                  ),
                   AppSpacing.verticalS,
                   _buildTileGrid(jungleTiles),
                   AppSpacing.verticalS,
@@ -280,7 +308,10 @@ class _DetailedSummaryWidgetState extends ConsumerState<DetailedSummaryWidget> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('Huts', style: AppTextStyles.sectionSublabel),
+                  Text(
+                    AppLocalizations.of(context).summaryHuts,
+                    style: AppTextStyles.sectionSublabel,
+                  ),
                   AppSpacing.verticalS,
                   _buildTileGrid(hutTiles),
                 ],
@@ -381,7 +412,9 @@ class _PlayerRow extends StatelessWidget {
         ),
         const SizedBox(width: 10),
         Text(
-          name.isNotEmpty ? name : 'Player $position',
+          name.isNotEmpty
+              ? name
+              : AppLocalizations.of(context).playerPosition(position),
           style: Theme.of(context).textTheme.bodyMedium?.copyWith(
             color: AppColors.brown,
             fontWeight: FontWeight.w500,
@@ -548,7 +581,7 @@ class _BigGameChip extends StatelessWidget {
           Icon(Icons.star, size: 16, color: AppColors.gold),
           const SizedBox(width: 6),
           Text(
-            'Big Game',
+            AppLocalizations.of(context).bigGame,
             style: AppTextStyles.bodySmall.copyWith(
               fontWeight: FontWeight.w600,
               color: AppColors.brown,

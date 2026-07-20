@@ -621,6 +621,636 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Back to the game'**
   String get backToGameAction;
+
+  /// No description provided for @menuHome.
+  ///
+  /// In en, this message translates to:
+  /// **'Home'**
+  String get menuHome;
+
+  /// No description provided for @menuGameSetup.
+  ///
+  /// In en, this message translates to:
+  /// **'Game Setup'**
+  String get menuGameSetup;
+
+  /// No description provided for @menuTiles.
+  ///
+  /// In en, this message translates to:
+  /// **'Tiles'**
+  String get menuTiles;
+
+  /// No description provided for @menuScores.
+  ///
+  /// In en, this message translates to:
+  /// **'Scores'**
+  String get menuScores;
+
+  /// No description provided for @menuRules.
+  ///
+  /// In en, this message translates to:
+  /// **'Rules'**
+  String get menuRules;
+
+  /// No description provided for @titlePreparation.
+  ///
+  /// In en, this message translates to:
+  /// **'Preparation'**
+  String get titlePreparation;
+
+  /// No description provided for @titleGameDashboard.
+  ///
+  /// In en, this message translates to:
+  /// **'Game Dashboard'**
+  String get titleGameDashboard;
+
+  /// No description provided for @phaseTilePool.
+  ///
+  /// In en, this message translates to:
+  /// **'Tile Pool'**
+  String get phaseTilePool;
+
+  /// No description provided for @phasePlayerSetup.
+  ///
+  /// In en, this message translates to:
+  /// **'Player Setup'**
+  String get phasePlayerSetup;
+
+  /// No description provided for @phaseBoardSetup.
+  ///
+  /// In en, this message translates to:
+  /// **'Board Setup'**
+  String get phaseBoardSetup;
+
+  /// No description provided for @phaseSupplies.
+  ///
+  /// In en, this message translates to:
+  /// **'Supplies'**
+  String get phaseSupplies;
+
+  /// No description provided for @playersSection.
+  ///
+  /// In en, this message translates to:
+  /// **'Players'**
+  String get playersSection;
+
+  /// No description provided for @expansionsSection.
+  ///
+  /// In en, this message translates to:
+  /// **'Expansions'**
+  String get expansionsSection;
+
+  /// No description provided for @modulesSection.
+  ///
+  /// In en, this message translates to:
+  /// **'Modules'**
+  String get modulesSection;
+
+  /// No description provided for @needMorePlayers.
+  ///
+  /// In en, this message translates to:
+  /// **'Need {count}+'**
+  String needMorePlayers(int count);
+
+  /// No description provided for @tapColorHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap a color to add a player. Hold and drag to reorder.'**
+  String get tapColorHint;
+
+  /// No description provided for @selectExpansionsHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Select the expansions you\'re playing with'**
+  String get selectExpansionsHint;
+
+  /// No description provided for @selectModulesHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Select the modules you\'re playing with'**
+  String get selectModulesHint;
+
+  /// No description provided for @noExpansionWithModules.
+  ///
+  /// In en, this message translates to:
+  /// **'No expansion with modules are selected'**
+  String get noExpansionWithModules;
+
+  /// No description provided for @noModules.
+  ///
+  /// In en, this message translates to:
+  /// **'No modules'**
+  String get noModules;
+
+  /// No description provided for @startGame.
+  ///
+  /// In en, this message translates to:
+  /// **'Start Game'**
+  String get startGame;
+
+  /// No description provided for @resumeGame.
+  ///
+  /// In en, this message translates to:
+  /// **'Resume Game'**
+  String get resumeGame;
+
+  /// No description provided for @clearSetup.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear Setup'**
+  String get clearSetup;
+
+  /// No description provided for @gameVariant.
+  ///
+  /// In en, this message translates to:
+  /// **'Game Variant'**
+  String get gameVariant;
+
+  /// No description provided for @bigGame.
+  ///
+  /// In en, this message translates to:
+  /// **'Big Game'**
+  String get bigGame;
+
+  /// No description provided for @bigGameHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Use all tiles from all modules without substitutions'**
+  String get bigGameHint;
+
+  /// No description provided for @showAllTiles.
+  ///
+  /// In en, this message translates to:
+  /// **'Show All Tiles'**
+  String get showAllTiles;
+
+  /// No description provided for @hideTiles.
+  ///
+  /// In en, this message translates to:
+  /// **'Hide Tiles'**
+  String get hideTiles;
+
+  /// No description provided for @tilesInPlay.
+  ///
+  /// In en, this message translates to:
+  /// **'Tiles in Play'**
+  String get tilesInPlay;
+
+  /// No description provided for @scoreCalculator.
+  ///
+  /// In en, this message translates to:
+  /// **'Score Calculator'**
+  String get scoreCalculator;
+
+  /// No description provided for @noPlayersSelected.
+  ///
+  /// In en, this message translates to:
+  /// **'No players selected'**
+  String get noPlayersSelected;
+
+  /// No description provided for @noTiles.
+  ///
+  /// In en, this message translates to:
+  /// **'No tiles'**
+  String get noTiles;
+
+  /// No description provided for @baseGameOnly.
+  ///
+  /// In en, this message translates to:
+  /// **'Base game only'**
+  String get baseGameOnly;
+
+  /// No description provided for @playerPosition.
+  ///
+  /// In en, this message translates to:
+  /// **'Player {position}'**
+  String playerPosition(int position);
+
+  /// No description provided for @closeAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Close'**
+  String get closeAction;
+
+  /// No description provided for @workerSheetTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'The New Workers'**
+  String get workerSheetTitle;
+
+  /// No description provided for @workerChooseIntro.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose which worker tiles each player will use. All players use the same set.'**
+  String get workerChooseIntro;
+
+  /// No description provided for @workerHowItWorks.
+  ///
+  /// In en, this message translates to:
+  /// **'How does it work?'**
+  String get workerHowItWorks;
+
+  /// No description provided for @workerHelpBody.
+  ///
+  /// In en, this message translates to:
+  /// **'• The New Workers adds 4 new worker tiles with distributions different from the base game ones.\n• You can use a quick preset or manually adjust the quantity of each tile.\n• The balance between workers and jungle tiles matters: if the difference falls outside the indicated range, the game may feel unbalanced.\n• By default, the game recommends keeping 11 tiles per player, but you can add more for a longer game.'**
+  String get workerHelpBody;
+
+  /// No description provided for @workerPresetsSection.
+  ///
+  /// In en, this message translates to:
+  /// **'Presets'**
+  String get workerPresetsSection;
+
+  /// No description provided for @workerRandomSection.
+  ///
+  /// In en, this message translates to:
+  /// **'Random'**
+  String get workerRandomSection;
+
+  /// No description provided for @workerPresetBaseOnly.
+  ///
+  /// In en, this message translates to:
+  /// **'Base only'**
+  String get workerPresetBaseOnly;
+
+  /// No description provided for @workerPresetReplace.
+  ///
+  /// In en, this message translates to:
+  /// **'Replace'**
+  String get workerPresetReplace;
+
+  /// No description provided for @workerPresetBase0004.
+  ///
+  /// In en, this message translates to:
+  /// **'Base + 0-0-0-4'**
+  String get workerPresetBase0004;
+
+  /// No description provided for @workerPresetAddAll.
+  ///
+  /// In en, this message translates to:
+  /// **'Add all'**
+  String get workerPresetAddAll;
+
+  /// No description provided for @workerAddAllDefault.
+  ///
+  /// In en, this message translates to:
+  /// **'Add all (default)'**
+  String get workerAddAllDefault;
+
+  /// No description provided for @workerManual.
+  ///
+  /// In en, this message translates to:
+  /// **'Manual'**
+  String get workerManual;
+
+  /// No description provided for @workerSurprise.
+  ///
+  /// In en, this message translates to:
+  /// **'Surprise'**
+  String get workerSurprise;
+
+  /// No description provided for @workerSurpriseChip.
+  ///
+  /// In en, this message translates to:
+  /// **'Surprise +2'**
+  String get workerSurpriseChip;
+
+  /// No description provided for @workerSurpriseTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Base + 2 new tiles picked at random. Tap again for a different pair.'**
+  String get workerSurpriseTooltip;
+
+  /// No description provided for @workerDescBaseOnly.
+  ///
+  /// In en, this message translates to:
+  /// **'Uses only the base game tiles (11 per player). The new Diamante tiles are not added.'**
+  String get workerDescBaseOnly;
+
+  /// No description provided for @workerDescReplace.
+  ///
+  /// In en, this message translates to:
+  /// **'Replaces 4 base tiles (1-1-1-1) with the 4 new Diamante ones. Total: 11 per player.'**
+  String get workerDescReplace;
+
+  /// No description provided for @workerDescBase0004.
+  ///
+  /// In en, this message translates to:
+  /// **'Adds only the 0-0-0-4 tile to the 11 base tiles. Total: 12 per player. Recommended by the community (BGG).'**
+  String get workerDescBase0004;
+
+  /// No description provided for @workerDescAddAll.
+  ///
+  /// In en, this message translates to:
+  /// **'Adds the 4 new Diamante tiles to the 11 base ones. Total: 15 per player.'**
+  String get workerDescAddAll;
+
+  /// No description provided for @workerDescManual.
+  ///
+  /// In en, this message translates to:
+  /// **'Manual selection: adjust the quantity of each tile individually.'**
+  String get workerDescManual;
+
+  /// No description provided for @workerDescSurprise.
+  ///
+  /// In en, this message translates to:
+  /// **'Surprise: base tiles + 2 new Diamante tiles picked at random. Tap again for a different pair.'**
+  String get workerDescSurprise;
+
+  /// No description provided for @workerCustomPreset.
+  ///
+  /// In en, this message translates to:
+  /// **'Custom preset: {name}'**
+  String workerCustomPreset(String name);
+
+  /// No description provided for @workerSummaryLine.
+  ///
+  /// In en, this message translates to:
+  /// **'{label} · {count} tiles/player'**
+  String workerSummaryLine(String label, int count);
+
+  /// No description provided for @workerBaseTiles.
+  ///
+  /// In en, this message translates to:
+  /// **'Base tiles'**
+  String get workerBaseTiles;
+
+  /// No description provided for @workerNewTiles.
+  ///
+  /// In en, this message translates to:
+  /// **'New tiles (Diamante)'**
+  String get workerNewTiles;
+
+  /// No description provided for @workerBalanceOk.
+  ///
+  /// In en, this message translates to:
+  /// **'Balance is fine'**
+  String get workerBalanceOk;
+
+  /// No description provided for @workerBalanceOut.
+  ///
+  /// In en, this message translates to:
+  /// **'Outside recommended range'**
+  String get workerBalanceOut;
+
+  /// No description provided for @workerBalanceValid.
+  ///
+  /// In en, this message translates to:
+  /// **'Valid'**
+  String get workerBalanceValid;
+
+  /// No description provided for @workerBalanceOutShort.
+  ///
+  /// In en, this message translates to:
+  /// **'Out of range'**
+  String get workerBalanceOutShort;
+
+  /// No description provided for @workerBalanceHint.
+  ///
+  /// In en, this message translates to:
+  /// **'The rulebook recommends this margin to keep the game balanced, but you can still apply the selection.'**
+  String get workerBalanceHint;
+
+  /// No description provided for @workerBalanceWorkersWord.
+  ///
+  /// In en, this message translates to:
+  /// **'workers'**
+  String get workerBalanceWorkersWord;
+
+  /// No description provided for @workerBalanceJungleWord.
+  ///
+  /// In en, this message translates to:
+  /// **'jungle'**
+  String get workerBalanceJungleWord;
+
+  /// No description provided for @workerBalanceRange.
+  ///
+  /// In en, this message translates to:
+  /// **'(range: {min}–{max})'**
+  String workerBalanceRange(int min, int max);
+
+  /// No description provided for @workerTilesPerPlayerLine.
+  ///
+  /// In en, this message translates to:
+  /// **'Tiles per player: {count}'**
+  String workerTilesPerPlayerLine(int count);
+
+  /// No description provided for @workerLockedTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Required by Tree of Life (2 players)'**
+  String get workerLockedTooltip;
+
+  /// No description provided for @resetAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Reset'**
+  String get resetAction;
+
+  /// No description provided for @applyAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Apply'**
+  String get applyAction;
+
+  /// No description provided for @saveAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Save'**
+  String get saveAction;
+
+  /// No description provided for @deleteAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete'**
+  String get deleteAction;
+
+  /// No description provided for @savePresetTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Save as preset'**
+  String get savePresetTitle;
+
+  /// No description provided for @presetNameLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Preset name'**
+  String get presetNameLabel;
+
+  /// No description provided for @presetNameHint.
+  ///
+  /// In en, this message translates to:
+  /// **'e.g. Our favorite'**
+  String get presetNameHint;
+
+  /// No description provided for @deletePresetTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete preset'**
+  String get deletePresetTitle;
+
+  /// No description provided for @deletePresetConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete \'{name}\'?'**
+  String deletePresetConfirm(String name);
+
+  /// No description provided for @errorLoadingPresets.
+  ///
+  /// In en, this message translates to:
+  /// **'Error loading custom presets'**
+  String get errorLoadingPresets;
+
+  /// No description provided for @errorSavingPresets.
+  ///
+  /// In en, this message translates to:
+  /// **'Error saving custom presets'**
+  String get errorSavingPresets;
+
+  /// No description provided for @hutRegisterTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Register the hut throw'**
+  String get hutRegisterTitle;
+
+  /// No description provided for @hutRegisterHint.
+  ///
+  /// In en, this message translates to:
+  /// **'For each physical tile, pick the side that landed face up.'**
+  String get hutRegisterHint;
+
+  /// No description provided for @hutRegisterAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Register which huts landed face up'**
+  String get hutRegisterAction;
+
+  /// No description provided for @hutRegisteredEdit.
+  ///
+  /// In en, this message translates to:
+  /// **'Throw registered · tap to edit'**
+  String get hutRegisteredEdit;
+
+  /// No description provided for @forgetThrowAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Forget throw'**
+  String get forgetThrowAction;
+
+  /// No description provided for @hutMarketCrier.
+  ///
+  /// In en, this message translates to:
+  /// **'Market Crier'**
+  String get hutMarketCrier;
+
+  /// No description provided for @hutHermit.
+  ///
+  /// In en, this message translates to:
+  /// **'Hermit'**
+  String get hutHermit;
+
+  /// No description provided for @hutRoadWorker.
+  ///
+  /// In en, this message translates to:
+  /// **'Road Worker'**
+  String get hutRoadWorker;
+
+  /// No description provided for @hutTrader.
+  ///
+  /// In en, this message translates to:
+  /// **'Trader'**
+  String get hutTrader;
+
+  /// No description provided for @hutFarmer.
+  ///
+  /// In en, this message translates to:
+  /// **'Farmer'**
+  String get hutFarmer;
+
+  /// No description provided for @hutShaman.
+  ///
+  /// In en, this message translates to:
+  /// **'Shaman'**
+  String get hutShaman;
+
+  /// No description provided for @hutMonk.
+  ///
+  /// In en, this message translates to:
+  /// **'Monk'**
+  String get hutMonk;
+
+  /// No description provided for @hutMasterBuilder.
+  ///
+  /// In en, this message translates to:
+  /// **'Master Builder'**
+  String get hutMasterBuilder;
+
+  /// No description provided for @hutForeman.
+  ///
+  /// In en, this message translates to:
+  /// **'Foreman'**
+  String get hutForeman;
+
+  /// No description provided for @hutFountainMaster.
+  ///
+  /// In en, this message translates to:
+  /// **'Fountain Master'**
+  String get hutFountainMaster;
+
+  /// No description provided for @hutChiefsDaughter.
+  ///
+  /// In en, this message translates to:
+  /// **'Chief\'s Daughter'**
+  String get hutChiefsDaughter;
+
+  /// No description provided for @hutChiefsSon.
+  ///
+  /// In en, this message translates to:
+  /// **'Chief\'s Son'**
+  String get hutChiefsSon;
+
+  /// No description provided for @hutChiefsWife.
+  ///
+  /// In en, this message translates to:
+  /// **'Chief\'s Wife'**
+  String get hutChiefsWife;
+
+  /// No description provided for @hutChief.
+  ///
+  /// In en, this message translates to:
+  /// **'Chief'**
+  String get hutChief;
+
+  /// No description provided for @menuTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Menu'**
+  String get menuTitle;
+
+  /// No description provided for @summaryTiles.
+  ///
+  /// In en, this message translates to:
+  /// **'Tiles'**
+  String get summaryTiles;
+
+  /// No description provided for @summaryWorkers.
+  ///
+  /// In en, this message translates to:
+  /// **'Workers'**
+  String get summaryWorkers;
+
+  /// No description provided for @summaryJungle.
+  ///
+  /// In en, this message translates to:
+  /// **'Jungle'**
+  String get summaryJungle;
+
+  /// No description provided for @summaryHuts.
+  ///
+  /// In en, this message translates to:
+  /// **'Huts'**
+  String get summaryHuts;
 }
 
 class _AppLocalizationsDelegate

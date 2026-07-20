@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:companion_for_cacao/config/routes/app_routes.dart';
 import 'package:companion_for_cacao/core/theme/app_colors.dart';
 import 'package:companion_for_cacao/core/theme/app_text_styles.dart';
+import 'package:companion_for_cacao/l10n/generated/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_advanced_drawer/flutter_advanced_drawer.dart';
 import 'package:go_router/go_router.dart';
@@ -43,34 +44,47 @@ class MenuWidget extends StatelessWidget {
             Center(
               child: Padding(
                 padding: const EdgeInsets.only(left: 55),
-                child: Text('Menu', style: AppTextStyles.loadingTextStyle),
+                child: Text(
+                  AppLocalizations.of(context).menuTitle,
+                  style: AppTextStyles.loadingTextStyle,
+                ),
               ),
             ),
             Expanded(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  _menuItem(context, Icons.home, 'Home', AppRoutes.home),
+                  _menuItem(
+                    context,
+                    Icons.home,
+                    AppLocalizations.of(context).menuHome,
+                    AppRoutes.home,
+                  ),
                   _menuItem(
                     context,
                     Icons.group,
-                    'Game setup',
+                    AppLocalizations.of(context).menuGameSetup,
                     AppRoutes.gameSetup,
                   ),
-                  _menuItem(context, Icons.widgets, 'Tiles', AppRoutes.tiles),
+                  _menuItem(
+                    context,
+                    Icons.widgets,
+                    AppLocalizations.of(context).menuTiles,
+                    AppRoutes.tiles,
+                  ),
                   // Menu labels stay short so they fit on one line at the
                   // menu font size (i18n must pick short forms too, e.g.
                   // 'Puntuació' / 'Puntuación' — not 'Calculadora de...').
                   _menuItem(
                     context,
                     Icons.calculate,
-                    'Scores',
+                    AppLocalizations.of(context).menuScores,
                     AppRoutes.scoreCalculator,
                   ),
                   _menuItem(
                     context,
                     Icons.library_books,
-                    'Rules',
+                    AppLocalizations.of(context).menuRules,
                     AppRoutes.rules,
                   ),
                 ],
