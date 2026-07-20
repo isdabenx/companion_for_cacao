@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:companion_for_cacao/config/constants/game_constants.dart';
 import 'package:companion_for_cacao/core/domain/entities/boardgame_entity.dart';
 import 'package:companion_for_cacao/core/domain/entities/module_entity.dart';
@@ -212,12 +213,29 @@ class GameSetupNotifier extends _$GameSetupNotifier {
   /// tiles and preparation steps accordingly.
   void applyWorkerSelection(WorkerSelectionEntity selection) {
     if (state.value == null) return;
-    final updated = state.value!.copyWith(workerSelection: selection);
+    final previous = state.value!;
+    final updated = previous.copyWith(workerSelection: selection);
     final useCase = ref.read(prepareGameUseCaseProvider);
+    final result = useCase.execute(updated);
+    // The pipeline regenerates the preparation list from scratch: carry
+    // over the completion of steps the user had already checked (matched
+    // by id), so re-applying a selection doesn't wipe their progress.
+    final preparation = [
+      for (final step in result.preparation)
+        step.copyWith(
+          isCompleted:
+              previous.preparation
+                  .firstWhereOrNull((p) => p.id == step.id)
+                  ?.isCompleted ??
+              step.isCompleted,
+        ),
+    ];
     state = AsyncData(
-      useCase
-          .execute(updated)
-          .copyWith(isStarted: true, workerSelection: selection),
+      result.copyWith(
+        preparation: preparation,
+        isStarted: true,
+        workerSelection: selection,
+      ),
     );
   }
 
@@ -228,12 +246,15 @@ class GameSetupNotifier extends _$GameSetupNotifier {
   }
 
   /// Registers which side of each hut tile landed face up in the throw.
+  /// The hut-throw preparation step derives its completion from this (see
+  /// DetailedPreparationWidget), so registering IS completing the step.
   void applyHutLayout(HutLayoutEntity layout) {
     if (state.value == null) return;
     state = AsyncData(state.value!.copyWith(hutLayout: layout));
   }
 
-  /// Forgets the registered hut throw (supply becomes unknown again).
+  /// Forgets the registered hut throw (supply becomes unknown again),
+  /// which also reopens its preparation step.
   void clearHutLayout() {
     if (state.value == null) return;
     state = AsyncData(state.value!.copyWith(clearHutLayout: true));

@@ -68,70 +68,84 @@ class WorkerSelectorWidget extends ConsumerWidget {
       jungleTileCount: jungleTileCount,
     );
 
-    // Match PreparationCard margins so the row aligns with the other cards
+    // Match PreparationCard margins and completed styling (dimmed, flat)
+    // so the card behaves like the other steps once its choice is applied.
     return Padding(
       padding: const EdgeInsets.symmetric(
         horizontal: AppSpacing.l,
         vertical: 6,
       ),
-      child: Material(
-        color: AppColors.cream,
-        borderRadius: BorderRadius.circular(12),
-        elevation: 1,
-        child: InkWell(
+      child: Opacity(
+        opacity: hasSelection ? 0.6 : 1.0,
+        child: Material(
+          color: AppColors.cream,
           borderRadius: BorderRadius.circular(12),
-          onTap: () => _openEditor(context, ref, gameState),
-          child: Container(
-            padding: const EdgeInsets.symmetric(
-              horizontal: AppSpacing.m,
-              vertical: AppSpacing.s,
-            ),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(12),
-              border: Border.all(
-                color: AppColors.greenDark.withValues(alpha: 0.3),
-                width: 1,
+          elevation: hasSelection ? 0 : 1,
+          child: InkWell(
+            borderRadius: BorderRadius.circular(12),
+            onTap: () => _openEditor(context, ref, gameState),
+            child: Container(
+              padding: const EdgeInsets.symmetric(
+                horizontal: AppSpacing.m,
+                vertical: AppSpacing.s,
               ),
-            ),
-            child: Row(
-              children: [
-                const Icon(
-                  Icons.people_outline,
-                  color: AppColors.brown,
-                  size: 20,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(
+                  color: AppColors.greenDark.withValues(alpha: 0.3),
+                  width: 1,
                 ),
-                const SizedBox(width: AppSpacing.s),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'The New Workers',
-                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          fontWeight: FontWeight.bold,
-                          color: AppColors.brown,
-                        ),
-                      ),
-                      const SizedBox(height: 2),
-                      Text(
-                        '$label · $tilesPerPlayer tiles/player',
-                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          color: AppColors.brown.withValues(alpha: 0.7),
-                          fontSize: 11,
-                        ),
-                      ),
-                    ],
+              ),
+              child: Row(
+                children: [
+                  const Icon(
+                    Icons.people_outline,
+                    color: AppColors.brown,
+                    size: 20,
                   ),
-                ),
-                const SizedBox(width: AppSpacing.s),
-                _BalanceBadge(isValid: balance.isValid),
-                const SizedBox(width: AppSpacing.s),
-                Icon(
-                  Icons.edit_outlined,
-                  color: AppColors.greenDarker,
-                  size: 18,
-                ),
-              ],
+                  const SizedBox(width: AppSpacing.s),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'The New Workers',
+                          style: Theme.of(context).textTheme.bodySmall
+                              ?.copyWith(
+                                fontWeight: FontWeight.bold,
+                                color: AppColors.brown,
+                              ),
+                        ),
+                        const SizedBox(height: 2),
+                        Text(
+                          '$label · $tilesPerPlayer tiles/player',
+                          style: Theme.of(context).textTheme.bodySmall
+                              ?.copyWith(
+                                color: AppColors.brown.withValues(alpha: 0.7),
+                                fontSize: 11,
+                              ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(width: AppSpacing.s),
+                  _BalanceBadge(isValid: balance.isValid),
+                  const SizedBox(width: AppSpacing.s),
+                  // The step completes by applying a selection in the editor
+                  // (mirrors the checkbox of regular preparation cards).
+                  Icon(
+                    hasSelection ? Icons.check_circle : Icons.circle_outlined,
+                    color: AppColors.brown,
+                    size: 20,
+                  ),
+                  const SizedBox(width: AppSpacing.s),
+                  Icon(
+                    Icons.edit_outlined,
+                    color: AppColors.greenDarker,
+                    size: 18,
+                  ),
+                ],
+              ),
             ),
           ),
         ),

@@ -5,6 +5,8 @@ import 'package:companion_for_cacao/features/game_setup/domain/entities/game_set
 import 'package:companion_for_cacao/features/game_setup/domain/entities/player_entity.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/preparation_entity.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/preparation_phase.dart';
+import 'package:companion_for_cacao/core/domain/services/hut_tile_supply.dart';
+import 'package:companion_for_cacao/features/game_setup/domain/entities/hut_layout_entity.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/worker_selection_entity.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/use_cases/prepare_game_use_case.dart';
 import 'package:companion_for_cacao/features/game_setup/presentation/providers/game_setup_notifier.dart';
@@ -395,6 +397,59 @@ void main() {
     );
 
     test(
+      'applyWorkerSelection preserves completion of already-checked steps',
+      () async {
+        // The pipeline regenerates the list with all steps unchecked.
+        final regenerated = GameSetupStateEntity(
+          players: [PlayerEntity(name: 'Alice', color: 'red')],
+          expansions: [baseGame],
+          preparation: const [
+            PreparationEntity(
+              id: 'prep-1',
+              description: 'Prepare the board',
+              phase: PreparationPhase.boardSetup,
+            ),
+            PreparationEntity(
+              id: 'prep-2',
+              description: 'Give players their pieces',
+              phase: PreparationPhase.playerSetup,
+            ),
+          ],
+        );
+        when(
+          () => mockPrepareGameUseCase.execute(any()),
+        ).thenReturn(regenerated);
+
+        final container = createContainer(
+          prepareGameUseCase: mockPrepareGameUseCase,
+        );
+        addTearDown(container.dispose);
+        await container.read(gameSetupProvider.future);
+
+        final notifier = container.read(gameSetupProvider.notifier);
+        notifier.addPlayer('Alice', 'red');
+        notifier.startGame();
+        notifier.togglePreparationCompletion('prep-1');
+
+        const selection = WorkerSelectionEntity(
+          mode: WorkerSelectionMode.preset,
+          presetType: WorkerPresetType.baseOnly,
+        );
+        notifier.applyWorkerSelection(selection);
+
+        final state = await container.read(gameSetupProvider.future);
+        expect(
+          state.preparation.firstWhere((p) => p.id == 'prep-1').isCompleted,
+          isTrue,
+        );
+        expect(
+          state.preparation.firstWhere((p) => p.id == 'prep-2').isCompleted,
+          isFalse,
+        );
+      },
+    );
+
+    test(
       'startGame does not reuse a worker selection from a previous game',
       () async {
         when(() => mockPrepareGameUseCase.execute(any())).thenAnswer(
@@ -642,5 +697,47 @@ void main() {
         expect(state.preparation.last.isCompleted, isTrue);
       },
     );
+
+    test('hut layout can be registered, forgotten, and never leaks into '
+        'the next game', () async {
+      final preparedState = GameSetupStateEntity(
+        players: [
+          PlayerEntity(name: 'Alice', color: 'red', isSelected: true),
+          PlayerEntity(name: 'Bob', color: 'yellow', isSelected: true),
+        ],
+        expansions: [baseGame],
+      );
+      when(
+        () => mockPrepareGameUseCase.execute(any()),
+      ).thenReturn(preparedState);
+
+      final container = createContainer(
+        prepareGameUseCase: mockPrepareGameUseCase,
+      );
+      addTearDown(container.dispose);
+      await container.read(gameSetupProvider.future);
+
+      final notifier = container.read(gameSetupProvider.notifier);
+      notifier.addPlayer('Alice', 'red');
+      notifier.addPlayer('Bob', 'yellow');
+      notifier.startGame();
+
+      final layout = HutLayoutEntity(
+        faceUp: [for (final (sideA, _) in HutTileSupply.tiles) sideA],
+      );
+      notifier.applyHutLayout(layout);
+      var state = await container.read(gameSetupProvider.future);
+      expect(state.hutLayout, layout);
+
+      notifier.clearHutLayout();
+      state = await container.read(gameSetupProvider.future);
+      expect(state.hutLayout, isNull);
+
+      // A registered throw belongs to its game only.
+      notifier.applyHutLayout(layout);
+      notifier.startGame();
+      state = await container.read(gameSetupProvider.future);
+      expect(state.hutLayout, isNull);
+    });
   });
 }

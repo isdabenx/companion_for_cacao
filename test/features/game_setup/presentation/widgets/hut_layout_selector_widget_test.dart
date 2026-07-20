@@ -31,7 +31,7 @@ void main() {
       await tester.pumpWidget(wrap(GameSetupStateEntity()));
       await tester.pumpAndSettle();
 
-      expect(find.text('Register throw result (optional)'), findsOneWidget);
+      expect(find.text('Register which huts landed face up'), findsOneWidget);
       expect(find.byIcon(Icons.app_registration), findsOneWidget);
     });
 

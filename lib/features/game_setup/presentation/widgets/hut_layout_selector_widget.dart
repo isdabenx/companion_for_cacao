@@ -11,10 +11,29 @@ import 'package:companion_for_cacao/shared/widgets/selectable_chip.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-/// Compact action row hosted inside the hut-throw preparation card:
-/// register which side of each of the 12 physical hut tiles landed face
-/// up. Optional — when registered, the score calculator offers exactly
-/// the huts in play.
+/// Opens the hut-throw editor sheet. Registering the throw is what marks
+/// the hut-throw preparation step as completed.
+void showHutLayoutEditor(BuildContext context, WidgetRef ref) {
+  final notifier = ref.read(gameSetupProvider.notifier);
+  final layout = ref.read(gameSetupProvider).value?.hutLayout;
+  showModalBottomSheet<void>(
+    context: context,
+    isScrollControlled: true,
+    backgroundColor: AppColors.cream,
+    shape: const RoundedRectangleBorder(
+      borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+    ),
+    builder: (_) => _HutLayoutEditorSheet(
+      initialLayout: layout,
+      onApply: notifier.applyHutLayout,
+      onClear: notifier.clearHutLayout,
+    ),
+  );
+}
+
+/// Status row hosted inside the hut-throw preparation card: the step is
+/// completed by registering which side of each of the 12 physical hut
+/// tiles landed face up (no manual checkbox).
 class HutThrowRegisterRow extends ConsumerWidget {
   const HutThrowRegisterRow({super.key});
 
@@ -29,7 +48,7 @@ class HutThrowRegisterRow extends ConsumerWidget {
       borderRadius: BorderRadius.circular(8),
       child: InkWell(
         borderRadius: BorderRadius.circular(8),
-        onTap: () => _openEditor(context, ref, layout),
+        onTap: () => showHutLayoutEditor(context, ref),
         child: Padding(
           padding: const EdgeInsets.symmetric(
             horizontal: AppSpacing.s,
@@ -48,8 +67,8 @@ class HutThrowRegisterRow extends ConsumerWidget {
               Expanded(
                 child: Text(
                   layout == null
-                      ? 'Register throw result (optional)'
-                      : 'Throw registered · exact hut supply known',
+                      ? 'Register which huts landed face up'
+                      : 'Throw registered · tap to edit',
                   style: Theme.of(context).textTheme.bodySmall?.copyWith(
                     color: AppColors.brown,
                     fontWeight: FontWeight.w600,
@@ -65,27 +84,6 @@ class HutThrowRegisterRow extends ConsumerWidget {
             ],
           ),
         ),
-      ),
-    );
-  }
-
-  void _openEditor(
-    BuildContext context,
-    WidgetRef ref,
-    HutLayoutEntity? layout,
-  ) {
-    final notifier = ref.read(gameSetupProvider.notifier);
-    showModalBottomSheet<void>(
-      context: context,
-      isScrollControlled: true,
-      backgroundColor: AppColors.cream,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-      ),
-      builder: (_) => _HutLayoutEditorSheet(
-        initialLayout: layout,
-        onApply: notifier.applyHutLayout,
-        onClear: notifier.clearHutLayout,
       ),
     );
   }
