@@ -281,12 +281,14 @@ Les 14 cabanes no tenen model de dades (ni JSON ni Drift). Caldria un HutModel o
 - **Configuració de partida:** Stepper de 3 passos (jugadors, expansions, mòduls) i generació de la preparació pas a pas. S'han integrat completament tots els mòduls de Chocolatl, Diamante i la Variant Gran Partida.
 - **Regles:** Visor de PDF integrat per als manuals de joc base, Chocolatl i Diamante.
 - **Rajoles d'expansions:** Models, JSON i handlers per a totes les expansions implementats.
+- **Calculadora de puntuació final:** Flux pas a pas amb passos dinàmics segons mòduls (temples/gemmes, cabanes), càlcul automàtic d'empats de temple i desempat oficial per cacau sobrant. Vegeu secció 12.
 
 ### Fase 1 — Funcionalitats Core (Prioritat alta)
-1. **Calculadora de puntuació final:** Formulari pas a pas amb suport per expansions (temples/gemmes, cabanes, track d'aigua). Gestió automàtica d'empats i desempats.
+1. **Calculadora de puntuació final:** Formulari pas a pas amb suport per expansions (temples/gemmes, cabanes, track d'aigua). Gestió automàtica d'empats i desempats. (COMPLETAT)
 2. **Filtre i cerca de rajoles:** Filtrar per tipus, color, expansió i mòdul. Cerca per nom. (COMPLETAT)
 3. **Selector de primer jugador:** Aleatori temàtic ("qui ha menjat xocolata més recentment?"), rotació basada en historial, o manual. (COMPLETAT)
 4. **Rajoles d'expansions completes:** Afegir totes les fitxes de Diamante al JSON i ampliar TileType (Chocolatl ja afegit). (COMPLETAT)
+5. **Registre de la tirada de cabanes (Hut Module):** Pas opcional de preparació per apuntar quina cara de cada una de les 12 rajoles físiques ha quedat cap amunt (parelles a `HutTileSupply.tiles` de la secció 12; mateix patró que el selector de treballadors del mòdul Nous Treballadors: entitat `HutLayoutEntity` dins de `GameSetupStateEntity`). La calculadora de puntuació, en pre-omplir-se des de la partida activa, ofereix només les cabanes realment disponibles; imatges de cada funció ja disponibles al catàleg de rajoles.
 
 ### Fase 2 — Diferenciació (Prioritat mitjana)
 5. **Historial de partides:** Registre de cada sessió amb jugadors, puntuacions, guanyador, durada, expansions utilitzades i notes opcionals.
@@ -303,7 +305,7 @@ Les 14 cabanes no tenen model de dades (ni JSON ni Drift). Caldria un HutModel o
 
 ### Fase 4 — Qualitat i Accessibilitat
 14. **Mode daltònic:** Patrons sobre colors (ratlles, punts), símbols per jugador (triangle, cercle, quadrat, estrella), paleta de colors segura.
-15. **Internacionalització (i18n):** Suport multiidioma (català, castellà, anglès com a mínim).
+15. **Internacionalització (i18n):** Suport multiidioma (català, castellà, anglès com a mínim). Restricció: les etiquetes del menú lateral han de ser curtes per cabre en una línia amb la font del menú (p. ex. "Scores" → "Puntuació"/"Puntuación", mai "Calculadora de puntuació").
 16. **Configuració general:** Preferències de l'app (tema, idioma, sons, notificacions).
 
 ## 8. Arquitectura Tècnica
@@ -349,8 +351,10 @@ Rutes definides a `app_routes.dart`:
 - `/game_setup`: `GameSetupScreen`
 - `/game_setup_detail`: `GameSetupDetailScreen` (rep `GameSetupStateEntity`)
 - `/rule`: `RuleScreen`
+- `/score_calculator`: `ScoreCalculatorScreen`
+- `/score_calculator/result`: `ScoreResultScreen`
 
-**Planificades:** `/score_calculator`, `/settings`, `/game_history`.
+**Planificades:** `/settings`, `/game_history`.
 
 ## 10. Models de Dades
 
@@ -363,8 +367,11 @@ Rutes definides a `app_routes.dart`:
 - `PreparationEntity`: Logica de preparació de rajoles.
 - `TileSettingsEntity`: Preferències de visualització de rajoles.
 
+- `ScoreStateEntity` / `ScoreInputEntity` / `PlayerScoreInputEntity`: Estat i entrades de la calculadora de puntuació.
+- `PlayerScoreEntity` / `ScoreResultEntity`: Desglossament per categoria i rànquing final.
+- `TempleEntryEntity`, `HutType`, `ScoreCategory`: Suport de puntuació (temples, cabanes, categories).
+
 ### Proposats
-- `ScoreEntryEntity`: Puntuació per jugador i categoria.
 - `GameSessionEntity`: Dades completes d'una partida finalitzada.
 - `SettingsEntity`: Preferències globals de l'usuari.
 
@@ -377,18 +384,42 @@ El flux del stepper consta de 3 passos:
 **Lògica de preparació:** Gestionada per `game_setup_notifier`. Inclou l'assignació de taulers, portadors d'aigua, rajoles per color i l'eliminació de rajoles segons el nombre de jugadors (2, 3 o 4).
 
 ## 12. Calculadora de Puntuació Final
-Algoritme de càlcul pas a pas:
-1. **Or acumulat:** Introducció manual de l'or obtingut.
-2. **Track d'aigua:** Selecció de la posició final i consulta del valor a la taula.
-3. **Temples:** (Si el mòdul de gemmes no està actiu) Introducció de treballadors per jugador i càlcul de 1r/2n lloc amb regles d'empat.
-4. **Fitxes de sol:** 1 or per cada fitxa no utilitzada.
-5. **Cabanes:** (Si el mòdul està actiu) Càlcul dels bonus de final de partida.
-6. **Mines de gemmes:** (Si el mòdul està actiu) Suma del valor de les màscares i 1 or per gemma sobrant.
-7. **Resultat:** Determinació del guanyador. En cas d'empat, guanya qui estigui més avançat al track d'aigua.
+
+Implementada a `features/score/` amb un motor de càlcul pur (`ScoreCalculatorService`, sense dependències de Flutter ni de BD, cobert amb tests unitaris) i un flux de passos dinàmics segons els mòduls actius. S'obre des del menú lateral (standalone, amb mini-configuració de jugadors i mòduls al primer pas) o des del Game Dashboard (pre-omplerta amb els jugadors i mòduls de la partida activa). Sessió efímera: preparada per mapar al futur `GameSessionEntity` (historial, Fase 2).
+
+Passos del flux (verificats contra els reglaments oficials de `assets/rules/`):
+1. **Jugadors i mòduls:** Selecció/confirmació de jugadors i dels dos mòduls que alteren la puntuació (Cabanes, Mines de Gemmes).
+2. **Or acumulat:** Introducció manual de l'or obtingut durant la partida.
+3. **Track d'aigua:** Posició final del portador (caselles: -10, -4, -1, 0, 2, 4, 7, 11, 16; les negatives resten).
+4. **Temples:** (Només si Mines de Gemmes NO està actiu, perquè les substitueixen) Per cada temple, treballadors adjacents per jugador; 1r = 6 or i 2n = 3 or. Empat al 1r: es reparteixen 6 or arrodonint avall i el 2n no cobra; 1r clar amb empat al 2n: es reparteixen 3 or arrodonint avall. Cal ≥1 treballador per puntuar.
+5. **Fitxes de sol:** 1 or per cada fitxa no utilitzada (màxim 3).
+6. **Cacau sobrant:** No dona or, però és el desempat oficial i alimenta el bonus de la cabana Comerciant.
+7. **Cabanes:** (Si el mòdul està actiu) Es retorna el cost de construcció de cada cabana i s'hi sumen els bonus. Font (+4 si aigua a 16), Comerciant (1 or/cacau), Monjo (1 or/temple amb presència) i Mestre d'obres (1 or/altra cabana) es deriven automàticament d'altres passos; Ermità i Peó de camins demanen un recompte manual del tauler. La selecció valida contra el **subministrament físic** (vegeu taula següent): cada cabana construïda ha de sortir d'una rajola física diferent (`HutTileSupply.isRealizable`, assignació per backtracking), així que una funció pot estar en joc com a màxim tantes vegades com rajoles la porten, i les dues cares d'una mateixa rajola s'exclouen.
+
+**Rajoles físiques del Hut Module** (12 rajoles a doble cara, transcrites dels components reals — fotos anvers/revers girades en la mateixa posició). Deu funcions apareixen en dues rajoles; la família del Cap només en una. Les rajoles 1 i 3 són dues còpies idèntiques:
+
+| # | Cara A | Cara B |
+|---|---|---|
+| 1 | Market Crier (4) | Hermit (6) |
+| 2 | Trader (6) | Farmer (8) |
+| 3 | Hermit (6) | Market Crier (4) |
+| 4 | Road Worker (6) | Shaman (8) |
+| 5 | Shaman (8) | Master Builder (10) |
+| 6 | Farmer (8) | Monk (10) |
+| 7 | Master Builder (10) | Chief's Son (16) |
+| 8 | Monk (10) | Chief's Daughter (14) |
+| 9 | Foreman (12) | Road Worker (6) |
+| 10 | Fountain Master (12) | Trader (6) |
+| 11 | Chief's Wife (20) | Fountain Master (12) |
+| 12 | Chief (24) | Foreman (12) |
+
+Font de veritat al codi: `features/score/domain/services/hut_tile_supply.dart`. Si mai una altra feature necessita aquesta relació (p. ex. mostrar el revers al catàleg de rajoles), es pot migrar a `tiles.json`/drift partint d'aquesta taula.
+8. **Mines de gemmes:** (Si el mòdul està actiu) Assignació de les 7 màscares (2×8, 2×9, 2×10, 1×12) al seu propietari i 1 or per gemma sobrant.
+9. **Resultat:** Rànquing amb desglossament per categoria. **En cas d'empat d'or guanya qui té més cacau sobrant; si persisteix, victòria compartida** (regla oficial del reglament base, pàg. 4 — corregit: una versió anterior d'aquest document deia erròniament que el desempat era pel track d'aigua).
 
 ## 13. Planificació i Prioritats (Roadmap)
 
-- **Fase 1:** Calculadora de puntuació, filtre de rajoles, selector primer jugador, rajoles expansions
+- **Fase 1:** Calculadora de puntuació, filtre de rajoles, selector primer jugador, rajoles expansions, registre de la tirada de cabanes
 - **Fase 2:** Historial de partides, perfils de jugador, comptador probabilitats, foto partida, gestor expansions millorat
 - **Fase 3:** Assoliments, grups de joc, anàlisi post-partida, temporitzador
 - **Fase 4:** Mode daltònic, i18n, configuració general
