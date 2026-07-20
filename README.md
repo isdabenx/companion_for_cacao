@@ -217,7 +217,9 @@ feature/
 
 ### Internacionalitzacio *(avancada des de la Fase 4)*
 
-- [ ] Catala, castella i angles — despres d'UX-1, sobre el contingut nou
+- [x] Infraestructura gen-l10n + contingut de preparacio (ca/es/en, terminologia oficial Devir)
+- [x] UI del flux de joc (menu, titols, fases, Game Setup, dashboard, sheets, noms de cabanes)
+- [ ] Cataleg de tiles i noms d'expansions/moduls per id estable + Home/score/regles
 
 ### Fase 2 — Diferenciacio
 
