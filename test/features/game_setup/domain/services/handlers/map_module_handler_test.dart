@@ -1,10 +1,13 @@
 import 'package:companion_for_cacao/core/domain/entities/tile_entity.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/player_entity.dart';
+import 'package:companion_for_cacao/features/game_setup/domain/entities/preparation_actor.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/preparation_entity.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/preparation_phase.dart';
+import 'package:companion_for_cacao/features/game_setup/domain/entities/table_zone.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/services/handlers/map_module_handler.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import '../../../../../support/preparation_fixtures.dart';
 import '../../../../../support/tile_fixtures.dart';
 
 void main() {
@@ -32,21 +35,26 @@ void main() {
       ];
 
       mockPreparationSteps = [
-        const PreparationEntity(
+        makePrepStep(
           id: 'setup_tiles_red',
-          description: 'Setup tiles for red',
+          detail: 'Setup tiles for red.',
+          actor: PreparationActor.player,
+          tableZone: TableZone.playerArea,
           phase: PreparationPhase.playerSetup,
           color: 'red',
         ),
-        const PreparationEntity(
+        makePrepStep(
           id: 'setup_tiles_blue',
-          description: 'Setup tiles for blue',
+          detail: 'Setup tiles for blue.',
+          actor: PreparationActor.player,
+          tableZone: TableZone.playerArea,
           phase: PreparationPhase.playerSetup,
           color: 'blue',
         ),
-        const PreparationEntity(
+        makePrepStep(
           id: 'setup_jungle_display',
-          description: 'Setup jungle display',
+          detail: 'Setup jungle display.',
+          tableZone: TableZone.jungleDisplay,
           phase: PreparationPhase.boardSetup,
         ),
       ];
@@ -91,10 +99,16 @@ void main() {
             equals(PreparationPhase.playerSetup),
           );
           expect(result[mapTokensRedIndex].color, equals('red'));
-
-          // Check map tokens description (individual, no surplus text)
           expect(
-            result[mapTokensRedIndex].description,
+            result[mapTokensRedIndex].actor,
+            equals(PreparationActor.player),
+          );
+          expect(result[mapTokensRedIndex].groupId, equals('group_player_red'));
+          expect(result[mapTokensRedIndex].quantity, equals(2));
+
+          // Check map tokens detail (individual, no surplus text)
+          expect(
+            result[mapTokensRedIndex].detail,
             equals('Player red takes 2 map tiles.'),
           );
 
@@ -118,6 +132,7 @@ void main() {
             result[surplusIndex].phase,
             equals(PreparationPhase.playerSetup),
           );
+          expect(result[surplusIndex].tableZone, equals(TableZone.box));
 
           // Check replaced jungle display
           expect(
@@ -133,6 +148,12 @@ void main() {
             result[mapBoardIndex].phase,
             equals(PreparationPhase.boardSetup),
           );
+          expect(
+            result[mapBoardIndex].detail,
+            equals(
+              'Place the map board directly next to the jungle draw pile.',
+            ),
+          );
 
           final jungleDisplayMapIndex = result.indexWhere(
             (step) => step.id == 'setup_jungle_display_map',
@@ -147,9 +168,11 @@ void main() {
 
       test('should handle missing setup_jungle_display gracefully', () {
         final stepsWithoutDisplay = [
-          const PreparationEntity(
+          makePrepStep(
             id: 'setup_tiles_red',
-            description: 'Setup tiles for red',
+            detail: 'Setup tiles for red.',
+            actor: PreparationActor.player,
+            tableZone: TableZone.playerArea,
             phase: PreparationPhase.playerSetup,
             color: 'red',
           ),
@@ -178,33 +201,42 @@ void main() {
         ];
 
         final stepsWithFourPlayers = [
-          const PreparationEntity(
+          makePrepStep(
             id: 'setup_tiles_red',
-            description: 'Setup tiles for red',
+            detail: 'Setup tiles for red.',
+            actor: PreparationActor.player,
+            tableZone: TableZone.playerArea,
             phase: PreparationPhase.playerSetup,
             color: 'red',
           ),
-          const PreparationEntity(
+          makePrepStep(
             id: 'setup_tiles_blue',
-            description: 'Setup tiles for blue',
+            detail: 'Setup tiles for blue.',
+            actor: PreparationActor.player,
+            tableZone: TableZone.playerArea,
             phase: PreparationPhase.playerSetup,
             color: 'blue',
           ),
-          const PreparationEntity(
+          makePrepStep(
             id: 'setup_tiles_white',
-            description: 'Setup tiles for white',
+            detail: 'Setup tiles for white.',
+            actor: PreparationActor.player,
+            tableZone: TableZone.playerArea,
             phase: PreparationPhase.playerSetup,
             color: 'white',
           ),
-          const PreparationEntity(
+          makePrepStep(
             id: 'setup_tiles_yellow',
-            description: 'Setup tiles for yellow',
+            detail: 'Setup tiles for yellow.',
+            actor: PreparationActor.player,
+            tableZone: TableZone.playerArea,
             phase: PreparationPhase.playerSetup,
             color: 'yellow',
           ),
-          const PreparationEntity(
+          makePrepStep(
             id: 'setup_jungle_display',
-            description: 'Setup jungle display',
+            detail: 'Setup jungle display.',
+            tableZone: TableZone.jungleDisplay,
             phase: PreparationPhase.boardSetup,
           ),
         ];

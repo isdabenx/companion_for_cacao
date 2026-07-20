@@ -1,8 +1,10 @@
 import 'package:companion_for_cacao/core/domain/entities/boardgame_entity.dart';
 import 'package:companion_for_cacao/core/domain/entities/tile_entity.dart';
+import 'package:companion_for_cacao/features/game_setup/domain/content/preparation_copy.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/player_entity.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/preparation_entity.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/preparation_phase.dart';
+import 'package:companion_for_cacao/features/game_setup/domain/entities/table_zone.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/services/module_preparation_handler.dart';
 
 /// Handler for the Huts Module (Chocolatl expansion, Module D).
@@ -64,10 +66,12 @@ class HutsModuleHandler implements ModulePreparationHandler {
     if (lastBoardSetupIndex >= 0) {
       preparation.insert(
         lastBoardSetupIndex + 1,
-        PreparationEntity(
+        const PreparationEntity(
           id: marketStepId,
-          description:
-              'Take the 12 hut tiles, drop them from a low height to randomly determine their face-up side, and sort them by building cost next to the bank as a supply.\n\nVariant: Alternatively, players can agree on a specific selection of huts instead of a random assortment.',
+          label: PreparationCopy.hutsMarketLabel,
+          detail: PreparationCopy.hutsMarketDetail,
+          rationale: PreparationCopy.hutsMarketRationale,
+          tableZone: TableZone.supplies,
           phase: PreparationPhase.boardSetup,
         ),
       );

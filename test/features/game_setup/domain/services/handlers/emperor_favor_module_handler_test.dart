@@ -1,10 +1,10 @@
 import 'package:companion_for_cacao/core/domain/entities/tile_entity.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/player_entity.dart';
-import 'package:companion_for_cacao/features/game_setup/domain/entities/preparation_entity.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/preparation_phase.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/services/handlers/emperor_favor_module_handler.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import '../../../../../support/preparation_fixtures.dart';
 import '../../../../../support/tile_fixtures.dart';
 
 void main() {
@@ -68,14 +68,14 @@ void main() {
       test('inserts emperor step right after the market initial tiles step '
           'when Watering is not active', () {
         final steps = [
-          const PreparationEntity(
+          makePrepStep(
             id: 'setup_initial_tiles_plantation_market',
-            description: 'Lay out plantation and market',
+            detail: 'Lay out plantation and market.',
             phase: PreparationPhase.boardSetup,
           ),
-          const PreparationEntity(
+          makePrepStep(
             id: 'setup_jungle_draw_pile',
-            description: 'Mix remaining jungle tiles',
+            detail: 'Mix remaining jungle tiles.',
             phase: PreparationPhase.boardSetup,
           ),
         ];
@@ -94,7 +94,7 @@ void main() {
         expect(emperorIndex, initialIndex + 1);
 
         final emperorStep = result[emperorIndex];
-        expect(emperorStep.description, contains('market, selling price 2'));
+        expect(emperorStep.detail, contains('market, selling price 2'));
         expect(emperorStep.phase, PreparationPhase.boardSetup);
         expect(emperorStep.imageKey, 'emperor_figure');
       });
@@ -102,14 +102,14 @@ void main() {
       test('places emperor on the water tile when Watering module '
           'is active', () {
         final steps = [
-          const PreparationEntity(
+          makePrepStep(
             id: 'setup_initial_tiles_plantation_water',
-            description: 'Lay out plantation and water',
+            detail: 'Lay out plantation and water.',
             phase: PreparationPhase.boardSetup,
           ),
-          const PreparationEntity(
+          makePrepStep(
             id: 'setup_jungle_draw_pile',
-            description: 'Mix remaining jungle tiles',
+            detail: 'Mix remaining jungle tiles.',
             phase: PreparationPhase.boardSetup,
           ),
         ];
@@ -125,14 +125,14 @@ void main() {
           (s) => s.id == 'setup_initial_tiles_plantation_water',
         );
         expect(emperorIndex, initialIndex + 1);
-        expect(result[emperorIndex].description, contains('water tile'));
+        expect(result[emperorIndex].detail, contains('water tile'));
       });
 
       test('appends emperor step when no initial tiles step exists', () {
         final steps = [
-          const PreparationEntity(
+          makePrepStep(
             id: 'setup_jungle_draw_pile',
-            description: 'Mix remaining jungle tiles',
+            detail: 'Mix remaining jungle tiles.',
             phase: PreparationPhase.boardSetup,
           ),
         ];
@@ -144,14 +144,14 @@ void main() {
         );
 
         expect(result.last.id, 'setup_emperor');
-        expect(result.last.description, contains('market, selling price 2'));
+        expect(result.last.detail, contains('market, selling price 2'));
       });
 
       test('does not modify the original steps list content', () {
         final steps = [
-          const PreparationEntity(
+          makePrepStep(
             id: 'setup_initial_tiles_plantation_market',
-            description: 'Lay out plantation and market',
+            detail: 'Lay out plantation and market.',
             phase: PreparationPhase.boardSetup,
           ),
         ];

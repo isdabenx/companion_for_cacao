@@ -1,9 +1,13 @@
 import 'package:companion_for_cacao/core/domain/entities/boardgame_entity.dart';
 import 'package:companion_for_cacao/core/domain/entities/tile_entity.dart';
+import 'package:companion_for_cacao/features/game_setup/domain/content/preparation_copy.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/player_entity.dart';
+import 'package:companion_for_cacao/features/game_setup/domain/entities/preparation_actor.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/preparation_entity.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/preparation_phase.dart';
+import 'package:companion_for_cacao/features/game_setup/domain/entities/table_zone.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/services/module_preparation_handler.dart';
+import 'package:companion_for_cacao/features/game_setup/domain/services/preparation_steps.dart';
 
 /// Handler for the Map Module (Chocolatl expansion, Module A).
 ///
@@ -52,7 +56,12 @@ class MapModuleHandler implements ModulePreparationHandler {
         modifiedSteps.add(
           PreparationEntity(
             id: 'setup_map_tokens_$color',
-            description: 'Player $color takes 2 map tiles.',
+            label: PreparationCopy.mapTokensLabel,
+            detail: PreparationCopy.mapTokensDetail(color),
+            actor: PreparationActor.player,
+            tableZone: TableZone.playerArea,
+            groupId: PreparationGroups.player(color),
+            quantity: 2,
             phase: PreparationPhase.playerSetup,
             color: color,
             imageKey: 'map_token',
@@ -68,7 +77,9 @@ class MapModuleHandler implements ModulePreparationHandler {
         lastMapTokenIndex + 1,
         const PreparationEntity(
           id: 'setup_map_tokens_surplus',
-          description: 'Put the surplus map tiles back into the box.',
+          label: PreparationCopy.mapTokensSurplusLabel,
+          detail: PreparationCopy.mapTokensSurplusDetail,
+          tableZone: TableZone.box,
           phase: PreparationPhase.playerSetup,
           imageKey: 'map_token',
         ),
@@ -82,19 +93,21 @@ class MapModuleHandler implements ModulePreparationHandler {
           modifiedSteps[i].phase == PreparationPhase.boardSetup) {
         // Replace with two new steps
         finalSteps.add(
-          PreparationEntity(
+          const PreparationEntity(
             id: 'setup_map_board',
-            description:
-                'Place the map board directly next to the jungle draw pile.',
+            label: PreparationCopy.mapBoardLabel,
+            detail: PreparationCopy.mapBoardDetail,
+            tableZone: TableZone.jungleDisplay,
             phase: PreparationPhase.boardSetup,
             imageKey: 'map_board',
           ),
         );
         finalSteps.add(
-          PreparationEntity(
+          const PreparationEntity(
             id: 'setup_jungle_display_map',
-            description:
-                'Draw the 4 top jungle tiles from the jungle draw pile. Lay the first two tiles face up on the marked spaces of the map board. Place the other two tiles as a face-up jungle display next to the map board.',
+            label: PreparationCopy.jungleDisplayMapLabel,
+            detail: PreparationCopy.jungleDisplayMapDetail,
+            tableZone: TableZone.jungleDisplay,
             phase: PreparationPhase.boardSetup,
           ),
         );

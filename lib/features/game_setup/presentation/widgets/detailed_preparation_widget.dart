@@ -551,7 +551,7 @@ class PreparationCard extends ConsumerWidget {
                       ),
                     Expanded(
                       child: Text(
-                        preparation.description,
+                        preparation.detail,
                         style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                           fontWeight: FontWeight.w600,
                           color: AppColors.brown,

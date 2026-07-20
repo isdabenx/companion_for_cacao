@@ -11,6 +11,7 @@ import 'package:companion_for_cacao/features/game_setup/domain/services/preparat
 import 'package:companion_for_cacao/features/game_setup/domain/services/tile_adjustments.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import '../../../../support/preparation_fixtures.dart';
 import '../../../../support/tile_fixtures.dart';
 
 class MockBaseGameHandler with TileAdjustments implements BaseGameHandler {
@@ -50,9 +51,9 @@ class MockBaseGameHandler with TileAdjustments implements BaseGameHandler {
     bool isBigGame = false,
   }) {
     return [
-      const PreparationEntity(
+      makePrepStep(
         id: 'base_step',
-        description: 'Base step',
+        detail: 'Base step.',
         phase: PreparationPhase.boardSetup,
       ),
     ];
@@ -86,9 +87,9 @@ class MockModuleHandler implements ModulePreparationHandler {
   }) {
     return [
       ...currentSteps,
-      const PreparationEntity(
+      makePrepStep(
         id: 'module_step',
-        description: 'Module step',
+        detail: 'Module step.',
         phase: PreparationPhase.boardSetup,
       ),
     ];

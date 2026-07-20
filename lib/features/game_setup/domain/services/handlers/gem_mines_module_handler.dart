@@ -1,9 +1,12 @@
 import 'package:companion_for_cacao/core/domain/entities/boardgame_entity.dart';
 import 'package:companion_for_cacao/core/domain/entities/tile_entity.dart';
+import 'package:companion_for_cacao/features/game_setup/domain/content/preparation_copy.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/player_entity.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/preparation_entity.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/preparation_phase.dart';
+import 'package:companion_for_cacao/features/game_setup/domain/entities/table_zone.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/services/module_preparation_handler.dart';
+import 'package:companion_for_cacao/features/game_setup/domain/services/preparation_steps.dart';
 
 class GemMinesModuleHandler implements ModulePreparationHandler {
   static const int moduleId = 5;
@@ -51,20 +54,22 @@ class GemMinesModuleHandler implements ModulePreparationHandler {
     // Big Game: skip tile substitution steps, only add supplies
     if (isBigGame) {
       preparation.add(
-        PreparationEntity(
+        const PreparationEntity(
           id: 'setup_gem_mines_mine_car',
-          description:
-              'Fill all 32 gems into the mine car and mix them by shaking. Place the mine car next to the playing area.',
+          label: PreparationCopy.mineCarLabel,
+          detail: PreparationCopy.mineCarAllDetail,
+          tableZone: TableZone.supplies,
           phase: PreparationPhase.supplies,
           imageKey: 'resources_mine_car',
         ),
       );
 
       preparation.add(
-        PreparationEntity(
+        const PreparationEntity(
           id: 'setup_gem_mines_masks',
-          description:
-              'Sort the 7 masks by their values in an ascending, overlapping row as a supply.',
+          label: PreparationCopy.masksLabel,
+          detail: PreparationCopy.masksAllDetail,
+          tableZone: TableZone.supplies,
           phase: PreparationPhase.supplies,
           imageKey: 'resources_masks',
         ),
@@ -73,8 +78,9 @@ class GemMinesModuleHandler implements ModulePreparationHandler {
       preparation.add(
         const PreparationEntity(
           id: 'setup_gem_mines_rule_reminder',
-          description:
-              'Rule reminder: As soon as a gem mine tile is placed in the jungle display or onto the map board, shake out 6 gems from the mine car and put them on the gem mine tile.',
+          label: PreparationCopy.gemMinesReminderLabel,
+          detail: PreparationCopy.gemMinesReminderDetail,
+          tableZone: TableZone.supplies,
           phase: PreparationPhase.supplies,
         ),
       );
@@ -106,8 +112,11 @@ class GemMinesModuleHandler implements ModulePreparationHandler {
       preparation.add(
         const PreparationEntity(
           id: 'setup_gem_mines_remove_gems',
-          description:
-              'Remove 8 gems (2 of each color) and put them back into the box.',
+          label: PreparationCopy.gemsRemoveLabel,
+          detail: PreparationCopy.gemsRemoveDetail,
+          rationale: PreparationCopy.twoPlayerRemovalRationale,
+          tableZone: TableZone.box,
+          quantity: 8,
           phase: PreparationPhase.supplies,
           imageKey: 'resources_gems',
         ),
@@ -117,9 +126,11 @@ class GemMinesModuleHandler implements ModulePreparationHandler {
     preparation.add(
       PreparationEntity(
         id: 'setup_gem_mines_mine_car',
-        description: players.length == 2
-            ? 'Fill the remaining gems into the mine car and mix them by shaking. Place the mine car next to the playing area.'
-            : 'Fill all 32 gems into the mine car and mix them by shaking. Place the mine car next to the playing area.',
+        label: PreparationCopy.mineCarLabel,
+        detail: players.length == 2
+            ? PreparationCopy.mineCarRemainingDetail
+            : PreparationCopy.mineCarAllDetail,
+        tableZone: TableZone.supplies,
         phase: PreparationPhase.supplies,
         imageKey: 'resources_mine_car',
       ),
@@ -128,9 +139,11 @@ class GemMinesModuleHandler implements ModulePreparationHandler {
     preparation.add(
       PreparationEntity(
         id: 'setup_gem_mines_masks',
-        description: players.length == 2
-            ? 'Sort the masks (without the value 12 mask) by their values in an ascending, overlapping row as a supply.'
-            : 'Sort the 7 masks by their values in an ascending, overlapping row as a supply.',
+        label: PreparationCopy.masksLabel,
+        detail: players.length == 2
+            ? PreparationCopy.masksWithout12Detail
+            : PreparationCopy.masksAllDetail,
+        tableZone: TableZone.supplies,
         phase: PreparationPhase.supplies,
         imageKey: 'resources_masks',
       ),
@@ -139,8 +152,9 @@ class GemMinesModuleHandler implements ModulePreparationHandler {
     preparation.add(
       const PreparationEntity(
         id: 'setup_gem_mines_rule_reminder',
-        description:
-            'Rule reminder: As soon as a gem mine tile is placed in the jungle display or onto the map board, shake out 6 gems from the mine car and put them on the gem mine tile.',
+        label: PreparationCopy.gemMinesReminderLabel,
+        detail: PreparationCopy.gemMinesReminderDetail,
+        tableZone: TableZone.supplies,
         phase: PreparationPhase.supplies,
       ),
     );
@@ -151,18 +165,23 @@ class GemMinesModuleHandler implements ModulePreparationHandler {
   /// Generates visible preparation steps for the gem mines tile substitution.
   List<PreparationEntity> _tileSubstitutionSteps(int playerCount) {
     return [
-      const PreparationEntity(
+      // "All temples" has no fixed quantity: the label says it (see spec).
+      PreparationEntity(
         id: 'setup_gem_mines_remove_temples',
-        description: 'Sort out all Temple tiles and put them back in the box',
+        label: PreparationCopy.removeAllTilesLabel(PreparationCopy.tileTemple),
+        detail: PreparationCopy.removeAllTilesDetail(
+          PreparationCopy.tileTemple,
+        ),
+        tableZone: TableZone.box,
+        groupId: PreparationGroups.returnToBox,
         imageKey: 'jungle_temple',
         phase: PreparationPhase.boardSetup,
       ),
-      PreparationEntity(
+      PreparationSteps.addition(
         id: 'setup_gem_mines_add_gem_mines',
-        description:
-            'Add ${playerCount == 2 ? 4 : 5}x Gem Mine tiles to the jungle tiles',
+        quantity: playerCount == 2 ? 4 : 5,
+        tileName: PreparationCopy.tileGemMine,
         imageKey: 'jungle_gem_mine',
-        phase: PreparationPhase.boardSetup,
       ),
     ];
   }

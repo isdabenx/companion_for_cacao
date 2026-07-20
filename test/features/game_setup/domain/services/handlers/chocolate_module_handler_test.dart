@@ -3,9 +3,11 @@ import 'package:companion_for_cacao/core/domain/entities/tile_entity.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/player_entity.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/preparation_entity.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/preparation_phase.dart';
+import 'package:companion_for_cacao/features/game_setup/domain/entities/table_zone.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/services/handlers/chocolate_module_handler.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import '../../../../../support/preparation_fixtures.dart';
 import '../../../../../support/tile_fixtures.dart';
 
 void main() {
@@ -57,14 +59,16 @@ void main() {
       ];
 
       mockPreparationSteps = [
-        const PreparationEntity(
+        makePrepStep(
           id: 'setup_resources_bank',
-          description: 'Setup resources bank',
+          detail: 'Setup resources bank.',
+          tableZone: TableZone.supplies,
           phase: PreparationPhase.supplies,
         ),
-        const PreparationEntity(
+        makePrepStep(
           id: 'step_1',
-          description: 'Another step',
+          detail: 'Another step.',
+          tableZone: TableZone.supplies,
           phase: PreparationPhase.supplies,
         ),
       ];
@@ -175,9 +179,10 @@ void main() {
         'should not insert setup_chocolate_bars if setup_resources_bank is missing',
         () {
           final stepsWithoutBank = [
-            const PreparationEntity(
+            makePrepStep(
               id: 'step_1',
-              description: 'Another step',
+              detail: 'Another step.',
+              tableZone: TableZone.supplies,
               phase: PreparationPhase.supplies,
             ),
           ];
@@ -200,28 +205,37 @@ void main() {
 
         setUp(() {
           stepsWithBaseRemovals = [
-            const PreparationEntity(
+            makePrepStep(
               id: 'setup_jungle_tiles_2p_removal_gold_mine_value_1',
-              description:
-                  'Sort out 1x Gold Mine, value 1 and put it back in the box',
+              label: 'Return 1x Gold Mine, value 1 to the box',
+              detail:
+                  'Sort out 1x Gold Mine, value 1 and put it back in the box.',
+              tableZone: TableZone.box,
+              groupId: 'group_return_to_box',
+              quantity: 1,
               imageKey: 'jungle_gold_mine_v1',
               phase: PreparationPhase.boardSetup,
             ),
-            const PreparationEntity(
+            makePrepStep(
               id: 'setup_jungle_tiles_2p_removal_market_selling_3',
-              description:
-                  'Sort out 1x Market, selling price 3 and put it back in the box',
+              label: 'Return 1x Market, selling price 3 to the box',
+              detail:
+                  'Sort out 1x Market, selling price 3 and put it back in the box.',
+              tableZone: TableZone.box,
+              groupId: 'group_return_to_box',
+              quantity: 1,
               imageKey: 'jungle_market_selling_3',
               phase: PreparationPhase.boardSetup,
             ),
-            const PreparationEntity(
+            makePrepStep(
               id: 'setup_jungle_draw_pile',
-              description: 'Mix remaining jungle tiles',
+              detail: 'Mix remaining jungle tiles.',
               phase: PreparationPhase.boardSetup,
             ),
-            const PreparationEntity(
+            makePrepStep(
               id: 'setup_resources_bank',
-              description: 'Resources bank',
+              detail: 'Resources bank.',
+              tableZone: TableZone.supplies,
               phase: PreparationPhase.supplies,
             ),
           ];
@@ -237,7 +251,12 @@ void main() {
           final goldMineStep = result.firstWhere(
             (s) => s.id == 'setup_jungle_tiles_2p_removal_gold_mine_value_1',
           );
-          expect(goldMineStep.description, contains('2x Gold Mine'));
+          expect(goldMineStep.detail, contains('2x Gold Mine'));
+          expect(goldMineStep.quantity, equals(2));
+          // copyWith keeps the structured fields of the base removal step.
+          expect(goldMineStep.imageKey, equals('jungle_gold_mine_v1'));
+          expect(goldMineStep.groupId, equals('group_return_to_box'));
+          expect(goldMineStep.tableZone, equals(TableZone.box));
         });
 
         test('should modify base market_selling_3 step from 1x to 3x', () {
@@ -250,7 +269,12 @@ void main() {
           final marketStep = result.firstWhere(
             (s) => s.id == 'setup_jungle_tiles_2p_removal_market_selling_3',
           );
-          expect(marketStep.description, contains('3x Market'));
+          expect(marketStep.detail, contains('3x Market'));
+          expect(marketStep.quantity, equals(3));
+          // copyWith keeps the structured fields of the base removal step.
+          expect(marketStep.imageKey, equals('jungle_market_selling_3'));
+          expect(marketStep.groupId, equals('group_return_to_box'));
+          expect(marketStep.tableZone, equals(TableZone.box));
         });
 
         test('should add gold_mine_v2 removal step', () {
@@ -264,8 +288,11 @@ void main() {
             (s) => s.id == 'setup_chocolate_remove_gold_mine_v2',
           );
           expect(v2Step, hasLength(1));
-          expect(v2Step.first.description, contains('1x Gold Mine, value 2'));
+          expect(v2Step.first.detail, contains('1x Gold Mine, value 2'));
           expect(v2Step.first.imageKey, equals('jungle_gold_mine_v2'));
+          expect(v2Step.first.groupId, equals('group_return_to_box'));
+          expect(v2Step.first.tableZone, equals(TableZone.box));
+          expect(v2Step.first.quantity, equals(1));
         });
 
         test('should add chocolate kitchen and market addition steps', () {
@@ -284,11 +311,8 @@ void main() {
 
           expect(kitchenStep, hasLength(1));
           expect(marketStep, hasLength(1));
-          expect(
-            kitchenStep.first.description,
-            contains('2x Chocolate Kitchen'),
-          );
-          expect(marketStep.first.description, contains('2x Chocolate Market'));
+          expect(kitchenStep.first.detail, contains('2x Chocolate Kitchen'));
+          expect(marketStep.first.detail, contains('2x Chocolate Market'));
         });
 
         test(
@@ -328,14 +352,15 @@ void main() {
           ];
 
           stepsWithDrawPile = [
-            const PreparationEntity(
+            makePrepStep(
               id: 'setup_jungle_draw_pile',
-              description: 'Mix remaining jungle tiles',
+              detail: 'Mix remaining jungle tiles.',
               phase: PreparationPhase.boardSetup,
             ),
-            const PreparationEntity(
+            makePrepStep(
               id: 'setup_resources_bank',
-              description: 'Resources bank',
+              detail: 'Resources bank.',
+              tableZone: TableZone.supplies,
               phase: PreparationPhase.supplies,
             ),
           ];
@@ -397,11 +422,11 @@ void main() {
               (s) => s.id == 'setup_chocolate_add_market',
             );
 
-            expect(v1Step.description, contains('2x Gold Mine, value 1'));
-            expect(v2Step.description, contains('1x Gold Mine, value 2'));
-            expect(marketStep.description, contains('3x Market'));
-            expect(kitchenStep.description, contains('3x Chocolate Kitchen'));
-            expect(mktStep.description, contains('3x Chocolate Market'));
+            expect(v1Step.detail, contains('2x Gold Mine, value 1'));
+            expect(v2Step.detail, contains('1x Gold Mine, value 2'));
+            expect(marketStep.detail, contains('3x Market'));
+            expect(kitchenStep.detail, contains('3x Chocolate Kitchen'));
+            expect(mktStep.detail, contains('3x Chocolate Market'));
           },
         );
       });

@@ -1,9 +1,10 @@
 import 'package:companion_for_cacao/core/domain/entities/boardgame_entity.dart';
 import 'package:companion_for_cacao/core/domain/entities/tile_entity.dart';
+import 'package:companion_for_cacao/features/game_setup/domain/content/preparation_copy.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/player_entity.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/preparation_entity.dart';
-import 'package:companion_for_cacao/features/game_setup/domain/entities/preparation_phase.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/services/module_preparation_handler.dart';
+import 'package:companion_for_cacao/features/game_setup/domain/services/preparation_steps.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/services/tile_adjustments.dart';
 
 /// Constants for watering module tile IDs.
@@ -104,17 +105,15 @@ class WateringModuleHandler
     }
 
     if (initialTilesIndex >= 0) {
-      final originalStep = preparation[initialTilesIndex];
-      final modifiedStep = PreparationEntity(
+      // copyWith keeps the structured fields (actor, zone...) of the
+      // base step; only the identity and texts change.
+      preparation[initialTilesIndex] = preparation[initialTilesIndex].copyWith(
         id: 'setup_initial_tiles_plantation_water',
-        description:
-            'From the jungle tiles, get "single plantation" and "water" tiles and place them face up in the middle of the table diagonally to one another; they form the starting tiles of the playing area',
-        color: originalStep.color,
-        variables: originalStep.variables,
+        label: PreparationCopy.initialTilesWaterLabel,
+        detail: PreparationCopy.initialTilesWaterDetail,
+        rationale: PreparationCopy.initialTilesWaterRationale,
         imageKey: 'initial_single_plantation_water',
-        phase: originalStep.phase,
       );
-      preparation[initialTilesIndex] = modifiedStep;
     }
 
     // Big Game: skip tile substitution steps (all tiles already in the pool)
@@ -139,42 +138,39 @@ class WateringModuleHandler
   /// Generates visible preparation steps for the watering tile substitution.
   List<PreparationEntity> _tileSubstitutionSteps(int playerCount) {
     if (playerCount == 2) {
-      return const [
-        PreparationEntity(
+      return [
+        PreparationSteps.removal(
           id: 'setup_watering_remove_double_plantation',
-          description:
-              'Sort out 2x Double Plantation and put them back in the box',
+          quantity: 2,
+          tileName: PreparationCopy.tileDoublePlantation,
           imageKey: 'jungle_double_plantation',
-          phase: PreparationPhase.boardSetup,
         ),
-        PreparationEntity(
+        PreparationSteps.addition(
           id: 'setup_watering_add_watering_tiles',
-          description: 'Add 2x Watering tiles to the jungle tiles',
+          quantity: 2,
+          tileName: PreparationCopy.tileWatering,
           imageKey: 'jungle_watering',
-          phase: PreparationPhase.boardSetup,
         ),
       ];
     } else if (playerCount >= 3) {
-      return const [
-        PreparationEntity(
+      return [
+        PreparationSteps.removal(
           id: 'setup_watering_remove_single_plantation',
-          description:
-              'Sort out 1x Single Plantation and put it back in the box',
+          quantity: 1,
+          tileName: PreparationCopy.tileSinglePlantation,
           imageKey: 'jungle_single_plantation',
-          phase: PreparationPhase.boardSetup,
         ),
-        PreparationEntity(
+        PreparationSteps.removal(
           id: 'setup_watering_remove_double_plantation',
-          description:
-              'Sort out 2x Double Plantation and put them back in the box',
+          quantity: 2,
+          tileName: PreparationCopy.tileDoublePlantation,
           imageKey: 'jungle_double_plantation',
-          phase: PreparationPhase.boardSetup,
         ),
-        PreparationEntity(
+        PreparationSteps.addition(
           id: 'setup_watering_add_watering_tiles',
-          description: 'Add 3x Watering tiles to the jungle tiles',
+          quantity: 3,
+          tileName: PreparationCopy.tileWatering,
           imageKey: 'jungle_watering',
-          phase: PreparationPhase.boardSetup,
         ),
       ];
     }

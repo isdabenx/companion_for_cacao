@@ -1,8 +1,12 @@
 import 'package:companion_for_cacao/core/domain/entities/boardgame_entity.dart';
 import 'package:companion_for_cacao/core/domain/entities/tile_entity.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/player_entity.dart';
+import 'package:companion_for_cacao/features/game_setup/domain/entities/preparation_actor.dart';
+import 'package:companion_for_cacao/features/game_setup/domain/entities/preparation_entity.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/preparation_phase.dart';
+import 'package:companion_for_cacao/features/game_setup/domain/entities/table_zone.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/services/base_game_handler.dart';
+import 'package:companion_for_cacao/features/game_setup/domain/services/preparation_steps.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import '../../../../support/tile_fixtures.dart';
@@ -136,12 +140,13 @@ void main() {
 
         final result = handler.modifyPreparationSteps(players, allTiles, []);
 
-        // Player setup steps: 4 per player (village board, water carrier, water field, tiles)
+        // Player setup steps: 3 per player (village board, water carrier
+        // fused with its field, tiles)
         final playerSetupSteps = result
             .where((s) => s.phase == PreparationPhase.playerSetup)
             .toList();
-        // 4 steps per player + 1 shuffle step = 9
-        expect(playerSetupSteps.length, 9);
+        // 3 steps per player + 1 shuffle step = 7
+        expect(playerSetupSteps.length, 7);
 
         // Board setup steps: initial tiles + 6 individual 2p removal + jungle draw pile + jungle display = 9
         final boardSetupSteps = result
@@ -182,35 +187,32 @@ void main() {
             removalSteps[0].id,
             'setup_jungle_tiles_2p_removal_single_plantation',
           );
-          expect(removalSteps[0].description, contains('2x Single Plantation'));
+          expect(removalSteps[0].detail, contains('2x Single Plantation'));
           expect(removalSteps[0].imageKey, 'jungle_single_plantation');
 
           expect(
             removalSteps[1].id,
             'setup_jungle_tiles_2p_removal_market_selling_3',
           );
-          expect(
-            removalSteps[1].description,
-            contains('Market, selling price 3'),
-          );
+          expect(removalSteps[1].detail, contains('Market, selling price 3'));
 
           expect(
             removalSteps[2].id,
             'setup_jungle_tiles_2p_removal_gold_mine_value_1',
           );
-          expect(removalSteps[2].description, contains('Gold Mine, value 1'));
+          expect(removalSteps[2].detail, contains('Gold Mine, value 1'));
 
           expect(removalSteps[3].id, 'setup_jungle_tiles_2p_removal_water');
-          expect(removalSteps[3].description, contains('Water'));
+          expect(removalSteps[3].detail, contains('Water'));
 
           expect(
             removalSteps[4].id,
             'setup_jungle_tiles_2p_removal_sun_worshiping_site',
           );
-          expect(removalSteps[4].description, contains('Sun-Worshiping Site'));
+          expect(removalSteps[4].detail, contains('Sun-Worshiping Site'));
 
           expect(removalSteps[5].id, 'setup_jungle_tiles_2p_removal_temple');
-          expect(removalSteps[5].description, contains('Temple'));
+          expect(removalSteps[5].detail, contains('Temple'));
 
           // All should be in boardSetup phase
           for (final step in removalSteps) {
@@ -330,6 +332,103 @@ void main() {
           (s) => s.id.startsWith('setup_remove_worker_'),
         );
         expect(removalSteps.length, 0);
+      });
+    });
+
+    // Structured fields introduced by Fase UX-1 (docs/spec-fase-ux1.md).
+    group('structured preparation steps (UX-1)', () {
+      List<PreparationEntity> stepsFor(List<String> colors) {
+        handler = BaseGameHandler(
+          baseGame: baseGame,
+          activeExpansions: [baseGame],
+          selectedColors: colors,
+        );
+        final players = [
+          for (final (i, color) in colors.indexed)
+            PlayerEntity(name: 'Player ${i + 1}', color: color),
+        ];
+        return handler.modifyPreparationSteps(players, allTiles, []);
+      }
+
+      test('fuses the water carrier and water field steps into one', () {
+        final result = stepsFor(['red', 'purple']);
+
+        expect(result.any((s) => s.id == 'setup_water_carrier_red'), isTrue);
+        expect(
+          result.any((s) => s.id.startsWith('setup_water_field_')),
+          isFalse,
+        );
+        final carrier = result.firstWhere(
+          (s) => s.id == 'setup_water_carrier_red',
+        );
+        expect(carrier.detail, contains('"-10"'));
+      });
+
+      test('groups each player corner under group_player_<color>', () {
+        final result = stepsFor(['red', 'purple']);
+
+        final redGroup = result.where((s) => s.groupId == 'group_player_red');
+        expect(
+          redGroup.map((s) => s.id),
+          containsAll([
+            'setup_village_board_red',
+            'setup_water_carrier_red',
+            'setup_tiles_red',
+          ]),
+        );
+        for (final step in redGroup) {
+          expect(step.actor, PreparationActor.player);
+          expect(step.color, 'red');
+        }
+      });
+
+      test('collects 2p jungle removals into the return-to-box group '
+          'with quantities and box zone', () {
+        final result = stepsFor(['red', 'purple']);
+
+        final removals = result.where(
+          (s) => s.groupId == PreparationGroups.returnToBox,
+        );
+        expect(removals.length, 6);
+        for (final step in removals) {
+          expect(step.tableZone, TableZone.box);
+          expect(step.quantity, isNotNull);
+          expect(step.rationale, isNotNull);
+        }
+        final plantation = removals.firstWhere(
+          (s) => s.id == 'setup_jungle_tiles_2p_removal_single_plantation',
+        );
+        expect(plantation.quantity, 2);
+      });
+
+      test('assigns actors and zones to the shared table steps', () {
+        final result = stepsFor(['red', 'purple']);
+
+        final shuffle = result.firstWhere(
+          (s) => s.id == 'setup_shuffle_workers',
+        );
+        expect(shuffle.actor, PreparationActor.allPlayers);
+        expect(shuffle.tableZone, TableZone.playerArea);
+
+        final initial = result.firstWhere(
+          (s) => s.id == 'setup_initial_tiles_plantation_market',
+        );
+        expect(initial.tableZone, TableZone.startingArea);
+
+        final pile = result.firstWhere((s) => s.id == 'setup_jungle_draw_pile');
+        expect(pile.tableZone, TableZone.junglePile);
+
+        final bank = result.firstWhere((s) => s.id == 'setup_resources_bank');
+        expect(bank.tableZone, TableZone.supplies);
+      });
+
+      test('every step provides a non-empty label and detail', () {
+        final result = stepsFor(['red', 'purple', 'yellow']);
+
+        for (final step in result) {
+          expect(step.label, isNotEmpty, reason: step.id);
+          expect(step.detail, isNotEmpty, reason: step.id);
+        }
       });
     });
   });

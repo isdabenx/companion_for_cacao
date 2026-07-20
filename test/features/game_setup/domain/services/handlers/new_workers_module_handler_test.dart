@@ -8,6 +8,7 @@ import 'package:companion_for_cacao/features/game_setup/domain/services/handlers
 import 'package:flutter_test/flutter_test.dart';
 
 import '../../../../../support/game_fixtures.dart';
+import '../../../../../support/preparation_fixtures.dart';
 import '../../../../../support/tile_fixtures.dart';
 
 void main() {
@@ -263,29 +264,29 @@ void main() {
 
       setUp(() {
         mockSteps = [
-          const PreparationEntity(
+          makePrepStep(
             id: 'setup_remove_worker_1_red',
-            description: 'Remove 1-1-1-1 for red',
+            detail: 'Remove 1-1-1-1 for red.',
             phase: PreparationPhase.playerSetup,
           ),
-          const PreparationEntity(
+          makePrepStep(
             id: 'setup_remove_worker_2_red',
-            description: 'Remove 2-1-0-1 for red',
+            detail: 'Remove 2-1-0-1 for red.',
             phase: PreparationPhase.playerSetup,
           ),
-          const PreparationEntity(
+          makePrepStep(
             id: 'setup_tree_of_life_add_0004_red',
-            description: 'Add 0-0-0-4 for red',
+            detail: 'Add 0-0-0-4 for red.',
             phase: PreparationPhase.playerSetup,
           ),
-          const PreparationEntity(
+          makePrepStep(
             id: 'setup_shuffle_workers',
-            description: 'Shuffle workers',
+            detail: 'Shuffle workers.',
             phase: PreparationPhase.playerSetup,
           ),
-          const PreparationEntity(
+          makePrepStep(
             id: 'setup_jungle_draw_pile',
-            description: 'Mix remaining jungle tiles',
+            detail: 'Mix remaining jungle tiles.',
             phase: PreparationPhase.boardSetup,
           ),
         ];
@@ -342,9 +343,9 @@ void main() {
         final handler = NewWorkersModuleHandler();
 
         final steps = [
-          const PreparationEntity(
+          makePrepStep(
             id: 'setup_jungle_draw_pile',
-            description: 'Mix remaining jungle tiles',
+            detail: 'Mix remaining jungle tiles.',
             phase: PreparationPhase.boardSetup,
           ),
         ];

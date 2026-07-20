@@ -3,7 +3,6 @@ import 'package:companion_for_cacao/core/domain/entities/module_entity.dart';
 import 'package:companion_for_cacao/core/domain/entities/tile_entity.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/game_setup_state_entity.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/player_entity.dart';
-import 'package:companion_for_cacao/features/game_setup/domain/entities/preparation_entity.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/preparation_phase.dart';
 import 'package:companion_for_cacao/core/domain/entities/hut_type.dart';
 import 'package:companion_for_cacao/core/domain/services/hut_tile_supply.dart';
@@ -20,6 +19,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
 import '../../../../support/fakes.dart';
+import '../../../../support/preparation_fixtures.dart';
 import '../../../../support/tile_fixtures.dart';
 
 class MockPrepareGameUseCase extends Mock implements PrepareGameUseCase {}
@@ -278,9 +278,9 @@ void main() {
           filenameImage: 'prepared.png',
           quantity: 1,
         );
-        final preparedStep = PreparationEntity(
+        final preparedStep = makePrepStep(
           id: 'prep-1',
-          description: 'Prepare the board',
+          detail: 'Prepare the board.',
           phase: PreparationPhase.boardSetup,
         );
         final preparedState = GameSetupStateEntity(
@@ -328,9 +328,9 @@ void main() {
           filenameImage: 'prepared.png',
           quantity: 1,
         );
-        final preparedStep = PreparationEntity(
+        final preparedStep = makePrepStep(
           id: 'prep-1',
-          description: 'Prepare the board',
+          detail: 'Prepare the board.',
           phase: PreparationPhase.boardSetup,
         );
         final preparedState = GameSetupStateEntity(
@@ -406,15 +406,15 @@ void main() {
         final regenerated = GameSetupStateEntity(
           players: [PlayerEntity(name: 'Alice', color: 'red')],
           expansions: [baseGame],
-          preparation: const [
-            PreparationEntity(
+          preparation: [
+            makePrepStep(
               id: 'prep-1',
-              description: 'Prepare the board',
+              detail: 'Prepare the board.',
               phase: PreparationPhase.boardSetup,
             ),
-            PreparationEntity(
+            makePrepStep(
               id: 'prep-2',
-              description: 'Give players their pieces',
+              detail: 'Give players their pieces.',
               phase: PreparationPhase.playerSetup,
             ),
           ],
@@ -663,15 +663,15 @@ void main() {
             PlayerEntity(name: 'Bob', color: 'yellow', isSelected: true),
           ],
           expansions: [baseGame],
-          preparation: const [
-            PreparationEntity(
+          preparation: [
+            makePrepStep(
               id: 'prep-1',
-              description: 'Prepare the board',
+              detail: 'Prepare the board.',
               phase: PreparationPhase.boardSetup,
             ),
-            PreparationEntity(
+            makePrepStep(
               id: 'prep-2',
-              description: 'Give players their pieces',
+              detail: 'Give players their pieces.',
               phase: PreparationPhase.playerSetup,
               isCompleted: true,
             ),

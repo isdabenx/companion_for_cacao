@@ -1,9 +1,13 @@
 import 'package:companion_for_cacao/core/domain/entities/boardgame_entity.dart';
 import 'package:companion_for_cacao/core/domain/entities/tile_entity.dart';
+import 'package:companion_for_cacao/features/game_setup/domain/content/preparation_copy.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/player_entity.dart';
+import 'package:companion_for_cacao/features/game_setup/domain/entities/preparation_actor.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/preparation_entity.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/preparation_phase.dart';
+import 'package:companion_for_cacao/features/game_setup/domain/entities/table_zone.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/services/module_preparation_handler.dart';
+import 'package:companion_for_cacao/features/game_setup/domain/services/preparation_steps.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/services/tile_adjustments.dart';
 
 /// Constants for tile IDs used in game preparation.
@@ -178,19 +182,27 @@ class BaseGameHandler with TileAdjustments implements ModulePreparationHandler {
         ..add(
           PreparationEntity(
             id: 'setup_village_board_$color',
-            description:
-                'Player $color takes the village board of color $color',
+            label: PreparationCopy.villageBoardLabel,
+            detail: PreparationCopy.villageBoardDetail(color),
+            actor: PreparationActor.player,
+            tableZone: TableZone.playerArea,
+            groupId: PreparationGroups.player(color),
             color: color,
             variables: {'color': color},
             imageKey: 'village_board_$color',
             phase: PreparationPhase.playerSetup,
           ),
         )
+        // Fuses the former take-the-carrier and put-it-on-the-field steps:
+        // one physical gesture, one step (spec-fase-ux1 §2.2).
         ..add(
           PreparationEntity(
             id: 'setup_water_carrier_$color',
-            description:
-                'Player $color takes the water carrier of color $color',
+            label: PreparationCopy.waterCarrierLabel,
+            detail: PreparationCopy.waterCarrierDetail(color),
+            actor: PreparationActor.player,
+            tableZone: TableZone.playerArea,
+            groupId: PreparationGroups.player(color),
             color: color,
             variables: {'color': color},
             imageKey: 'carrier_$color',
@@ -199,18 +211,12 @@ class BaseGameHandler with TileAdjustments implements ModulePreparationHandler {
         )
         ..add(
           PreparationEntity(
-            id: 'setup_water_field_$color',
-            description:
-                'Player $color puts the water carrier on the water field with the value "-10"',
-            color: color,
-            variables: {'color': color},
-            phase: PreparationPhase.playerSetup,
-          ),
-        )
-        ..add(
-          PreparationEntity(
             id: 'setup_tiles_$color',
-            description: 'Player $color gets all tiles with color $color',
+            label: PreparationCopy.ownTilesLabel,
+            detail: PreparationCopy.ownTilesDetail(color),
+            actor: PreparationActor.player,
+            tableZone: TableZone.playerArea,
+            groupId: PreparationGroups.player(color),
             color: color,
             variables: {'color': color},
             imageKey: 'tile_back_$color',
@@ -231,8 +237,13 @@ class BaseGameHandler with TileAdjustments implements ModulePreparationHandler {
           preparation.add(
             PreparationEntity(
               id: 'setup_remove_worker_1_${player.color}',
-              description:
-                  'Player ${player.color} searches for one of the 1-1-1-1 worker tiles and returns it to the game box',
+              label: PreparationCopy.removeWorkerLabel('1-1-1-1'),
+              detail: PreparationCopy.removeWorkerDetail('1-1-1-1'),
+              rationale: PreparationCopy.removeWorkerRationale,
+              actor: PreparationActor.player,
+              tableZone: TableZone.box,
+              groupId: PreparationGroups.player(player.color),
+              quantity: 1,
               color: player.color,
               variables: {'color': player.color},
               imageKey: 'tile_${workerTile.filenameImage}',
@@ -252,8 +263,13 @@ class BaseGameHandler with TileAdjustments implements ModulePreparationHandler {
             preparation.add(
               PreparationEntity(
                 id: 'setup_remove_worker_2_${player.color}',
-                description:
-                    'Player ${player.color} searches for one of the 2-1-0-1 worker tiles and returns it to the game box',
+                label: PreparationCopy.removeWorkerLabel('2-1-0-1'),
+                detail: PreparationCopy.removeWorkerDetail('2-1-0-1'),
+                rationale: PreparationCopy.removeWorkerRationale,
+                actor: PreparationActor.player,
+                tableZone: TableZone.box,
+                groupId: PreparationGroups.player(player.color),
+                quantity: 1,
                 color: player.color,
                 variables: {'color': player.color},
                 imageKey: 'tile_${workerTile201.filenameImage}',
@@ -269,16 +285,19 @@ class BaseGameHandler with TileAdjustments implements ModulePreparationHandler {
       ..add(
         const PreparationEntity(
           id: 'setup_shuffle_workers',
-          description:
-              'Each player mixes their worker tiles and puts them as a face-down worker draw pile next to their village board. After that, they draw the 3 top worker tiles from their worker draw pile and take them into their hand',
+          label: PreparationCopy.shuffleWorkersLabel,
+          detail: PreparationCopy.shuffleWorkersDetail,
+          actor: PreparationActor.allPlayers,
+          tableZone: TableZone.playerArea,
           phase: PreparationPhase.playerSetup,
         ),
       )
       ..add(
         const PreparationEntity(
           id: 'setup_initial_tiles_plantation_market',
-          description:
-              'From the jungle tiles, get "single plantation" and "market, selling price 2" and place them face up in the middle of the table diagonally to one another; they form the starting tiles of the playing area',
+          label: PreparationCopy.initialTilesMarketLabel,
+          detail: PreparationCopy.initialTilesMarketDetail,
+          tableZone: TableZone.startingArea,
           imageKey: 'initial_tiles_cacao',
           phase: PreparationPhase.boardSetup,
         ),
@@ -296,24 +315,27 @@ class BaseGameHandler with TileAdjustments implements ModulePreparationHandler {
       ..add(
         const PreparationEntity(
           id: 'setup_jungle_draw_pile',
-          description:
-              'Mix the remaining jungle tiles and lay them out as a face-down jungle draw pile',
+          label: PreparationCopy.junglePileLabel,
+          detail: PreparationCopy.junglePileDetail,
+          tableZone: TableZone.junglePile,
           phase: PreparationPhase.boardSetup,
         ),
       )
       ..add(
         const PreparationEntity(
           id: 'setup_jungle_display',
-          description:
-              'Draw the 2 top jungle tiles from the jungle draw pile and place them next to the pile as a face-up jungle display',
+          label: PreparationCopy.jungleDisplayLabel,
+          detail: PreparationCopy.jungleDisplayDetail,
+          tableZone: TableZone.jungleDisplay,
           phase: PreparationPhase.boardSetup,
         ),
       )
       ..add(
         const PreparationEntity(
           id: 'setup_resources_bank',
-          description:
-              'Lay out the cacao fruits and the sun tokens as separate supply piles. Put the gold coins next to them to serve as the bank',
+          label: PreparationCopy.resourcesBankLabel,
+          detail: PreparationCopy.resourcesBankDetail,
+          tableZone: TableZone.supplies,
           imageKey: 'resources_cacao',
           phase: PreparationPhase.supplies,
         ),
@@ -352,85 +374,88 @@ class BaseGameHandler with TileAdjustments implements ModulePreparationHandler {
   }
 
   List<PreparationEntity> _twoPlayerJungleTileRemovals() {
-    return const [
-      PreparationEntity(
+    return [
+      PreparationSteps.removal(
         id: 'setup_jungle_tiles_2p_removal_single_plantation',
-        description:
-            'Sort out 2x Single Plantation and put them back in the box',
+        quantity: 2,
+        tileName: PreparationCopy.tileSinglePlantation,
         imageKey: 'jungle_single_plantation',
-        phase: PreparationPhase.boardSetup,
+        rationale: PreparationCopy.twoPlayerRemovalRationale,
       ),
-      PreparationEntity(
+      PreparationSteps.removal(
         id: 'setup_jungle_tiles_2p_removal_market_selling_3',
-        description:
-            'Sort out 1x Market, selling price 3 and put it back in the box',
+        quantity: 1,
+        tileName: PreparationCopy.tileMarketSelling3,
         imageKey: 'jungle_market_selling_3',
-        phase: PreparationPhase.boardSetup,
+        rationale: PreparationCopy.twoPlayerRemovalRationale,
       ),
-      PreparationEntity(
+      PreparationSteps.removal(
         id: 'setup_jungle_tiles_2p_removal_gold_mine_value_1',
-        description:
-            'Sort out 1x Gold Mine, value 1 and put it back in the box',
+        quantity: 1,
+        tileName: PreparationCopy.tileGoldMineV1,
         imageKey: 'jungle_gold_mine_v1',
-        phase: PreparationPhase.boardSetup,
+        rationale: PreparationCopy.twoPlayerRemovalRationale,
       ),
-      PreparationEntity(
+      PreparationSteps.removal(
         id: 'setup_jungle_tiles_2p_removal_water',
-        description: 'Sort out 1x Water and put it back in the box',
+        quantity: 1,
+        tileName: PreparationCopy.tileWater,
         imageKey: 'jungle_water',
-        phase: PreparationPhase.boardSetup,
+        rationale: PreparationCopy.twoPlayerRemovalRationale,
       ),
-      PreparationEntity(
+      PreparationSteps.removal(
         id: 'setup_jungle_tiles_2p_removal_sun_worshiping_site',
-        description:
-            'Sort out 1x Sun-Worshiping Site and put it back in the box',
+        quantity: 1,
+        tileName: PreparationCopy.tileSunWorshipingSite,
         imageKey: 'jungle_sun_worshiping_site',
-        phase: PreparationPhase.boardSetup,
+        rationale: PreparationCopy.twoPlayerRemovalRationale,
       ),
-      PreparationEntity(
+      PreparationSteps.removal(
         id: 'setup_jungle_tiles_2p_removal_temple',
-        description: 'Sort out 1x Temple and put it back in the box',
+        quantity: 1,
+        tileName: PreparationCopy.tileTemple,
         imageKey: 'jungle_temple',
-        phase: PreparationPhase.boardSetup,
+        rationale: PreparationCopy.twoPlayerRemovalRationale,
       ),
     ];
   }
 
   List<PreparationEntity> _bigGame3pJungleTileRemovals() {
-    return const [
-      PreparationEntity(
+    return [
+      PreparationSteps.removal(
         id: 'setup_big_game_3p_removal_single_plantation',
-        description:
-            'Sort out 2x Single Plantation and put them back in the box',
+        quantity: 2,
+        tileName: PreparationCopy.tileSinglePlantation,
         imageKey: 'jungle_single_plantation',
-        phase: PreparationPhase.boardSetup,
+        rationale: PreparationCopy.bigGame3pRemovalRationale,
       ),
-      PreparationEntity(
+      PreparationSteps.removal(
         id: 'setup_big_game_3p_removal_gold_mine_v1',
-        description:
-            'Sort out 2x Gold Mine, value 1 and put them back in the box',
+        quantity: 2,
+        tileName: PreparationCopy.tileGoldMineV1,
         imageKey: 'jungle_gold_mine_v1',
-        phase: PreparationPhase.boardSetup,
+        rationale: PreparationCopy.bigGame3pRemovalRationale,
       ),
-      PreparationEntity(
+      PreparationSteps.removal(
         id: 'setup_big_game_3p_removal_market_selling_2',
-        description:
-            'Sort out 1x Market, selling price 2 and put it back in the box',
+        quantity: 1,
+        tileName: PreparationCopy.tileMarketSelling2,
         imageKey: 'jungle_market_selling_2',
-        phase: PreparationPhase.boardSetup,
+        rationale: PreparationCopy.bigGame3pRemovalRationale,
       ),
-      PreparationEntity(
+      PreparationSteps.removal(
         id: 'setup_big_game_3p_removal_market_selling_3',
-        description:
-            'Sort out 1x Market, selling price 3 and put it back in the box',
+        quantity: 1,
+        tileName: PreparationCopy.tileMarketSelling3,
         imageKey: 'jungle_market_selling_3',
-        phase: PreparationPhase.boardSetup,
+        rationale: PreparationCopy.bigGame3pRemovalRationale,
       ),
-      PreparationEntity(
+      PreparationSteps.removal(
         id: 'setup_big_game_3p_removal_watering',
-        description: 'Sort out 1x Watering and put it back in the box',
+        quantity: 1,
+        tileName: PreparationCopy.tileWatering,
         imageKey: 'jungle_watering',
-        phase: PreparationPhase.boardSetup,
+        rationale: PreparationCopy.bigGame3pRemovalRationale,
       ),
     ];
   }

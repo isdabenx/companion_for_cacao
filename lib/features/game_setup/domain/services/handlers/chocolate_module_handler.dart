@@ -1,9 +1,12 @@
 import 'package:companion_for_cacao/core/domain/entities/boardgame_entity.dart';
 import 'package:companion_for_cacao/core/domain/entities/tile_entity.dart';
+import 'package:companion_for_cacao/features/game_setup/domain/content/preparation_copy.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/player_entity.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/preparation_entity.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/preparation_phase.dart';
+import 'package:companion_for_cacao/features/game_setup/domain/entities/table_zone.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/services/module_preparation_handler.dart';
+import 'package:companion_for_cacao/features/game_setup/domain/services/preparation_steps.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/services/tile_adjustments.dart';
 
 /// Constants for chocolate module tile IDs.
@@ -129,8 +132,10 @@ class ChocolateModuleHandler
         resourceBankIndex + 1,
         const PreparationEntity(
           id: 'setup_chocolate_bars',
-          description:
-              'Lay out the 20 chocolate bars as a separate supply pile next to the cacao fruits.',
+          label: PreparationCopy.chocolateBarsLabel,
+          detail: PreparationCopy.chocolateBarsDetail,
+          tableZone: TableZone.supplies,
+          quantity: 20,
           phase: PreparationPhase.supplies,
           imageKey: 'resources_chocolate',
         ),
@@ -171,21 +176,31 @@ class ChocolateModuleHandler
   void _modifyBaseStepsFor2Players(List<PreparationEntity> preparation) {
     for (int i = 0; i < preparation.length; i++) {
       final step = preparation[i];
+      // copyWith keeps the structured fields (group, zone, rationale...)
+      // of the base removal step; only quantity and texts change.
       if (step.id == 'setup_jungle_tiles_2p_removal_gold_mine_value_1') {
-        preparation[i] = PreparationEntity(
-          id: step.id,
-          description:
-              'Sort out 2x Gold Mine, value 1 and put them back in the box',
-          imageKey: step.imageKey,
-          phase: step.phase,
+        preparation[i] = step.copyWith(
+          label: PreparationCopy.removeTilesLabel(
+            2,
+            PreparationCopy.tileGoldMineV1,
+          ),
+          detail: PreparationCopy.removeTilesDetail(
+            2,
+            PreparationCopy.tileGoldMineV1,
+          ),
+          quantity: 2,
         );
       } else if (step.id == 'setup_jungle_tiles_2p_removal_market_selling_3') {
-        preparation[i] = PreparationEntity(
-          id: step.id,
-          description:
-              'Sort out 3x Market, selling price 3 and put them back in the box',
-          imageKey: step.imageKey,
-          phase: step.phase,
+        preparation[i] = step.copyWith(
+          label: PreparationCopy.removeTilesLabel(
+            3,
+            PreparationCopy.tileMarketSelling3,
+          ),
+          detail: PreparationCopy.removeTilesDetail(
+            3,
+            PreparationCopy.tileMarketSelling3,
+          ),
+          quantity: 3,
         );
       }
     }
@@ -200,61 +215,57 @@ class ChocolateModuleHandler
   /// For 3+ players: all removal and addition steps are new.
   List<PreparationEntity> _tileSubstitutionSteps(int playerCount) {
     if (playerCount == 2) {
-      return const [
-        PreparationEntity(
+      return [
+        PreparationSteps.removal(
           id: 'setup_chocolate_remove_gold_mine_v2',
-          description:
-              'Sort out 1x Gold Mine, value 2 and put it back in the box',
+          quantity: 1,
+          tileName: PreparationCopy.tileGoldMineV2,
           imageKey: 'jungle_gold_mine_v2',
-          phase: PreparationPhase.boardSetup,
         ),
-        PreparationEntity(
+        PreparationSteps.addition(
           id: 'setup_chocolate_add_kitchen',
-          description: 'Add 2x Chocolate Kitchen tiles to the jungle tiles',
+          quantity: 2,
+          tileName: PreparationCopy.tileChocolateKitchen,
           imageKey: 'jungle_chocolate_kitchen',
-          phase: PreparationPhase.boardSetup,
         ),
-        PreparationEntity(
+        PreparationSteps.addition(
           id: 'setup_chocolate_add_market',
-          description: 'Add 2x Chocolate Market tiles to the jungle tiles',
+          quantity: 2,
+          tileName: PreparationCopy.tileChocolateMarket,
           imageKey: 'jungle_chocolate_market',
-          phase: PreparationPhase.boardSetup,
         ),
       ];
     } else if (playerCount >= 3) {
-      return const [
-        PreparationEntity(
+      return [
+        PreparationSteps.removal(
           id: 'setup_chocolate_remove_gold_mine_v1',
-          description:
-              'Sort out 2x Gold Mine, value 1 and put them back in the box',
+          quantity: 2,
+          tileName: PreparationCopy.tileGoldMineV1,
           imageKey: 'jungle_gold_mine_v1',
-          phase: PreparationPhase.boardSetup,
         ),
-        PreparationEntity(
+        PreparationSteps.removal(
           id: 'setup_chocolate_remove_gold_mine_v2',
-          description:
-              'Sort out 1x Gold Mine, value 2 and put it back in the box',
+          quantity: 1,
+          tileName: PreparationCopy.tileGoldMineV2,
           imageKey: 'jungle_gold_mine_v2',
-          phase: PreparationPhase.boardSetup,
         ),
-        PreparationEntity(
+        PreparationSteps.removal(
           id: 'setup_chocolate_remove_market_selling_3',
-          description:
-              'Sort out 3x Market, selling price 3 and put them back in the box',
+          quantity: 3,
+          tileName: PreparationCopy.tileMarketSelling3,
           imageKey: 'jungle_market_selling_3',
-          phase: PreparationPhase.boardSetup,
         ),
-        PreparationEntity(
+        PreparationSteps.addition(
           id: 'setup_chocolate_add_kitchen',
-          description: 'Add 3x Chocolate Kitchen tiles to the jungle tiles',
+          quantity: 3,
+          tileName: PreparationCopy.tileChocolateKitchen,
           imageKey: 'jungle_chocolate_kitchen',
-          phase: PreparationPhase.boardSetup,
         ),
-        PreparationEntity(
+        PreparationSteps.addition(
           id: 'setup_chocolate_add_market',
-          description: 'Add 3x Chocolate Market tiles to the jungle tiles',
+          quantity: 3,
+          tileName: PreparationCopy.tileChocolateMarket,
           imageKey: 'jungle_chocolate_market',
-          phase: PreparationPhase.boardSetup,
         ),
       ];
     }

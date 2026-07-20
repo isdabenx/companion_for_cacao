@@ -6,6 +6,7 @@ import 'package:companion_for_cacao/features/game_setup/domain/entities/preparat
 import 'package:companion_for_cacao/features/game_setup/domain/services/handlers/watering_module_handler.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import '../../../../../support/preparation_fixtures.dart';
 import '../../../../../support/tile_fixtures.dart';
 
 void main() {
@@ -52,14 +53,15 @@ void main() {
       ];
 
       mockPreparationSteps = [
-        const PreparationEntity(
+        makePrepStep(
           id: 'setup_initial_tiles_plantation_market',
-          description: 'Initial step with plantation and market',
+          detail: 'Initial step with plantation and market.',
+          imageKey: 'initial_tiles_cacao',
           phase: PreparationPhase.tilePool,
         ),
-        const PreparationEntity(
+        makePrepStep(
           id: 'step_1',
-          description: 'Another step',
+          detail: 'Another step.',
           phase: PreparationPhase.tilePool,
         ),
       ];
@@ -135,16 +137,14 @@ void main() {
             (step) => step.id == 'setup_initial_tiles_plantation_water',
           );
 
-          // Verify the step was modified with correct ID and description
+          // Verify the step was modified with correct ID and detail
           expect(
             modifiedStep.id,
             equals('setup_initial_tiles_plantation_water'),
           );
-          expect(modifiedStep.description.contains('"water"'), isTrue);
-          expect(
-            modifiedStep.description.contains('single plantation'),
-            isTrue,
-          );
+          expect(modifiedStep.detail.contains('"water"'), isTrue);
+          expect(modifiedStep.detail.contains('single plantation'), isTrue);
+          expect(modifiedStep.rationale, isNotNull);
         },
       );
 
@@ -153,14 +153,15 @@ void main() {
 
         setUp(() {
           stepsWithDrawPile = [
-            const PreparationEntity(
+            makePrepStep(
               id: 'setup_initial_tiles_plantation_market',
-              description: 'Initial step',
+              detail: 'Initial step.',
+              imageKey: 'initial_tiles_cacao',
               phase: PreparationPhase.boardSetup,
             ),
-            const PreparationEntity(
+            makePrepStep(
               id: 'setup_jungle_draw_pile',
-              description: 'Mix remaining jungle tiles',
+              detail: 'Mix remaining jungle tiles.',
               phase: PreparationPhase.boardSetup,
             ),
           ];
@@ -183,10 +184,10 @@ void main() {
           expect(removeDoublePlantation, hasLength(1));
           expect(addWatering, hasLength(1));
           expect(
-            removeDoublePlantation.first.description,
+            removeDoublePlantation.first.detail,
             contains('2x Double Plantation'),
           );
-          expect(addWatering.first.description, contains('2x Watering'));
+          expect(addWatering.first.detail, contains('2x Watering'));
           expect(
             removeDoublePlantation.first.imageKey,
             equals('jungle_double_plantation'),
@@ -221,10 +222,10 @@ void main() {
           expect(removeDoublePlantation, hasLength(1));
           expect(addWatering, hasLength(1));
           expect(
-            removeSinglePlantation.first.description,
+            removeSinglePlantation.first.detail,
             contains('1x Single Plantation'),
           );
-          expect(addWatering.first.description, contains('3x Watering'));
+          expect(addWatering.first.detail, contains('3x Watering'));
         });
 
         test(

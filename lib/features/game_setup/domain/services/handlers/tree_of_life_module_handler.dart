@@ -1,11 +1,15 @@
 import 'package:companion_for_cacao/core/domain/entities/boardgame_entity.dart';
 import 'package:companion_for_cacao/core/domain/entities/tile_entity.dart';
+import 'package:companion_for_cacao/features/game_setup/domain/content/preparation_copy.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/player_entity.dart';
+import 'package:companion_for_cacao/features/game_setup/domain/entities/preparation_actor.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/preparation_entity.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/preparation_phase.dart';
+import 'package:companion_for_cacao/features/game_setup/domain/entities/table_zone.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/services/handlers/chocolate_module_handler.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/services/handlers/new_workers_module_handler.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/services/module_preparation_handler.dart';
+import 'package:companion_for_cacao/features/game_setup/domain/services/preparation_steps.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/services/tile_adjustments.dart';
 
 class TreeOfLifeModuleHandler
@@ -174,8 +178,13 @@ class TreeOfLifeModuleHandler
             .firstOrNull;
         return PreparationEntity(
           id: 'setup_tree_of_life_add_0004_${player.color}',
-          description:
-              'Tree of Life Module: Player ${player.color} takes their 0-0-0-4 worker tile from the New Workers Module and adds it to their worker tiles.',
+          label: PreparationCopy.treeOfLife0004Label,
+          detail: PreparationCopy.treeOfLife0004Detail(player.color),
+          rationale: PreparationCopy.treeOfLife0004Rationale,
+          actor: PreparationActor.player,
+          tableZone: TableZone.playerArea,
+          groupId: PreparationGroups.player(player.color),
+          quantity: 1,
           color: player.color,
           imageKey: workerTile != null
               ? 'tile_${workerTile.filenameImage}'
@@ -211,13 +220,18 @@ class TreeOfLifeModuleHandler
   void _modifyBaseStepsFor2Players(List<PreparationEntity> preparation) {
     for (int i = 0; i < preparation.length; i++) {
       final step = preparation[i];
+      // copyWith keeps the structured fields of the base removal step.
       if (step.id == 'setup_jungle_tiles_2p_removal_gold_mine_value_1') {
-        preparation[i] = PreparationEntity(
-          id: step.id,
-          description:
-              'Sort out 2x Gold Mine, value 1 and put them back in the box',
-          imageKey: step.imageKey,
-          phase: step.phase,
+        preparation[i] = step.copyWith(
+          label: PreparationCopy.removeTilesLabel(
+            2,
+            PreparationCopy.tileGoldMineV1,
+          ),
+          detail: PreparationCopy.removeTilesDetail(
+            2,
+            PreparationCopy.tileGoldMineV1,
+          ),
+          quantity: 2,
         );
       }
     }
@@ -239,54 +253,50 @@ class TreeOfLifeModuleHandler
     if (isChocolateActive) {
       // Gold mines already handled by Chocolate handler
       return [
-        PreparationEntity(
+        PreparationSteps.addition(
           id: 'setup_tree_of_life_add_tiles',
-          description:
-              'Add ${playerCount == 2 ? 2 : 3}x Tree of Life tiles to the jungle tiles',
+          quantity: playerCount == 2 ? 2 : 3,
+          tileName: PreparationCopy.tileTreeOfLife,
           imageKey: 'jungle_tree_of_life',
-          phase: PreparationPhase.boardSetup,
         ),
       ];
     }
 
     if (playerCount == 2) {
       // Gold mine v1 handled by _modifyBaseStepsFor2Players (1→2)
-      return const [
-        PreparationEntity(
+      return [
+        PreparationSteps.removal(
           id: 'setup_tree_of_life_remove_gold_mine_v2',
-          description:
-              'Sort out 1x Gold Mine, value 2 and put it back in the box',
+          quantity: 1,
+          tileName: PreparationCopy.tileGoldMineV2,
           imageKey: 'jungle_gold_mine_v2',
-          phase: PreparationPhase.boardSetup,
         ),
-        PreparationEntity(
+        PreparationSteps.addition(
           id: 'setup_tree_of_life_add_tiles',
-          description: 'Add 2x Tree of Life tiles to the jungle tiles',
+          quantity: 2,
+          tileName: PreparationCopy.tileTreeOfLife,
           imageKey: 'jungle_tree_of_life',
-          phase: PreparationPhase.boardSetup,
         ),
       ];
     } else if (playerCount >= 3) {
-      return const [
-        PreparationEntity(
+      return [
+        PreparationSteps.removal(
           id: 'setup_tree_of_life_remove_gold_mine_v1',
-          description:
-              'Sort out 2x Gold Mine, value 1 and put them back in the box',
+          quantity: 2,
+          tileName: PreparationCopy.tileGoldMineV1,
           imageKey: 'jungle_gold_mine_v1',
-          phase: PreparationPhase.boardSetup,
         ),
-        PreparationEntity(
+        PreparationSteps.removal(
           id: 'setup_tree_of_life_remove_gold_mine_v2',
-          description:
-              'Sort out 1x Gold Mine, value 2 and put it back in the box',
+          quantity: 1,
+          tileName: PreparationCopy.tileGoldMineV2,
           imageKey: 'jungle_gold_mine_v2',
-          phase: PreparationPhase.boardSetup,
         ),
-        PreparationEntity(
+        PreparationSteps.addition(
           id: 'setup_tree_of_life_add_tiles',
-          description: 'Add 3x Tree of Life tiles to the jungle tiles',
+          quantity: 3,
+          tileName: PreparationCopy.tileTreeOfLife,
           imageKey: 'jungle_tree_of_life',
-          phase: PreparationPhase.boardSetup,
         ),
       ];
     }

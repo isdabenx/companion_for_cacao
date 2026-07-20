@@ -77,13 +77,13 @@ void main() {
     expect(result.preparation.isNotEmpty, true);
     expect(
       result.preparation.any(
-        (p) => p.description.contains('Player red takes the village board'),
+        (p) => p.detail.contains('village board of color red'),
       ),
       true,
     );
     expect(
       result.preparation.any(
-        (p) => p.description.contains('Player white takes the village board'),
+        (p) => p.detail.contains('village board of color white'),
       ),
       true,
     );

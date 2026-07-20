@@ -1,8 +1,10 @@
 import 'package:companion_for_cacao/core/domain/entities/boardgame_entity.dart';
 import 'package:companion_for_cacao/core/domain/entities/tile_entity.dart';
+import 'package:companion_for_cacao/features/game_setup/domain/content/preparation_copy.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/player_entity.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/preparation_entity.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/preparation_phase.dart';
+import 'package:companion_for_cacao/features/game_setup/domain/entities/table_zone.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/services/module_preparation_handler.dart';
 
 class EmperorFavorModuleHandler implements ModulePreparationHandler {
@@ -43,13 +45,13 @@ class EmperorFavorModuleHandler implements ModulePreparationHandler {
       }
     }
 
-    final emperorDescription = isWateringModule
-        ? 'After laying out the starting tiles, place the Emperor figure on the water tile.'
-        : 'After laying out the starting tiles, place the Emperor figure on the market, selling price 2.';
-
     final emperorStep = PreparationEntity(
       id: 'setup_emperor',
-      description: emperorDescription,
+      label: PreparationCopy.emperorLabel,
+      detail: isWateringModule
+          ? PreparationCopy.emperorOnWaterDetail
+          : PreparationCopy.emperorOnMarketDetail,
+      tableZone: TableZone.startingArea,
       phase: PreparationPhase.boardSetup,
       imageKey: 'emperor_figure',
     );

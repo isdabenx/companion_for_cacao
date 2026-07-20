@@ -6,6 +6,7 @@ import 'package:companion_for_cacao/features/game_setup/domain/entities/preparat
 import 'package:companion_for_cacao/features/game_setup/domain/services/handlers/gem_mines_module_handler.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import '../../../../../support/preparation_fixtures.dart';
 import '../../../../../support/tile_fixtures.dart';
 
 void main() {
@@ -87,20 +88,22 @@ void main() {
 
         setUp(() {
           stepsWithBaseRemovals = [
-            const PreparationEntity(
+            makePrepStep(
               id: 'setup_jungle_tiles_2p_removal_temple',
-              description: 'Sort out 1x Temple and put it back in the box',
+              detail: 'Sort out 1x Temple and put it back in the box.',
               imageKey: 'jungle_temple',
+              groupId: 'group_return_to_box',
+              quantity: 1,
               phase: PreparationPhase.boardSetup,
             ),
-            const PreparationEntity(
+            makePrepStep(
               id: 'setup_jungle_draw_pile',
-              description: 'Mix remaining jungle tiles',
+              detail: 'Mix remaining jungle tiles.',
               phase: PreparationPhase.boardSetup,
             ),
-            const PreparationEntity(
+            makePrepStep(
               id: 'setup_resources_bank',
-              description: 'Resources bank',
+              detail: 'Resources bank.',
               phase: PreparationPhase.supplies,
             ),
           ];
@@ -130,7 +133,7 @@ void main() {
             (s) => s.id == 'setup_gem_mines_remove_temples',
           );
           expect(templeStep, hasLength(1));
-          expect(templeStep.first.description, contains('all Temple tiles'));
+          expect(templeStep.first.detail, contains('all Temple tiles'));
           expect(templeStep.first.imageKey, equals('jungle_temple'));
         });
 
@@ -147,7 +150,7 @@ void main() {
               (s) => s.id == 'setup_gem_mines_add_gem_mines',
             );
             expect(gemStep, hasLength(1));
-            expect(gemStep.first.description, contains('4x Gem Mine'));
+            expect(gemStep.first.detail, contains('4x Gem Mine'));
             expect(gemStep.first.imageKey, equals('jungle_gem_mine'));
           },
         );
@@ -156,14 +159,14 @@ void main() {
           'should add gem mine tiles step with correct quantity for 3+ players',
           () {
             final stepsWithDrawPile = [
-              const PreparationEntity(
+              makePrepStep(
                 id: 'setup_jungle_draw_pile',
-                description: 'Mix remaining jungle tiles',
+                detail: 'Mix remaining jungle tiles.',
                 phase: PreparationPhase.boardSetup,
               ),
-              const PreparationEntity(
+              makePrepStep(
                 id: 'setup_resources_bank',
-                description: 'Resources bank',
+                detail: 'Resources bank.',
                 phase: PreparationPhase.supplies,
               ),
             ];
@@ -178,7 +181,7 @@ void main() {
               (s) => s.id == 'setup_gem_mines_add_gem_mines',
             );
             expect(gemStep, hasLength(1));
-            expect(gemStep.first.description, contains('5x Gem Mine'));
+            expect(gemStep.first.detail, contains('5x Gem Mine'));
           },
         );
 
@@ -220,7 +223,7 @@ void main() {
             (s) => s.id == 'setup_gem_mines_remove_gems',
           );
           expect(removeGemsStep, hasLength(1));
-          expect(removeGemsStep.first.description, contains('Remove 8 gems'));
+          expect(removeGemsStep.first.detail, contains('Remove 8 gems'));
           expect(removeGemsStep.first.phase, equals(PreparationPhase.supplies));
           expect(removeGemsStep.first.imageKey, equals('resources_gems'));
         });
@@ -250,7 +253,7 @@ void main() {
           );
           expect(mineCarStep, hasLength(1));
           expect(
-            mineCarStep.first.description,
+            mineCarStep.first.detail,
             contains('remaining gems into the mine car'),
           );
           expect(mineCarStep.first.imageKey, equals('resources_mine_car'));
@@ -267,7 +270,7 @@ void main() {
             (s) => s.id == 'setup_gem_mines_mine_car',
           );
           expect(mineCarStep, hasLength(1));
-          expect(mineCarStep.first.description, contains('Fill all 32 gems'));
+          expect(mineCarStep.first.detail, contains('Fill all 32 gems'));
         });
 
         test('should add masks step with 2-player rules', () {
@@ -281,10 +284,7 @@ void main() {
             (s) => s.id == 'setup_gem_mines_masks',
           );
           expect(masksStep, hasLength(1));
-          expect(
-            masksStep.first.description,
-            contains('without the value 12 mask'),
-          );
+          expect(masksStep.first.detail, contains('without the value 12 mask'));
           expect(masksStep.first.phase, equals(PreparationPhase.supplies));
           expect(masksStep.first.imageKey, equals('resources_masks'));
         });
@@ -300,7 +300,7 @@ void main() {
             (s) => s.id == 'setup_gem_mines_masks',
           );
           expect(masksStep, hasLength(1));
-          expect(masksStep.first.description, contains('7 masks'));
+          expect(masksStep.first.detail, contains('7 masks'));
         });
 
         test('should add rule reminder step', () {
@@ -314,7 +314,7 @@ void main() {
             (s) => s.id == 'setup_gem_mines_rule_reminder',
           );
           expect(reminderStep, hasLength(1));
-          expect(reminderStep.first.description, contains('shake out 6 gems'));
+          expect(reminderStep.first.detail, contains('shake out 6 gems'));
         });
       });
     });

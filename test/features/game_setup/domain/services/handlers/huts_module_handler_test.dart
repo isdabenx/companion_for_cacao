@@ -6,6 +6,7 @@ import 'package:companion_for_cacao/features/game_setup/domain/entities/preparat
 import 'package:companion_for_cacao/features/game_setup/domain/services/handlers/huts_module_handler.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import '../../../../../support/preparation_fixtures.dart';
 import '../../../../../support/tile_fixtures.dart';
 
 void main() {
@@ -33,19 +34,19 @@ void main() {
       ];
 
       mockPreparationSteps = [
-        const PreparationEntity(
+        makePrepStep(
           id: 'setup_board_1',
-          description: 'Board setup step 1',
+          detail: 'Board setup step 1.',
           phase: PreparationPhase.boardSetup,
         ),
-        const PreparationEntity(
+        makePrepStep(
           id: 'setup_board_2',
-          description: 'Board setup step 2',
+          detail: 'Board setup step 2.',
           phase: PreparationPhase.boardSetup,
         ),
-        const PreparationEntity(
+        makePrepStep(
           id: 'setup_player_1',
-          description: 'Player setup step 1',
+          detail: 'Player setup step 1.',
           phase: PreparationPhase.playerSetup,
         ),
       ];
@@ -128,9 +129,9 @@ void main() {
         'should not insert setup_huts_market if no boardSetup phase exists',
         () {
           final stepsWithoutBoardSetup = [
-            const PreparationEntity(
+            makePrepStep(
               id: 'setup_player_1',
-              description: 'Player setup step 1',
+              detail: 'Player setup step 1.',
               phase: PreparationPhase.playerSetup,
             ),
           ];
