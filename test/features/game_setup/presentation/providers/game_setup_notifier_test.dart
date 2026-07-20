@@ -1,5 +1,8 @@
+import 'dart:math';
+
 import 'package:companion_for_cacao/core/domain/entities/boardgame_entity.dart';
 import 'package:companion_for_cacao/core/domain/entities/module_entity.dart';
+import 'package:companion_for_cacao/core/theme/app_colors.dart';
 import 'package:companion_for_cacao/core/domain/entities/tile_entity.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/game_setup_state_entity.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/player_entity.dart';
@@ -810,5 +813,38 @@ void main() {
       state = await container.read(gameSetupProvider.future);
       expect(state.hutLayout, isNull);
     });
+
+    test('drawRandomFirstPlayer moves the drawn color to the front of '
+        'colorOrder and returns the player', () async {
+      final container = createContainer();
+      addTearDown(container.dispose);
+      await container.read(gameSetupProvider.future);
+
+      final notifier = container.read(gameSetupProvider.notifier);
+      notifier.addPlayer('Alice', 'red');
+      notifier.addPlayer('Bob', 'yellow');
+
+      final drawn = notifier.drawRandomFirstPlayer(random: Random(42));
+
+      final state = await container.read(gameSetupProvider.future);
+      expect(drawn, isNotNull);
+      expect(state.colorOrder.first, drawn!.color);
+      // Nothing is lost: same colors, just reordered.
+      expect(state.colorOrder.toSet(), AppColors.colors.keys.toSet());
+    });
+
+    test(
+      'drawRandomFirstPlayer returns null with fewer than 2 players',
+      () async {
+        final container = createContainer();
+        addTearDown(container.dispose);
+        await container.read(gameSetupProvider.future);
+
+        final notifier = container.read(gameSetupProvider.notifier);
+        notifier.addPlayer('Alice', 'red');
+
+        expect(notifier.drawRandomFirstPlayer(), isNull);
+      },
+    );
   });
 }

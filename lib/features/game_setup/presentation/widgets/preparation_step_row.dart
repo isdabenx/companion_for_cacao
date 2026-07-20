@@ -7,6 +7,7 @@ import 'package:companion_for_cacao/features/game_setup/presentation/providers/g
 import 'package:companion_for_cacao/features/game_setup/presentation/utils/preparation_image_resolver.dart';
 import 'package:companion_for_cacao/features/game_setup/presentation/widgets/preparation_image_dialog.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 /// One preparation step as an expandable row: thumbnail + short label
@@ -60,6 +61,7 @@ class _PreparationStepRowState extends ConsumerState<PreparationStepRow> {
       widget.onCheckTap!();
       return;
     }
+    HapticFeedback.lightImpact();
     ref
         .read(gameSetupProvider.notifier)
         .togglePreparationCompletion(widget.step.id);
@@ -131,11 +133,7 @@ class _PreparationStepRowState extends ConsumerState<PreparationStepRow> {
                   InkResponse(
                     onTap: _onCheckTap,
                     radius: 24,
-                    child: Icon(
-                      isCompleted ? Icons.check_circle : Icons.circle_outlined,
-                      color: AppColors.brown,
-                      size: 26,
-                    ),
+                    child: AnimatedCheckIcon(isCompleted: isCompleted),
                   ),
                 ],
               ),
@@ -195,6 +193,44 @@ class _PreparationStepRowState extends ConsumerState<PreparationStepRow> {
           ),
         ],
       ),
+    );
+  }
+}
+
+/// Completion check that plays a short "pop" whenever the state flips
+/// to completed. The key swap restarts the tween only on real changes,
+/// so rebuilds are free; disabled animations skip the pop entirely.
+class AnimatedCheckIcon extends StatelessWidget {
+  const AnimatedCheckIcon({
+    required this.isCompleted,
+    this.size = 26,
+    super.key,
+  });
+
+  final bool isCompleted;
+  final double size;
+
+  @override
+  Widget build(BuildContext context) {
+    final icon = Icon(
+      isCompleted ? Icons.check_circle : Icons.circle_outlined,
+      color: AppColors.brown,
+      size: size,
+    );
+    if (!isCompleted || MediaQuery.of(context).disableAnimations) {
+      return icon;
+    }
+    return TweenAnimationBuilder<double>(
+      key: ValueKey(isCompleted),
+      tween: Tween(begin: 0, end: 1),
+      duration: const Duration(milliseconds: 280),
+      curve: Curves.easeOut,
+      builder: (context, t, child) {
+        // 1 → 1.35 → 1 bump along the tween.
+        final scale = 1 + (t < 0.5 ? t : 1 - t) * 0.7;
+        return Transform.scale(scale: scale, child: child);
+      },
+      child: icon,
     );
   }
 }

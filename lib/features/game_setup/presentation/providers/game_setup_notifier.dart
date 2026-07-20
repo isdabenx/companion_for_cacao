@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:collection/collection.dart';
 import 'package:companion_for_cacao/config/constants/game_constants.dart';
 import 'package:companion_for_cacao/core/domain/entities/boardgame_entity.dart';
@@ -332,6 +334,25 @@ class GameSetupNotifier extends _$GameSetupNotifier {
         }).toList(),
       ),
     );
+  }
+
+  /// Draws a random first player among the selected ones: rotates
+  /// [GameSetupStateEntity.colorOrder] so their color sits first (turn
+  /// order is the grid position) and returns the drawn player so the UI
+  /// can announce them. Returns null with fewer than 2 selected players.
+  PlayerEntity? drawRandomFirstPlayer({Random? random}) {
+    final current = state.value;
+    if (current == null) return null;
+    final selected = current.players.where((p) => p.isSelected).toList();
+    if (selected.length < 2) return null;
+
+    final rng = random ?? Random();
+    final drawn = selected[rng.nextInt(selected.length)];
+    final order = List<String>.from(current.colorOrder)
+      ..remove(drawn.color)
+      ..insert(0, drawn.color);
+    state = AsyncData(current.copyWith(colorOrder: order));
+    return drawn;
   }
 
   void updatePlayerName(String color, String newName) {

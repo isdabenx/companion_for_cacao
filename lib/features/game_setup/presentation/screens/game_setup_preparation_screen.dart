@@ -1,3 +1,4 @@
+import 'package:companion_for_cacao/core/theme/app_colors.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/game_setup_state_entity.dart';
 import 'package:companion_for_cacao/features/game_setup/presentation/providers/game_setup_notifier.dart';
 import 'package:companion_for_cacao/features/game_setup/presentation/widgets/detailed_preparation_widget.dart';
@@ -16,11 +17,34 @@ class GameSetupPreparationScreen extends ConsumerWidget {
     // re-runs the pipeline, and the route extra is only a snapshot taken
     // when the game was started.
     final liveSetup = ref.watch(gameSetupProvider).value ?? gameSetup;
+    final (completed, total) = ref.watch(preparationProgressProvider);
+    final progress = total == 0 ? 0.0 : completed / total;
 
     return CustomScaffoldWidget(
       title: 'Preparation',
       showBackButton: true,
-      body: DetailedPreparationWidget(preparation: liveSetup.preparation),
+      body: Column(
+        children: [
+          // Global progress: the thin bar under the title answers "how
+          // far along is the table?" at a glance.
+          TweenAnimationBuilder<double>(
+            tween: Tween(begin: 0, end: progress),
+            duration: const Duration(milliseconds: 350),
+            curve: Curves.easeOutCubic,
+            builder: (context, value, _) => LinearProgressIndicator(
+              value: value,
+              minHeight: 6,
+              backgroundColor: AppColors.brown.withValues(alpha: 0.15),
+              color: AppColors.greenDark,
+            ),
+          ),
+          Expanded(
+            child: DetailedPreparationWidget(
+              preparation: liveSetup.preparation,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

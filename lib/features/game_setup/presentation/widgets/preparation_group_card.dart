@@ -7,6 +7,7 @@ import 'package:companion_for_cacao/features/game_setup/presentation/utils/prepa
 import 'package:companion_for_cacao/features/game_setup/presentation/widgets/preparation_image_dialog.dart';
 import 'package:companion_for_cacao/features/game_setup/presentation/widgets/preparation_step_row.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 /// Card that renders every step of a preparation group (a player's
@@ -101,13 +102,15 @@ class PreparationGroupCard extends ConsumerWidget {
                   ),
                   AppSpacing.horizontalM,
                   InkResponse(
-                    onTap: () => ref
-                        .read(gameSetupProvider.notifier)
-                        .toggleGroupCompletion(groupId),
+                    onTap: () {
+                      if (!allCompleted) HapticFeedback.mediumImpact();
+                      ref
+                          .read(gameSetupProvider.notifier)
+                          .toggleGroupCompletion(groupId);
+                    },
                     radius: 24,
-                    child: Icon(
-                      allCompleted ? Icons.check_circle : Icons.circle_outlined,
-                      color: AppColors.brown,
+                    child: AnimatedCheckIcon(
+                      isCompleted: allCompleted,
                       size: 28,
                     ),
                   ),
@@ -276,13 +279,15 @@ class ReturnToBoxCard extends ConsumerWidget {
                   ),
                   AppSpacing.horizontalM,
                   InkResponse(
-                    onTap: () => ref
-                        .read(gameSetupProvider.notifier)
-                        .toggleGroupCompletion(groupId),
+                    onTap: () {
+                      if (!allCompleted) HapticFeedback.mediumImpact();
+                      ref
+                          .read(gameSetupProvider.notifier)
+                          .toggleGroupCompletion(groupId);
+                    },
                     radius: 24,
-                    child: Icon(
-                      allCompleted ? Icons.check_circle : Icons.circle_outlined,
-                      color: AppColors.brown,
+                    child: AnimatedCheckIcon(
+                      isCompleted: allCompleted,
                       size: 28,
                     ),
                   ),
@@ -328,9 +333,12 @@ class _RemovalTileCell extends ConsumerWidget {
       message: step.label,
       child: InkWell(
         borderRadius: BorderRadius.circular(10),
-        onTap: () => ref
-            .read(gameSetupProvider.notifier)
-            .togglePreparationCompletion(step.id),
+        onTap: () {
+          HapticFeedback.lightImpact();
+          ref
+              .read(gameSetupProvider.notifier)
+              .togglePreparationCompletion(step.id);
+        },
         onLongPress: step.imageKey != null
             ? () => showPreparationImageDialog(
                 context,

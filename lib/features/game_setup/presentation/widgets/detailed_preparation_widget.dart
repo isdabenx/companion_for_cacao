@@ -12,11 +12,13 @@ import 'package:companion_for_cacao/features/game_setup/domain/services/handlers
 import 'package:companion_for_cacao/features/game_setup/domain/services/preparation_steps.dart';
 import 'package:companion_for_cacao/features/game_setup/presentation/providers/game_setup_notifier.dart';
 import 'package:companion_for_cacao/features/game_setup/presentation/widgets/hut_layout_selector_widget.dart';
+import 'package:companion_for_cacao/features/game_setup/presentation/widgets/preparation_celebration_overlay.dart';
 import 'package:companion_for_cacao/features/game_setup/presentation/widgets/preparation_group_card.dart';
 import 'package:companion_for_cacao/features/game_setup/presentation/widgets/preparation_step_row.dart';
 import 'package:companion_for_cacao/features/game_setup/presentation/widgets/worker_selector_widget.dart';
 import 'package:companion_for_cacao/shared/widgets/container_full_style_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -55,6 +57,32 @@ Future<bool> preparationFirstRun(Ref ref) async {
   return !(await repository.hasSeenPreparation());
 }
 
+/// Overall preparation progress as (completed, total), counting the
+/// derived completion of the interactive steps (worker selection, hut
+/// throw). Feeds the global progress bar and the celebration overlay.
+@riverpod
+(int, int) preparationProgress(Ref ref) {
+  final preparation = ref.watch(
+    gameSetupProvider.select((s) => s.value?.preparation ?? const []),
+  );
+  final workerSelectionApplied = ref.watch(
+    gameSetupProvider.select((s) => s.value?.workerSelection != null),
+  );
+  final hutThrowRegistered = ref.watch(
+    gameSetupProvider.select((s) => s.value?.hutLayout != null),
+  );
+  var completed = 0;
+  for (final step in preparation) {
+    final isDone = switch (step.id) {
+      NewWorkersModuleHandler.selectionStepId => workerSelectionApplied,
+      HutsModuleHandler.marketStepId => hutThrowRegistered,
+      _ => step.isCompleted,
+    };
+    if (isDone) completed++;
+  }
+  return (completed, preparation.length);
+}
+
 /// How one list entry renders: a group card or a standalone step.
 sealed class _RenderUnit {
   const _RenderUnit();
@@ -86,6 +114,10 @@ class _DetailedPreparationWidgetState
   final ScrollController _scrollController = ScrollController();
   PreparationPhase? _lastFirstIncompletePhase;
   bool _phaseTracked = false;
+
+  /// The user closed the celebration to keep reviewing; resets as soon
+  /// as the preparation is no longer fully complete.
+  bool _celebrationDismissed = false;
 
   @override
   void initState() {
@@ -124,6 +156,8 @@ class _DetailedPreparationWidgetState
     final advanced =
         previous != null && (current == null || current.index > previous.index);
     if (!advanced) return;
+    // A whole phase just closed: stronger feedback than a single step.
+    HapticFeedback.mediumImpact();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!mounted) return;
       // The flow moved on: drop manual expand/collapse overrides (e.g. a
@@ -217,124 +251,146 @@ class _DetailedPreparationWidgetState
     }
     _scrollToTopOnPhaseAdvance(firstIncompletePhase);
 
+    final allComplete =
+        widget.preparation.isNotEmpty && firstIncompletePhase == null;
+    if (!allComplete && _celebrationDismissed) {
+      _celebrationDismissed = false;
+    }
+
     String playerTitle(String? colorName) {
       if (colorName == null) return '';
       final player = players.firstWhereOrNull((p) => p.color == colorName);
       return player?.displayName ?? colorName.capitalized;
     }
 
-    return ContainerFullStyleWidget(
-      child: Center(
-        child: ConstrainedBox(
-          constraints: const BoxConstraints(maxWidth: 800),
-          child: CustomScrollView(
-            controller: _scrollController,
-            slivers: [
-              const SliverPadding(padding: EdgeInsets.only(top: AppSpacing.l)),
-              for (final entry in groupedPreparation.entries)
-                SliverMainAxisGroup(
-                  slivers: [
-                    SliverPersistentHeader(
-                      pinned: true,
-                      delegate: _PhaseHeaderDelegate(
-                        phase: entry.key,
-                        phaseName: _getPhaseName(entry.key),
-                        items: entry.value,
-                        completionMap: completionMap,
-                        isExpanded:
-                            expansionMap[entry.key] ??
-                            (entry.key == firstIncompletePhase),
-                        onTap: () {
-                          ref
-                              .read(phaseExpansionProvider.notifier)
-                              .toggle(
-                                entry.key,
-                                isDefaultExpanded:
-                                    entry.key == firstIncompletePhase,
-                              );
-                        },
-                      ),
-                    ),
-                    Builder(
-                      builder: (context) {
-                        final isDefaultExpanded =
-                            entry.key == firstIncompletePhase;
-                        final isExpanded =
-                            expansionMap[entry.key] ?? isDefaultExpanded;
-
-                        if (!isExpanded) {
-                          return const SliverToBoxAdapter(
-                            child: SizedBox.shrink(),
-                          );
-                        }
-
-                        final units = _buildUnits(entry.value);
-
-                        return SliverList(
-                          delegate: SliverChildBuilderDelegate((
-                            context,
-                            index,
-                          ) {
-                            final unit = units[index];
-                            switch (unit) {
-                              case _GroupUnit(:final groupId, :final steps):
-                                if (groupId == PreparationGroups.returnToBox) {
-                                  return ReturnToBoxCard(
-                                    key: ValueKey(groupId),
-                                    groupId: groupId,
-                                    title: PreparationCopy.returnToBoxTitle,
-                                    subtitle:
-                                        PreparationCopy.returnToBoxSubtitle,
-                                    steps: steps,
+    return Stack(
+      children: [
+        ContainerFullStyleWidget(
+          child: Center(
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 800),
+              child: CustomScrollView(
+                controller: _scrollController,
+                slivers: [
+                  const SliverPadding(
+                    padding: EdgeInsets.only(top: AppSpacing.l),
+                  ),
+                  for (final entry in groupedPreparation.entries)
+                    SliverMainAxisGroup(
+                      slivers: [
+                        SliverPersistentHeader(
+                          pinned: true,
+                          delegate: _PhaseHeaderDelegate(
+                            phase: entry.key,
+                            phaseName: _getPhaseName(entry.key),
+                            items: entry.value,
+                            completionMap: completionMap,
+                            isExpanded:
+                                expansionMap[entry.key] ??
+                                (entry.key == firstIncompletePhase),
+                            onTap: () {
+                              ref
+                                  .read(phaseExpansionProvider.notifier)
+                                  .toggle(
+                                    entry.key,
+                                    isDefaultExpanded:
+                                        entry.key == firstIncompletePhase,
                                   );
-                                }
-                                final colorName = steps.first.color;
-                                return PreparationGroupCard(
-                                  key: ValueKey(groupId),
-                                  groupId: groupId,
-                                  title: playerTitle(colorName),
-                                  colorName: colorName,
-                                  steps: steps,
-                                  initiallyExpandedRows: isFirstRun,
-                                );
-                              case _StepUnit(:final step):
-                                // Interactive worker selection step
-                                if (step.id ==
-                                    NewWorkersModuleHandler.selectionStepId) {
-                                  return const WorkerSelectorWidget();
-                                }
-                                // The hut-throw card completes by registering
-                                // the throw result, not by a manual checkbox.
-                                final isHutThrow =
-                                    step.id == HutsModuleHandler.marketStepId;
-                                return PreparationCard(
-                                  key: ValueKey(step.id),
-                                  preparation: step,
-                                  initiallyExpanded: isFirstRun,
-                                  footer: isHutThrow
-                                      ? const HutThrowRegisterRow()
-                                      : null,
-                                  onCheckTapOverride: isHutThrow
-                                      ? () => showHutLayoutEditor(context, ref)
-                                      : null,
-                                  isCompletedOverride: isHutThrow
-                                      ? hutThrowRegistered
-                                      : null,
-                                );
+                            },
+                          ),
+                        ),
+                        Builder(
+                          builder: (context) {
+                            final isDefaultExpanded =
+                                entry.key == firstIncompletePhase;
+                            final isExpanded =
+                                expansionMap[entry.key] ?? isDefaultExpanded;
+
+                            if (!isExpanded) {
+                              return const SliverToBoxAdapter(
+                                child: SizedBox.shrink(),
+                              );
                             }
-                          }, childCount: units.length),
-                        );
-                      },
+
+                            final units = _buildUnits(entry.value);
+
+                            return SliverList(
+                              delegate: SliverChildBuilderDelegate((
+                                context,
+                                index,
+                              ) {
+                                final unit = units[index];
+                                switch (unit) {
+                                  case _GroupUnit(:final groupId, :final steps):
+                                    if (groupId ==
+                                        PreparationGroups.returnToBox) {
+                                      return ReturnToBoxCard(
+                                        key: ValueKey(groupId),
+                                        groupId: groupId,
+                                        title: PreparationCopy.returnToBoxTitle,
+                                        subtitle:
+                                            PreparationCopy.returnToBoxSubtitle,
+                                        steps: steps,
+                                      );
+                                    }
+                                    final colorName = steps.first.color;
+                                    return PreparationGroupCard(
+                                      key: ValueKey(groupId),
+                                      groupId: groupId,
+                                      title: playerTitle(colorName),
+                                      colorName: colorName,
+                                      steps: steps,
+                                      initiallyExpandedRows: isFirstRun,
+                                    );
+                                  case _StepUnit(:final step):
+                                    // Interactive worker selection step
+                                    if (step.id ==
+                                        NewWorkersModuleHandler
+                                            .selectionStepId) {
+                                      return const WorkerSelectorWidget();
+                                    }
+                                    // The hut-throw card completes by registering
+                                    // the throw result, not by a manual checkbox.
+                                    final isHutThrow =
+                                        step.id ==
+                                        HutsModuleHandler.marketStepId;
+                                    return PreparationCard(
+                                      key: ValueKey(step.id),
+                                      preparation: step,
+                                      initiallyExpanded: isFirstRun,
+                                      footer: isHutThrow
+                                          ? const HutThrowRegisterRow()
+                                          : null,
+                                      onCheckTapOverride: isHutThrow
+                                          ? () => showHutLayoutEditor(
+                                              context,
+                                              ref,
+                                            )
+                                          : null,
+                                      isCompletedOverride: isHutThrow
+                                          ? hutThrowRegistered
+                                          : null,
+                                    );
+                                }
+                              }, childCount: units.length),
+                            );
+                          },
+                        ),
+                      ],
                     ),
-                  ],
-                ),
-              const SliverPadding(
-                padding: EdgeInsets.only(bottom: AppSpacing.l),
+                  const SliverPadding(
+                    padding: EdgeInsets.only(bottom: AppSpacing.l),
+                  ),
+                ],
               ),
-            ],
+            ),
           ),
         ),
-      ),
+        if (allComplete && !_celebrationDismissed)
+          PreparationCelebrationOverlay(
+            onClose: () => setState(() => _celebrationDismissed = true),
+          ),
+      ],
     );
   }
 }
