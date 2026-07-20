@@ -200,13 +200,31 @@ feature/
 - [x] Rajoles d'expansió Chocolatl
 - [x] Rajoles d'expansió Diamante
 
+### Fase UX-1 — Redisseny de la preparacio
+
+- [ ] Model de preparacio estructurat (actor, que/com/per que, zona de taula)
+- [ ] Targetes consolidades per jugador amb files expandibles i noms reals
+- [ ] Imatge protagonista amb zoom visible
+- [ ] Targeta de New Workers unificada amb la resta de passos
+- [ ] Progres global, chips de fase, feedback haptic i celebracio final
+
+### Fase UX-2 — Preparacio guiada
+
+- [ ] Mode guiat per pagines (passos consolidats, 8-13 pagines)
+- [ ] Mapa de taula esquematic
+- [ ] Game Setup en una sola pagina (inclou el gestor d'expansions millorat)
+- [ ] Registre de cabanes en graella amb gir
+
+### Internacionalitzacio *(avancada des de la Fase 4)*
+
+- [ ] Catala, castella i angles — despres d'UX-1, sobre el contingut nou
+
 ### Fase 2 — Diferenciacio
 
 - [ ] Historial de partides
 - [ ] Perfils de jugador amb estadistiques
 - [ ] Comptador de probabilitats de rajoles
 - [ ] Foto de partida
-- [ ] Gestor d'expansions millorat
 - [x] Selector interactiu de nous treballadors (presets predefinits, presets personalitzats i seleccio manual amb validacio d'equilibri)
 
 ### Fase 3 — Engagement
@@ -218,8 +236,7 @@ feature/
 
 ### Fase 4 — Qualitat i Accessibilitat
 
-- [ ] Mode daltonic
-- [ ] Internacionalitzacio (catala, castella, angles)
+- [ ] Mode daltonic (coordinat amb el tint per color de jugador d'UX-1)
 - [ ] Configuracio general de l'app
 
 > Per a detalls complets de cada funcionalitat, consulta [DESIGN.md](DESIGN.md).
