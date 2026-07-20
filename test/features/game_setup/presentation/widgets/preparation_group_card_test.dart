@@ -12,6 +12,7 @@ import 'package:companion_for_cacao/features/game_setup/domain/entities/table_zo
 import 'package:companion_for_cacao/features/game_setup/presentation/providers/game_setup_notifier.dart';
 import 'package:companion_for_cacao/features/game_setup/presentation/widgets/preparation_group_card.dart';
 import 'package:companion_for_cacao/features/game_setup/presentation/widgets/preparation_step_row.dart';
+import 'package:companion_for_cacao/l10n/generated/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -88,6 +89,8 @@ void main() {
         gameSetupProvider.overrideWith(() => FakeGameSetupNotifier(state)),
       ],
       child: MaterialApp(
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
         home: Scaffold(body: SingleChildScrollView(child: child)),
       ),
     );

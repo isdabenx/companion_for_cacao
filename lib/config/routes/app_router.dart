@@ -14,6 +14,7 @@ import 'package:companion_for_cacao/features/splash/presentation/providers/splas
 import 'package:companion_for_cacao/features/splash/presentation/screens/splash_screen.dart';
 import 'package:companion_for_cacao/features/tile/presentation/screens/tile_detail_screen.dart';
 import 'package:companion_for_cacao/features/tile/presentation/screens/tile_list_screen.dart';
+import 'package:companion_for_cacao/l10n/generated/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -41,8 +42,12 @@ GoRouter goRouter(Ref ref) {
     initialLocation: AppRoutes.splash,
     refreshListenable: refreshNotifier,
     errorBuilder: (context, state) => Scaffold(
-      appBar: AppBar(title: const Text('Page Not Found')),
-      body: Center(child: Text('Route not found: ${state.uri}')),
+      appBar: AppBar(
+        title: Text(AppLocalizations.of(context).pageNotFoundTitle),
+      ),
+      body: Center(
+        child: Text(AppLocalizations.of(context).routeNotFound('${state.uri}')),
+      ),
     ),
     routes: [
       GoRoute(
@@ -64,7 +69,9 @@ GoRouter goRouter(Ref ref) {
           if (tile is! TileEntity) {
             return Scaffold(
               appBar: AppBar(title: const Text('Error')),
-              body: const Center(child: Text('Invalid tile data')),
+              body: Center(
+                child: Text(AppLocalizations.of(context).invalidDataMessage),
+              ),
             );
           }
           return TileDetailScreen(tile: tile);
@@ -81,7 +88,9 @@ GoRouter goRouter(Ref ref) {
           if (extra is! Map<String, String>) {
             return Scaffold(
               appBar: AppBar(title: const Text('Error')),
-              body: const Center(child: Text('Invalid PDF data')),
+              body: Center(
+                child: Text(AppLocalizations.of(context).invalidDataMessage),
+              ),
             );
           }
           return RulePdfScreen(
@@ -101,7 +110,9 @@ GoRouter goRouter(Ref ref) {
           if (gameSetup is! GameSetupStateEntity) {
             return Scaffold(
               appBar: AppBar(title: const Text('Error')),
-              body: const Center(child: Text('Invalid game setup data')),
+              body: Center(
+                child: Text(AppLocalizations.of(context).invalidDataMessage),
+              ),
             );
           }
           return GameSetupDetailScreen(gameSetup: gameSetup);
@@ -114,7 +125,9 @@ GoRouter goRouter(Ref ref) {
           if (gameSetup is! GameSetupStateEntity) {
             return Scaffold(
               appBar: AppBar(title: const Text('Error')),
-              body: const Center(child: Text('Invalid game setup data')),
+              body: Center(
+                child: Text(AppLocalizations.of(context).invalidDataMessage),
+              ),
             );
           }
           return GameSetupPreparationScreen(gameSetup: gameSetup);
@@ -135,7 +148,9 @@ GoRouter goRouter(Ref ref) {
           if (gameSetup is! GameSetupStateEntity) {
             return Scaffold(
               appBar: AppBar(title: const Text('Error')),
-              body: const Center(child: Text('Invalid game setup data')),
+              body: Center(
+                child: Text(AppLocalizations.of(context).invalidDataMessage),
+              ),
             );
           }
           return GameSetupTilesScreen(gameSetup: gameSetup);

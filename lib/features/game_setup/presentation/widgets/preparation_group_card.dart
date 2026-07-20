@@ -6,6 +6,7 @@ import 'package:companion_for_cacao/features/game_setup/presentation/providers/g
 import 'package:companion_for_cacao/features/game_setup/presentation/utils/preparation_image_resolver.dart';
 import 'package:companion_for_cacao/features/game_setup/presentation/widgets/preparation_image_dialog.dart';
 import 'package:companion_for_cacao/features/game_setup/presentation/widgets/preparation_step_row.dart';
+import 'package:companion_for_cacao/l10n/generated/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -400,7 +401,9 @@ class _RemovalTileCell extends ConsumerWidget {
                   border: Border.all(color: AppColors.cream, width: 1.5),
                 ),
                 child: Text(
-                  step.quantity != null ? '×${step.quantity}' : 'ALL',
+                  step.quantity != null
+                      ? '×${step.quantity}'
+                      : AppLocalizations.of(context).quantityAll,
                   style: const TextStyle(
                     color: AppColors.white,
                     fontSize: 10,

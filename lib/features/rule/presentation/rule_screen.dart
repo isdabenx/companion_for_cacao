@@ -5,6 +5,7 @@ import 'package:companion_for_cacao/config/routes/app_routes.dart';
 import 'package:companion_for_cacao/core/theme/app_colors.dart';
 import 'package:companion_for_cacao/core/theme/app_spacing.dart';
 import 'package:companion_for_cacao/core/theme/app_text_styles.dart';
+import 'package:companion_for_cacao/l10n/generated/app_localizations.dart';
 import 'package:companion_for_cacao/shared/widgets/container_full_style_widget.dart';
 import 'package:companion_for_cacao/shared/widgets/custom_scaffold_widget.dart';
 import 'package:flutter/material.dart';
@@ -15,40 +16,45 @@ class RuleScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return CustomScaffoldWidget(
-      title: 'Rules',
+      title: l10n.menuRules,
       body: ContainerFullStyleWidget(
         child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              _buildSectionHeader('Base Game'),
+              _buildSectionHeader(l10n.rulesBaseGame),
               _buildRuleCard(
                 context,
-                title: 'Instructions',
+                title: l10n.rulesInstructions,
                 pdfPath: Assets.ruleCacaoPdf,
                 imagePath: Assets.boardgameCacao,
               ),
               AppSpacing.verticalM,
               _buildRuleCard(
                 context,
-                title: 'Overview',
+                title: l10n.rulesOverview,
                 pdfPath: Assets.ruleCacaoOverviewPdf,
                 imagePath: Assets.boardgameCacao,
               ),
               AppSpacing.verticalXl,
-              _buildSectionHeader('Expansion: Chocolatl'),
+              _buildSectionHeader(
+                l10n.rulesExpansionHeader(l10n.expansionNameChocolatl),
+              ),
               _buildRuleCard(
                 context,
-                title: 'Chocolatl Rules',
+                title: l10n.rulesExpansionRules(l10n.expansionNameChocolatl),
                 pdfPath: Assets.ruleCacaoChocolatlPdf,
                 imagePath: Assets.boardgameChocolatl,
               ),
               AppSpacing.verticalXl,
-              _buildSectionHeader('Expansion: Diamante'),
+              _buildSectionHeader(
+                l10n.rulesExpansionHeader(l10n.expansionNameDiamante),
+              ),
               _buildRuleCard(
                 context,
-                title: 'Diamante Rules',
+                title: l10n.rulesExpansionRules(l10n.expansionNameDiamante),
                 pdfPath: Assets.ruleCacaoDiamantePdf,
                 imagePath: Assets.boardgameDiamante,
               ),

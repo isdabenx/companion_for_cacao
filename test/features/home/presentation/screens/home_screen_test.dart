@@ -19,6 +19,7 @@ void main() {
     '🌟 Big Game Variant: Integration of all modules and expansions.',
     '📖 Integrated Manuals: Read the game rules.',
     '🏆 Score Calculator: Automatic final scoring with official tie rules.',
+    '🌐 Multi-language Support: Catalan, Spanish and English.',
     '📊 Adaptive UI: Optimized design for different screen sizes.',
     '🔄 Auto-Updater: Automatic detection of new versions.',
   ];
@@ -27,7 +28,6 @@ void main() {
     '🕒 Turn Timer: Control the duration of each turn.',
     '📜 Game History: Record of finished games and player stats.',
     '⚙️ Custom Settings: Adjust the game experience.',
-    '🌐 Multi-language Support: Interface in multiple languages.',
   ];
 
   setUpAll(() {

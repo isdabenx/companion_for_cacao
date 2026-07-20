@@ -2,6 +2,7 @@ import 'package:companion_for_cacao/core/theme/app_colors.dart';
 import 'package:companion_for_cacao/core/theme/app_spacing.dart';
 import 'package:companion_for_cacao/core/theme/app_text_styles.dart';
 import 'package:companion_for_cacao/core/utils/app_logger.dart';
+import 'package:companion_for_cacao/l10n/generated/app_localizations.dart';
 import 'package:flutter/material.dart';
 
 class AsyncErrorWidget extends StatelessWidget {
@@ -21,7 +22,7 @@ class AsyncErrorWidget extends StatelessWidget {
           Icon(Icons.error_outline, color: AppColors.brown, size: 48),
           SizedBox(height: AppSpacing.m),
           Text(
-            'Something went wrong. Please try again.',
+            AppLocalizations.of(context).errorGenericRetry,
             textAlign: TextAlign.center,
             style: AppTextStyles.bodyMedium.copyWith(color: AppColors.brown),
           ),
@@ -32,7 +33,7 @@ class AsyncErrorWidget extends StatelessWidget {
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.greenDark,
               ),
-              child: const Text('Retry'),
+              child: Text(AppLocalizations.of(context).retryAction),
             ),
           ],
         ],

@@ -1,5 +1,6 @@
 import 'package:companion_for_cacao/config/constants/assets.dart';
 import 'package:companion_for_cacao/core/theme/app_breakpoints.dart';
+import 'package:companion_for_cacao/l10n/generated/app_localizations.dart';
 import 'package:companion_for_cacao/shared/widgets/main_menu_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_advanced_drawer/flutter_advanced_drawer.dart';
@@ -63,7 +64,7 @@ class _CustomScaffoldWidgetState extends State<CustomScaffoldWidget> {
           leading: widget.showBackButton
               ? null
               : Tooltip(
-                  message: 'Open menu',
+                  message: AppLocalizations.of(context).openMenuTooltip,
                   child: IconButton(
                     onPressed: () {
                       drawerController.showDrawer();

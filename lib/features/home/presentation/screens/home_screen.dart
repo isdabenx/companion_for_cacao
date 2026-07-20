@@ -16,31 +16,15 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final completedFeatures = <String>[
-      '🏠 Main Menu: Quick access to all functionalities.',
-      '🗂 Tile Database: Comprehensive catalog of tiles.',
-      '🔍 Tile Filtering: Search and filter by multiple criteria.',
-      '🌴 Cacao Base Game: Full support and game setup.',
-      '🍫 Chocolatl Expansion: Full support including all 4 modules.',
-      '🚀 Diamante Expansion: Full support including all 4 modules.',
-      '🎲 Game Dashboard: Summary, preparation, and tiles in play.',
-      '🌟 Big Game Variant: Integration of all modules and expansions.',
-      '📖 Integrated Manuals: Read the game rules.',
-      '🏆 Score Calculator: Automatic final scoring with official tie rules.',
-      '📊 Adaptive UI: Optimized design for different screen sizes.',
-      '🔄 Auto-Updater: Automatic detection of new versions.',
-    ];
-
-    final pendingFeatures = <String>[
-      '🕒 Turn Timer: Control the duration of each turn.',
-      '📜 Game History: Record of finished games and player stats.',
-      '⚙️ Custom Settings: Adjust the game experience.',
-      '🌐 Multi-language Support: Interface in multiple languages.',
-    ];
+    final l10n = AppLocalizations.of(context);
+    // Feature lists live in the ARB as one string per list, one bullet
+    // per line, so translators keep them together.
+    final completedFeatures = l10n.homeCompletedFeatures.split('\n');
+    final pendingFeatures = l10n.homePendingFeatures.split('\n');
 
     return UpgradeAlert(
       child: CustomScaffoldWidget(
-        title: AppLocalizations.of(context).menuHome,
+        title: l10n.menuHome,
         body: ContainerFullStyleWidget(
           child: SingleChildScrollView(
             child: Column(
@@ -56,15 +40,12 @@ class HomeScreen extends StatelessWidget {
                 AppSpacing.verticalS,
                 Center(child: Image.asset(Assets.cacaoTile)),
                 AppSpacing.verticalXl,
-                const Padding(
-                  padding: EdgeInsets.symmetric(vertical: AppSpacing.xs),
-                  child: Text(
-                    'Companion for Cacao is a mobile application developed with Flutter designed to assist players of the Cacao board game and its expansions. '
-                    'The goal is to provide digital tools that enhance the gaming experience by facilitating score tracking, rule consultation, and game management.',
-                  ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: AppSpacing.xs),
+                  child: Text(l10n.homeIntro),
                 ),
                 AppSpacing.verticalXl,
-                const HeaderWidget(text: 'Completed Features'),
+                HeaderWidget(text: l10n.homeCompletedFeaturesTitle),
                 for (final String feature in completedFeatures)
                   Padding(
                     padding: const EdgeInsets.symmetric(
@@ -73,7 +54,7 @@ class HomeScreen extends StatelessWidget {
                     child: Text(feature),
                   ),
                 AppSpacing.verticalXl,
-                const HeaderWidget(text: 'Pending Features'),
+                HeaderWidget(text: l10n.homePendingFeaturesTitle),
                 for (final String feature in pendingFeatures)
                   Padding(
                     padding: const EdgeInsets.symmetric(
@@ -82,20 +63,15 @@ class HomeScreen extends StatelessWidget {
                     child: Text(feature),
                   ),
                 AppSpacing.verticalXl,
-                const HeaderWidget(text: 'Contact Me'),
-                const Padding(
-                  padding: EdgeInsets.symmetric(vertical: AppSpacing.xs),
-                  child: Text(
-                    'For suggestions, improvements, bug reports, or any other inquiries, '
-                    'you can visit our GitHub repository. The application is open-source '
-                    'and we are always looking for contributors to help improve it.',
-                  ),
+                HeaderWidget(text: l10n.homeContactTitle),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: AppSpacing.xs),
+                  child: Text(l10n.homeContactBody),
                 ),
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: AppSpacing.xs),
                   child: Text(
-                    'Visit our GitHub repository:',
-
+                    l10n.homeVisitRepo,
                     style: AppTextStyles.markdownBody.copyWith(
                       fontWeight: FontWeight.bold,
                     ),
@@ -120,13 +96,9 @@ class HomeScreen extends StatelessWidget {
                     ),
                   ),
                 ),
-                const Padding(
-                  padding: EdgeInsets.symmetric(vertical: AppSpacing.xs),
-                  child: Text(
-                    'On GitHub, you can open "issues" to report bugs, suggest new features, '
-                    'or even submit "pull requests" with your own contributions. '
-                    'We strive to constantly improve the app and appreciate any help!',
-                  ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: AppSpacing.xs),
+                  child: Text(l10n.homeGithubBody),
                 ),
               ],
             ),
