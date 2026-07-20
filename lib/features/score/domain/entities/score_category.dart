@@ -1,13 +1,11 @@
 /// Categories that contribute gold to a player's final score.
+///
+/// Display names live in the ARB catalog (`ScoreCategoryL10n`).
 enum ScoreCategory {
-  accumulatedGold('Accumulated Gold'),
-  waterTrack('Water Track'),
-  temples('Temples'),
-  sunTokens('Sun Tokens'),
-  huts('Huts'),
-  gemMines('Gem Mines');
-
-  const ScoreCategory(this.label);
-
-  final String label;
+  accumulatedGold,
+  waterTrack,
+  temples,
+  sunTokens,
+  huts,
+  gemMines,
 }

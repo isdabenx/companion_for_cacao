@@ -1,10 +1,13 @@
 import 'package:companion_for_cacao/features/score/presentation/widgets/count_stepper_widget.dart';
+import 'package:companion_for_cacao/l10n/generated/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   Widget wrap(Widget child) {
     return MaterialApp(
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      supportedLocales: AppLocalizations.supportedLocales,
       home: Scaffold(body: Center(child: child)),
     );
   }

@@ -8,19 +8,17 @@ import 'package:companion_for_cacao/features/score/domain/services/score_calcula
 import 'package:flutter/foundation.dart';
 
 /// One page of the score calculator flow.
+///
+/// Display names live in the ARB catalog (`ScoreStepL10n`).
 enum ScoreStep {
-  setup('Players & Modules'),
-  accumulatedGold('Accumulated Gold'),
-  waterTrack('Water Track'),
-  temples('Temples'),
-  sunTokens('Sun Tokens'),
-  cacaoFruits('Leftover Cacao'),
-  huts('Huts'),
-  gemMines('Gem Mines');
-
-  const ScoreStep(this.label);
-
-  final String label;
+  setup,
+  accumulatedGold,
+  waterTrack,
+  temples,
+  sunTokens,
+  cacaoFruits,
+  huts,
+  gemMines,
 }
 
 /// Full state of an in-progress final scoring session.

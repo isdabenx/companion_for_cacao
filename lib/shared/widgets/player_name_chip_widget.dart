@@ -2,6 +2,8 @@ import 'package:companion_for_cacao/core/theme/app_colors.dart';
 import 'package:companion_for_cacao/core/theme/app_spacing.dart';
 import 'package:companion_for_cacao/core/theme/app_text_styles.dart';
 import 'package:companion_for_cacao/core/utils/string_extensions.dart';
+import 'package:companion_for_cacao/l10n/generated/app_localizations.dart';
+import 'package:companion_for_cacao/shared/utils/player_display_l10n.dart';
 import 'package:companion_for_cacao/shared/widgets/circle_badge.dart';
 import 'package:companion_for_cacao/shared/widgets/selectable_chip.dart';
 import 'package:flutter/material.dart';
@@ -139,7 +141,7 @@ class _PlayerNameChipWidgetState extends State<PlayerNameChipWidget> {
                         borderRadius: BorderRadius.circular(8),
                         borderSide: BorderSide.none,
                       ),
-                      hintText: 'Name',
+                      hintText: AppLocalizations.of(context).playerNameHint,
                       hintStyle: AppTextStyles.hintText.copyWith(
                         color: (isDarkColor ? AppColors.white : AppColors.brown)
                             .withValues(alpha: 0.5),
@@ -147,7 +149,10 @@ class _PlayerNameChipWidgetState extends State<PlayerNameChipWidget> {
                     ),
                   )
                 : Text(
-                    widget.colorString.capitalized,
+                    localizedColorName(
+                      AppLocalizations.of(context),
+                      widget.colorString,
+                    ).capitalized,
                     textAlign: TextAlign.center,
                     style: AppTextStyles.colorName,
                   ),

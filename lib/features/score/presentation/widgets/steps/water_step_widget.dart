@@ -4,6 +4,7 @@ import 'package:companion_for_cacao/core/theme/app_text_styles.dart';
 import 'package:companion_for_cacao/features/score/domain/services/score_calculator_service.dart';
 import 'package:companion_for_cacao/features/score/presentation/providers/score_notifier.dart';
 import 'package:companion_for_cacao/features/score/presentation/widgets/score_player_row_widget.dart';
+import 'package:companion_for_cacao/l10n/generated/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -20,8 +21,7 @@ class WaterStepWidget extends ConsumerWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Select the water field where each water carrier ended the game. '
-          'Negative fields subtract gold.',
+          AppLocalizations.of(context).scoreWaterIntro,
           style: AppTextStyles.instruction,
         ),
         AppSpacing.verticalM,

@@ -6,6 +6,8 @@ import 'package:companion_for_cacao/features/score/domain/services/score_calcula
 import 'package:companion_for_cacao/features/score/presentation/providers/score_notifier.dart';
 import 'package:companion_for_cacao/features/score/presentation/widgets/count_stepper_widget.dart';
 import 'package:companion_for_cacao/features/score/presentation/widgets/score_player_row_widget.dart';
+import 'package:companion_for_cacao/l10n/generated/app_localizations.dart';
+import 'package:companion_for_cacao/shared/utils/player_display_l10n.dart';
 import 'package:companion_for_cacao/shared/widgets/circle_badge.dart';
 import 'package:companion_for_cacao/shared/widgets/safe_asset_image.dart';
 import 'package:flutter/material.dart';
@@ -25,8 +27,7 @@ class GemsStepWidget extends ConsumerWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Tap a mask tile and pick who owns it. Masks add their value in '
-          'gold.',
+          AppLocalizations.of(context).scoreGemsIntro,
           style: AppTextStyles.instruction,
         ),
         AppSpacing.verticalM,
@@ -46,7 +47,7 @@ class GemsStepWidget extends ConsumerWidget {
         ),
         AppSpacing.verticalXl,
         Text(
-          'Leftover gems next to each village board (1 gold each):',
+          AppLocalizations.of(context).scoreGemsLeftoverIntro,
           style: AppTextStyles.instruction,
         ),
         AppSpacing.verticalS,
@@ -117,7 +118,7 @@ class _MaskCard extends ConsumerWidget {
     final ownerColor = owner != null ? AppColors.findColorByName(owner) : null;
 
     return PopupMenuButton<String>(
-      tooltip: 'Assign mask',
+      tooltip: AppLocalizations.of(context).assignMaskTooltip,
       onSelected: (selected) =>
           notifier.setMaskOwner(maskIndex, selected.isEmpty ? null : selected),
       itemBuilder: (context) => [
@@ -131,7 +132,10 @@ class _MaskCard extends ConsumerWidget {
                   size: 20,
                 ),
                 AppSpacing.horizontalS,
-                Text(player.displayName, style: AppTextStyles.markdownBody),
+                Text(
+                  player.localizedDisplayName(AppLocalizations.of(context)),
+                  style: AppTextStyles.markdownBody,
+                ),
               ],
             ),
           ),
@@ -142,7 +146,10 @@ class _MaskCard extends ConsumerWidget {
               children: [
                 const Icon(Icons.clear, size: 20, color: AppColors.red),
                 AppSpacing.horizontalS,
-                Text('Nobody', style: AppTextStyles.markdownBody),
+                Text(
+                  AppLocalizations.of(context).nobodyOption,
+                  style: AppTextStyles.markdownBody,
+                ),
               ],
             ),
           ),

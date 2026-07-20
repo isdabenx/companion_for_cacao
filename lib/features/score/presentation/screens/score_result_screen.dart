@@ -3,6 +3,9 @@ import 'package:companion_for_cacao/core/theme/app_spacing.dart';
 import 'package:companion_for_cacao/core/theme/app_text_styles.dart';
 import 'package:companion_for_cacao/features/score/domain/entities/score_result_entity.dart';
 import 'package:companion_for_cacao/features/score/presentation/providers/score_notifier.dart';
+import 'package:companion_for_cacao/features/score/presentation/utils/score_l10n.dart';
+import 'package:companion_for_cacao/l10n/generated/app_localizations.dart';
+import 'package:companion_for_cacao/shared/utils/player_display_l10n.dart';
 import 'package:companion_for_cacao/shared/widgets/circle_badge.dart';
 import 'package:companion_for_cacao/shared/widgets/container_full_style_widget.dart';
 import 'package:companion_for_cacao/shared/widgets/custom_scaffold_widget.dart';
@@ -19,7 +22,7 @@ class ScoreResultScreen extends ConsumerWidget {
     final result = ref.watch(scoreResultProvider);
 
     return CustomScaffoldWidget(
-      title: 'Final Score',
+      title: AppLocalizations.of(context).finalScoreTitle,
       showBackButton: true,
       body: ContainerFullStyleWidget(
         child: SingleChildScrollView(
@@ -47,12 +50,15 @@ class _WinnerBanner extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final names = result.winners.map((s) => s.player.displayName).join(' & ');
+    final l10n = AppLocalizations.of(context);
+    final names = result.winners
+        .map((s) => s.player.localizedDisplayName(l10n))
+        .join(' & ');
 
     final subtitle = result.sharedWin
-        ? 'Shared victory! Tied on gold and leftover cacao.'
+        ? l10n.sharedVictorySubtitle
         : result.tiebreakByCacaoApplied
-        ? 'Tie on gold broken by leftover cacao fruits.'
+        ? l10n.tiebreakSubtitle
         : null;
 
     return Container(
@@ -72,7 +78,7 @@ class _WinnerBanner extends StatelessWidget {
             style: AppTextStyles.titleTextStyle.copyWith(fontSize: 26),
           ),
           Text(
-            result.sharedWin ? 'win the game!' : 'wins the game!',
+            result.sharedWin ? l10n.winsTheGameShared : l10n.winsTheGameSingle,
             style: AppTextStyles.markdownBody,
           ),
           if (subtitle != null) ...[
@@ -123,7 +129,9 @@ class _PlayerScoreCard extends StatelessWidget {
                 AppSpacing.horizontalS,
                 Expanded(
                   child: Text(
-                    score.player.displayName,
+                    score.player.localizedDisplayName(
+                      AppLocalizations.of(context),
+                    ),
                     overflow: TextOverflow.ellipsis,
                     style: AppTextStyles.markdownBody.copyWith(
                       fontWeight: FontWeight.bold,
@@ -151,7 +159,7 @@ class _PlayerScoreCard extends StatelessWidget {
                   children: [
                     Expanded(
                       child: Text(
-                        entry.key.label,
+                        entry.key.localizedName(AppLocalizations.of(context)),
                         style: AppTextStyles.tileNameSmall,
                       ),
                     ),
@@ -173,7 +181,7 @@ class _PlayerScoreCard extends StatelessWidget {
                 children: [
                   Expanded(
                     child: Text(
-                      'Leftover cacao (tiebreaker)',
+                      AppLocalizations.of(context).leftoverCacaoTiebreaker,
                       style: AppTextStyles.sectionSublabel,
                     ),
                   ),

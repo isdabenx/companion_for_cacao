@@ -5,6 +5,7 @@ import 'package:companion_for_cacao/features/score/domain/services/score_calcula
 import 'package:companion_for_cacao/features/score/presentation/providers/score_notifier.dart';
 import 'package:companion_for_cacao/features/score/presentation/widgets/count_stepper_widget.dart';
 import 'package:companion_for_cacao/features/score/presentation/widgets/score_player_row_widget.dart';
+import 'package:companion_for_cacao/l10n/generated/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -22,9 +23,7 @@ class TemplesStepWidget extends ConsumerWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Add one entry per temple and count the workers adjacent to it. '
-          'Gold is awarded automatically: 6 for first place, 3 for second, '
-          'ties split rounded down.',
+          AppLocalizations.of(context).scoreTemplesIntro,
           style: AppTextStyles.instruction,
         ),
         AppSpacing.verticalM,
@@ -35,7 +34,7 @@ class TemplesStepWidget extends ConsumerWidget {
           child: OutlinedButton.icon(
             onPressed: notifier.addTemple,
             icon: const Icon(Icons.add),
-            label: const Text('Add temple'),
+            label: Text(AppLocalizations.of(context).addTempleAction),
           ),
         ),
       ],
@@ -70,14 +69,14 @@ class _TempleCard extends ConsumerWidget {
                 AppSpacing.horizontalS,
                 Expanded(
                   child: Text(
-                    'Temple ${index + 1}',
+                    AppLocalizations.of(context).templeNumber(index + 1),
                     style: AppTextStyles.sectionTitlePlain,
                   ),
                 ),
                 IconButton(
                   onPressed: () => notifier.removeTemple(templeId),
                   icon: const Icon(Icons.delete_outline, color: AppColors.red),
-                  tooltip: 'Remove temple',
+                  tooltip: AppLocalizations.of(context).removeTempleTooltip,
                   visualDensity: VisualDensity.compact,
                 ),
               ],

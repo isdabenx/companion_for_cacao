@@ -16,6 +16,7 @@ import 'package:companion_for_cacao/features/game_setup/presentation/widgets/pre
 import 'package:companion_for_cacao/features/game_setup/presentation/widgets/preparation_group_card.dart';
 import 'package:companion_for_cacao/features/game_setup/presentation/widgets/preparation_step_row.dart';
 import 'package:companion_for_cacao/features/game_setup/presentation/widgets/worker_selector_widget.dart';
+import 'package:companion_for_cacao/shared/utils/player_display_l10n.dart';
 import 'package:companion_for_cacao/shared/widgets/container_full_style_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -259,8 +260,10 @@ class _DetailedPreparationWidgetState
 
     String playerTitle(String? colorName) {
       if (colorName == null) return '';
+      final l10n = AppLocalizations.of(context);
       final player = players.firstWhereOrNull((p) => p.color == colorName);
-      return player?.displayName ?? colorName.capitalized;
+      return player?.localizedDisplayName(l10n) ??
+          localizedColorName(l10n, colorName).capitalized;
     }
 
     return Stack(

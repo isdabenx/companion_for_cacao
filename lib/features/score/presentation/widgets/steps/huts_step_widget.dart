@@ -5,7 +5,10 @@ import 'package:companion_for_cacao/features/game_setup/domain/entities/player_e
 import 'package:companion_for_cacao/core/domain/entities/hut_type.dart';
 import 'package:companion_for_cacao/features/score/presentation/providers/score_notifier.dart';
 import 'package:companion_for_cacao/features/score/presentation/widgets/count_stepper_widget.dart';
+import 'package:companion_for_cacao/l10n/generated/app_localizations.dart';
 import 'package:companion_for_cacao/shared/utils/hut_type_assets.dart';
+import 'package:companion_for_cacao/shared/utils/hut_type_l10n.dart';
+import 'package:companion_for_cacao/shared/utils/player_display_l10n.dart';
 import 'package:companion_for_cacao/shared/widgets/circle_badge.dart';
 import 'package:companion_for_cacao/shared/widgets/safe_asset_image.dart';
 import 'package:companion_for_cacao/shared/widgets/selectable_chip.dart';
@@ -25,10 +28,7 @@ class HutsStepWidget extends ConsumerWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Mark the huts each player built. Building costs are refunded and '
-          'bonuses added automatically. Huts are limited physical tiles: a '
-          'grayed-out hut has no tile left (deselect it from its owner to '
-          'reassign it).',
+          AppLocalizations.of(context).scoreHutsIntro,
           style: AppTextStyles.instruction,
         ),
         AppSpacing.verticalM,
@@ -48,6 +48,7 @@ class _PlayerHutsPanel extends ConsumerWidget {
     final color = player.color;
     final input = ref.watch(scoreProvider.select((s) => s.inputOf(color)));
     final notifier = ref.read(scoreProvider.notifier);
+    final l10n = AppLocalizations.of(context);
 
     return Card(
       color: AppColors.white.withValues(alpha: 0.6),
@@ -56,13 +57,13 @@ class _PlayerHutsPanel extends ConsumerWidget {
         shape: const Border(),
         leading: CircleBadge(color: AppColors.findColorByName(color), size: 28),
         title: Text(
-          player.displayName,
+          player.localizedDisplayName(l10n),
           style: AppTextStyles.markdownBody.copyWith(
             fontWeight: FontWeight.w600,
           ),
         ),
         subtitle: Text(
-          '${input.huts.length} huts',
+          l10n.hutsCount(input.huts.length),
           style: AppTextStyles.sectionSublabel,
         ),
         childrenPadding: const EdgeInsets.fromLTRB(
@@ -83,7 +84,7 @@ class _PlayerHutsPanel extends ConsumerWidget {
           if (input.huts.contains(HutType.hermit)) ...[
             AppSpacing.verticalM,
             _ManualCountRow(
-              label: 'Hermit: own workers with no adjacent jungle tile',
+              label: l10n.scoreHermitCount(HutType.hermit.localizedName(l10n)),
               value: input.hermitWorkers,
               onChanged: (value) => notifier.setHermitWorkers(color, value),
             ),
@@ -91,7 +92,9 @@ class _PlayerHutsPanel extends ConsumerWidget {
           if (input.huts.contains(HutType.roadWorker)) ...[
             AppSpacing.verticalM,
             _ManualCountRow(
-              label: 'Road Worker: worker tiles in your best row or column',
+              label: l10n.scoreRoadWorkerCount(
+                HutType.roadWorker.localizedName(l10n),
+              ),
               value: input.roadWorkerTiles,
               onChanged: (value) => notifier.setRoadWorkerTiles(color, value),
             ),
@@ -151,7 +154,7 @@ class _HutChip extends ConsumerWidget {
             AppSpacing.horizontalS,
           ],
           Text(
-            '${hut.label} (${hut.cost})',
+            '${hut.localizedName(AppLocalizations.of(context))} (${hut.cost})',
             style: AppTextStyles.tileNameSmall.copyWith(
               color: isBlocked
                   ? AppColors.brown.withValues(alpha: 0.4)

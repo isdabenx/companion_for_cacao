@@ -1,6 +1,7 @@
 import 'package:companion_for_cacao/core/theme/app_colors.dart';
 import 'package:companion_for_cacao/core/theme/app_spacing.dart';
 import 'package:companion_for_cacao/core/theme/app_text_styles.dart';
+import 'package:companion_for_cacao/l10n/generated/app_localizations.dart';
 import 'package:companion_for_cacao/shared/widgets/dialog_button_bar_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -34,7 +35,7 @@ class _ValueEntryDialogState extends State<_ValueEntryDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: const Text('Enter value'),
+      title: Text(AppLocalizations.of(context).enterValueTitle),
       content: TextField(
         controller: _controller,
         autofocus: true,
@@ -46,7 +47,7 @@ class _ValueEntryDialogState extends State<_ValueEntryDialog> {
         DialogButtonBarWidget(
           onCancel: () => Navigator.of(context).pop(),
           onConfirm: _submit,
-          confirmLabel: 'OK',
+          confirmLabel: AppLocalizations.of(context).okAction,
         ),
       ],
     );

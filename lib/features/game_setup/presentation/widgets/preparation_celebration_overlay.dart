@@ -7,6 +7,7 @@ import 'package:companion_for_cacao/core/theme/app_text_styles.dart';
 import 'package:companion_for_cacao/l10n/generated/app_localizations.dart';
 import 'package:companion_for_cacao/features/game_setup/presentation/providers/game_setup_notifier.dart';
 import 'package:companion_for_cacao/features/game_setup/presentation/widgets/preparation_group_card.dart';
+import 'package:companion_for_cacao/shared/utils/player_display_l10n.dart';
 import 'package:confetti/confetti.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -70,6 +71,7 @@ class _PreparationCelebrationOverlayState
     // watching keeps the pill in sync when a redraw rotates the order.
     // The record carries (displayName, color) so the pill can wear the
     // player color — at the table, the color IS the identity.
+    final l10n = AppLocalizations.of(context);
     final firstPlayer = ref.watch(
       gameSetupProvider.select<(String, String)?>((s) {
         final state = s.value;
@@ -78,10 +80,12 @@ class _PreparationCelebrationOverlayState
         if (selected.isEmpty) return null;
         for (final color in state.colorOrder) {
           final player = selected.where((p) => p.color == color).firstOrNull;
-          if (player != null) return (player.displayName, player.color);
+          if (player != null) {
+            return (player.localizedDisplayName(l10n), player.color);
+          }
         }
         final fallback = selected.first;
-        return (fallback.displayName, fallback.color);
+        return (fallback.localizedDisplayName(l10n), fallback.color);
       }),
     );
 

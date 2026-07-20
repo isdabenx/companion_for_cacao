@@ -2,6 +2,7 @@ import 'package:companion_for_cacao/core/theme/app_colors.dart';
 import 'package:companion_for_cacao/core/theme/app_spacing.dart';
 import 'package:companion_for_cacao/core/theme/app_text_styles.dart';
 import 'package:companion_for_cacao/features/score/presentation/providers/score_notifier.dart';
+import 'package:companion_for_cacao/l10n/generated/app_localizations.dart';
 import 'package:companion_for_cacao/shared/widgets/player_name_chip_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -15,14 +16,12 @@ class SetupStepWidget extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(scoreProvider);
     final notifier = ref.read(scoreProvider.notifier);
+    final l10n = AppLocalizations.of(context);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          'Select the players of the finished game.',
-          style: AppTextStyles.instruction,
-        ),
+        Text(l10n.scoreSetupIntro, style: AppTextStyles.instruction),
         AppSpacing.verticalM,
         Wrap(
           spacing: AppSpacing.s,
@@ -45,10 +44,7 @@ class SetupStepWidget extends ConsumerWidget {
           ],
         ),
         AppSpacing.verticalXl,
-        Text(
-          'Modules that change the final scoring:',
-          style: AppTextStyles.instruction,
-        ),
+        Text(l10n.scoreModulesIntro, style: AppTextStyles.instruction),
         AppSpacing.verticalS,
         // ListTiles paint ink on the nearest Material; without this the
         // decorated container behind them triggers a framework assertion.
@@ -60,9 +56,9 @@ class SetupStepWidget extends ConsumerWidget {
                 value: state.hutModuleActive,
                 onChanged: notifier.setHutModuleActive,
                 activeThumbColor: AppColors.greenDarker,
-                title: Text('Hut Module', style: AppTextStyles.markdownBody),
+                title: Text(l10n.moduleHuts, style: AppTextStyles.markdownBody),
                 subtitle: Text(
-                  'Chocolatl: built huts refund their cost and give bonuses',
+                  l10n.scoreHutModuleSubtitle,
                   style: AppTextStyles.sectionSublabel,
                 ),
                 contentPadding: EdgeInsets.zero,
@@ -71,9 +67,12 @@ class SetupStepWidget extends ConsumerWidget {
                 value: state.gemMinesActive,
                 onChanged: notifier.setGemMinesActive,
                 activeThumbColor: AppColors.greenDarker,
-                title: Text('The Gem Mines', style: AppTextStyles.markdownBody),
+                title: Text(
+                  l10n.moduleGemMines,
+                  style: AppTextStyles.markdownBody,
+                ),
                 subtitle: Text(
-                  'Diamante: gem mines replace the temples',
+                  l10n.scoreGemModuleSubtitle,
                   style: AppTextStyles.sectionSublabel,
                 ),
                 contentPadding: EdgeInsets.zero,

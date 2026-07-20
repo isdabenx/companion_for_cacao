@@ -3,6 +3,7 @@ import 'package:companion_for_cacao/core/theme/app_text_styles.dart';
 import 'package:companion_for_cacao/features/score/presentation/providers/score_notifier.dart';
 import 'package:companion_for_cacao/features/score/presentation/widgets/count_stepper_widget.dart';
 import 'package:companion_for_cacao/features/score/presentation/widgets/score_player_row_widget.dart';
+import 'package:companion_for_cacao/l10n/generated/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -20,8 +21,7 @@ class CacaoStepWidget extends ConsumerWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Leftover cacao fruits give no gold, but they decide ties: with '
-          'equal gold, the player with most cacao left wins.',
+          AppLocalizations.of(context).scoreCacaoIntro,
           style: AppTextStyles.instruction,
         ),
         AppSpacing.verticalM,

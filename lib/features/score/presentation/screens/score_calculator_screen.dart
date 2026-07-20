@@ -11,8 +11,10 @@ import 'package:companion_for_cacao/features/score/presentation/widgets/steps/hu
 import 'package:companion_for_cacao/features/score/presentation/widgets/steps/setup_step_widget.dart';
 import 'package:companion_for_cacao/features/score/presentation/widgets/steps/sun_step_widget.dart';
 import 'package:companion_for_cacao/features/score/presentation/widgets/steps/temples_step_widget.dart';
+import 'package:companion_for_cacao/features/score/presentation/utils/score_l10n.dart';
 import 'package:companion_for_cacao/features/score/presentation/utils/score_step_assets.dart';
 import 'package:companion_for_cacao/features/score/presentation/widgets/steps/water_step_widget.dart';
+import 'package:companion_for_cacao/l10n/generated/app_localizations.dart';
 import 'package:companion_for_cacao/shared/widgets/container_full_style_widget.dart';
 import 'package:companion_for_cacao/shared/widgets/custom_scaffold_widget.dart';
 import 'package:companion_for_cacao/shared/widgets/dialog_button_bar_widget.dart';
@@ -30,12 +32,13 @@ class ScoreCalculatorScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(scoreProvider);
     final notifier = ref.read(scoreProvider.notifier);
+    final l10n = AppLocalizations.of(context);
 
     return CustomScaffoldWidget(
-      title: 'Score Calculator',
+      title: l10n.scoreCalculator,
       actions: [
         Tooltip(
-          message: 'Start over',
+          message: l10n.startOverAction,
           child: IconButton(
             onPressed: () => _confirmReset(context, notifier),
             icon: const Icon(Icons.refresh),
@@ -70,19 +73,17 @@ class ScoreCalculatorScreen extends ConsumerWidget {
     BuildContext context,
     ScoreNotifier notifier,
   ) async {
+    final l10n = AppLocalizations.of(context);
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (dialogContext) => AlertDialog(
-        title: const Text('Start over?'),
-        content: const Text(
-          'This discards all entered scores and reloads players and modules '
-          'from the current game setup.',
-        ),
+        title: Text(l10n.startOverTitle),
+        content: Text(l10n.startOverBody),
         actions: [
           DialogButtonBarWidget(
             onCancel: () => Navigator.of(dialogContext).pop(false),
             onConfirm: () => Navigator.of(dialogContext).pop(true),
-            confirmLabel: 'Start over',
+            confirmLabel: l10n.startOverAction,
           ),
         ],
       ),
@@ -105,7 +106,7 @@ class _StepHeader extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              state.currentStep.label,
+              state.currentStep.localizedName(AppLocalizations.of(context)),
               style: AppTextStyles.sectionTitlePlain.copyWith(fontSize: 18),
             ),
             Text(
@@ -186,6 +187,7 @@ class _NavigationBar extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final notifier = ref.read(scoreProvider.notifier);
     final needsPlayers = !state.canCalculate;
+    final l10n = AppLocalizations.of(context);
 
     return Row(
       children: [
@@ -193,22 +195,22 @@ class _NavigationBar extends ConsumerWidget {
           OutlinedButton.icon(
             onPressed: notifier.previousStep,
             icon: const Icon(Icons.arrow_back),
-            label: const Text('Back'),
+            label: Text(l10n.backAction),
           ),
         const Spacer(),
         if (needsPlayers)
-          Text('Select at least 2 players', style: AppTextStyles.warningText)
+          Text(l10n.needTwoPlayers, style: AppTextStyles.warningText)
         else if (state.isLastStep)
           FilledButton.icon(
             onPressed: () => context.push(AppRoutes.scoreResult),
             icon: const Icon(Icons.emoji_events),
-            label: const Text('Results'),
+            label: Text(l10n.resultsAction),
           )
         else
           FilledButton.icon(
             onPressed: notifier.nextStep,
             icon: const Icon(Icons.arrow_forward),
-            label: const Text('Next'),
+            label: Text(l10n.nextAction),
           ),
       ],
     );

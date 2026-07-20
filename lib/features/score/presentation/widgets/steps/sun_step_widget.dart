@@ -3,6 +3,7 @@ import 'package:companion_for_cacao/core/theme/app_text_styles.dart';
 import 'package:companion_for_cacao/features/score/presentation/providers/score_notifier.dart';
 import 'package:companion_for_cacao/features/score/presentation/widgets/count_stepper_widget.dart';
 import 'package:companion_for_cacao/features/score/presentation/widgets/score_player_row_widget.dart';
+import 'package:companion_for_cacao/l10n/generated/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -19,8 +20,7 @@ class SunStepWidget extends ConsumerWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Sun tokens not used for overbuilding are worth 1 gold each '
-          '(maximum 3).',
+          AppLocalizations.of(context).scoreSunIntro,
           style: AppTextStyles.instruction,
         ),
         AppSpacing.verticalM,

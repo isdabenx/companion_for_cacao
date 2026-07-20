@@ -2,6 +2,7 @@
 // ignore_for_file: riverpod_lint/scoped_providers_should_specify_dependencies
 import 'package:companion_for_cacao/config/routes/app_routes.dart';
 import 'package:companion_for_cacao/core/domain/entities/boardgame_entity.dart';
+import 'package:companion_for_cacao/features/score/domain/entities/score_state_entity.dart';
 import 'package:companion_for_cacao/features/score/presentation/providers/score_notifier.dart';
 import 'package:companion_for_cacao/features/score/presentation/screens/score_calculator_screen.dart';
 import 'package:companion_for_cacao/features/score/presentation/screens/score_result_screen.dart';
@@ -106,9 +107,9 @@ void main() {
         ..setGemMinesActive(true);
       await tester.pump();
 
-      final steps = container.read(scoreProvider).steps.map((s) => s.label);
-      expect(steps, isNot(contains('Temples')));
-      expect(steps, contains('Gem Mines'));
+      final steps = container.read(scoreProvider).steps;
+      expect(steps, isNot(contains(ScoreStep.temples)));
+      expect(steps, contains(ScoreStep.gemMines));
 
       // Walk to the last step and check the gems UI is shown.
       while (!container.read(scoreProvider).isLastStep) {
