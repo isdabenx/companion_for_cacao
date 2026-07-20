@@ -51,6 +51,17 @@ class GameSetupDetailScreen extends ConsumerWidget {
                   context.push(AppRoutes.gameSetupTiles, extra: liveSetup),
             ),
           ),
+          AppSpacing.verticalL,
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: AppSpacing.s),
+            child: _DashboardCard(
+              title: 'Score Calculator',
+              icon: Icons.calculate,
+              // Prefilled from this game: starting a game resets any older
+              // scoring session (see ScoreNotifier.build).
+              onTap: () => context.push(AppRoutes.scoreCalculator),
+            ),
+          ),
           // Add more dashboard items here in the future
         ],
       ),

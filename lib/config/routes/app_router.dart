@@ -7,6 +7,8 @@ import 'package:companion_for_cacao/features/game_setup/presentation/screens/gam
 import 'package:companion_for_cacao/features/game_setup/presentation/screens/game_setup_tiles_screen.dart';
 import 'package:companion_for_cacao/features/home/presentation/screens/home_screen.dart';
 import 'package:companion_for_cacao/features/rule/presentation/rule_pdf_screen.dart';
+import 'package:companion_for_cacao/features/score/presentation/screens/score_calculator_screen.dart';
+import 'package:companion_for_cacao/features/score/presentation/screens/score_result_screen.dart';
 import 'package:companion_for_cacao/features/rule/presentation/rule_screen.dart';
 import 'package:companion_for_cacao/features/splash/presentation/providers/splash_provider.dart';
 import 'package:companion_for_cacao/features/splash/presentation/screens/splash_screen.dart';
@@ -117,6 +119,14 @@ GoRouter goRouter(Ref ref) {
           }
           return GameSetupPreparationScreen(gameSetup: gameSetup);
         },
+      ),
+      GoRoute(
+        path: AppRoutes.scoreCalculator,
+        builder: (context, state) => const ScoreCalculatorScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.scoreResult,
+        builder: (context, state) => const ScoreResultScreen(),
       ),
       GoRoute(
         path: AppRoutes.gameSetupTiles,

@@ -9,4 +9,6 @@ class AppRoutes {
   static const String gameSetupDetail = '/game_setup/detail';
   static const String gameSetupPreparation = '/game_setup/detail/preparation';
   static const String gameSetupTiles = '/game_setup/detail/tiles';
+  static const String scoreCalculator = '/score_calculator';
+  static const String scoreResult = '/score_calculator/result';
 }

@@ -58,6 +58,15 @@ class MenuWidget extends StatelessWidget {
                     AppRoutes.gameSetup,
                   ),
                   _menuItem(context, Icons.widgets, 'Tiles', AppRoutes.tiles),
+                  // Menu labels stay short so they fit on one line at the
+                  // menu font size (i18n must pick short forms too, e.g.
+                  // 'Puntuació' / 'Puntuación' — not 'Calculadora de...').
+                  _menuItem(
+                    context,
+                    Icons.calculate,
+                    'Scores',
+                    AppRoutes.scoreCalculator,
+                  ),
                   _menuItem(
                     context,
                     Icons.library_books,

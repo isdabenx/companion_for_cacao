@@ -39,6 +39,15 @@ class Assets {
       'assets/images/preparation/initial_single_plantation_selling_price_2.webp';
   static const String preparationResourcesCacao =
       'assets/images/preparation/resources_cacao.webp';
+
+  // Crops of the supply photo above (gold / cacao / sun tokens separately),
+  // used as score-step reference images.
+  static const String resourcesGold =
+      'assets/images/preparation/resources_gold.webp';
+  static const String resourcesCacaoFruits =
+      'assets/images/preparation/resources_cacao_fruits.webp';
+  static const String resourcesSunToken =
+      'assets/images/preparation/resources_sun_token.webp';
   static const String preparationMapToken =
       'assets/images/preparation/map_token.webp';
   static const String preparationMapBoard =

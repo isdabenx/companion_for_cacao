@@ -17,13 +17,14 @@ void main() {
     '🎲 Game Dashboard: Summary, preparation, and tiles in play.',
     '🌟 Big Game Variant: Integration of all modules and expansions.',
     '📖 Integrated Manuals: Read the game rules.',
+    '🏆 Score Calculator: Automatic final scoring with official tie rules.',
     '📊 Adaptive UI: Optimized design for different screen sizes.',
     '🔄 Auto-Updater: Automatic detection of new versions.',
   ];
 
   const pendingFeatures = <String>[
     '🕒 Turn Timer: Control the duration of each turn.',
-    '🏆 Final Score Calculation: Automatic points calculator.',
+    '📜 Game History: Record of finished games and player stats.',
     '⚙️ Custom Settings: Adjust the game experience.',
     '🌐 Multi-language Support: Interface in multiple languages.',
   ];
