@@ -309,6 +309,19 @@ class AppLocalizationsEs extends AppLocalizations {
       'Selecciona qué losetas de recolectores queréis usar en esta partida.';
 
   @override
+  String get newWorkersBuildLabel => 'Monta la pila de recolectores';
+
+  @override
+  String get newWorkersBuildDetail =>
+      'Cada jugador coge las losetas indicadas de cada origen.';
+
+  @override
+  String get workerBuildFromBase => 'Del juego base, coge:';
+
+  @override
+  String get workerBuildFromExpansion => 'De la expansión, coge:';
+
+  @override
   String get returnToBoxTitle => 'Devolver a la caja';
 
   @override
@@ -614,7 +627,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get hutRegisterHint =>
-      'Toca una loseta para elegir la cara que ha quedado boca arriba; vuelve a tocarla para girarla.';
+      'Toca cada cara de cabaña que ha quedado boca arriba. Las imposibles desaparecen solas.';
 
   @override
   String get hutRegisterAction => 'Registra qué bohíos han quedado boca arriba';
@@ -1033,6 +1046,25 @@ class AppLocalizationsEs extends AppLocalizations {
       'Esto descarta todas las puntuaciones introducidas y vuelve a cargar los jugadores y módulos de la partida configurada.';
 
   @override
+  String get scoreContextGame => 'Puntuando la partida en curso';
+
+  @override
+  String get scoreContextDetached => 'Cálculo aparte';
+
+  @override
+  String get scoreBackToGameAction => 'Volver a la partida';
+
+  @override
+  String get scoreResetChooseBody =>
+      '¿Quieres reiniciar la puntuación de esta partida o empezar un cálculo aparte, vacío?';
+
+  @override
+  String get scoreResetGameOption => 'Reinicia la puntuación de la partida';
+
+  @override
+  String get scoreClearBlankOption => 'Vaciarlo todo (cálculo aparte)';
+
+  @override
   String get backAction => 'Atrás';
 
   @override
@@ -1231,4 +1263,52 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get playerNameHint => 'Nombre';
+
+  @override
+  String get homeAboutTitle => 'Sobre la app';
+
+  @override
+  String get homeTagline => 'Tu compañero de mesa para Cacao';
+
+  @override
+  String get loadingLabel => 'Cargando…';
+
+  @override
+  String get scoreTemplesEmpty =>
+      'Aún no hay templos — añade uno por cada templo del tablero.';
+
+  @override
+  String get expansionsModulesSection => 'Expansiones y módulos';
+
+  @override
+  String get expansionSelectHint =>
+      'Toca una expansión para activarla y elegir sus módulos.';
+
+  @override
+  String get expansionTapHint => 'Toca para elegir sus módulos';
+
+  @override
+  String get modulesPickLabel => 'Elige los módulos';
+
+  @override
+  String moduleCountLabel(int count, int total) {
+    return '$count / $total módulos';
+  }
+
+  @override
+  String get cancelAction => 'Cancelar';
+
+  @override
+  String get clearSetupBody =>
+      'Esto borra los jugadores, expansiones y módulos seleccionados.';
+
+  @override
+  String get moduleWarningPickOne => 'Elige al menos un módulo';
+
+  @override
+  String get expansionNeedsModuleHint =>
+      'Alguna expansión no tiene módulos elegidos';
+
+  @override
+  String get playersNeededHint => 'Añade al menos 2 jugadores';
 }

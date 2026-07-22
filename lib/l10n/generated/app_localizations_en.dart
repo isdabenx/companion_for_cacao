@@ -305,6 +305,19 @@ class AppLocalizationsEn extends AppLocalizations {
       'Select which worker tiles you want to use for this game.';
 
   @override
+  String get newWorkersBuildLabel => 'Build the worker pile';
+
+  @override
+  String get newWorkersBuildDetail =>
+      'Each player takes the tiles shown from each source.';
+
+  @override
+  String get workerBuildFromBase => 'From the base game, take:';
+
+  @override
+  String get workerBuildFromExpansion => 'From the expansion, take:';
+
+  @override
   String get returnToBoxTitle => 'Return to the box';
 
   @override
@@ -606,7 +619,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get hutRegisterHint =>
-      'Tap a tile to pick its face-up side; tap it again to flip it over.';
+      'Tap each hut face that landed up. Impossible ones disappear on their own.';
 
   @override
   String get hutRegisterAction => 'Register which huts landed face up';
@@ -1025,6 +1038,25 @@ class AppLocalizationsEn extends AppLocalizations {
       'This discards all entered scores and reloads players and modules from the current game setup.';
 
   @override
+  String get scoreContextGame => 'Scoring the game in progress';
+
+  @override
+  String get scoreContextDetached => 'Separate calculation';
+
+  @override
+  String get scoreBackToGameAction => 'Back to the game';
+
+  @override
+  String get scoreResetChooseBody =>
+      'Reset the scoring for this game, or start a separate, empty calculation?';
+
+  @override
+  String get scoreResetGameOption => 'Reset the game scoring';
+
+  @override
+  String get scoreClearBlankOption => 'Clear everything (separate calculation)';
+
+  @override
   String get backAction => 'Back';
 
   @override
@@ -1221,4 +1253,51 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get playerNameHint => 'Name';
+
+  @override
+  String get homeAboutTitle => 'About the app';
+
+  @override
+  String get homeTagline => 'Your table-side companion for Cacao';
+
+  @override
+  String get loadingLabel => 'Loading…';
+
+  @override
+  String get scoreTemplesEmpty =>
+      'No temples yet — add one for each temple on the board.';
+
+  @override
+  String get expansionsModulesSection => 'Expansions and modules';
+
+  @override
+  String get expansionSelectHint =>
+      'Tap an expansion to turn it on and pick its modules.';
+
+  @override
+  String get expansionTapHint => 'Tap to pick its modules';
+
+  @override
+  String get modulesPickLabel => 'Choose modules';
+
+  @override
+  String moduleCountLabel(int count, int total) {
+    return '$count / $total modules';
+  }
+
+  @override
+  String get cancelAction => 'Cancel';
+
+  @override
+  String get clearSetupBody =>
+      'This clears the selected players, expansions and modules.';
+
+  @override
+  String get moduleWarningPickOne => 'Pick at least one module';
+
+  @override
+  String get expansionNeedsModuleHint => 'An expansion has no modules selected';
+
+  @override
+  String get playersNeededHint => 'Add at least 2 players';
 }

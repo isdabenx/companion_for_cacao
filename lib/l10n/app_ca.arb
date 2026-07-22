@@ -100,6 +100,10 @@
 
   "newWorkersSelectionLabel": "Tria les rajoles de recol·lectors",
   "newWorkersSelectionDetail": "Selecciona quines rajoles de recol·lectors voleu usar en aquesta partida.",
+  "newWorkersBuildLabel": "Munta la pila de recol·lectors",
+  "newWorkersBuildDetail": "Cada jugador agafa les rajoles indicades de cada origen.",
+  "workerBuildFromBase": "Del joc base, agafa:",
+  "workerBuildFromExpansion": "De l'expansió, agafa:",
 
   "returnToBoxTitle": "Torna a la capsa",
   "returnToBoxSubtitle": "Aquestes rajoles no s'usen en aquesta partida",
@@ -197,7 +201,7 @@
   "errorSavingPresets": "Error en desar els ajustos personalitzats",
 
   "hutRegisterTitle": "Registra la tirada de cabanes",
-  "hutRegisterHint": "Toca una rajola per triar la cara que ha quedat amunt; torna-la a tocar per girar-la.",
+  "hutRegisterHint": "Toca cada cara de cabana que ha quedat amunt. Les impossibles desapareixen soles.",
   "hutRegisterAction": "Registra quines cabanes han quedat cara amunt",
   "hutRegisteredEdit": "Tirada registrada · toca per editar",
   "forgetThrowAction": "Oblida la tirada",
@@ -323,6 +327,12 @@
   "startOverAction": "Torna a començar",
   "startOverTitle": "Tornar a començar?",
   "startOverBody": "Això descarta totes les puntuacions introduïdes i torna a carregar els jugadors i mòduls de la partida configurada.",
+  "scoreContextGame": "Puntuant la partida en curs",
+  "scoreContextDetached": "Càlcul a part",
+  "scoreBackToGameAction": "Torna a la partida",
+  "scoreResetChooseBody": "Vols reiniciar la puntuació d'aquesta partida o començar un càlcul a part, buit?",
+  "scoreResetGameOption": "Reinicia la puntuació de la partida",
+  "scoreClearBlankOption": "Buida-ho tot (càlcul a part)",
   "backAction": "Enrere",
   "nextAction": "Següent",
   "resultsAction": "Resultats",
@@ -376,5 +386,19 @@
   "routeNotFound": "Ruta no trobada: {uri}",
   "invalidDataMessage": "Dades no vàlides per a aquesta pantalla.",
   "retryAction": "Reintenta",
-  "playerNameHint": "Nom"
+  "playerNameHint": "Nom",
+  "homeAboutTitle": "Sobre l'app",
+  "homeTagline": "El teu company de taula per al Cacao",
+  "loadingLabel": "Carregant…",
+  "scoreTemplesEmpty": "Encara no hi ha temples — afegeix-ne un per cada temple del tauler.",
+  "expansionsModulesSection": "Expansions i mòduls",
+  "expansionSelectHint": "Toca una expansió per activar-la i triar-ne els mòduls.",
+  "expansionTapHint": "Toca per triar-ne els mòduls",
+  "modulesPickLabel": "Tria els mòduls",
+  "moduleCountLabel": "{count} / {total} mòduls",
+  "cancelAction": "Cancel·la",
+  "clearSetupBody": "Això esborra els jugadors, expansions i mòduls seleccionats.",
+  "moduleWarningPickOne": "Tria almenys un mòdul",
+  "expansionNeedsModuleHint": "Alguna expansió no té cap mòdul triat",
+  "playersNeededHint": "Afegeix almenys 2 jugadors"
 }

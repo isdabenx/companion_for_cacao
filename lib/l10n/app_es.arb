@@ -100,6 +100,10 @@
 
   "newWorkersSelectionLabel": "Elige las losetas de recolectores",
   "newWorkersSelectionDetail": "Selecciona qué losetas de recolectores queréis usar en esta partida.",
+  "newWorkersBuildLabel": "Monta la pila de recolectores",
+  "newWorkersBuildDetail": "Cada jugador coge las losetas indicadas de cada origen.",
+  "workerBuildFromBase": "Del juego base, coge:",
+  "workerBuildFromExpansion": "De la expansión, coge:",
 
   "returnToBoxTitle": "Devolver a la caja",
   "returnToBoxSubtitle": "Estas losetas no se usan en esta partida",
@@ -197,7 +201,7 @@
   "errorSavingPresets": "Error al guardar los ajustes personalizados",
 
   "hutRegisterTitle": "Registra la tirada de bohíos",
-  "hutRegisterHint": "Toca una loseta para elegir la cara que ha quedado boca arriba; vuelve a tocarla para girarla.",
+  "hutRegisterHint": "Toca cada cara de cabaña que ha quedado boca arriba. Las imposibles desaparecen solas.",
   "hutRegisterAction": "Registra qué bohíos han quedado boca arriba",
   "hutRegisteredEdit": "Tirada registrada · toca para editar",
   "forgetThrowAction": "Olvidar la tirada",
@@ -323,6 +327,12 @@
   "startOverAction": "Empezar de nuevo",
   "startOverTitle": "¿Empezar de nuevo?",
   "startOverBody": "Esto descarta todas las puntuaciones introducidas y vuelve a cargar los jugadores y módulos de la partida configurada.",
+  "scoreContextGame": "Puntuando la partida en curso",
+  "scoreContextDetached": "Cálculo aparte",
+  "scoreBackToGameAction": "Volver a la partida",
+  "scoreResetChooseBody": "¿Quieres reiniciar la puntuación de esta partida o empezar un cálculo aparte, vacío?",
+  "scoreResetGameOption": "Reinicia la puntuación de la partida",
+  "scoreClearBlankOption": "Vaciarlo todo (cálculo aparte)",
   "backAction": "Atrás",
   "nextAction": "Siguiente",
   "resultsAction": "Resultados",
@@ -376,5 +386,19 @@
   "routeNotFound": "Ruta no encontrada: {uri}",
   "invalidDataMessage": "Datos no válidos para esta pantalla.",
   "retryAction": "Reintentar",
-  "playerNameHint": "Nombre"
+  "playerNameHint": "Nombre",
+  "homeAboutTitle": "Sobre la app",
+  "homeTagline": "Tu compañero de mesa para Cacao",
+  "loadingLabel": "Cargando…",
+  "scoreTemplesEmpty": "Aún no hay templos — añade uno por cada templo del tablero.",
+  "expansionsModulesSection": "Expansiones y módulos",
+  "expansionSelectHint": "Toca una expansión para activarla y elegir sus módulos.",
+  "expansionTapHint": "Toca para elegir sus módulos",
+  "modulesPickLabel": "Elige los módulos",
+  "moduleCountLabel": "{count} / {total} módulos",
+  "cancelAction": "Cancelar",
+  "clearSetupBody": "Esto borra los jugadores, expansiones y módulos seleccionados.",
+  "moduleWarningPickOne": "Elige al menos un módulo",
+  "expansionNeedsModuleHint": "Alguna expansión no tiene módulos elegidos",
+  "playersNeededHint": "Añade al menos 2 jugadores"
 }

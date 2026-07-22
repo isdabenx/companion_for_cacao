@@ -574,6 +574,30 @@ abstract class AppLocalizations {
   /// **'Select which worker tiles you want to use for this game.'**
   String get newWorkersSelectionDetail;
 
+  /// No description provided for @newWorkersBuildLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Build the worker pile'**
+  String get newWorkersBuildLabel;
+
+  /// No description provided for @newWorkersBuildDetail.
+  ///
+  /// In en, this message translates to:
+  /// **'Each player takes the tiles shown from each source.'**
+  String get newWorkersBuildDetail;
+
+  /// No description provided for @workerBuildFromBase.
+  ///
+  /// In en, this message translates to:
+  /// **'From the base game, take:'**
+  String get workerBuildFromBase;
+
+  /// No description provided for @workerBuildFromExpansion.
+  ///
+  /// In en, this message translates to:
+  /// **'From the expansion, take:'**
+  String get workerBuildFromExpansion;
+
   /// No description provided for @returnToBoxTitle.
   ///
   /// In en, this message translates to:
@@ -1117,7 +1141,7 @@ abstract class AppLocalizations {
   /// No description provided for @hutRegisterHint.
   ///
   /// In en, this message translates to:
-  /// **'Tap a tile to pick its face-up side; tap it again to flip it over.'**
+  /// **'Tap each hut face that landed up. Impossible ones disappear on their own.'**
   String get hutRegisterHint;
 
   /// No description provided for @hutRegisterAction.
@@ -1852,6 +1876,42 @@ abstract class AppLocalizations {
   /// **'This discards all entered scores and reloads players and modules from the current game setup.'**
   String get startOverBody;
 
+  /// No description provided for @scoreContextGame.
+  ///
+  /// In en, this message translates to:
+  /// **'Scoring the game in progress'**
+  String get scoreContextGame;
+
+  /// No description provided for @scoreContextDetached.
+  ///
+  /// In en, this message translates to:
+  /// **'Separate calculation'**
+  String get scoreContextDetached;
+
+  /// No description provided for @scoreBackToGameAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Back to the game'**
+  String get scoreBackToGameAction;
+
+  /// No description provided for @scoreResetChooseBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Reset the scoring for this game, or start a separate, empty calculation?'**
+  String get scoreResetChooseBody;
+
+  /// No description provided for @scoreResetGameOption.
+  ///
+  /// In en, this message translates to:
+  /// **'Reset the game scoring'**
+  String get scoreResetGameOption;
+
+  /// No description provided for @scoreClearBlankOption.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear everything (separate calculation)'**
+  String get scoreClearBlankOption;
+
   /// No description provided for @backAction.
   ///
   /// In en, this message translates to:
@@ -2175,6 +2235,90 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Name'**
   String get playerNameHint;
+
+  /// No description provided for @homeAboutTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'About the app'**
+  String get homeAboutTitle;
+
+  /// No description provided for @homeTagline.
+  ///
+  /// In en, this message translates to:
+  /// **'Your table-side companion for Cacao'**
+  String get homeTagline;
+
+  /// No description provided for @loadingLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Loading…'**
+  String get loadingLabel;
+
+  /// No description provided for @scoreTemplesEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No temples yet — add one for each temple on the board.'**
+  String get scoreTemplesEmpty;
+
+  /// No description provided for @expansionsModulesSection.
+  ///
+  /// In en, this message translates to:
+  /// **'Expansions and modules'**
+  String get expansionsModulesSection;
+
+  /// No description provided for @expansionSelectHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap an expansion to turn it on and pick its modules.'**
+  String get expansionSelectHint;
+
+  /// No description provided for @expansionTapHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap to pick its modules'**
+  String get expansionTapHint;
+
+  /// No description provided for @modulesPickLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose modules'**
+  String get modulesPickLabel;
+
+  /// No description provided for @moduleCountLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} / {total} modules'**
+  String moduleCountLabel(int count, int total);
+
+  /// No description provided for @cancelAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get cancelAction;
+
+  /// No description provided for @clearSetupBody.
+  ///
+  /// In en, this message translates to:
+  /// **'This clears the selected players, expansions and modules.'**
+  String get clearSetupBody;
+
+  /// No description provided for @moduleWarningPickOne.
+  ///
+  /// In en, this message translates to:
+  /// **'Pick at least one module'**
+  String get moduleWarningPickOne;
+
+  /// No description provided for @expansionNeedsModuleHint.
+  ///
+  /// In en, this message translates to:
+  /// **'An expansion has no modules selected'**
+  String get expansionNeedsModuleHint;
+
+  /// No description provided for @playersNeededHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Add at least 2 players'**
+  String get playersNeededHint;
 }
 
 class _AppLocalizationsDelegate

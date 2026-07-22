@@ -169,6 +169,10 @@
 
   "newWorkersSelectionLabel": "Choose the worker tiles",
   "newWorkersSelectionDetail": "Select which worker tiles you want to use for this game.",
+  "newWorkersBuildLabel": "Build the worker pile",
+  "newWorkersBuildDetail": "Each player takes the tiles shown from each source.",
+  "workerBuildFromBase": "From the base game, take:",
+  "workerBuildFromExpansion": "From the expansion, take:",
 
   "returnToBoxTitle": "Return to the box",
   "returnToBoxSubtitle": "These tiles are not used in this game",
@@ -308,7 +312,7 @@
   "errorSavingPresets": "Error saving custom presets",
 
   "hutRegisterTitle": "Register the hut throw",
-  "hutRegisterHint": "Tap a tile to pick its face-up side; tap it again to flip it over.",
+  "hutRegisterHint": "Tap each hut face that landed up. Impossible ones disappear on their own.",
   "hutRegisterAction": "Register which huts landed face up",
   "hutRegisteredEdit": "Throw registered · tap to edit",
   "forgetThrowAction": "Forget throw",
@@ -458,6 +462,12 @@
   "startOverAction": "Start over",
   "startOverTitle": "Start over?",
   "startOverBody": "This discards all entered scores and reloads players and modules from the current game setup.",
+  "scoreContextGame": "Scoring the game in progress",
+  "scoreContextDetached": "Separate calculation",
+  "scoreBackToGameAction": "Back to the game",
+  "scoreResetChooseBody": "Reset the scoring for this game, or start a separate, empty calculation?",
+  "scoreResetGameOption": "Reset the game scoring",
+  "scoreClearBlankOption": "Clear everything (separate calculation)",
   "backAction": "Back",
   "nextAction": "Next",
   "resultsAction": "Results",
@@ -560,5 +570,22 @@
   },
   "invalidDataMessage": "Invalid data for this screen.",
   "retryAction": "Retry",
-  "playerNameHint": "Name"
+  "playerNameHint": "Name",
+  "homeAboutTitle": "About the app",
+  "homeTagline": "Your table-side companion for Cacao",
+  "loadingLabel": "Loading…",
+  "scoreTemplesEmpty": "No temples yet — add one for each temple on the board.",
+  "expansionsModulesSection": "Expansions and modules",
+  "expansionSelectHint": "Tap an expansion to turn it on and pick its modules.",
+  "expansionTapHint": "Tap to pick its modules",
+  "modulesPickLabel": "Choose modules",
+  "moduleCountLabel": "{count} / {total} modules",
+  "@moduleCountLabel": {
+    "placeholders": { "count": { "type": "int" }, "total": { "type": "int" } }
+  },
+  "cancelAction": "Cancel",
+  "clearSetupBody": "This clears the selected players, expansions and modules.",
+  "moduleWarningPickOne": "Pick at least one module",
+  "expansionNeedsModuleHint": "An expansion has no modules selected",
+  "playersNeededHint": "Add at least 2 players"
 }
