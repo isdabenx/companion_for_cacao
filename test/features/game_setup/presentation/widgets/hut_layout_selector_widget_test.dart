@@ -71,13 +71,13 @@ void main() {
       );
       expect(apply.onPressed, isNull);
 
-      // Deciding a tile updates the counter.
-      await tester.tap(find.byKey(const ValueKey('hut_tile_0')));
+      // Marking a face-up function bumps the counter.
+      await tester.tap(find.text('Market Crier').first);
       await tester.pumpAndSettle();
       expect(find.text('1 / ${HutTileSupply.tiles.length}'), findsOneWidget);
     });
 
-    testWidgets('tapping a tile cycles undecided, side A, side B, side A', (
+    testWidgets('filling a function makes its impossible pair disappear', (
       tester,
     ) async {
       await tester.pumpWidget(wrap(GameSetupStateEntity()));
@@ -86,30 +86,49 @@ void main() {
       await tester.tap(find.byType(HutThrowRegisterRow));
       await tester.pumpAndSettle();
 
-      final cell = find.byKey(const ValueKey('hut_tile_0'));
-      final (sideA, sideB) = HutTileSupply.tiles[0];
-      Finder cost(int value) =>
-          find.descendant(of: cell, matching: find.text('($value)'));
+      // Market Crier and Hermit share the same two tiles, so both start with
+      // two open cells each.
+      expect(find.text('Market Crier'), findsNWidgets(2));
+      expect(find.text('Hermit'), findsNWidgets(2));
 
-      // Undecided: both sides listed small, no cost shown.
-      expect(cost(sideA.cost), findsNothing);
-      expect(cost(sideB.cost), findsNothing);
-
-      await tester.tap(cell);
+      // Recording ONE Market Crier consumes one shared tile, so one Hermit
+      // slot disappears immediately (tile-mates are linked).
+      await tester.tap(find.text('Market Crier').first);
       await tester.pumpAndSettle();
-      expect(cost(sideA.cost), findsOneWidget);
+      expect(find.text('Hermit'), findsOneWidget);
 
-      await tester.tap(cell);
+      // Recording the second Market Crier uses the last shared tile: Hermit
+      // can no longer land at all.
+      await tester.tap(find.text('Market Crier').last);
       await tester.pumpAndSettle();
-      expect(cost(sideB.cost), findsOneWidget);
-      expect(cost(sideA.cost), findsNothing);
+      expect(find.text('2 / ${HutTileSupply.tiles.length}'), findsOneWidget);
+      expect(find.text('Hermit'), findsNothing);
 
-      await tester.tap(cell);
+      // Undoing one Market Crier frees a tile, so Hermit reappears.
+      await tester.tap(find.text('Market Crier').last);
       await tester.pumpAndSettle();
-      expect(cost(sideA.cost), findsOneWidget);
+      expect(find.text('Hermit'), findsWidgets);
+    });
 
-      // Flipping the same tile never adds to the counter past one.
-      expect(find.text('1 / ${HutTileSupply.tiles.length}'), findsOneWidget);
+    testWidgets('tapping the second copy marks that copy, not the first', (
+      tester,
+    ) async {
+      await tester.pumpWidget(wrap(GameSetupStateEntity()));
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.byType(HutThrowRegisterRow));
+      await tester.pumpAndSettle();
+
+      final copy0 = find.byKey(const ValueKey('hut_cell_marketCrier_0'));
+      final copy1 = find.byKey(const ValueKey('hut_cell_marketCrier_1'));
+      Finder checkIn(Finder cell) =>
+          find.descendant(of: cell, matching: find.byIcon(Icons.check));
+
+      // Tapping the second copy marks the second copy — not the first.
+      await tester.tap(copy1);
+      await tester.pumpAndSettle();
+      expect(checkIn(copy1), findsOneWidget);
+      expect(checkIn(copy0), findsNothing);
     });
 
     testWidgets('editor of a registered layout can forget the throw', (
