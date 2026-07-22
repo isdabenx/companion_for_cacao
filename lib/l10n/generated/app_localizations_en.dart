@@ -24,6 +24,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get villageBoardLabel => 'Take your village board';
 
   @override
+  String get villageBoardDetailAll =>
+      'Each player takes the village board of their colour and places it in front of them. Their worker draw pile and water carrier track live there.';
+
+  @override
   String villageBoardDetail(String color) {
     return 'Take the village board of color $color and place it in front of you. Your worker draw pile and water carrier track live there.';
   }
@@ -32,12 +36,20 @@ class AppLocalizationsEn extends AppLocalizations {
   String get waterCarrierLabel => 'Put your water carrier on the \"-10\" field';
 
   @override
+  String get waterCarrierDetailAll =>
+      'Each player takes the water carrier of their colour and places it on the \"-10\" water field of their village board.';
+
+  @override
   String waterCarrierDetail(String color) {
     return 'Take the water carrier of color $color and place it on the water field with the value \"-10\" of your village board.';
   }
 
   @override
   String get ownTilesLabel => 'Take all your worker tiles';
+
+  @override
+  String get ownTilesDetailAll =>
+      'Each player gathers all worker tiles with their colour on the back; they are their personal supply for the whole game.';
 
   @override
   String ownTilesDetail(String color) {
@@ -52,6 +64,11 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String removeWorkerDetail(String distribution) {
     return 'Search your worker tiles for one of the $distribution tiles and return it to the game box.';
+  }
+
+  @override
+  String removeWorkerDetailAll(String distribution) {
+    return 'Each player searches their worker tiles for one of the $distribution tiles and returns it to the game box.';
   }
 
   @override
@@ -73,11 +90,21 @@ class AppLocalizationsEn extends AppLocalizations {
       'From the jungle tiles, get \"single plantation\" and \"market, selling price 2\" and place them face up in the middle of the table diagonally to one another; they form the starting tiles of the playing area.';
 
   @override
-  String get junglePileLabel => 'Build the jungle draw pile';
+  String get jungleGroupTitle => 'The jungle';
+
+  @override
+  String get gatherJungleLabel => 'Gather the jungle tiles';
+
+  @override
+  String get gatherJungleDetail =>
+      'Take all the base-game jungle tiles; you\'ll then modify them (remove/add) and form the pile.';
+
+  @override
+  String get junglePileLabel => 'Shuffle and form the pile';
 
   @override
   String get junglePileDetail =>
-      'Mix the remaining jungle tiles and lay them out as a face-down jungle draw pile.';
+      'Shuffle all the jungle tiles face-down and form the pile, next to the board.';
 
   @override
   String get jungleDisplayLabel => 'Reveal 2 jungle tiles';
@@ -188,6 +215,9 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get mapTokensDetailAll => 'Each player takes 2 map tiles.';
+
+  @override
   String get mapTokensSurplusLabel => 'Return the surplus map tiles to the box';
 
   @override
@@ -283,6 +313,10 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get treeOfLife0004DetailAll =>
+      'Tree of Life Module: each player takes the 0-0-0-4 worker tile of their colour (from the New Workers Module) and adds it to their worker tiles.';
+
+  @override
   String get treeOfLife0004Rationale =>
       'With 2 players the Tree of Life requires the 0-0-0-4 tile so every tree can be fully harvested (Diamante rulebook).';
 
@@ -315,7 +349,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get workerBuildFromBase => 'From the base game, take:';
 
   @override
-  String get workerBuildFromExpansion => 'From the expansion, take:';
+  String get workerBuildFromExpansion => 'From the Diamante expansion, take:';
 
   @override
   String get returnToBoxTitle => 'Return to the box';
@@ -584,6 +618,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get applyAction => 'Apply';
+
+  @override
+  String get workerSelectionResetNotice =>
+      'You changed the workers: build the pile again.';
 
   @override
   String get saveAction => 'Save';

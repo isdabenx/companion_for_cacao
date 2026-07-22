@@ -177,7 +177,7 @@ class GemMinesModuleHandler implements ModulePreparationHandler {
         label: copy.removeAllTilesLabel(copy.tileTemple),
         detail: copy.removeAllTilesDetail(copy.tileTemple),
         tableZone: TableZone.box,
-        groupId: PreparationGroups.returnToBox,
+        groupId: PreparationGroups.jungle,
         imageKey: 'jungle_temple',
         phase: PreparationPhase.boardSetup,
       ),

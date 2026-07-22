@@ -8,15 +8,19 @@
 
   "villageBoardLabel": "Coge el tablero de tu aldea",
   "villageBoardDetail": "Coge el tablero de aldea de color {color} y colócalo delante de ti. Ahí están tus almacenes y los remansos del aguador.",
+  "villageBoardDetailAll": "Cada jugador coge el tablero de aldea de su color y lo coloca delante de sí. Ahí están los almacenes y los remansos del aguador.",
 
   "waterCarrierLabel": "Pon el aguador en el remanso \"-10\"",
   "waterCarrierDetail": "Coge el aguador de color {color} y colócalo en el remanso de valor \"-10\" del tablero de tu aldea.",
+  "waterCarrierDetailAll": "Cada jugador coge el aguador de su color y lo coloca en el remanso de valor \"-10\" de su tablero.",
 
   "ownTilesLabel": "Coge todas tus losetas de recolectores",
   "ownTilesDetail": "Reúne todas las losetas de recolectores con el reverso de color {color}; son tu reserva personal para toda la partida.",
+  "ownTilesDetailAll": "Cada jugador reúne todas las losetas de recolectores de su color; son su reserva personal para toda la partida.",
 
   "removeWorkerLabel": "Devuelve una loseta de recolectores {distribution} a la caja",
   "removeWorkerDetail": "Busca entre tus losetas de recolectores una de las {distribution} y devuélvela a la caja del juego.",
+  "removeWorkerDetailAll": "Cada jugador busca entre sus losetas de recolectores una de las {distribution} y la devuelve a la caja del juego.",
   "removeWorkerRationale": "Con 3 o más jugadores cada uno usa menos losetas de recolectores para que la selva no se agote antes de acabar la partida.",
 
   "shuffleWorkersLabel": "Mezcla tus recolectores y roba 3",
@@ -25,8 +29,11 @@
   "initialTilesMarketLabel": "Coloca las 2 losetas iniciales en diagonal",
   "initialTilesMarketDetail": "De las losetas de selva, busca la \"plantación simple\" y el \"mercado de precio de venta 2\" y colócalas boca arriba en el centro de la mesa, en diagonal una respecto de la otra; son las losetas iniciales de la zona de juego.",
 
-  "junglePileLabel": "Monta la pila de la selva",
-  "junglePileDetail": "Mezcla las losetas de selva restantes y colócalas boca abajo formando la pila de la selva.",
+  "jungleGroupTitle": "La selva",
+  "gatherJungleLabel": "Reúne las losetas de la selva",
+  "gatherJungleDetail": "Coge todas las losetas de selva del juego base; luego las modificarás (quitar/añadir) y formarás la pila.",
+  "junglePileLabel": "Baraja y forma la pila",
+  "junglePileDetail": "Baraja todas las losetas de la selva boca abajo y forma la pila, junto al tablero.",
 
   "jungleDisplayLabel": "Revela la selva explorada",
   "jungleDisplayDetail": "Roba las 2 losetas superiores de la pila de la selva y colócalas boca arriba junto a la pila: forman la selva explorada.",
@@ -61,6 +68,7 @@
 
   "mapTokensLabel": "Coge 2 fichas de mapa",
   "mapTokensDetail": "El jugador {color} coge 2 fichas de mapa.",
+  "mapTokensDetailAll": "Cada jugador coge 2 fichas de mapa.",
   "mapTokensSurplusLabel": "Devuelve las fichas de mapa sobrantes a la caja",
   "mapTokensSurplusDetail": "Las fichas de mapa sobrantes se devuelven a la caja.",
   "mapBoardLabel": "Coloca el tablero de mapas",
@@ -92,6 +100,7 @@
 
   "treeOfLife0004Label": "Añade tu loseta de recolectores 0-0-0-4",
   "treeOfLife0004Detail": "Módulo El árbol de la vida: el jugador {color} coge su loseta de recolectores 0-0-0-4 del módulo Los nuevos recolectores y la añade a sus losetas.",
+  "treeOfLife0004DetailAll": "Módulo El árbol de la vida: cada jugador coge la loseta de recolectores 0-0-0-4 de su color (del módulo Los nuevos recolectores) y la añade a sus losetas.",
   "treeOfLife0004Rationale": "Con 2 jugadores El árbol de la vida requiere la loseta 0-0-0-4 para que todos los árboles puedan cosecharse por completo (reglamento de Diamante).",
 
   "emperorLabel": "Coloca la figura del ahau",
@@ -103,7 +112,7 @@
   "newWorkersBuildLabel": "Monta la pila de recolectores",
   "newWorkersBuildDetail": "Cada jugador coge las losetas indicadas de cada origen.",
   "workerBuildFromBase": "Del juego base, coge:",
-  "workerBuildFromExpansion": "De la expansión, coge:",
+  "workerBuildFromExpansion": "De la expansión Diamante, coge:",
 
   "returnToBoxTitle": "Devolver a la caja",
   "returnToBoxSubtitle": "Estas losetas no se usan en esta partida",
@@ -190,6 +199,7 @@
   "workerLockedTooltip": "Obligatoria con El árbol de la vida (2 jugadores)",
   "resetAction": "Restablecer",
   "applyAction": "Aplicar",
+  "workerSelectionResetNotice": "Has cambiado los recolectores: vuelve a montar la pila.",
   "saveAction": "Guardar",
   "deleteAction": "Eliminar",
   "savePresetTitle": "Guardar como ajuste",

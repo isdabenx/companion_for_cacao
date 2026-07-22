@@ -130,6 +130,12 @@ abstract class AppLocalizations {
   /// **'Take your village board'**
   String get villageBoardLabel;
 
+  /// No description provided for @villageBoardDetailAll.
+  ///
+  /// In en, this message translates to:
+  /// **'Each player takes the village board of their colour and places it in front of them. Their worker draw pile and water carrier track live there.'**
+  String get villageBoardDetailAll;
+
   /// No description provided for @villageBoardDetail.
   ///
   /// In en, this message translates to:
@@ -142,6 +148,12 @@ abstract class AppLocalizations {
   /// **'Put your water carrier on the \"-10\" field'**
   String get waterCarrierLabel;
 
+  /// No description provided for @waterCarrierDetailAll.
+  ///
+  /// In en, this message translates to:
+  /// **'Each player takes the water carrier of their colour and places it on the \"-10\" water field of their village board.'**
+  String get waterCarrierDetailAll;
+
   /// No description provided for @waterCarrierDetail.
   ///
   /// In en, this message translates to:
@@ -153,6 +165,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Take all your worker tiles'**
   String get ownTilesLabel;
+
+  /// No description provided for @ownTilesDetailAll.
+  ///
+  /// In en, this message translates to:
+  /// **'Each player gathers all worker tiles with their colour on the back; they are their personal supply for the whole game.'**
+  String get ownTilesDetailAll;
 
   /// No description provided for @ownTilesDetail.
   ///
@@ -171,6 +189,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Search your worker tiles for one of the {distribution} tiles and return it to the game box.'**
   String removeWorkerDetail(String distribution);
+
+  /// No description provided for @removeWorkerDetailAll.
+  ///
+  /// In en, this message translates to:
+  /// **'Each player searches their worker tiles for one of the {distribution} tiles and returns it to the game box.'**
+  String removeWorkerDetailAll(String distribution);
 
   /// No description provided for @removeWorkerRationale.
   ///
@@ -202,16 +226,34 @@ abstract class AppLocalizations {
   /// **'From the jungle tiles, get \"single plantation\" and \"market, selling price 2\" and place them face up in the middle of the table diagonally to one another; they form the starting tiles of the playing area.'**
   String get initialTilesMarketDetail;
 
+  /// No description provided for @jungleGroupTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'The jungle'**
+  String get jungleGroupTitle;
+
+  /// No description provided for @gatherJungleLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Gather the jungle tiles'**
+  String get gatherJungleLabel;
+
+  /// No description provided for @gatherJungleDetail.
+  ///
+  /// In en, this message translates to:
+  /// **'Take all the base-game jungle tiles; you\'ll then modify them (remove/add) and form the pile.'**
+  String get gatherJungleDetail;
+
   /// No description provided for @junglePileLabel.
   ///
   /// In en, this message translates to:
-  /// **'Build the jungle draw pile'**
+  /// **'Shuffle and form the pile'**
   String get junglePileLabel;
 
   /// No description provided for @junglePileDetail.
   ///
   /// In en, this message translates to:
-  /// **'Mix the remaining jungle tiles and lay them out as a face-down jungle draw pile.'**
+  /// **'Shuffle all the jungle tiles face-down and form the pile, next to the board.'**
   String get junglePileDetail;
 
   /// No description provided for @jungleDisplayLabel.
@@ -382,6 +424,12 @@ abstract class AppLocalizations {
   /// **'Player {color} takes 2 map tiles.'**
   String mapTokensDetail(String color);
 
+  /// No description provided for @mapTokensDetailAll.
+  ///
+  /// In en, this message translates to:
+  /// **'Each player takes 2 map tiles.'**
+  String get mapTokensDetailAll;
+
   /// No description provided for @mapTokensSurplusLabel.
   ///
   /// In en, this message translates to:
@@ -538,6 +586,12 @@ abstract class AppLocalizations {
   /// **'Tree of Life Module: Player {color} takes their 0-0-0-4 worker tile from the New Workers Module and adds it to their worker tiles.'**
   String treeOfLife0004Detail(String color);
 
+  /// No description provided for @treeOfLife0004DetailAll.
+  ///
+  /// In en, this message translates to:
+  /// **'Tree of Life Module: each player takes the 0-0-0-4 worker tile of their colour (from the New Workers Module) and adds it to their worker tiles.'**
+  String get treeOfLife0004DetailAll;
+
   /// No description provided for @treeOfLife0004Rationale.
   ///
   /// In en, this message translates to:
@@ -595,7 +649,7 @@ abstract class AppLocalizations {
   /// No description provided for @workerBuildFromExpansion.
   ///
   /// In en, this message translates to:
-  /// **'From the expansion, take:'**
+  /// **'From the Diamante expansion, take:'**
   String get workerBuildFromExpansion;
 
   /// No description provided for @returnToBoxTitle.
@@ -1077,6 +1131,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Apply'**
   String get applyAction;
+
+  /// No description provided for @workerSelectionResetNotice.
+  ///
+  /// In en, this message translates to:
+  /// **'You changed the workers: build the pile again.'**
+  String get workerSelectionResetNotice;
 
   /// No description provided for @saveAction.
   ///

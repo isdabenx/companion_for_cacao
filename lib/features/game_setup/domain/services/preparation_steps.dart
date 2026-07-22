@@ -11,6 +11,11 @@ abstract final class PreparationGroups {
   /// One card collecting every "return to the box" tile removal of the
   /// board-setup phase (base 2p removals, module substitutions...).
   static const String returnToBox = 'group_return_to_box';
+
+  /// One card for the whole jungle-pile assembly: gather → return → add →
+  /// shuffle → reveal. Keeps the ordered flow together and makes room for
+  /// any expansion that adds or removes jungle tiles.
+  static const String jungle = 'group_jungle';
 }
 
 /// Builders for the step shapes shared by the base game and modules.
@@ -31,7 +36,7 @@ abstract final class PreparationSteps {
       detail: copy.removeTilesDetail(quantity, tileName),
       rationale: rationale,
       tableZone: TableZone.box,
-      groupId: PreparationGroups.returnToBox,
+      groupId: PreparationGroups.jungle,
       quantity: quantity,
       imageKey: imageKey,
       phase: PreparationPhase.boardSetup,
@@ -53,6 +58,7 @@ abstract final class PreparationSteps {
       detail: copy.addTilesDetail(quantity, tileName),
       rationale: rationale,
       tableZone: TableZone.junglePile,
+      groupId: PreparationGroups.jungle,
       quantity: quantity,
       imageKey: imageKey,
       phase: PreparationPhase.boardSetup,

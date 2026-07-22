@@ -24,6 +24,10 @@ class AppLocalizationsCa extends AppLocalizations {
   String get villageBoardLabel => 'Agafa el tauler del teu poblat';
 
   @override
+  String get villageBoardDetailAll =>
+      'Cada jugador agafa el tauler de poblat del seu color i se\'l posa al davant. Hi ha els magatzems i els remansos de l\'aiguader.';
+
+  @override
   String villageBoardDetail(String color) {
     return 'Agafa el tauler de poblat de color $color i posa-te\'l al davant. Hi ha els teus magatzems i els remansos de l\'aiguader.';
   }
@@ -32,12 +36,20 @@ class AppLocalizationsCa extends AppLocalizations {
   String get waterCarrierLabel => 'Posa l\'aiguader al remans \"-10\"';
 
   @override
+  String get waterCarrierDetailAll =>
+      'Cada jugador agafa l\'aiguader del seu color i el col·loca al remans de valor \"-10\" del seu tauler.';
+
+  @override
   String waterCarrierDetail(String color) {
     return 'Agafa l\'aiguader de color $color i col·loca\'l al remans de valor \"-10\" del tauler del teu poblat.';
   }
 
   @override
   String get ownTilesLabel => 'Agafa totes les teves rajoles de recol·lectors';
+
+  @override
+  String get ownTilesDetailAll =>
+      'Cada jugador reuneix totes les rajoles de recol·lectors del seu color; són la seva reserva personal per a tota la partida.';
 
   @override
   String ownTilesDetail(String color) {
@@ -52,6 +64,11 @@ class AppLocalizationsCa extends AppLocalizations {
   @override
   String removeWorkerDetail(String distribution) {
     return 'Busca entre les teves rajoles de recol·lectors una de les $distribution i torna-la a la capsa del joc.';
+  }
+
+  @override
+  String removeWorkerDetailAll(String distribution) {
+    return 'Cada jugador busca entre les seves rajoles de recol·lectors una de les $distribution i la torna a la capsa del joc.';
   }
 
   @override
@@ -74,11 +91,21 @@ class AppLocalizationsCa extends AppLocalizations {
       'De les rajoles de selva, busca la \"plantació simple\" i el \"mercat de preu de venda 2\" i posa-les cara amunt al mig de la taula, en diagonal l\'una respecte de l\'altra; són les rajoles inicials de la zona de joc.';
 
   @override
-  String get junglePileLabel => 'Munta la pila de la selva';
+  String get jungleGroupTitle => 'La selva';
+
+  @override
+  String get gatherJungleLabel => 'Reuneix les rajoles de la selva';
+
+  @override
+  String get gatherJungleDetail =>
+      'Agafa totes les rajoles de selva del joc base; tot seguit les modificaràs (treure/afegir) i en formaràs la pila.';
+
+  @override
+  String get junglePileLabel => 'Barreja i forma la pila';
 
   @override
   String get junglePileDetail =>
-      'Barreja les rajoles de selva restants i posa-les cap per avall formant la pila de la selva.';
+      'Barreja totes les rajoles de la selva cara avall i forma la pila, al costat del tauler.';
 
   @override
   String get jungleDisplayLabel => 'Descobreix la selva explorada';
@@ -189,6 +216,9 @@ class AppLocalizationsCa extends AppLocalizations {
   }
 
   @override
+  String get mapTokensDetailAll => 'Cada jugador agafa 2 fitxes de mapa.';
+
+  @override
   String get mapTokensSurplusLabel =>
       'Torna les fitxes de mapa sobrants a la capsa';
 
@@ -288,6 +318,10 @@ class AppLocalizationsCa extends AppLocalizations {
   }
 
   @override
+  String get treeOfLife0004DetailAll =>
+      'Mòdul L\'arbre de la vida: cada jugador agafa la rajola de recol·lectors 0-0-0-4 del seu color (del mòdul Els nous recol·lectors) i l\'afegeix a les seves rajoles.';
+
+  @override
   String get treeOfLife0004Rationale =>
       'Amb 2 jugadors L\'arbre de la vida requereix la rajola 0-0-0-4 perquè tots els arbres es puguin collir del tot (reglament de Diamante).';
 
@@ -320,7 +354,7 @@ class AppLocalizationsCa extends AppLocalizations {
   String get workerBuildFromBase => 'Del joc base, agafa:';
 
   @override
-  String get workerBuildFromExpansion => 'De l\'expansió, agafa:';
+  String get workerBuildFromExpansion => 'De l\'expansió Diamante, agafa:';
 
   @override
   String get returnToBoxTitle => 'Torna a la capsa';
@@ -591,6 +625,10 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String get applyAction => 'Aplica';
+
+  @override
+  String get workerSelectionResetNotice =>
+      'Has canviat els recol·lectors: torna a muntar la pila.';
 
   @override
   String get saveAction => 'Desa';

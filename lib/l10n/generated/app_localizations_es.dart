@@ -24,6 +24,10 @@ class AppLocalizationsEs extends AppLocalizations {
   String get villageBoardLabel => 'Coge el tablero de tu aldea';
 
   @override
+  String get villageBoardDetailAll =>
+      'Cada jugador coge el tablero de aldea de su color y lo coloca delante de sí. Ahí están los almacenes y los remansos del aguador.';
+
+  @override
   String villageBoardDetail(String color) {
     return 'Coge el tablero de aldea de color $color y colócalo delante de ti. Ahí están tus almacenes y los remansos del aguador.';
   }
@@ -32,12 +36,20 @@ class AppLocalizationsEs extends AppLocalizations {
   String get waterCarrierLabel => 'Pon el aguador en el remanso \"-10\"';
 
   @override
+  String get waterCarrierDetailAll =>
+      'Cada jugador coge el aguador de su color y lo coloca en el remanso de valor \"-10\" de su tablero.';
+
+  @override
   String waterCarrierDetail(String color) {
     return 'Coge el aguador de color $color y colócalo en el remanso de valor \"-10\" del tablero de tu aldea.';
   }
 
   @override
   String get ownTilesLabel => 'Coge todas tus losetas de recolectores';
+
+  @override
+  String get ownTilesDetailAll =>
+      'Cada jugador reúne todas las losetas de recolectores de su color; son su reserva personal para toda la partida.';
 
   @override
   String ownTilesDetail(String color) {
@@ -52,6 +64,11 @@ class AppLocalizationsEs extends AppLocalizations {
   @override
   String removeWorkerDetail(String distribution) {
     return 'Busca entre tus losetas de recolectores una de las $distribution y devuélvela a la caja del juego.';
+  }
+
+  @override
+  String removeWorkerDetailAll(String distribution) {
+    return 'Cada jugador busca entre sus losetas de recolectores una de las $distribution y la devuelve a la caja del juego.';
   }
 
   @override
@@ -74,11 +91,21 @@ class AppLocalizationsEs extends AppLocalizations {
       'De las losetas de selva, busca la \"plantación simple\" y el \"mercado de precio de venta 2\" y colócalas boca arriba en el centro de la mesa, en diagonal una respecto de la otra; son las losetas iniciales de la zona de juego.';
 
   @override
-  String get junglePileLabel => 'Monta la pila de la selva';
+  String get jungleGroupTitle => 'La selva';
+
+  @override
+  String get gatherJungleLabel => 'Reúne las losetas de la selva';
+
+  @override
+  String get gatherJungleDetail =>
+      'Coge todas las losetas de selva del juego base; luego las modificarás (quitar/añadir) y formarás la pila.';
+
+  @override
+  String get junglePileLabel => 'Baraja y forma la pila';
 
   @override
   String get junglePileDetail =>
-      'Mezcla las losetas de selva restantes y colócalas boca abajo formando la pila de la selva.';
+      'Baraja todas las losetas de la selva boca abajo y forma la pila, junto al tablero.';
 
   @override
   String get jungleDisplayLabel => 'Revela la selva explorada';
@@ -189,6 +216,9 @@ class AppLocalizationsEs extends AppLocalizations {
   }
 
   @override
+  String get mapTokensDetailAll => 'Cada jugador coge 2 fichas de mapa.';
+
+  @override
   String get mapTokensSurplusLabel =>
       'Devuelve las fichas de mapa sobrantes a la caja';
 
@@ -287,6 +317,10 @@ class AppLocalizationsEs extends AppLocalizations {
   }
 
   @override
+  String get treeOfLife0004DetailAll =>
+      'Módulo El árbol de la vida: cada jugador coge la loseta de recolectores 0-0-0-4 de su color (del módulo Los nuevos recolectores) y la añade a sus losetas.';
+
+  @override
   String get treeOfLife0004Rationale =>
       'Con 2 jugadores El árbol de la vida requiere la loseta 0-0-0-4 para que todos los árboles puedan cosecharse por completo (reglamento de Diamante).';
 
@@ -319,7 +353,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get workerBuildFromBase => 'Del juego base, coge:';
 
   @override
-  String get workerBuildFromExpansion => 'De la expansión, coge:';
+  String get workerBuildFromExpansion => 'De la expansión Diamante, coge:';
 
   @override
   String get returnToBoxTitle => 'Devolver a la caja';
@@ -590,6 +624,10 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get applyAction => 'Aplicar';
+
+  @override
+  String get workerSelectionResetNotice =>
+      'Has cambiado los recolectores: vuelve a montar la pila.';
 
   @override
   String get saveAction => 'Guardar';

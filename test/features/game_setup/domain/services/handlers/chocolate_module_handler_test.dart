@@ -211,7 +211,7 @@ void main() {
               detail:
                   'Sort out 1x Gold Mine, value 1 and put it back in the box.',
               tableZone: TableZone.box,
-              groupId: 'group_return_to_box',
+              groupId: 'group_jungle',
               quantity: 1,
               imageKey: 'jungle_gold_mine_v1',
               phase: PreparationPhase.boardSetup,
@@ -222,7 +222,7 @@ void main() {
               detail:
                   'Sort out 1x Market, selling price 3 and put it back in the box.',
               tableZone: TableZone.box,
-              groupId: 'group_return_to_box',
+              groupId: 'group_jungle',
               quantity: 1,
               imageKey: 'jungle_market_selling_3',
               phase: PreparationPhase.boardSetup,
@@ -255,7 +255,7 @@ void main() {
           expect(goldMineStep.quantity, equals(2));
           // copyWith keeps the structured fields of the base removal step.
           expect(goldMineStep.imageKey, equals('jungle_gold_mine_v1'));
-          expect(goldMineStep.groupId, equals('group_return_to_box'));
+          expect(goldMineStep.groupId, equals('group_jungle'));
           expect(goldMineStep.tableZone, equals(TableZone.box));
         });
 
@@ -273,7 +273,7 @@ void main() {
           expect(marketStep.quantity, equals(3));
           // copyWith keeps the structured fields of the base removal step.
           expect(marketStep.imageKey, equals('jungle_market_selling_3'));
-          expect(marketStep.groupId, equals('group_return_to_box'));
+          expect(marketStep.groupId, equals('group_jungle'));
           expect(marketStep.tableZone, equals(TableZone.box));
         });
 
@@ -290,7 +290,7 @@ void main() {
           expect(v2Step, hasLength(1));
           expect(v2Step.first.detail, contains('1x Gold Mine, value 2'));
           expect(v2Step.first.imageKey, equals('jungle_gold_mine_v2'));
-          expect(v2Step.first.groupId, equals('group_return_to_box'));
+          expect(v2Step.first.groupId, equals('group_jungle'));
           expect(v2Step.first.tableZone, equals(TableZone.box));
           expect(v2Step.first.quantity, equals(1));
         });

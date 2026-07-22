@@ -92,7 +92,7 @@ void main() {
               id: 'setup_jungle_tiles_2p_removal_temple',
               detail: 'Sort out 1x Temple and put it back in the box.',
               imageKey: 'jungle_temple',
-              groupId: 'group_return_to_box',
+              groupId: 'group_jungle',
               quantity: 1,
               phase: PreparationPhase.boardSetup,
             ),

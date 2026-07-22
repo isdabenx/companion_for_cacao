@@ -1,14 +1,19 @@
 import 'package:companion_for_cacao/core/theme/app_colors.dart';
 import 'package:companion_for_cacao/core/theme/app_spacing.dart';
+import 'package:companion_for_cacao/core/theme/color_filters.dart';
 import 'package:companion_for_cacao/l10n/generated/app_localizations.dart';
 import 'package:flutter/material.dart';
 
 /// Fullscreen zoom dialog for a preparation step image, shared by every
 /// card/row that shows a step thumbnail.
+///
+/// [grayscale] keeps the enlarged art neutral when the thumbnail is a
+/// grayscale colour-reference (so the Hero flight stays consistent).
 void showPreparationImageDialog(
   BuildContext context, {
   required String imagePath,
   required String heroTag,
+  bool grayscale = false,
 }) {
   showDialog<void>(
     context: context,
@@ -42,19 +47,22 @@ void showPreparationImageDialog(
                       ],
                     ),
                     padding: AppSpacing.allL,
-                    child: Image.asset(
-                      imagePath,
-                      fit: BoxFit.contain,
-                      errorBuilder: (context, error, stackTrace) {
-                        return const Padding(
-                          padding: EdgeInsets.all(40.0),
-                          child: Icon(
-                            Icons.image_not_supported_outlined,
-                            color: AppColors.brown,
-                            size: 100,
-                          ),
-                        );
-                      },
+                    child: _maybeGrayscale(
+                      grayscale,
+                      Image.asset(
+                        imagePath,
+                        fit: BoxFit.contain,
+                        errorBuilder: (context, error, stackTrace) {
+                          return const Padding(
+                            padding: EdgeInsets.all(40.0),
+                            child: Icon(
+                              Icons.image_not_supported_outlined,
+                              color: AppColors.brown,
+                              size: 100,
+                            ),
+                          );
+                        },
+                      ),
                     ),
                   ),
                 ),
@@ -80,3 +88,7 @@ void showPreparationImageDialog(
     },
   );
 }
+
+Widget _maybeGrayscale(bool grayscale, Widget child) => grayscale
+    ? ColorFiltered(colorFilter: kGrayscaleFilter, child: child)
+    : child;

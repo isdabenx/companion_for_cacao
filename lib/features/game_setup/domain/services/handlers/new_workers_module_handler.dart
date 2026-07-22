@@ -144,23 +144,32 @@ class NewWorkersModuleHandler implements ModulePreparationHandler {
     // for each player — keeping these removal steps would conflict with or
     // duplicate the selector's choices regardless of the preset.
     preparation.removeWhere(
-      (step) => step.id.startsWith('setup_remove_worker_1_'),
+      (step) =>
+          step.id == 'setup_remove_worker_1' ||
+          step.id.startsWith('setup_remove_worker_1_'),
     );
     preparation.removeWhere(
-      (step) => step.id.startsWith('setup_remove_worker_2_'),
+      (step) =>
+          step.id == 'setup_remove_worker_2' ||
+          step.id.startsWith('setup_remove_worker_2_'),
     );
 
     // Remove Tree of Life's per-player 0-0-0-4 addition step. The selector
     // already includes this tile (and enforces min 1 when Tree of Life is
     // active for 2 players), so a separate step is redundant.
     preparation.removeWhere(
-      (step) => step.id.startsWith('setup_tree_of_life_add_0004_'),
+      (step) =>
+          step.id == 'setup_tree_of_life_add_0004' ||
+          step.id.startsWith('setup_tree_of_life_add_0004_'),
     );
 
-    // Remove the base game's per-player "take all your worker tiles" step:
-    // the build step below is the single authority on the composition, so we
-    // don't want to first say "take all" and then have players adjust.
-    preparation.removeWhere((step) => step.id.startsWith('setup_tiles_'));
+    // Remove the base game's "take all your worker tiles" step: the build
+    // step below is the single authority on the composition, so we don't
+    // want to first say "take all" and then have players adjust. (Matches
+    // both the generalized id and any legacy per-colour ids.)
+    preparation.removeWhere(
+      (step) => step.id == 'setup_tiles' || step.id.startsWith('setup_tiles_'),
+    );
 
     // Insert before 'setup_shuffle_workers' so players decide about new
     // worker tiles after taking their base tiles (and any removals for 3p/4p),

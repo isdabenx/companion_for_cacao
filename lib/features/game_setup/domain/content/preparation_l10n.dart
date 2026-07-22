@@ -37,15 +37,20 @@ class PreparationL10n {
   String get villageBoardLabel => _l10n.villageBoardLabel;
   String villageBoardDetail(String color) =>
       _l10n.villageBoardDetail(colorName(color));
+  String get villageBoardDetailAll => _l10n.villageBoardDetailAll;
   String get waterCarrierLabel => _l10n.waterCarrierLabel;
   String waterCarrierDetail(String color) =>
       _l10n.waterCarrierDetail(colorName(color));
+  String get waterCarrierDetailAll => _l10n.waterCarrierDetailAll;
   String get ownTilesLabel => _l10n.ownTilesLabel;
   String ownTilesDetail(String color) => _l10n.ownTilesDetail(colorName(color));
+  String get ownTilesDetailAll => _l10n.ownTilesDetailAll;
   String removeWorkerLabel(String distribution) =>
       _l10n.removeWorkerLabel(distribution);
   String removeWorkerDetail(String distribution) =>
       _l10n.removeWorkerDetail(distribution);
+  String removeWorkerDetailAll(String distribution) =>
+      _l10n.removeWorkerDetailAll(distribution);
   String get removeWorkerRationale => _l10n.removeWorkerRationale;
   String get shuffleWorkersLabel => _l10n.shuffleWorkersLabel;
   String get shuffleWorkersDetail => _l10n.shuffleWorkersDetail;
@@ -53,6 +58,8 @@ class PreparationL10n {
   // Board setup (base game)
   String get initialTilesMarketLabel => _l10n.initialTilesMarketLabel;
   String get initialTilesMarketDetail => _l10n.initialTilesMarketDetail;
+  String get gatherJungleLabel => _l10n.gatherJungleLabel;
+  String get gatherJungleDetail => _l10n.gatherJungleDetail;
   String get junglePileLabel => _l10n.junglePileLabel;
   String get junglePileDetail => _l10n.junglePileDetail;
   String get jungleDisplayLabel => _l10n.jungleDisplayLabel;
@@ -98,6 +105,7 @@ class PreparationL10n {
   String get mapTokensLabel => _l10n.mapTokensLabel;
   String mapTokensDetail(String color) =>
       _l10n.mapTokensDetail(colorName(color));
+  String get mapTokensDetailAll => _l10n.mapTokensDetailAll;
   String get mapTokensSurplusLabel => _l10n.mapTokensSurplusLabel;
   String get mapTokensSurplusDetail => _l10n.mapTokensSurplusDetail;
   String get mapBoardLabel => _l10n.mapBoardLabel;
@@ -135,6 +143,7 @@ class PreparationL10n {
   String get treeOfLife0004Label => _l10n.treeOfLife0004Label;
   String treeOfLife0004Detail(String color) =>
       _l10n.treeOfLife0004Detail(colorName(color));
+  String get treeOfLife0004DetailAll => _l10n.treeOfLife0004DetailAll;
   String get treeOfLife0004Rationale => _l10n.treeOfLife0004Rationale;
 
   // Emperor's Favor module

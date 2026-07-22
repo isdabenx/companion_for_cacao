@@ -1,5 +1,6 @@
 import 'package:companion_for_cacao/core/domain/entities/tile_entity.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/player_entity.dart';
+import 'package:companion_for_cacao/features/game_setup/domain/entities/preparation_actor.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/preparation_entity.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/preparation_phase.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/table_zone.dart';
@@ -80,7 +81,7 @@ void main() {
               detail:
                   'Sort out 1x Gold Mine, value 1 and put it back in the box.',
               tableZone: TableZone.box,
-              groupId: 'group_return_to_box',
+              groupId: 'group_jungle',
               quantity: 1,
               imageKey: 'jungle_gold_mine_v1',
               phase: PreparationPhase.boardSetup,
@@ -112,7 +113,7 @@ void main() {
           expect(goldMineStep.quantity, equals(2));
           // copyWith keeps the structured fields of the base removal step.
           expect(goldMineStep.imageKey, equals('jungle_gold_mine_v1'));
-          expect(goldMineStep.groupId, equals('group_return_to_box'));
+          expect(goldMineStep.groupId, equals('group_jungle'));
           expect(goldMineStep.tableZone, equals(TableZone.box));
         });
 
@@ -129,7 +130,7 @@ void main() {
           expect(v2Step, hasLength(1));
           expect(v2Step.first.detail, contains('1x Gold Mine, value 2'));
           expect(v2Step.first.imageKey, equals('jungle_gold_mine_v2'));
-          expect(v2Step.first.groupId, equals('group_return_to_box'));
+          expect(v2Step.first.groupId, equals('group_jungle'));
           expect(v2Step.first.tableZone, equals(TableZone.box));
           expect(v2Step.first.quantity, equals(1));
         });
@@ -174,7 +175,8 @@ void main() {
           },
         );
 
-        test('should add 0-0-0-4 worker step for 2 players', () {
+        test('should add a single generalized 0-0-0-4 worker step for 2 '
+            'players', () {
           final result = handler.modifyPreparationSteps(
             mockPlayers2,
             mockTiles,
@@ -182,18 +184,19 @@ void main() {
           );
 
           final worker0004Steps = result.where(
-            (s) => s.id.startsWith('setup_tree_of_life_add_0004_'),
+            (s) => s.id == 'setup_tree_of_life_add_0004',
           );
-          expect(worker0004Steps, hasLength(2));
-          for (final step in worker0004Steps) {
-            expect(step.label, equals('Add your 0-0-0-4 worker tile'));
-            expect(step.detail, contains('0-0-0-4 worker tile'));
-            expect(step.groupId, equals('group_player_${step.color}'));
-            expect(step.quantity, equals(1));
-          }
+          expect(worker0004Steps, hasLength(1));
+          final step = worker0004Steps.single;
+          expect(step.label, equals('Add your 0-0-0-4 worker tile'));
+          expect(step.detail, contains('0-0-0-4 worker tile'));
+          expect(step.actor, equals(PreparationActor.allPlayers));
+          expect(step.groupId, isNull);
+          expect(step.color, isNull);
+          expect(step.quantity, equals(1));
         });
 
-        test('should insert 0-0-0-4 steps before setup_shuffle_workers', () {
+        test('should insert 0-0-0-4 step before setup_shuffle_workers', () {
           final result = handler.modifyPreparationSteps(
             mockPlayers2,
             mockTiles,
@@ -203,16 +206,12 @@ void main() {
           final shuffleIndex = result.indexWhere(
             (s) => s.id == 'setup_shuffle_workers',
           );
-          final worker0004Indexes = <int>[];
-          for (int i = 0; i < result.length; i++) {
-            if (result[i].id.startsWith('setup_tree_of_life_add_0004_')) {
-              worker0004Indexes.add(i);
-            }
-          }
+          final worker0004Index = result.indexWhere(
+            (s) => s.id == 'setup_tree_of_life_add_0004',
+          );
 
-          for (final idx in worker0004Indexes) {
-            expect(idx, lessThan(shuffleIndex));
-          }
+          expect(worker0004Index, greaterThanOrEqualTo(0));
+          expect(worker0004Index, lessThan(shuffleIndex));
         });
       });
 
@@ -364,7 +363,7 @@ void main() {
           );
 
           expect(
-            result.any((s) => s.id.startsWith('setup_remove_worker_1_')),
+            result.any((s) => s.id.startsWith('setup_remove_worker_1')),
             isFalse,
           );
         });
@@ -447,12 +446,12 @@ void main() {
 
           // 2-1-0-1 removals should be gone
           expect(
-            result.any((s) => s.id.startsWith('setup_remove_worker_2_')),
+            result.any((s) => s.id.startsWith('setup_remove_worker_2')),
             isFalse,
           );
           // 1-1-1-1 removals should remain
           expect(
-            result.any((s) => s.id.startsWith('setup_remove_worker_1_')),
+            result.any((s) => s.id.startsWith('setup_remove_worker_1')),
             isTrue,
           );
         });

@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:companion_for_cacao/core/theme/app_colors.dart';
 import 'package:companion_for_cacao/core/theme/app_spacing.dart';
+import 'package:companion_for_cacao/core/theme/color_filters.dart';
 import 'package:companion_for_cacao/l10n/generated/app_localizations.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/custom_preset_entity.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/worker_selection_entity.dart';
@@ -204,7 +205,21 @@ class WorkerSelectorWidget extends ConsumerWidget {
         ),
         isTreeOfLifeActive: isTreeOfLifeActive,
         onApply: (selection) {
-          ref.read(gameSetupProvider.notifier).applyWorkerSelection(selection);
+          final reopened = ref
+              .read(gameSetupProvider.notifier)
+              .applyWorkerSelection(selection);
+          // Only warn when the change re-opened a step the user had ticked —
+          // otherwise they already know it's still pending. The SnackBar shows
+          // in both the checklist and the paged view, where the re-opened step
+          // may sit on another page.
+          if (reopened && context.mounted) {
+            final l10n = AppLocalizations.of(context);
+            ScaffoldMessenger.of(context)
+              ..hideCurrentSnackBar()
+              ..showSnackBar(
+                SnackBar(content: Text(l10n.workerSelectionResetNotice)),
+              );
+          }
         },
       ),
     );
@@ -329,15 +344,20 @@ class _BuildTile extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           SizedBox(
-            width: 34,
-            height: 34,
-            child: Image.asset(
-              _imagePath,
-              fit: BoxFit.contain,
-              errorBuilder: (_, _, _) => const Icon(
-                Icons.image_not_supported_outlined,
-                color: AppColors.grey,
-                size: 20,
+            width: 56,
+            height: 56,
+            // Worker tiles come in each player's colour; shown as a neutral
+            // (grayscale) reference, like the other "each player" steps.
+            child: ColorFiltered(
+              colorFilter: kGrayscaleFilter,
+              child: Image.asset(
+                _imagePath,
+                fit: BoxFit.contain,
+                errorBuilder: (_, _, _) => const Icon(
+                  Icons.image_not_supported_outlined,
+                  color: AppColors.grey,
+                  size: 28,
+                ),
               ),
             ),
           ),

@@ -8,15 +8,19 @@
 
   "villageBoardLabel": "Agafa el tauler del teu poblat",
   "villageBoardDetail": "Agafa el tauler de poblat de color {color} i posa-te'l al davant. Hi ha els teus magatzems i els remansos de l'aiguader.",
+  "villageBoardDetailAll": "Cada jugador agafa el tauler de poblat del seu color i se'l posa al davant. Hi ha els magatzems i els remansos de l'aiguader.",
 
   "waterCarrierLabel": "Posa l'aiguader al remans \"-10\"",
   "waterCarrierDetail": "Agafa l'aiguader de color {color} i col·loca'l al remans de valor \"-10\" del tauler del teu poblat.",
+  "waterCarrierDetailAll": "Cada jugador agafa l'aiguader del seu color i el col·loca al remans de valor \"-10\" del seu tauler.",
 
   "ownTilesLabel": "Agafa totes les teves rajoles de recol·lectors",
   "ownTilesDetail": "Reuneix totes les rajoles de recol·lectors amb el revers de color {color}; són la teva reserva personal per a tota la partida.",
+  "ownTilesDetailAll": "Cada jugador reuneix totes les rajoles de recol·lectors del seu color; són la seva reserva personal per a tota la partida.",
 
   "removeWorkerLabel": "Torna una rajola de recol·lectors {distribution} a la capsa",
   "removeWorkerDetail": "Busca entre les teves rajoles de recol·lectors una de les {distribution} i torna-la a la capsa del joc.",
+  "removeWorkerDetailAll": "Cada jugador busca entre les seves rajoles de recol·lectors una de les {distribution} i la torna a la capsa del joc.",
   "removeWorkerRationale": "Amb 3 o més jugadors cadascú usa menys rajoles de recol·lectors perquè la selva no s'esgoti abans que acabi la partida.",
 
   "shuffleWorkersLabel": "Barreja els recol·lectors i roba'n 3",
@@ -25,8 +29,11 @@
   "initialTilesMarketLabel": "Posa les 2 rajoles inicials en diagonal",
   "initialTilesMarketDetail": "De les rajoles de selva, busca la \"plantació simple\" i el \"mercat de preu de venda 2\" i posa-les cara amunt al mig de la taula, en diagonal l'una respecte de l'altra; són les rajoles inicials de la zona de joc.",
 
-  "junglePileLabel": "Munta la pila de la selva",
-  "junglePileDetail": "Barreja les rajoles de selva restants i posa-les cap per avall formant la pila de la selva.",
+  "jungleGroupTitle": "La selva",
+  "gatherJungleLabel": "Reuneix les rajoles de la selva",
+  "gatherJungleDetail": "Agafa totes les rajoles de selva del joc base; tot seguit les modificaràs (treure/afegir) i en formaràs la pila.",
+  "junglePileLabel": "Barreja i forma la pila",
+  "junglePileDetail": "Barreja totes les rajoles de la selva cara avall i forma la pila, al costat del tauler.",
 
   "jungleDisplayLabel": "Descobreix la selva explorada",
   "jungleDisplayDetail": "Roba les 2 rajoles superiors de la pila de la selva i posa-les cara amunt al costat de la pila: formen la selva explorada.",
@@ -61,6 +68,7 @@
 
   "mapTokensLabel": "Agafa 2 fitxes de mapa",
   "mapTokensDetail": "El jugador {color} agafa 2 fitxes de mapa.",
+  "mapTokensDetailAll": "Cada jugador agafa 2 fitxes de mapa.",
   "mapTokensSurplusLabel": "Torna les fitxes de mapa sobrants a la capsa",
   "mapTokensSurplusDetail": "Les fitxes de mapa sobrants es tornen a la capsa.",
   "mapBoardLabel": "Col·loca el tauler de mapes",
@@ -92,6 +100,7 @@
 
   "treeOfLife0004Label": "Afegeix la teva rajola de recol·lectors 0-0-0-4",
   "treeOfLife0004Detail": "Mòdul L'arbre de la vida: el jugador {color} agafa la seva rajola de recol·lectors 0-0-0-4 del mòdul Els nous recol·lectors i l'afegeix a les seves rajoles.",
+  "treeOfLife0004DetailAll": "Mòdul L'arbre de la vida: cada jugador agafa la rajola de recol·lectors 0-0-0-4 del seu color (del mòdul Els nous recol·lectors) i l'afegeix a les seves rajoles.",
   "treeOfLife0004Rationale": "Amb 2 jugadors L'arbre de la vida requereix la rajola 0-0-0-4 perquè tots els arbres es puguin collir del tot (reglament de Diamante).",
 
   "emperorLabel": "Col·loca la figura de l'ahau",
@@ -103,7 +112,7 @@
   "newWorkersBuildLabel": "Munta la pila de recol·lectors",
   "newWorkersBuildDetail": "Cada jugador agafa les rajoles indicades de cada origen.",
   "workerBuildFromBase": "Del joc base, agafa:",
-  "workerBuildFromExpansion": "De l'expansió, agafa:",
+  "workerBuildFromExpansion": "De l'expansió Diamante, agafa:",
 
   "returnToBoxTitle": "Torna a la capsa",
   "returnToBoxSubtitle": "Aquestes rajoles no s'usen en aquesta partida",
@@ -190,6 +199,7 @@
   "workerLockedTooltip": "Obligatòria amb L'arbre de la vida (2 jugadors)",
   "resetAction": "Restableix",
   "applyAction": "Aplica",
+  "workerSelectionResetNotice": "Has canviat els recol·lectors: torna a muntar la pila.",
   "saveAction": "Desa",
   "deleteAction": "Elimina",
   "savePresetTitle": "Desa com a ajust",

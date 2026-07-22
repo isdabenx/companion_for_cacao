@@ -73,18 +73,15 @@ void main() {
     expect(singlePlantationTiles.length, 1);
     expect(singlePlantationTiles.first.quantity, 2); // 4 - 2 = 2
 
-    // Check preparation steps
+    // Check preparation steps: a single generalized "each player takes the
+    // village board of their colour" step (no per-colour steps).
     expect(result.preparation.isNotEmpty, true);
+    final villageBoardSteps = result.preparation
+        .where((p) => p.id == 'setup_village_board')
+        .toList();
+    expect(villageBoardSteps.length, 1);
     expect(
-      result.preparation.any(
-        (p) => p.detail.contains('village board of color red'),
-      ),
-      true,
-    );
-    expect(
-      result.preparation.any(
-        (p) => p.detail.contains('village board of color white'),
-      ),
+      villageBoardSteps.first.detail.contains('village board of their colour'),
       true,
     );
   });

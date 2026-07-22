@@ -277,6 +277,17 @@ class _DetailedPreparationWidgetState
                                 final unit = units[index];
                                 switch (unit) {
                                   case GroupUnit(:final groupId, :final steps):
+                                    if (groupId == PreparationGroups.jungle) {
+                                      return PreparationGroupCard(
+                                        key: ValueKey(groupId),
+                                        groupId: groupId,
+                                        title: AppLocalizations.of(
+                                          context,
+                                        ).jungleGroupTitle,
+                                        steps: steps,
+                                        initiallyExpandedRows: isFirstRun,
+                                      );
+                                    }
                                     if (groupId ==
                                         PreparationGroups.returnToBox) {
                                       return ReturnToBoxCard(

@@ -7,6 +7,7 @@
   "colorYellow": "yellow",
 
   "villageBoardLabel": "Take your village board",
+  "villageBoardDetailAll": "Each player takes the village board of their colour and places it in front of them. Their worker draw pile and water carrier track live there.",
   "villageBoardDetail": "Take the village board of color {color} and place it in front of you. Your worker draw pile and water carrier track live there.",
   "@villageBoardDetail": {
     "placeholders": {
@@ -15,6 +16,7 @@
   },
 
   "waterCarrierLabel": "Put your water carrier on the \"-10\" field",
+  "waterCarrierDetailAll": "Each player takes the water carrier of their colour and places it on the \"-10\" water field of their village board.",
   "waterCarrierDetail": "Take the water carrier of color {color} and place it on the water field with the value \"-10\" of your village board.",
   "@waterCarrierDetail": {
     "placeholders": {
@@ -23,6 +25,7 @@
   },
 
   "ownTilesLabel": "Take all your worker tiles",
+  "ownTilesDetailAll": "Each player gathers all worker tiles with their colour on the back; they are their personal supply for the whole game.",
   "ownTilesDetail": "Gather all worker tiles with the {color} back; they are your personal supply for the whole game.",
   "@ownTilesDetail": {
     "placeholders": {
@@ -42,6 +45,12 @@
       "distribution": { "type": "String" }
     }
   },
+  "removeWorkerDetailAll": "Each player searches their worker tiles for one of the {distribution} tiles and returns it to the game box.",
+  "@removeWorkerDetailAll": {
+    "placeholders": {
+      "distribution": { "type": "String" }
+    }
+  },
   "removeWorkerRationale": "With 3 or more players each player uses fewer worker tiles so the jungle does not run out before the game ends.",
 
   "shuffleWorkersLabel": "Shuffle your workers and draw 3",
@@ -50,8 +59,11 @@
   "initialTilesMarketLabel": "Place the 2 starting tiles diagonally",
   "initialTilesMarketDetail": "From the jungle tiles, get \"single plantation\" and \"market, selling price 2\" and place them face up in the middle of the table diagonally to one another; they form the starting tiles of the playing area.",
 
-  "junglePileLabel": "Build the jungle draw pile",
-  "junglePileDetail": "Mix the remaining jungle tiles and lay them out as a face-down jungle draw pile.",
+  "jungleGroupTitle": "The jungle",
+  "gatherJungleLabel": "Gather the jungle tiles",
+  "gatherJungleDetail": "Take all the base-game jungle tiles; you'll then modify them (remove/add) and form the pile.",
+  "junglePileLabel": "Shuffle and form the pile",
+  "junglePileDetail": "Shuffle all the jungle tiles face-down and form the pile, next to the board.",
 
   "jungleDisplayLabel": "Reveal 2 jungle tiles",
   "jungleDisplayDetail": "Draw the 2 top jungle tiles from the jungle draw pile and place them next to the pile as a face-up jungle display.",
@@ -125,6 +137,7 @@
       "color": { "type": "String" }
     }
   },
+  "mapTokensDetailAll": "Each player takes 2 map tiles.",
   "mapTokensSurplusLabel": "Return the surplus map tiles to the box",
   "mapTokensSurplusDetail": "Put the surplus map tiles back into the box.",
   "mapBoardLabel": "Place the map board",
@@ -156,6 +169,7 @@
 
   "treeOfLife0004Label": "Add your 0-0-0-4 worker tile",
   "treeOfLife0004Detail": "Tree of Life Module: Player {color} takes their 0-0-0-4 worker tile from the New Workers Module and adds it to their worker tiles.",
+  "treeOfLife0004DetailAll": "Tree of Life Module: each player takes the 0-0-0-4 worker tile of their colour (from the New Workers Module) and adds it to their worker tiles.",
   "@treeOfLife0004Detail": {
     "placeholders": {
       "color": { "type": "String" }
@@ -172,7 +186,7 @@
   "newWorkersBuildLabel": "Build the worker pile",
   "newWorkersBuildDetail": "Each player takes the tiles shown from each source.",
   "workerBuildFromBase": "From the base game, take:",
-  "workerBuildFromExpansion": "From the expansion, take:",
+  "workerBuildFromExpansion": "From the Diamante expansion, take:",
 
   "returnToBoxTitle": "Return to the box",
   "returnToBoxSubtitle": "These tiles are not used in this game",
@@ -296,6 +310,7 @@
   "workerLockedTooltip": "Required by Tree of Life (2 players)",
   "resetAction": "Reset",
   "applyAction": "Apply",
+  "workerSelectionResetNotice": "You changed the workers: build the pile again.",
   "saveAction": "Save",
   "deleteAction": "Delete",
   "savePresetTitle": "Save as preset",

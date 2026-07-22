@@ -26,6 +26,7 @@ class PreparationEntity {
     this.isCompleted = false,
     this.color,
     this.variables,
+    this.colorReferenceImage = false,
   });
 
   final String id;
@@ -61,6 +62,11 @@ class PreparationEntity {
   final String? color;
   final Map<String, String>? variables;
 
+  /// True when [imageKey] shows a component that comes in each player's
+  /// colour, displayed as a neutral (grayscale) reference on an all-players
+  /// step. Neutral images (e.g. map tokens) keep it false and stay in colour.
+  final bool colorReferenceImage;
+
   PreparationEntity copyWith({
     String? id,
     String? label,
@@ -75,6 +81,7 @@ class PreparationEntity {
     bool? isCompleted,
     String? color,
     Map<String, String>? variables,
+    bool? colorReferenceImage,
   }) {
     return PreparationEntity(
       id: id ?? this.id,
@@ -90,6 +97,7 @@ class PreparationEntity {
       isCompleted: isCompleted ?? this.isCompleted,
       color: color ?? this.color,
       variables: variables ?? this.variables,
+      colorReferenceImage: colorReferenceImage ?? this.colorReferenceImage,
     );
   }
 
@@ -110,6 +118,7 @@ class PreparationEntity {
         other.imageKey == imageKey &&
         other.isCompleted == isCompleted &&
         other.color == color &&
+        other.colorReferenceImage == colorReferenceImage &&
         mapEquals(other.variables, variables);
   }
 
@@ -127,6 +136,7 @@ class PreparationEntity {
     imageKey,
     isCompleted,
     color,
+    colorReferenceImage,
     variables == null ? null : Object.hashAll(variables!.entries),
   );
 }

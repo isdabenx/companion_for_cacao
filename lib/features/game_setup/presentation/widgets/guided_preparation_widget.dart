@@ -88,6 +88,16 @@ class _GuidedPreparationWidgetState
   }) {
     switch (unit) {
       case GroupUnit(:final groupId, :final steps):
+        if (groupId == PreparationGroups.jungle) {
+          return PreparationGroupCard(
+            key: ValueKey(groupId),
+            groupId: groupId,
+            title: AppLocalizations.of(context).jungleGroupTitle,
+            steps: steps,
+            // The step details are the point of a guided page.
+            initiallyExpandedRows: true,
+          );
+        }
         if (groupId == PreparationGroups.returnToBox) {
           return ReturnToBoxCard(
             key: ValueKey(groupId),

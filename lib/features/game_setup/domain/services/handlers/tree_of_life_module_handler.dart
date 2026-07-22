@@ -176,41 +176,44 @@ class TreeOfLifeModuleHandler
       );
       if (shuffleIndex == -1) shuffleIndex = preparation.length;
 
-      final newSteps = players.map((player) {
-        final workerTile = tiles
-            .where(
-              (t) => t.id.contains('0-0-0-4') && t.color?.name == player.color,
-            )
-            .firstOrNull;
-        return PreparationEntity(
-          id: 'setup_tree_of_life_add_0004_${player.color}',
+      // Single generalized "each player adds their own 0-0-0-4 tile" step
+      // (consistent with the base per-player steps). The tile image is shown
+      // in grayscale by the UI, so any colour's tile works as the reference.
+      final workerTile = tiles
+          .where((t) => t.id.contains('0-0-0-4'))
+          .firstOrNull;
+      preparation.insert(
+        shuffleIndex,
+        PreparationEntity(
+          id: 'setup_tree_of_life_add_0004',
           label: copy.treeOfLife0004Label,
-          detail: copy.treeOfLife0004Detail(player.color),
+          detail: copy.treeOfLife0004DetailAll,
           rationale: copy.treeOfLife0004Rationale,
-          actor: PreparationActor.player,
+          actor: PreparationActor.allPlayers,
           tableZone: TableZone.playerArea,
-          groupId: PreparationGroups.player(player.color),
           quantity: 1,
-          color: player.color,
           imageKey: workerTile != null
               ? 'tile_${workerTile.filenameImage}'
               : null,
+          colorReferenceImage: true,
           phase: PreparationPhase.playerSetup,
-        );
-      }).toList();
-
-      preparation.insertAll(shuffleIndex, newSteps);
+        ),
+      );
     } else if (players.length == 3) {
       // For 3 players, base game says remove 1-1-1-1. Tree of Life says remove NONE.
       // So we delete the removal steps completely.
       preparation.removeWhere(
-        (step) => step.id.startsWith('setup_remove_worker_1_'),
+        (step) =>
+            step.id == 'setup_remove_worker_1' ||
+            step.id.startsWith('setup_remove_worker_1_'),
       );
     } else if (players.length == 4) {
       // For 4 players, base game says remove 1-1-1-1 AND 2-1-0-1. Tree of Life says remove ONLY 1-1-1-1.
       // So we delete the 2-1-0-1 removal steps.
       preparation.removeWhere(
-        (step) => step.id.startsWith('setup_remove_worker_2_'),
+        (step) =>
+            step.id == 'setup_remove_worker_2' ||
+            step.id.startsWith('setup_remove_worker_2_'),
       );
     }
 
