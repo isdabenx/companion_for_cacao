@@ -1,6 +1,7 @@
 import 'package:companion_for_cacao/core/theme/app_colors.dart';
 import 'package:companion_for_cacao/core/theme/app_text_styles.dart';
 import 'package:companion_for_cacao/features/tile/presentation/providers/tile_settings_notifier.dart';
+import 'package:companion_for_cacao/shared/widgets/async_error_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -34,7 +35,7 @@ class SettingsItemWidget extends ConsumerWidget {
             .toggleSettings(settingsName),
       ),
       loading: () => const Center(child: CircularProgressIndicator()),
-      error: (error, _) => Center(child: Text('Error: $error')),
+      error: (error, _) => AsyncErrorWidget(error: error),
     );
   }
 }
