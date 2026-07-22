@@ -9,6 +9,7 @@ import 'package:companion_for_cacao/features/game_setup/domain/entities/game_set
 import 'package:companion_for_cacao/features/tile/tile_public_api.dart';
 import 'package:companion_for_cacao/l10n/generated/app_localizations.dart';
 import 'package:companion_for_cacao/shared/utils/catalog_l10n.dart';
+import 'package:companion_for_cacao/shared/utils/player_display_l10n.dart';
 import 'package:companion_for_cacao/shared/widgets/circle_badge.dart';
 import 'package:companion_for_cacao/shared/widgets/container_full_style_widget.dart';
 import 'package:companion_for_cacao/features/game_setup/presentation/widgets/responsive_grid_builder.dart';
@@ -145,7 +146,8 @@ class _DetailedSummaryWidgetState extends ConsumerState<DetailedSummaryWidget> {
         return _PlayerRow(
           key: ValueKey('player_${player.color}'),
           color: AppColors.findColorByName(player.color),
-          name: player.name,
+          // Unnamed players show their color, like the score calculator.
+          name: player.localizedDisplayName(AppLocalizations.of(context)),
           position: index + 1,
         );
       },

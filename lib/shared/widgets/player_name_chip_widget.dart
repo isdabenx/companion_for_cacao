@@ -117,9 +117,12 @@ class _PlayerNameChipWidgetState extends State<PlayerNameChipWidget> {
             ),
           ),
           AppSpacing.verticalS,
-          // Name field or placeholder
+          // Name field or placeholder. Fixed height so the chip is exactly
+          // the same size selected or not — no growth (score picker) and no
+          // overflow (game-setup grid) when a color is picked.
           SizedBox(
             width: 80,
+            height: 38,
             child: widget.isSelected
                 ? TextField(
                     controller: _controller,
@@ -148,13 +151,15 @@ class _PlayerNameChipWidgetState extends State<PlayerNameChipWidget> {
                       ),
                     ),
                   )
-                : Text(
-                    localizedColorName(
-                      AppLocalizations.of(context),
-                      widget.colorString,
-                    ).capitalized,
-                    textAlign: TextAlign.center,
-                    style: AppTextStyles.colorName,
+                : Center(
+                    child: Text(
+                      localizedColorName(
+                        AppLocalizations.of(context),
+                        widget.colorString,
+                      ).capitalized,
+                      textAlign: TextAlign.center,
+                      style: AppTextStyles.colorName,
+                    ),
                   ),
           ),
         ],

@@ -25,9 +25,9 @@ class PrepareGameUseCase {
     final modules = currentSetup.modules
         .where((m) => currentSetup.expansions.any((e) => e.id == m.boardgameId))
         .toList();
-    final players = currentSetup.players
-        .where((p) => p.isSelected && p.name.isNotEmpty)
-        .toList();
+    // A name is optional — a selected player without one is shown by their
+    // color (PlayerEntity.displayName), matching the score calculator.
+    final players = currentSetup.players.where((p) => p.isSelected).toList();
 
     final playerColors = players.map((p) => p.color).toSet();
     final filteredColors = AppColors.colors.keys

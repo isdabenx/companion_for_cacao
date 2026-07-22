@@ -28,42 +28,40 @@ class StartButtonWidget extends ConsumerWidget {
     }
   }
 
-  void _onClearSetupPressed(BuildContext context, WidgetRef ref) {
-    ref.read(gameSetupProvider.notifier).clearAll();
-  }
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final isStartButtonEnabled = ref.watch(
+    final l10n = AppLocalizations.of(context);
+
+    // Two selected players are enough — a name is optional. Unnamed players
+    // fall back to their color (PlayerEntity.displayName), matching how the
+    // score calculator lets you proceed without typing names.
+    final playersReady = ref.watch(
       gameSetupProvider.select(
-        (s) =>
-            (s.value?.players
-                    .where((p) => p.isSelected && p.name.isNotEmpty)
-                    .length ??
-                0) >=
-            2,
+        (s) => (s.value?.players.where((p) => p.isSelected).length ?? 0) >= 2,
       ),
+    );
+
+    // A selected expansion with no module picked adds nothing to the game, so
+    // it blocks the start and we say why right here (the card also flags it).
+    final hasIncompleteExpansion = ref.watch(
+      gameSetupProvider.select((s) => s.value?.hasIncompleteExpansion ?? false),
     );
 
     final isStarted = ref.watch(
       gameSetupProvider.select((s) => s.value?.isStarted ?? false),
     );
 
-    final hasAnyInput = ref.watch(
-      gameSetupProvider.select((s) {
-        final state = s.value;
-        if (state == null) return false;
-        // Check if any player has a name
-        final hasPlayers = state.players.any((p) => p.name.isNotEmpty);
-        // Check if any expansions beyond the base game are selected
-        final hasExpansions = state.expansions.length > 1;
-        return hasPlayers || hasExpansions;
-      }),
-    );
+    final isStartButtonEnabled = playersReady && !hasIncompleteExpansion;
 
-    final isLandscape =
-        MediaQuery.sizeOf(context).width > MediaQuery.sizeOf(context).height;
-    final isHorizontal = isLandscape && hasAnyInput;
+    // A disabled button always explains itself. Players come first (the more
+    // fundamental blocker); once they're in place we surface the expansion
+    // gap. The reason line stays visible even when its section (players grid
+    // or the flagged expansion card) is scrolled out of view.
+    final String? disabledReason = !playersReady
+        ? l10n.playersNeededHint
+        : hasIncompleteExpansion
+        ? l10n.expansionNeedsModuleHint
+        : null;
 
     return Padding(
       padding: const EdgeInsets.fromLTRB(
@@ -72,80 +70,49 @@ class StartButtonWidget extends ConsumerWidget {
         AppSpacing.l,
         AppSpacing.s,
       ),
-      child: Flex(
-        direction: isHorizontal ? Axis.horizontal : Axis.vertical,
+      child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          isHorizontal
-              ? Expanded(
-                  flex: 2,
-                  child: _buildStartButton(
-                    context,
-                    ref,
-                    isStartButtonEnabled: isStartButtonEnabled,
-                    isStarted: isStarted,
-                  ),
-                )
-              : SizedBox(
-                  width: double.infinity,
-                  child: _buildStartButton(
-                    context,
-                    ref,
-                    isStartButtonEnabled: isStartButtonEnabled,
-                    isStarted: isStarted,
+          if (disabledReason != null) ...[
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Icon(
+                  Icons.warning_amber_rounded,
+                  size: 18,
+                  color: AppColors.warning,
+                ),
+                const SizedBox(width: AppSpacing.xs),
+                Flexible(
+                  child: Text(
+                    disabledReason,
+                    style: AppTextStyles.sectionSublabel.copyWith(
+                      color: AppColors.warning,
+                      fontWeight: FontWeight.w700,
+                    ),
                   ),
                 ),
-          if (hasAnyInput) ...[
-            SizedBox(
-              width: isHorizontal ? AppSpacing.s : 0,
-              height: isHorizontal ? 0 : AppSpacing.s,
+              ],
             ),
-            isHorizontal
-                ? Expanded(child: _buildClearButton(context, ref))
-                : SizedBox(
-                    width: double.infinity,
-                    child: _buildClearButton(context, ref),
-                  ),
+            AppSpacing.verticalS,
           ],
+          SizedBox(
+            width: double.infinity,
+            child: FilledButton(
+              onPressed: isStartButtonEnabled
+                  ? () => isStarted
+                        ? _onResumeButtonPressed(context, ref)
+                        : _onStartButtonPressed(context, ref)
+                  : null,
+              child: Text(
+                isStarted ? l10n.resumeGame : l10n.startGame,
+                style: AppTextStyles.boardgameTitlePlain.copyWith(
+                  color: AppColors.white,
+                ),
+              ),
+            ),
+          ),
         ],
-      ),
-    );
-  }
-
-  Widget _buildStartButton(
-    BuildContext context,
-    WidgetRef ref, {
-    required bool isStartButtonEnabled,
-    required bool isStarted,
-  }) {
-    return FilledButton(
-      onPressed: isStartButtonEnabled
-          ? () => isStarted
-                ? _onResumeButtonPressed(context, ref)
-                : _onStartButtonPressed(context, ref)
-          : null,
-      child: Text(
-        isStarted
-            ? AppLocalizations.of(context).resumeGame
-            : AppLocalizations.of(context).startGame,
-        style: AppTextStyles.boardgameTitlePlain.copyWith(
-          color: AppColors.white,
-        ),
-      ),
-    );
-  }
-
-  Widget _buildClearButton(BuildContext context, WidgetRef ref) {
-    return OutlinedButton.icon(
-      onPressed: () => _onClearSetupPressed(context, ref),
-      icon: const Icon(Icons.clear_all, size: 20),
-      label: Text(
-        AppLocalizations.of(context).clearSetup,
-        style: AppTextStyles.boardgameTitlePlain.copyWith(color: AppColors.red),
-      ),
-      style: OutlinedButton.styleFrom(
-        side: const BorderSide(color: AppColors.red),
-        foregroundColor: AppColors.red,
       ),
     );
   }

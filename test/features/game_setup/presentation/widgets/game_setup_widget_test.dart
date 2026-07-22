@@ -26,11 +26,12 @@ void main() {
       WidgetTester tester, {
       bool isStarted = false,
       GameSetupStateEntity? state,
+      List<BoardgameEntity>? boardgames,
     }) async {
       final container = ProviderContainer(
         overrides: [
           boardgameProvider.overrideWith(
-            () => FakeBoardgameNotifier(testBoardgames),
+            () => FakeBoardgameNotifier(boardgames ?? testBoardgames),
           ),
           gameSetupProvider.overrideWith(
             () => FakeGameSetupNotifier(
@@ -54,15 +55,24 @@ void main() {
       await tester.pumpAndSettle();
     }
 
-    testWidgets('shows all three sections at once on a single page', (
+    testWidgets('shows the players and expansions+modules sections', (
       tester,
     ) async {
+      // Phone-shaped logical viewport (dpr 1) so the player cells get a
+      // realistic width and the lazy ListView builds every section — the
+      // 2×2 player grid is taller than a single row.
+      tester.view.physicalSize = const Size(400, 1400);
+      tester.view.devicePixelRatio = 1.0;
+      addTearDown(() {
+        tester.view.resetPhysicalSize();
+        tester.view.resetDevicePixelRatio();
+      });
       await pump(tester);
 
       expect(find.byType(Stepper), findsNothing);
       expect(find.text('Players'), findsOneWidget);
-      expect(find.text('Expansions'), findsOneWidget);
-      expect(find.text('Modules'), findsOneWidget);
+      // Expansions and modules are now one combined section.
+      expect(find.text('Expansions and modules'), findsOneWidget);
     });
 
     testWidgets('should display Start Game button', (tester) async {
@@ -72,11 +82,15 @@ void main() {
       expect(find.byType(FilledButton), findsOneWidget);
     });
 
-    testWidgets('groups modules under the expansion they come from', (
+    testWidgets('a selected expansion opens to reveal its modules', (
       tester,
     ) async {
-      await tester.binding.setSurfaceSize(const Size(800, 1800));
-      addTearDown(() => tester.binding.setSurfaceSize(null));
+      tester.view.physicalSize = const Size(430, 1800);
+      tester.view.devicePixelRatio = 1.0;
+      addTearDown(() {
+        tester.view.resetPhysicalSize();
+        tester.view.resetDevicePixelRatio();
+      });
 
       final chocolatl = BoardgameEntity(
         id: 2,
@@ -85,14 +99,16 @@ void main() {
         filenameImage: '',
         modules: [ModuleEntity(id: 4, name: 'Huts', description: '')],
       );
+      // The expansion is both in the catalog (so its card renders) and in the
+      // setup state (so the card is selected → expanded, showing its modules).
       await pump(
         tester,
+        boardgames: [...testBoardgames, chocolatl],
         state: GameSetupStateEntity(players: [], expansions: [chocolatl]),
       );
 
-      // The expansion name (localized, English here) heads its module group,
-      // and the module resolves by stable id ("Hut Module"), not by the
-      // seeded name.
+      // The card header shows the localized expansion name, and its opened
+      // body reveals the module (resolved by stable id: "Hut Module").
       expect(find.text('Cacao: Chocolatl'), findsOneWidget);
       expect(find.text('Hut Module'), findsOneWidget);
     });

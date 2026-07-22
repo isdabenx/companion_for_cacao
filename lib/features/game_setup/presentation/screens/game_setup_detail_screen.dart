@@ -1,11 +1,10 @@
 import 'package:companion_for_cacao/config/routes/app_routes.dart';
-import 'package:companion_for_cacao/core/theme/app_colors.dart';
 import 'package:companion_for_cacao/core/theme/app_spacing.dart';
-import 'package:companion_for_cacao/core/theme/app_text_styles.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/game_setup_state_entity.dart';
 import 'package:companion_for_cacao/features/game_setup/presentation/providers/game_setup_notifier.dart';
 import 'package:companion_for_cacao/features/game_setup/presentation/widgets/detailed_summary_widget.dart';
 import 'package:companion_for_cacao/l10n/generated/app_localizations.dart';
+import 'package:companion_for_cacao/shared/widgets/action_card_widget.dart';
 import 'package:companion_for_cacao/shared/widgets/custom_scaffold_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -30,10 +29,10 @@ class GameSetupDetailScreen extends ConsumerWidget {
         padding: const EdgeInsets.symmetric(vertical: AppSpacing.xs),
         children: [
           DetailedSummaryWidget(gameSetup: liveSetup),
-          AppSpacing.verticalXl,
+          AppSpacing.verticalL,
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: AppSpacing.s),
-            child: _DashboardCard(
+            padding: const EdgeInsets.symmetric(horizontal: AppSpacing.m),
+            child: ActionCardWidget(
               title: AppLocalizations.of(context).titlePreparation,
               icon: Icons.list_alt,
               onTap: () => context.push(
@@ -42,20 +41,20 @@ class GameSetupDetailScreen extends ConsumerWidget {
               ),
             ),
           ),
-          AppSpacing.verticalL,
+          AppSpacing.verticalM,
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: AppSpacing.s),
-            child: _DashboardCard(
+            padding: const EdgeInsets.symmetric(horizontal: AppSpacing.m),
+            child: ActionCardWidget(
               title: AppLocalizations.of(context).tilesInPlay,
               icon: Icons.grid_view,
               onTap: () =>
                   context.push(AppRoutes.gameSetupTiles, extra: liveSetup),
             ),
           ),
-          AppSpacing.verticalL,
+          AppSpacing.verticalM,
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: AppSpacing.s),
-            child: _DashboardCard(
+            padding: const EdgeInsets.symmetric(horizontal: AppSpacing.m),
+            child: ActionCardWidget(
               title: AppLocalizations.of(context).scoreCalculator,
               icon: Icons.calculate,
               // Prefilled from this game: starting a game resets any older
@@ -65,53 +64,6 @@ class GameSetupDetailScreen extends ConsumerWidget {
           ),
           // Add more dashboard items here in the future
         ],
-      ),
-    );
-  }
-}
-
-class _DashboardCard extends StatelessWidget {
-  const _DashboardCard({
-    required this.title,
-    required this.icon,
-    required this.onTap,
-  });
-
-  final String title;
-  final IconData icon;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      elevation: 4,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.all(Radius.circular(16)),
-      ),
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(16),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(
-            vertical: AppSpacing.xl,
-            horizontal: AppSpacing.xl,
-          ),
-          child: Row(
-            children: [
-              Icon(icon, size: 32, color: AppColors.greenDarker),
-              AppSpacing.horizontalXl,
-              Expanded(
-                child: Text(
-                  title,
-                  style: AppTextStyles.boardgameTitlePlain.copyWith(
-                    fontSize: 20,
-                  ),
-                ),
-              ),
-              const Icon(Icons.chevron_right, color: AppColors.brown),
-            ],
-          ),
-        ),
       ),
     );
   }

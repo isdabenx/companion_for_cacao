@@ -1,3 +1,5 @@
+import 'package:companion_for_cacao/core/domain/entities/boardgame_entity.dart';
+import 'package:companion_for_cacao/core/domain/entities/module_entity.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/game_setup_state_entity.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/player_entity.dart';
 import 'package:companion_for_cacao/features/game_setup/presentation/widgets/start_button_widget.dart';
@@ -105,6 +107,39 @@ void main() {
       expect(button.onPressed, isNotNull);
     });
 
+    testWidgets('is enabled with 2 selected players even without names', (
+      tester,
+    ) async {
+      final container = ProviderContainer(
+        overrides: [
+          gameSetupProvider.overrideWith(
+            () => FakeGameSetupNotifier(
+              players: [
+                FakePlayer(name: '', color: 'red', isSelected: true),
+                FakePlayer(name: '', color: 'yellow', isSelected: true),
+              ],
+            ),
+          ),
+        ],
+      );
+
+      await tester.pumpWidget(
+        UncontrolledProviderScope(
+          container: container,
+          child: const MaterialApp(
+            localizationsDelegates: AppLocalizations.localizationsDelegates,
+            supportedLocales: AppLocalizations.supportedLocales,
+            home: Scaffold(body: StartButtonWidget()),
+          ),
+        ),
+      );
+
+      await tester.pumpAndSettle();
+
+      final button = tester.widget<FilledButton>(find.byType(FilledButton));
+      expect(button.onPressed, isNotNull);
+    });
+
     testWidgets('should display Start Game text when not started', (
       tester,
     ) async {
@@ -171,36 +206,9 @@ void main() {
       expect(find.text('Start Game'), findsNothing);
     });
 
-    testWidgets('should NOT show Clear Setup button when form is empty', (
-      tester,
-    ) async {
-      final container = ProviderContainer(
-        overrides: [
-          gameSetupProvider.overrideWith(
-            () => FakeGameSetupNotifier(players: []),
-          ),
-        ],
-      );
-
-      await tester.pumpWidget(
-        UncontrolledProviderScope(
-          container: container,
-          child: const MaterialApp(
-            localizationsDelegates: AppLocalizations.localizationsDelegates,
-            supportedLocales: AppLocalizations.supportedLocales,
-            home: Scaffold(body: StartButtonWidget()),
-          ),
-        ),
-      );
-
-      await tester.pumpAndSettle();
-
-      expect(find.text('Clear Setup'), findsNothing);
-    });
-
-    testWidgets('should show Clear Setup button when a player is entered', (
-      tester,
-    ) async {
+    testWidgets('does not render the clear control itself', (tester) async {
+      // Clear moved to the game-setup app bar; the button widget is now just
+      // the start/resume action.
       final container = ProviderContainer(
         overrides: [
           gameSetupProvider.overrideWith(
@@ -226,18 +234,20 @@ void main() {
 
       await tester.pumpAndSettle();
 
-      expect(find.text('Clear Setup'), findsOneWidget);
+      expect(find.text('Clear Setup'), findsNothing);
     });
 
-    testWidgets('should call clearAll when Clear Setup is tapped', (
+    testWidgets('surfaces the players hint when fewer than 2 are selected', (
       tester,
     ) async {
-      final notifier = FakeGameSetupNotifier(
-        players: [FakePlayer(name: 'Player 1', color: 'red', isSelected: true)],
-      );
-
       final container = ProviderContainer(
-        overrides: [gameSetupProvider.overrideWith(() => notifier)],
+        overrides: [
+          gameSetupProvider.overrideWith(
+            () => FakeGameSetupNotifier(
+              players: [FakePlayer(name: '', color: 'white', isSelected: true)],
+            ),
+          ),
+        ],
       );
 
       await tester.pumpWidget(
@@ -253,12 +263,96 @@ void main() {
 
       await tester.pumpAndSettle();
 
-      // Tap the Clear Setup button
-      await tester.tap(find.text('Clear Setup'));
+      final button = tester.widget<FilledButton>(find.byType(FilledButton));
+      expect(button.onPressed, isNull);
+      expect(find.text('Add at least 2 players'), findsOneWidget);
+    });
+
+    testWidgets('is disabled when a selected expansion has no modules', (
+      tester,
+    ) async {
+      final chocolatl = BoardgameEntity(
+        id: 2,
+        name: 'Cacao: Chocolatl',
+        description: '',
+        filenameImage: '',
+        modules: [ModuleEntity(id: 4, name: 'Huts', description: '')],
+      );
+      final container = ProviderContainer(
+        overrides: [
+          gameSetupProvider.overrideWith(
+            () => FakeGameSetupNotifier(
+              players: [
+                FakePlayer(name: '', color: 'white', isSelected: true),
+                FakePlayer(name: '', color: 'red', isSelected: true),
+              ],
+              expansions: [chocolatl],
+            ),
+          ),
+        ],
+      );
+
+      await tester.pumpWidget(
+        UncontrolledProviderScope(
+          container: container,
+          child: const MaterialApp(
+            localizationsDelegates: AppLocalizations.localizationsDelegates,
+            supportedLocales: AppLocalizations.supportedLocales,
+            home: Scaffold(body: StartButtonWidget()),
+          ),
+        ),
+      );
+
       await tester.pumpAndSettle();
 
-      // Verify that clearAll was called
-      expect(notifier.clearAllCalled, isTrue);
+      final button = tester.widget<FilledButton>(find.byType(FilledButton));
+      expect(button.onPressed, isNull);
+      // The reason is surfaced near the button.
+      expect(find.text('An expansion has no modules selected'), findsOneWidget);
+    });
+
+    testWidgets('is enabled once the selected expansion has a module', (
+      tester,
+    ) async {
+      final huts = ModuleEntity(id: 4, name: 'Huts', description: '');
+      final chocolatl = BoardgameEntity(
+        id: 2,
+        name: 'Cacao: Chocolatl',
+        description: '',
+        filenameImage: '',
+        modules: [huts],
+      );
+      final container = ProviderContainer(
+        overrides: [
+          gameSetupProvider.overrideWith(
+            () => FakeGameSetupNotifier(
+              players: [
+                FakePlayer(name: '', color: 'white', isSelected: true),
+                FakePlayer(name: '', color: 'red', isSelected: true),
+              ],
+              expansions: [chocolatl],
+              modules: [huts],
+            ),
+          ),
+        ],
+      );
+
+      await tester.pumpWidget(
+        UncontrolledProviderScope(
+          container: container,
+          child: const MaterialApp(
+            localizationsDelegates: AppLocalizations.localizationsDelegates,
+            supportedLocales: AppLocalizations.supportedLocales,
+            home: Scaffold(body: StartButtonWidget()),
+          ),
+        ),
+      );
+
+      await tester.pumpAndSettle();
+
+      final button = tester.widget<FilledButton>(find.byType(FilledButton));
+      expect(button.onPressed, isNotNull);
+      expect(find.text('An expansion has no modules selected'), findsNothing);
     });
   });
 }
@@ -278,11 +372,17 @@ class FakePlayer {
 // Test fake: public fields configure the fixture and spy on calls.
 // ignore_for_file: riverpod_lint/avoid_public_notifier_properties
 class FakeGameSetupNotifier extends GameSetupNotifier {
-  FakeGameSetupNotifier({required this.players, this.isStarted = false});
+  FakeGameSetupNotifier({
+    required this.players,
+    this.isStarted = false,
+    this.expansions = const [],
+    this.modules = const [],
+  });
 
   final List<FakePlayer> players;
   final bool isStarted;
-  bool clearAllCalled = false;
+  final List<BoardgameEntity> expansions;
+  final List<ModuleEntity> modules;
 
   @override
   Future<GameSetupStateEntity> build() async {
@@ -297,11 +397,8 @@ class FakeGameSetupNotifier extends GameSetupNotifier {
           )
           .toList(),
       isStarted: isStarted,
+      expansions: expansions,
+      modules: modules,
     );
-  }
-
-  @override
-  Future<void> clearAll() async {
-    clearAllCalled = true;
   }
 }

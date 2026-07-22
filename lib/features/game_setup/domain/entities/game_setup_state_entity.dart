@@ -41,6 +41,17 @@ class GameSetupStateEntity {
   /// (Chocolatl 4 + Diamante 4).
   static const int totalModuleCount = 8;
 
+  /// Selected expansions that expose modules but have none picked yet.
+  /// An expansion is nothing but its modules, so selecting one without any
+  /// module adds nothing to the game — we treat it as an incomplete choice.
+  List<BoardgameEntity> get expansionsWithoutModules => expansions
+      .where((e) => e.modules.isNotEmpty)
+      .where((e) => !modules.any((m) => e.modules.any((em) => em.id == m.id)))
+      .toList();
+
+  /// True when at least one selected expansion has no module picked.
+  bool get hasIncompleteExpansion => expansionsWithoutModules.isNotEmpty;
+
   /// Big Game rule (single source of truth): requires ALL modules
   /// selected and 3–4 players.
   bool get canEnableBigGame =>
