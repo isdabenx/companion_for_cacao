@@ -1,5 +1,6 @@
 import 'package:companion_for_cacao/features/home/presentation/screens/home_screen.dart';
 import 'package:companion_for_cacao/l10n/generated/app_localizations.dart';
+import 'package:companion_for_cacao/shared/widgets/action_card_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -98,9 +99,7 @@ void main() {
       await tester.pump(const Duration(milliseconds: 100));
     }
 
-    testWidgets('renders title, sections, and contact information', (
-      tester,
-    ) async {
+    testWidgets('renders the hero and the main action cards', (tester) async {
       await pumpHomeScreen(tester);
 
       expect(
@@ -108,25 +107,37 @@ void main() {
         findsOneWidget,
       );
       expect(find.text('Companion for'), findsOneWidget);
-      expect(find.text('Completed Features'), findsOneWidget);
-      expect(find.text('Pending Features'), findsOneWidget);
-      expect(find.text('Contact Me'), findsOneWidget);
-      expect(find.text('Visit our GitHub repository:'), findsOneWidget);
+      // The launchpad shows the four main destinations as action cards.
+      // (Scoped to the cards: the same labels also live in the drawer menu.)
       expect(
-        find.text('https://github.com/isdabenx/companion_for_cacao'),
+        find.widgetWithText(ActionCardWidget, 'Game Setup'),
         findsOneWidget,
       );
+      expect(find.widgetWithText(ActionCardWidget, 'Tiles'), findsOneWidget);
+      expect(find.widgetWithText(ActionCardWidget, 'Scores'), findsOneWidget);
+      expect(find.widgetWithText(ActionCardWidget, 'Rules'), findsOneWidget);
     });
 
-    testWidgets('shows all completed and pending feature items', (
+    testWidgets('tucks features and contact into the About section', (
       tester,
     ) async {
       await pumpHomeScreen(tester);
 
+      // Collapsed by default: the feature wall is not shown up front.
+      expect(find.text(completedFeatures.first), findsNothing);
+      expect(find.text('About the app'), findsOneWidget);
+
+      await tester.ensureVisible(find.text('About the app'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('About the app'));
+      await tester.pumpAndSettle();
+
+      expect(find.text('Completed Features'), findsOneWidget);
+      expect(find.text('Pending Features'), findsOneWidget);
+      expect(find.text('Contact Me'), findsOneWidget);
       for (final feature in completedFeatures) {
         expect(find.text(feature), findsOneWidget);
       }
-
       for (final feature in pendingFeatures) {
         expect(find.text(feature), findsOneWidget);
       }

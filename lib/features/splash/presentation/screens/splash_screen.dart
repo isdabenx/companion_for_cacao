@@ -1,9 +1,11 @@
 import 'dart:async';
 
 import 'package:companion_for_cacao/config/constants/assets.dart';
+import 'package:companion_for_cacao/core/theme/app_colors.dart';
 import 'package:companion_for_cacao/core/theme/app_text_styles.dart';
 import 'package:companion_for_cacao/features/splash/presentation/providers/splash_provider.dart';
 import 'package:companion_for_cacao/features/splash/presentation/widgets/background_image_widget.dart';
+import 'package:companion_for_cacao/l10n/generated/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
@@ -40,9 +42,11 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
           _disableImmersiveMode();
           SchedulerBinding.instance.addPostFrameCallback((_) {
             if (!mounted) return;
-            ScaffoldMessenger.of(
-              context,
-            ).showSnackBar(SnackBar(content: Text('Error: $error')));
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(AppLocalizations.of(context).errorGenericRetry),
+              ),
+            );
           });
         },
       );
@@ -112,6 +116,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
     final imageHeight = size.width / imageAspectRatio;
 
     return Scaffold(
+      backgroundColor: AppColors.cream,
       body: Stack(
         fit: StackFit.expand,
         children: [
@@ -145,7 +150,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
                   width: size.width,
                   child: Center(
                     child: Text(
-                      'Loading...',
+                      AppLocalizations.of(context).loadingLabel,
                       style: AppTextStyles.loadingTextStyle,
                     ),
                   ),
