@@ -23,25 +23,36 @@ class SetupStepWidget extends ConsumerWidget {
       children: [
         Text(l10n.scoreSetupIntro, style: AppTextStyles.instruction),
         AppSpacing.verticalM,
-        Wrap(
-          spacing: AppSpacing.s,
-          runSpacing: AppSpacing.s,
-          children: [
-            for (final color in AppColors.colors.keys)
-              PlayerNameChipWidget(
-                colorString: color,
-                isSelected: state.players.any((p) => p.color == color),
-                name:
-                    state.players
-                        .where((p) => p.color == color)
-                        .map((p) => p.name)
-                        .firstOrNull ??
-                    '',
-                onActivated: (name) => notifier.addPlayer(name, color),
-                onDeactivated: () => notifier.removePlayer(color),
-                onNameChanged: (name) => notifier.updatePlayerName(color, name),
-              ),
-          ],
+        // Two-per-row so the four colors form a balanced 2×2 grid instead
+        // of an uneven 3 + 1.
+        LayoutBuilder(
+          builder: (context, constraints) {
+            final itemWidth = (constraints.maxWidth - AppSpacing.s) / 2;
+            return Wrap(
+              spacing: AppSpacing.s,
+              runSpacing: AppSpacing.s,
+              children: [
+                for (final color in AppColors.colors.keys)
+                  SizedBox(
+                    width: itemWidth,
+                    child: PlayerNameChipWidget(
+                      colorString: color,
+                      isSelected: state.players.any((p) => p.color == color),
+                      name:
+                          state.players
+                              .where((p) => p.color == color)
+                              .map((p) => p.name)
+                              .firstOrNull ??
+                          '',
+                      onActivated: (name) => notifier.addPlayer(name, color),
+                      onDeactivated: () => notifier.removePlayer(color),
+                      onNameChanged: (name) =>
+                          notifier.updatePlayerName(color, name),
+                    ),
+                  ),
+              ],
+            );
+          },
         ),
         AppSpacing.verticalXl,
         Text(l10n.scoreModulesIntro, style: AppTextStyles.instruction),

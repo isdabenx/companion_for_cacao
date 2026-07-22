@@ -24,15 +24,19 @@ class GoldStepWidget extends ConsumerWidget {
           style: AppTextStyles.instruction,
         ),
         AppSpacing.verticalM,
-        for (final player in state.players)
-          ScorePlayerRowWidget(
-            player: player,
-            trailing: CountStepperWidget(
-              value: state.inputOf(player.color).accumulatedGold,
-              onChanged: (value) =>
-                  notifier.setAccumulatedGold(player.color, value),
-            ),
-          ),
+        ScoreListCard(
+          children: [
+            for (final player in state.players)
+              ScorePlayerRowWidget(
+                player: player,
+                trailing: CountStepperWidget(
+                  value: state.inputOf(player.color).accumulatedGold,
+                  onChanged: (value) =>
+                      notifier.setAccumulatedGold(player.color, value),
+                ),
+              ),
+          ],
+        ),
       ],
     );
   }

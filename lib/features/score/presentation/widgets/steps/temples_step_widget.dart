@@ -27,8 +27,28 @@ class TemplesStepWidget extends ConsumerWidget {
           style: AppTextStyles.instruction,
         ),
         AppSpacing.verticalM,
-        for (var i = 0; i < state.temples.length; i++)
-          _TempleCard(index: i, templeId: state.temples[i].id),
+        if (state.temples.isEmpty)
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: AppSpacing.xl),
+            child: Column(
+              children: [
+                Icon(
+                  Icons.temple_hindu_outlined,
+                  size: 44,
+                  color: AppColors.brown.withValues(alpha: 0.35),
+                ),
+                AppSpacing.verticalS,
+                Text(
+                  AppLocalizations.of(context).scoreTemplesEmpty,
+                  textAlign: TextAlign.center,
+                  style: AppTextStyles.sectionSublabel,
+                ),
+              ],
+            ),
+          )
+        else
+          for (var i = 0; i < state.temples.length; i++)
+            _TempleCard(index: i, templeId: state.temples[i].id),
         AppSpacing.verticalS,
         Center(
           child: OutlinedButton.icon(
@@ -56,7 +76,7 @@ class _TempleCard extends ConsumerWidget {
     final gold = const ScoreCalculatorService().scoreTemple(temple);
 
     return Card(
-      color: AppColors.white.withValues(alpha: 0.6),
+      color: AppColors.surfaceCard,
       margin: const EdgeInsets.symmetric(vertical: AppSpacing.xs),
       child: Padding(
         padding: AppSpacing.allM,

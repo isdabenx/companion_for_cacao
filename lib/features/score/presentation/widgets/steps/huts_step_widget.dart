@@ -46,12 +46,14 @@ class _PlayerHutsPanel extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final color = player.color;
-    final input = ref.watch(scoreProvider.select((s) => s.inputOf(color)));
+    final state = ref.watch(scoreProvider);
+    final input = state.inputOf(color);
     final notifier = ref.read(scoreProvider.notifier);
     final l10n = AppLocalizations.of(context);
 
     return Card(
-      color: AppColors.white.withValues(alpha: 0.6),
+      // Inherit the shared card surface (crisp white, squircle, soft shadow)
+      // from the global cardTheme, like every other card.
       margin: const EdgeInsets.symmetric(vertical: AppSpacing.xs),
       child: ExpansionTile(
         shape: const Border(),
@@ -77,8 +79,11 @@ class _PlayerHutsPanel extends ConsumerWidget {
             spacing: AppSpacing.s,
             runSpacing: AppSpacing.s,
             children: [
+              // With the throw registered, functions that never landed face
+              // up aren't in the game — hide them instead of showing them
+              // permanently greyed out.
               for (final hut in HutType.values)
-                _HutChip(hut: hut, owner: color),
+                if (state.isHutInGame(hut)) _HutChip(hut: hut, owner: color),
             ],
           ),
           if (input.huts.contains(HutType.hermit)) ...[

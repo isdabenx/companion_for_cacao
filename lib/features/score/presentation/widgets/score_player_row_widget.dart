@@ -58,3 +58,36 @@ class ScorePlayerRowWidget extends StatelessWidget {
     );
   }
 }
+
+/// Groups per-player input rows into a single card with hairline dividers,
+/// so the counting steps read as a structured list instead of rows floating
+/// on the panel.
+class ScoreListCard extends StatelessWidget {
+  const ScoreListCard({required this.children, super.key});
+
+  final List<Widget> children;
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(
+          horizontal: AppSpacing.m,
+          vertical: AppSpacing.xs,
+        ),
+        child: Column(
+          children: [
+            for (var i = 0; i < children.length; i++) ...[
+              if (i > 0)
+                Divider(
+                  height: 1,
+                  color: AppColors.greenNormal.withValues(alpha: 0.6),
+                ),
+              children[i],
+            ],
+          ],
+        ),
+      ),
+    );
+  }
+}
