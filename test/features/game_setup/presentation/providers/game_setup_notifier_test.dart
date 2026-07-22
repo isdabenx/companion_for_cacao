@@ -456,6 +456,92 @@ void main() {
     );
 
     test(
+      'applyWorkerSelection re-opens a completed dependent step and reports it',
+      () async {
+        final regenerated = GameSetupStateEntity(
+          players: [PlayerEntity(name: 'Alice', color: 'red')],
+          expansions: [baseGame],
+          preparation: [
+            makePrepStep(
+              id: 'setup_shuffle_workers',
+              detail: 'Shuffle and draw 3.',
+              phase: PreparationPhase.playerSetup,
+            ),
+          ],
+        );
+        when(
+          () => mockPrepareGameUseCase.execute(any()),
+        ).thenReturn(regenerated);
+
+        final container = createContainer(
+          prepareGameUseCase: mockPrepareGameUseCase,
+        );
+        addTearDown(container.dispose);
+        await container.read(gameSetupProvider.future);
+
+        final notifier = container.read(gameSetupProvider.notifier);
+        notifier.addPlayer('Alice', 'red');
+        notifier.startGame();
+        notifier.togglePreparationCompletion('setup_shuffle_workers');
+
+        final reopened = notifier.applyWorkerSelection(
+          const WorkerSelectionEntity(
+            mode: WorkerSelectionMode.preset,
+            presetType: WorkerPresetType.baseOnly,
+          ),
+        );
+
+        expect(reopened, isTrue);
+        final state = await container.read(gameSetupProvider.future);
+        expect(
+          state.preparation
+              .firstWhere((p) => p.id == 'setup_shuffle_workers')
+              .isCompleted,
+          isFalse,
+        );
+      },
+    );
+
+    test(
+      'applyWorkerSelection does not report a re-open when nothing was ticked',
+      () async {
+        final regenerated = GameSetupStateEntity(
+          players: [PlayerEntity(name: 'Alice', color: 'red')],
+          expansions: [baseGame],
+          preparation: [
+            makePrepStep(
+              id: 'setup_shuffle_workers',
+              detail: 'Shuffle and draw 3.',
+              phase: PreparationPhase.playerSetup,
+            ),
+          ],
+        );
+        when(
+          () => mockPrepareGameUseCase.execute(any()),
+        ).thenReturn(regenerated);
+
+        final container = createContainer(
+          prepareGameUseCase: mockPrepareGameUseCase,
+        );
+        addTearDown(container.dispose);
+        await container.read(gameSetupProvider.future);
+
+        final notifier = container.read(gameSetupProvider.notifier);
+        notifier.addPlayer('Alice', 'red');
+        notifier.startGame();
+
+        final reopened = notifier.applyWorkerSelection(
+          const WorkerSelectionEntity(
+            mode: WorkerSelectionMode.preset,
+            presetType: WorkerPresetType.baseOnly,
+          ),
+        );
+
+        expect(reopened, isFalse);
+      },
+    );
+
+    test(
       'startGame does not reuse a worker selection from a previous game',
       () async {
         when(() => mockPrepareGameUseCase.execute(any())).thenAnswer(
