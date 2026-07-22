@@ -1064,9 +1064,12 @@ void main() {
       final shuffleIdx27 = stepIndex(r.stepIds, 'setup_shuffle_workers');
       expect(nwIdx27, lessThan(shuffleIdx27));
 
-      // Village board, carrier, field, tiles for each player
+      // Village board, carrier, field for each player. New Workers replaces
+      // the base "take all your worker tiles" step with the selection + a
+      // build step that says which tiles to take from each source.
       expect(hasStep(r.stepIds, 'setup_village_board_red'), isTrue);
-      expect(hasStep(r.stepIds, 'setup_tiles_red'), isTrue);
+      expect(hasStep(r.stepIds, 'setup_tiles_red'), isFalse);
+      expect(hasStep(r.stepIds, 'setup_new_workers_build'), isTrue);
 
       // Map tokens + surplus
       expect(hasStep(r.stepIds, 'setup_map_tokens_red'), isTrue);

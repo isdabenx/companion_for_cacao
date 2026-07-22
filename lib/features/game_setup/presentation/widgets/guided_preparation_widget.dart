@@ -111,6 +111,14 @@ class _GuidedPreparationWidgetState
         if (step.id == NewWorkersModuleHandler.selectionStepId) {
           return const WorkerSelectorWidget();
         }
+        if (step.id == NewWorkersModuleHandler.buildStepId) {
+          return PreparationCard(
+            key: ValueKey(step.id),
+            preparation: step,
+            initiallyExpanded: true,
+            footer: const WorkerBuildSummary(),
+          );
+        }
         final isHutThrow = step.id == HutsModuleHandler.marketStepId;
         return PreparationCard(
           key: ValueKey(step.id),

@@ -145,4 +145,6 @@ class PreparationL10n {
   // New Workers module
   String get newWorkersSelectionLabel => _l10n.newWorkersSelectionLabel;
   String get newWorkersSelectionDetail => _l10n.newWorkersSelectionDetail;
+  String get newWorkersBuildLabel => _l10n.newWorkersBuildLabel;
+  String get newWorkersBuildDetail => _l10n.newWorkersBuildDetail;
 }

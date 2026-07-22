@@ -307,6 +307,16 @@ class _DetailedPreparationWidgetState
                                             .selectionStepId) {
                                       return const WorkerSelectorWidget();
                                     }
+                                    // Physical "take these" follow-up.
+                                    if (step.id ==
+                                        NewWorkersModuleHandler.buildStepId) {
+                                      return PreparationCard(
+                                        key: ValueKey(step.id),
+                                        preparation: step,
+                                        initiallyExpanded: isFirstRun,
+                                        footer: const WorkerBuildSummary(),
+                                      );
+                                    }
                                     // The hut-throw card completes by registering
                                     // the throw result, not by a manual checkbox.
                                     final isHutThrow =
