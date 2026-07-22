@@ -9,7 +9,9 @@ class AppTextStyles {
 
   static const double _offset = 0.7;
 
-  // Title base (for decorative titles with gold shadow)
+  // Hero title base — the decorative font WITH the gold "sticker" outline.
+  // Reserved for display/brand moments (splash, menu title, big screen
+  // titles); the outline muddies at small sizes so it is not reused there.
   static const TextStyle _titleBase = TextStyle(
     letterSpacing: 2,
     fontFamily: AppFonts.headerFont,
@@ -22,12 +24,24 @@ class AppTextStyles {
     ],
   );
 
-  // Section title base (simple, no shadow)
-  static const TextStyle _sectionTitleBase = TextStyle(
+  // Brand base — the decorative font WITHOUT the outline, for chrome that
+  // should still feel branded but stay clean and legible (app bar, dashboard
+  // card titles, start button).
+  static const TextStyle _brandBase = TextStyle(
     fontFamily: AppFonts.headerFont,
-    fontSize: 16,
-    fontWeight: FontWeight.bold,
     color: AppColors.brown,
+    letterSpacing: 1,
+  );
+
+  // Section title base — the readable body font, bold. Section headings use
+  // size/weight for hierarchy instead of the decorative font, per current
+  // typography guidance (display fonts only for large headings).
+  static const TextStyle _sectionTitleBase = TextStyle(
+    fontFamily: AppFonts.bodyFont,
+    fontSize: 16,
+    fontWeight: FontWeight.w700,
+    color: AppColors.brown,
+    letterSpacing: 0.2,
   );
 
   // Body text base
@@ -41,50 +55,51 @@ class AppTextStyles {
   // ============================================
 
   static TextStyle loadingTextStyle = _titleBase.copyWith(fontSize: 54);
-  static TextStyle appBarTextStyle = _titleBase.copyWith(fontSize: 28);
   static TextStyle titleTextStyle = _titleBase.copyWith(fontSize: 32);
   static TextStyle menuTitle = _titleBase.copyWith(fontSize: 54);
-  static TextStyle markdownH2 = _titleBase.copyWith(fontSize: 20);
+
+  // App bar: branded (Burrito) but clean — no gold outline, so long titles
+  // stay legible when the FittedBox scales them down.
+  static TextStyle appBarTextStyle = _brandBase.copyWith(fontSize: 26);
+
+  // Markdown H2 / HeaderWidget: readable body font, bold. (Was decorative.)
+  static TextStyle markdownH2 = _sectionTitleBase.copyWith(
+    fontSize: 18,
+    letterSpacing: 0.3,
+  );
 
   // ============================================
   // SECTION TITLES
   // ============================================
 
-  static TextStyle sectionTitle = _sectionTitleBase.copyWith(
-    shadows: [
-      Shadow(offset: Offset(-_offset, -_offset), color: AppColors.gold),
-      Shadow(offset: Offset(_offset, -_offset), color: AppColors.gold),
-      Shadow(offset: Offset(_offset, _offset), color: AppColors.gold),
-      Shadow(offset: Offset(-_offset, _offset), color: AppColors.gold),
-    ],
+  // Section headings: readable body font, bold. The gold-outline decorative
+  // treatment was dropped here — it hurt legibility at these sizes.
+  static TextStyle sectionTitle = _sectionTitleBase;
+  static TextStyle sectionTitlePlain = _sectionTitleBase;
+
+  // Tile-card boardgame title (rendered uppercased by the widget): body
+  // font, bold, tight tracking — legible at small sizes over the card.
+  static TextStyle boardgameTitle = _sectionTitleBase.copyWith(
+    fontSize: 13,
+    letterSpacing: 0.5,
   );
 
-  static TextStyle sectionTitlePlain = _sectionTitleBase;
-  static TextStyle boardgameTitle = const TextStyle(
-    color: AppColors.brown,
-    fontSize: 18,
-    fontFamily: AppFonts.headerFont,
-    shadows: [
-      Shadow(offset: Offset(-_offset, -_offset), color: AppColors.gold),
-      Shadow(offset: Offset(_offset, -_offset), color: AppColors.gold),
-      Shadow(offset: Offset(_offset, _offset), color: AppColors.gold),
-      Shadow(offset: Offset(-_offset, _offset), color: AppColors.gold),
-    ],
-  );
-  static TextStyle boardgameTitlePlain = const TextStyle(
-    color: AppColors.brown,
-    fontSize: 18,
-    fontFamily: AppFonts.headerFont,
-  );
+  // Larger "branded" title kept in the decorative font for dashboard cards
+  // and the start button — brand flavor, no outline.
+  static TextStyle boardgameTitlePlain = _brandBase.copyWith(fontSize: 18);
 
   // ============================================
   // MENU STYLES
   // ============================================
 
+  // Drawer list items: readable body font, bold — a big legibility win over
+  // the decorative font at list sizes.
   static TextStyle menuItem = const TextStyle(
-    fontSize: 22,
-    fontFamily: AppFonts.headerFont,
+    fontSize: 20,
+    fontFamily: AppFonts.bodyFont,
+    fontWeight: FontWeight.w700,
     color: AppColors.brown,
+    letterSpacing: 0.3,
   );
 
   // ============================================

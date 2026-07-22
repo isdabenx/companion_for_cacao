@@ -1,5 +1,6 @@
 import 'package:companion_for_cacao/config/constants/assets.dart';
 import 'package:companion_for_cacao/core/theme/app_breakpoints.dart';
+import 'package:companion_for_cacao/core/theme/app_colors.dart';
 import 'package:companion_for_cacao/l10n/generated/app_localizations.dart';
 import 'package:companion_for_cacao/shared/widgets/main_menu_widget.dart';
 import 'package:flutter/material.dart';
@@ -53,7 +54,7 @@ class _CustomScaffoldWidgetState extends State<CustomScaffoldWidget> {
       openRatio: drawerRatio,
       child: Scaffold(
         appBar: AppBar(
-          toolbarHeight: isLandscape ? 40 : 48,
+          toolbarHeight: isLandscape ? 44 : 56,
           bottom: widget.appBarBottom,
           actions: widget.actions,
           title: FittedBox(
@@ -76,10 +77,17 @@ class _CustomScaffoldWidgetState extends State<CustomScaffoldWidget> {
         body: LayoutBuilder(
           builder: (context, constraints) {
             return Container(
-              decoration: const BoxDecoration(
+              decoration: BoxDecoration(
                 image: DecorationImage(
-                  image: AssetImage(Assets.background),
+                  image: const AssetImage(Assets.background),
                   fit: BoxFit.cover,
+                  // Warm wash over the leaf texture: keeps the jungle
+                  // identity as a whisper while giving content real
+                  // contrast to sit on.
+                  colorFilter: ColorFilter.mode(
+                    AppColors.scrim.withValues(alpha: 0.86),
+                    BlendMode.srcOver,
+                  ),
                 ),
               ),
               child: ConstrainedBox(

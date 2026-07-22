@@ -13,6 +13,17 @@ class AppColors {
   static const Color iconColor = brown;
   static const Color shadow = Color(0x1F000000);
 
+  // Content surfaces (the calm, warm layer that content sits on, so the
+  // leafy background stays a texture and text keeps its contrast).
+  /// Full-width framed panels.
+  static const Color surface = cream;
+
+  /// Cards floating on [surface].
+  static const Color surfaceCard = white;
+
+  /// Wash laid over the leaf background image to calm it (used with alpha).
+  static const Color scrim = greenLight;
+
   static const Color greenLight = Color(0xFFE7F3DE);
   static const Color greenNormal = Color(0xFFC1DFAE);
   static const Color greenDark = Color(0xFF63B944);

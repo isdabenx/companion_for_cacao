@@ -1,6 +1,7 @@
 import 'package:companion_for_cacao/config/routes/app_router.dart';
 import 'package:companion_for_cacao/core/theme/app_colors.dart';
 import 'package:companion_for_cacao/core/theme/app_fonts.dart';
+import 'package:companion_for_cacao/core/theme/app_shapes.dart';
 import 'package:companion_for_cacao/core/theme/app_text_styles.dart';
 import 'package:companion_for_cacao/l10n/generated/app_localizations.dart';
 import 'package:flutter/material.dart';
@@ -34,7 +35,7 @@ class MainApp extends ConsumerWidget {
       onSecondary: AppColors.brown,
       secondaryContainer: AppColors.greenLight,
       onSecondaryContainer: AppColors.greenDarker,
-      surface: AppColors.greenLight,
+      surface: AppColors.cream,
       onSurface: AppColors.brown,
       surfaceContainerHighest: AppColors.greenNormal,
     );
@@ -55,28 +56,44 @@ class MainApp extends ConsumerWidget {
           centerTitle: true,
         ),
         cardTheme: CardThemeData(
-          color: colorScheme.primaryContainer,
-          elevation: 2,
+          color: AppColors.surfaceCard,
+          elevation: 3,
+          shadowColor: AppColors.brown.withValues(alpha: 0.45),
+          // Hairline warm border so cards stay crisp even on the cream panel.
+          shape: AppShapes.shape(
+            AppShapes.radiusL,
+            side: BorderSide(
+              color: AppColors.brown.withValues(alpha: 0.10),
+              width: 1,
+            ),
+          ),
         ),
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
             backgroundColor: AppColors.greenDark,
             foregroundColor: AppColors.white,
+            // Rounded rectangle, not the M3 stadium pill.
+            shape: AppShapes.shape(AppShapes.radiusM),
           ),
         ),
         filledButtonTheme: FilledButtonThemeData(
           style: FilledButton.styleFrom(
             backgroundColor: AppColors.greenDark,
             foregroundColor: AppColors.white,
+            shape: AppShapes.shape(AppShapes.radiusM),
           ),
         ),
         textButtonTheme: TextButtonThemeData(
-          style: TextButton.styleFrom(foregroundColor: AppColors.greenDarker),
+          style: TextButton.styleFrom(
+            foregroundColor: AppColors.greenDarker,
+            shape: AppShapes.shape(AppShapes.radiusM),
+          ),
         ),
         outlinedButtonTheme: OutlinedButtonThemeData(
           style: OutlinedButton.styleFrom(
             foregroundColor: AppColors.greenDarker,
             side: const BorderSide(color: AppColors.greenDarker),
+            shape: AppShapes.shape(AppShapes.radiusM),
           ),
         ),
         scaffoldBackgroundColor: AppColors.greenLight,
