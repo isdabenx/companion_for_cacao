@@ -75,7 +75,11 @@ Future<bool> preparationFirstRun(Ref ref) async {
     gameSetupProvider.select((s) => s.value?.hutLayout != null),
   );
   var completed = 0;
+  var total = 0;
   for (final step in preparation) {
+    // Informational rows (mixed-storage notes) are guidance, not tasks.
+    if (step.informational) continue;
+    total++;
     final isDone = switch (step.id) {
       NewWorkersModuleHandler.selectionStepId => workerSelectionApplied,
       HutsModuleHandler.marketStepId => hutThrowRegistered,
@@ -83,7 +87,7 @@ Future<bool> preparationFirstRun(Ref ref) async {
     };
     if (isDone) completed++;
   }
-  return (completed, preparation.length);
+  return (completed, total);
 }
 
 class DetailedPreparationWidget extends ConsumerStatefulWidget {
@@ -397,11 +401,13 @@ class _PhaseHeaderDelegate extends SliverPersistentHeaderDelegate {
     double shrinkOffset,
     bool overlapsContent,
   ) {
-    // Interactive steps count too: the map carries their derived completion
-    final phaseCompletedCount = items
+    // Interactive steps count too: the map carries their derived completion.
+    // Informational rows (mixed-storage notes) are guidance, not tasks.
+    final countable = items.where((p) => !p.informational);
+    final phaseCompletedCount = countable
         .where((p) => completionMap[p.id] ?? p.isCompleted)
         .length;
-    final phaseTotalCount = items.length;
+    final phaseTotalCount = countable.length;
     final isPhaseCompleted =
         phaseTotalCount > 0 && phaseCompletedCount == phaseTotalCount;
     final phaseProgress = phaseTotalCount == 0

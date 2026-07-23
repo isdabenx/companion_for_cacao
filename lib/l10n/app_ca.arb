@@ -34,6 +34,8 @@
   "gatherJungleDetail": "Agafa totes les rajoles de selva del joc base; tot seguit les modificaràs (treure/afegir) i en formaràs la pila.",
   "junglePileLabel": "Barreja i forma la pila",
   "junglePileDetail": "Barreja totes les rajoles de la selva cara avall i forma la pila, al costat del tauler.",
+  "junglePurgeLabel": "Si tens {expansion} barrejada",
+  "junglePurgeDetail": "Aquesta partida no usa aquestes rajoles de selva de {expansion}: {tiles}. Si les tens barrejades amb el joc base, treu-les abans de muntar la pila.",
 
   "jungleDisplayLabel": "Descobreix la selva explorada",
   "jungleDisplayDetail": "Roba les 2 rajoles superiors de la pila de la selva i posa-les cara amunt al costat de la pila: formen la selva explorada.",

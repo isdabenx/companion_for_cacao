@@ -356,13 +356,16 @@ class GameSetupNotifier extends _$GameSetupNotifier {
   /// them all. Group completion itself stays derived from the members.
   void toggleGroupCompletion(String groupId) {
     if (state.value == null) return;
-    final members = state.value!.preparation.where((p) => p.groupId == groupId);
+    // Informational rows never toggle (they carry no completion).
+    final members = state.value!.preparation.where(
+      (p) => p.groupId == groupId && !p.informational,
+    );
     if (members.isEmpty) return;
     final allCompleted = members.every((p) => p.isCompleted);
     state = AsyncData(
       state.value!.copyWith(
         preparation: state.value!.preparation.map((prep) {
-          if (prep.groupId == groupId) {
+          if (prep.groupId == groupId && !prep.informational) {
             return prep.copyWith(isCompleted: !allCompleted);
           }
           return prep;

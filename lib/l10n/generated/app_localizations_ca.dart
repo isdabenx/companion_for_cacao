@@ -108,6 +108,16 @@ class AppLocalizationsCa extends AppLocalizations {
       'Barreja totes les rajoles de la selva cara avall i forma la pila, al costat del tauler.';
 
   @override
+  String junglePurgeLabel(String expansion) {
+    return 'Si tens $expansion barrejada';
+  }
+
+  @override
+  String junglePurgeDetail(String expansion, String tiles) {
+    return 'Aquesta partida no usa aquestes rajoles de selva de $expansion: $tiles. Si les tens barrejades amb el joc base, treu-les abans de muntar la pila.';
+  }
+
+  @override
   String get jungleDisplayLabel => 'Descobreix la selva explorada';
 
   @override

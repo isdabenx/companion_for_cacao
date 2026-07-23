@@ -107,6 +107,16 @@ class AppLocalizationsEn extends AppLocalizations {
       'Shuffle all the jungle tiles face-down and form the pile, next to the board.';
 
   @override
+  String junglePurgeLabel(String expansion) {
+    return 'If you keep $expansion mixed in';
+  }
+
+  @override
+  String junglePurgeDetail(String expansion, String tiles) {
+    return 'This game doesn\'t use these $expansion jungle tiles: $tiles. If you store them mixed with the base game, take them out before forming the pile.';
+  }
+
+  @override
   String get jungleDisplayLabel => 'Reveal 2 jungle tiles';
 
   @override

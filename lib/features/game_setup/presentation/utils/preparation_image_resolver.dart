@@ -50,6 +50,9 @@ extension PreparationImageResolver on String {
     'jungle_chocolate_market' => Assets.jungleChocolateMarket,
     'jungle_gem_mine' => Assets.jungleGemMine,
     'jungle_tree_of_life' => Assets.jungleTreeOfLife,
+    // Expansion box covers (mixed-storage notes).
+    'expansion_cover_xocolatl' => Assets.boardgameChocolatl,
+    'expansion_cover_diamante' => Assets.boardgameDiamante,
     _ => this,
   };
 }

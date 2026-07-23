@@ -85,4 +85,66 @@ void main() {
       true,
     );
   });
+
+  test('base-only game adds mixed-storage notes for every expansion', () {
+    final baseGame = BoardgameEntity(
+      id: 1,
+      name: 'Cacao',
+      description: 'Base Game',
+      filenameImage: 'cacao.png',
+      tiles: [
+        TileEntity(
+          id: TileIds.workerTile('red', '1-1-1-1'),
+          boardgameId: 1,
+          name: '1-1-1-1',
+          description: 'Worker',
+          filenameImage: 'worker.png',
+          quantity: 4,
+          color: TileColor.red,
+        ),
+        TileEntity(
+          id: TileIds.workerTile('white', '1-1-1-1'),
+          boardgameId: 1,
+          name: '1-1-1-1',
+          description: 'Worker',
+          filenameImage: 'worker.png',
+          quantity: 4,
+          color: TileColor.white,
+        ),
+        TileEntity(
+          id: TileIds.singlePlantation,
+          boardgameId: 1,
+          name: 'Single Plantation',
+          description: 'Jungle',
+          filenameImage: 'jungle.png',
+          quantity: 4,
+        ),
+      ],
+    );
+
+    final result = useCase.execute(
+      GameSetupStateEntity(
+        players: [
+          PlayerEntity(name: 'P1', color: 'red', isSelected: true),
+          PlayerEntity(name: 'P2', color: 'white', isSelected: true),
+        ],
+        expansions: [baseGame],
+        modules: [],
+      ),
+    );
+
+    final notes = result.preparation
+        .where((p) => p.id.startsWith('setup_jungle_purge_'))
+        .toList();
+    // One note per expansion with unused jungle tiles (Xocolatl + Diamante).
+    expect(notes.length, 2);
+    for (final note in notes) {
+      expect(note.informational, isTrue);
+      // Pre-completed so it never blocks progress or the celebration.
+      expect(note.isCompleted, isTrue);
+      expect(note.groupId, 'group_jungle');
+    }
+    expect(notes.any((n) => n.id == 'setup_jungle_purge_xocolatl'), isTrue);
+    expect(notes.any((n) => n.id == 'setup_jungle_purge_diamante'), isTrue);
+  });
 }

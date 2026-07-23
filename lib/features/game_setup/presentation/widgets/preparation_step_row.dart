@@ -155,15 +155,39 @@ class _PreparationStepRowState extends ConsumerState<PreparationStepRow> {
                     ),
                   ),
                   AppSpacing.horizontalS,
-                  InkResponse(
-                    onTap: _onCheckTap,
-                    radius: 24,
-                    child: AnimatedCheckIcon(isCompleted: isCompleted),
-                  ),
+                  // Informational steps (e.g. "if you store this expansion
+                  // mixed in…") carry guidance, not a task, so they show an
+                  // info glyph instead of a checkbox and can't be ticked.
+                  if (step.informational)
+                    Icon(
+                      Icons.info_outline,
+                      size: 24,
+                      color: AppColors.brown.withValues(alpha: 0.4),
+                    )
+                  else
+                    InkResponse(
+                      onTap: _onCheckTap,
+                      radius: 24,
+                      child: AnimatedCheckIcon(isCompleted: isCompleted),
+                    ),
                 ],
               ),
             ),
           ),
+          // Extra tile faces (e.g. the ones a mixed-storage note asks to take
+          // out), shown as a strip so they're recognised without expanding.
+          if (step.imageStrip.isNotEmpty)
+            Padding(
+              padding: const EdgeInsets.only(left: 54, bottom: AppSpacing.xs),
+              child: Wrap(
+                spacing: AppSpacing.s,
+                runSpacing: AppSpacing.xs,
+                children: [
+                  for (final tile in step.imageStrip)
+                    _MiniTile(imageKey: tile.imageKey, quantity: tile.quantity),
+                ],
+              ),
+            ),
           AnimatedCrossFade(
             duration: const Duration(milliseconds: 200),
             crossFadeState: _expanded
@@ -260,6 +284,77 @@ class AnimatedCheckIcon extends StatelessWidget {
   }
 }
 
+/// A small tile face shown in a step's image strip (e.g. the tiles a
+/// mixed-storage note asks to take out). Tappable to zoom.
+class _MiniTile extends StatelessWidget {
+  const _MiniTile({required this.imageKey, required this.quantity});
+
+  final String imageKey;
+  final int quantity;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () => showPreparationImageDialog(
+        context,
+        imagePath: imageKey.toAssetPath(),
+        heroTag: 'prep_mini_$imageKey',
+      ),
+      child: Stack(
+        clipBehavior: Clip.none,
+        children: [
+          Container(
+            width: 46,
+            height: 46,
+            decoration: BoxDecoration(
+              color: AppColors.white,
+              borderRadius: BorderRadius.circular(9),
+              boxShadow: [
+                BoxShadow(
+                  color: AppColors.brown.withValues(alpha: 0.12),
+                  blurRadius: 3,
+                  offset: const Offset(0, 1),
+                ),
+              ],
+            ),
+            padding: const EdgeInsets.all(3),
+            child: Image.asset(
+              imageKey.toAssetPath(),
+              fit: BoxFit.contain,
+              errorBuilder: (context, error, stackTrace) => Icon(
+                Icons.image_not_supported_outlined,
+                color: AppColors.brown.withValues(alpha: 0.5),
+                size: 20,
+              ),
+            ),
+          ),
+          if (quantity >= 1)
+            Positioned(
+              top: -5,
+              right: -5,
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 1),
+                decoration: BoxDecoration(
+                  color: AppColors.brown,
+                  borderRadius: BorderRadius.circular(999),
+                  border: Border.all(color: AppColors.cream, width: 1.5),
+                ),
+                child: Text(
+                  '×$quantity',
+                  style: const TextStyle(
+                    color: AppColors.white,
+                    fontSize: 10,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ),
+        ],
+      ),
+    );
+  }
+}
+
 /// Step thumbnail: the real asset when available (tappable to zoom, with
 /// a visible magnifier affordance) or a zone icon otherwise. Grows when
 /// the row expands.
@@ -348,7 +443,7 @@ class _Thumb extends StatelessWidget {
           clipBehavior: Clip.none,
           children: [
             content,
-            if (quantity != null && quantity! > 1)
+            if (quantity != null && quantity! >= 1)
               Positioned(
                 top: -5,
                 right: -5,

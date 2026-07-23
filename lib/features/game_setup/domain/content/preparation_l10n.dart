@@ -62,6 +62,10 @@ class PreparationL10n {
   String get gatherJungleDetail => _l10n.gatherJungleDetail;
   String get junglePileLabel => _l10n.junglePileLabel;
   String get junglePileDetail => _l10n.junglePileDetail;
+  String junglePurgeLabel(String expansion) =>
+      _l10n.junglePurgeLabel(expansion);
+  String junglePurgeDetail(String expansion, String tiles) =>
+      _l10n.junglePurgeDetail(expansion, tiles);
   String get jungleDisplayLabel => _l10n.jungleDisplayLabel;
   String get jungleDisplayDetail => _l10n.jungleDisplayDetail;
 

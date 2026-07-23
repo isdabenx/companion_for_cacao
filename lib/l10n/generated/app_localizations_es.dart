@@ -108,6 +108,16 @@ class AppLocalizationsEs extends AppLocalizations {
       'Baraja todas las losetas de la selva boca abajo y forma la pila, junto al tablero.';
 
   @override
+  String junglePurgeLabel(String expansion) {
+    return 'Si tienes $expansion mezclada';
+  }
+
+  @override
+  String junglePurgeDetail(String expansion, String tiles) {
+    return 'Esta partida no usa estas losetas de selva de $expansion: $tiles. Si las tienes mezcladas con el juego base, sácalas antes de montar la pila.';
+  }
+
+  @override
   String get jungleDisplayLabel => 'Revela la selva explorada';
 
   @override

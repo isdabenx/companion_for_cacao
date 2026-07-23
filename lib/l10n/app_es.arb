@@ -34,6 +34,8 @@
   "gatherJungleDetail": "Coge todas las losetas de selva del juego base; luego las modificarás (quitar/añadir) y formarás la pila.",
   "junglePileLabel": "Baraja y forma la pila",
   "junglePileDetail": "Baraja todas las losetas de la selva boca abajo y forma la pila, junto al tablero.",
+  "junglePurgeLabel": "Si tienes {expansion} mezclada",
+  "junglePurgeDetail": "Esta partida no usa estas losetas de selva de {expansion}: {tiles}. Si las tienes mezcladas con el juego base, sácalas antes de montar la pila.",
 
   "jungleDisplayLabel": "Revela la selva explorada",
   "jungleDisplayDetail": "Roba las 2 losetas superiores de la pila de la selva y colócalas boca arriba junto a la pila: forman la selva explorada.",

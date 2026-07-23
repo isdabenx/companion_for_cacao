@@ -50,8 +50,12 @@ class PreparationGroupCard extends ConsumerWidget {
     );
     bool completed(PreparationEntity step) =>
         completionByid[step.id] ?? step.isCompleted;
-    final completedCount = steps.where(completed).length;
-    final allCompleted = completedCount == steps.length && steps.isNotEmpty;
+    // Informational rows (e.g. "if you keep this expansion mixed in…") carry
+    // guidance, not tasks, so they never count toward the group's progress.
+    final actionable = steps.where((s) => !s.informational).toList();
+    final completedCount = actionable.where(completed).length;
+    final allCompleted =
+        completedCount == actionable.length && actionable.isNotEmpty;
 
     final Color tint = colorName != null
         ? AppColors.findColorByName(colorName!)
@@ -98,7 +102,7 @@ class PreparationGroupCard extends ConsumerWidget {
                     ),
                   ),
                   Text(
-                    '$completedCount/${steps.length}',
+                    '$completedCount/${actionable.length}',
                     style: AppTextStyles.phaseCounter.copyWith(fontSize: 13),
                   ),
                   AppSpacing.horizontalM,

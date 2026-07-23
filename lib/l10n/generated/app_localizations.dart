@@ -256,6 +256,18 @@ abstract class AppLocalizations {
   /// **'Shuffle all the jungle tiles face-down and form the pile, next to the board.'**
   String get junglePileDetail;
 
+  /// No description provided for @junglePurgeLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'If you keep {expansion} mixed in'**
+  String junglePurgeLabel(String expansion);
+
+  /// No description provided for @junglePurgeDetail.
+  ///
+  /// In en, this message translates to:
+  /// **'This game doesn\'t use these {expansion} jungle tiles: {tiles}. If you store them mixed with the base game, take them out before forming the pile.'**
+  String junglePurgeDetail(String expansion, String tiles);
+
   /// No description provided for @jungleDisplayLabel.
   ///
   /// In en, this message translates to:
