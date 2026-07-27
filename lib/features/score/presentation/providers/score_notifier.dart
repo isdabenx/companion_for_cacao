@@ -1,5 +1,5 @@
 import 'package:companion_for_cacao/features/game_setup/domain/entities/game_setup_state_entity.dart';
-import 'package:companion_for_cacao/features/game_setup/domain/entities/player_entity.dart';
+import 'package:companion_for_cacao/core/domain/entities/player_entity.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/services/handlers/gem_mines_module_handler.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/services/handlers/huts_module_handler.dart';
 import 'package:companion_for_cacao/features/game_setup/presentation/providers/game_setup_notifier.dart';

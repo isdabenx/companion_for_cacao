@@ -19,7 +19,7 @@ import 'package:companion_for_cacao/features/game_setup/presentation/widgets/pre
 import 'package:companion_for_cacao/features/game_setup/presentation/widgets/preparation_step_row.dart';
 import 'package:companion_for_cacao/features/game_setup/presentation/widgets/worker_selector_widget.dart';
 import 'package:companion_for_cacao/shared/utils/player_display_l10n.dart';
-import 'package:companion_for_cacao/shared/utils/preparation_phase_l10n.dart';
+import 'package:companion_for_cacao/features/game_setup/presentation/utils/preparation_phase_l10n.dart';
 import 'package:companion_for_cacao/shared/widgets/container_full_style_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
