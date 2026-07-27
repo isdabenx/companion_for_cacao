@@ -29,30 +29,29 @@ void main() {
   group('goRouter', () {
     // Every constant in AppRoutes is a navigation target somewhere in the app.
     // One without a matching GoRoute compiles fine and only fails at runtime,
-    // on the "page not found" screen — this is the guard against that.
+    // on the "page not found" screen — this is the guard against that. It
+    // reads AppRoutes.all rather than a copy of the list, so a route this
+    // file forgot cannot pass by being absent from both places.
     test('registers a route for every path in AppRoutes', () {
       final paths = declaredPaths(buildRouter());
 
-      for (final route in const [
-        AppRoutes.splash,
-        AppRoutes.home,
-        AppRoutes.tiles,
-        AppRoutes.tileDetail,
-        AppRoutes.rules,
-        AppRoutes.rulePdf,
-        AppRoutes.gameSetup,
-        AppRoutes.gameSetupDetail,
-        AppRoutes.gameSetupPreparation,
-        AppRoutes.gameSetupTiles,
-        AppRoutes.scoreCalculator,
-        AppRoutes.scoreResult,
-      ]) {
+      for (final route in AppRoutes.all) {
         expect(
           paths,
           contains(route),
           reason: 'no GoRoute declared for $route',
         );
       }
+    });
+
+    // The inverse: AppRoutes.all is only a useful guard while it stays the
+    // full list, and nothing else forces a new constant to be added to it.
+    test('AppRoutes.all covers every route the router declares', () {
+      expect(
+        declaredPaths(buildRouter()).difference(AppRoutes.all.toSet()),
+        isEmpty,
+        reason: 'a GoRoute exists whose path is missing from AppRoutes.all',
+      );
     });
 
     test('declares no duplicate paths', () {
