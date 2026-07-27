@@ -11,6 +11,7 @@ import 'package:companion_for_cacao/features/game_setup/presentation/providers/c
 import 'package:companion_for_cacao/features/game_setup/presentation/providers/game_setup_notifier.dart';
 import 'package:companion_for_cacao/shared/widgets/dialog_button_bar_widget.dart';
 import 'package:flutter/foundation.dart';
+import 'package:companion_for_cacao/core/theme/app_shapes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -84,14 +85,14 @@ class WorkerSelectorWidget extends ConsumerWidget {
           vertical: 6,
         ),
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: AppShapes.radius(AppShapes.radiusM),
           side: BorderSide(
             color: AppColors.brown.withValues(alpha: 0.2),
             width: 1,
           ),
         ),
         child: InkWell(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: AppShapes.radius(AppShapes.radiusM),
           onTap: () => _openEditor(context, ref, gameState),
           child: Padding(
             padding: const EdgeInsets.symmetric(
@@ -108,7 +109,7 @@ class WorkerSelectorWidget extends ConsumerWidget {
                       height: 42,
                       decoration: BoxDecoration(
                         color: AppColors.white,
-                        borderRadius: BorderRadius.circular(10),
+                        borderRadius: AppShapes.radius(AppShapes.radiusM),
                       ),
                       child: const Icon(
                         Icons.people_outline,
@@ -138,7 +139,7 @@ class WorkerSelectorWidget extends ConsumerWidget {
                 const SizedBox(height: AppSpacing.s),
                 Material(
                   color: AppColors.greenLight.withValues(alpha: 0.6),
-                  borderRadius: BorderRadius.circular(8),
+                  borderRadius: AppShapes.radius(AppShapes.radiusS),
                   child: Padding(
                     padding: const EdgeInsets.symmetric(
                       horizontal: AppSpacing.s,
@@ -337,7 +338,7 @@ class _BuildTile extends StatelessWidget {
       ),
       decoration: BoxDecoration(
         color: AppColors.white,
-        borderRadius: BorderRadius.circular(10),
+        borderRadius: AppShapes.radius(AppShapes.radiusM),
         border: Border.all(color: AppColors.brown.withValues(alpha: 0.15)),
       ),
       child: Row(
@@ -1117,7 +1118,7 @@ class _TileQuantityCard extends StatelessWidget {
         color: isActive
             ? AppColors.white
             : AppColors.grey.withValues(alpha: 0.15),
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: AppShapes.radius(AppShapes.radiusS),
         border: Border.all(
           color: isActive
               ? AppColors.greenDark.withValues(alpha: 0.4)
@@ -1250,7 +1251,9 @@ class _SmallIconButton extends StatelessWidget {
               ? AppColors.greenNormal.withValues(alpha: 0.5)
               : AppColors.grey.withValues(alpha: 0.15),
           foregroundColor: onPressed != null ? AppColors.brown : AppColors.grey,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+          shape: RoundedRectangleBorder(
+            borderRadius: AppShapes.radius(AppShapes.radiusS),
+          ),
         ),
       ),
     );
@@ -1279,7 +1282,7 @@ class _BalanceIndicator extends StatelessWidget {
       ),
       decoration: BoxDecoration(
         color: color.withValues(alpha: 0.08),
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: AppShapes.radius(AppShapes.radiusS),
         border: Border.all(color: color.withValues(alpha: 0.3), width: 1),
       ),
       child: Column(
@@ -1390,7 +1393,7 @@ class _BalanceBadge extends StatelessWidget {
       ),
       decoration: BoxDecoration(
         color: color.withValues(alpha: 0.12),
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: AppShapes.radius(AppShapes.radiusM),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,

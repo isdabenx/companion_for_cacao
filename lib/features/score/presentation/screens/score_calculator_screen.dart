@@ -312,7 +312,7 @@ class _StepReferenceImage extends StatelessWidget {
       padding: const EdgeInsets.only(bottom: AppSpacing.s),
       child: Center(
         child: ClipRRect(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: AppShapes.radius(AppShapes.radiusM),
           child: SafeAssetImage(
             assetPath: asset,
             height: 120,

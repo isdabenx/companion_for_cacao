@@ -9,6 +9,7 @@ import 'package:companion_for_cacao/l10n/generated/app_localizations.dart';
 import 'package:companion_for_cacao/shared/utils/catalog_l10n.dart';
 import 'package:companion_for_cacao/shared/widgets/container_full_style_widget.dart';
 import 'package:companion_for_cacao/shared/widgets/custom_scaffold_widget.dart';
+import 'package:companion_for_cacao/core/theme/app_shapes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown_plus/flutter_markdown_plus.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -171,7 +172,7 @@ class TileDetailScreen extends ConsumerWidget {
       ),
       decoration: BoxDecoration(
         color: backgroundColor,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: AppShapes.radius(AppShapes.radiusL),
         border: Border.all(
           color: backgroundColor == Colors.transparent
               ? AppColors.brown

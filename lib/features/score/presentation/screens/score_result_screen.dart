@@ -9,6 +9,7 @@ import 'package:companion_for_cacao/shared/utils/player_display_l10n.dart';
 import 'package:companion_for_cacao/shared/widgets/circle_badge.dart';
 import 'package:companion_for_cacao/shared/widgets/container_full_style_widget.dart';
 import 'package:companion_for_cacao/shared/widgets/custom_scaffold_widget.dart';
+import 'package:companion_for_cacao/core/theme/app_shapes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -79,7 +80,7 @@ class _WinnerBanner extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppColors.gold.withValues(alpha: 0.25),
         border: Border.all(color: AppColors.gold, width: 2),
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: AppShapes.radius(AppShapes.radiusL),
       ),
       child: Column(
         children: [

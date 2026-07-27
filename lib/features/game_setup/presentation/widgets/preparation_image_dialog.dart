@@ -2,6 +2,7 @@ import 'package:companion_for_cacao/core/theme/app_colors.dart';
 import 'package:companion_for_cacao/core/theme/app_spacing.dart';
 import 'package:companion_for_cacao/core/theme/color_filters.dart';
 import 'package:companion_for_cacao/l10n/generated/app_localizations.dart';
+import 'package:companion_for_cacao/core/theme/app_shapes.dart';
 import 'package:flutter/material.dart';
 
 /// Fullscreen zoom dialog for a preparation step image, shared by every
@@ -37,7 +38,7 @@ void showPreparationImageDialog(
                   child: Container(
                     decoration: BoxDecoration(
                       color: AppColors.white,
-                      borderRadius: BorderRadius.circular(16),
+                      borderRadius: AppShapes.radius(AppShapes.radiusL),
                       boxShadow: [
                         BoxShadow(
                           color: AppColors.black.withValues(alpha: 0.2),

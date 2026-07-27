@@ -14,6 +14,7 @@ import 'package:companion_for_cacao/shared/widgets/circle_badge.dart';
 import 'package:companion_for_cacao/shared/widgets/container_full_style_widget.dart';
 import 'package:companion_for_cacao/features/game_setup/presentation/widgets/responsive_grid_builder.dart';
 import 'package:companion_for_cacao/shared/widgets/selectable_chip.dart';
+import 'package:companion_for_cacao/core/theme/app_shapes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -547,7 +548,7 @@ class _TileChip extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 1),
               decoration: BoxDecoration(
                 color: AppColors.gold.withValues(alpha: 0.3),
-                borderRadius: BorderRadius.circular(8),
+                borderRadius: AppShapes.radius(AppShapes.radiusS),
               ),
               child: Text(
                 '×$quantity',
@@ -575,7 +576,7 @@ class _BigGameChip extends StatelessWidget {
       ),
       decoration: BoxDecoration(
         color: AppColors.gold.withValues(alpha: 0.2),
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: AppShapes.radius(AppShapes.radiusL),
         border: Border.all(color: AppColors.gold, width: 1.5),
       ),
       child: Row(

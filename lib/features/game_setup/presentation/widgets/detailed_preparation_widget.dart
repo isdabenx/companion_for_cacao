@@ -21,6 +21,7 @@ import 'package:companion_for_cacao/features/game_setup/presentation/widgets/wor
 import 'package:companion_for_cacao/shared/utils/player_display_l10n.dart';
 import 'package:companion_for_cacao/features/game_setup/presentation/utils/preparation_phase_l10n.dart';
 import 'package:companion_for_cacao/shared/widgets/container_full_style_widget.dart';
+import 'package:companion_for_cacao/core/theme/app_shapes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -452,7 +453,7 @@ class PreparationCard extends ConsumerWidget {
       elevation: 2,
       margin: const EdgeInsets.symmetric(horizontal: AppSpacing.l, vertical: 6),
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: AppShapes.radius(AppShapes.radiusM),
         side: BorderSide(
           color: AppColors.brown.withValues(alpha: 0.2),
           width: 1,

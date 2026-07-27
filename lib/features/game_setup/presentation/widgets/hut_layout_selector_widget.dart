@@ -48,9 +48,9 @@ class HutThrowRegisterRow extends ConsumerWidget {
 
     return Material(
       color: AppColors.greenLight.withValues(alpha: 0.6),
-      borderRadius: BorderRadius.circular(8),
+      borderRadius: AppShapes.radius(AppShapes.radiusS),
       child: InkWell(
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: AppShapes.radius(AppShapes.radiusS),
         onTap: () => showHutLayoutEditor(context, ref),
         child: Padding(
           padding: const EdgeInsets.symmetric(
