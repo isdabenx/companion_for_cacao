@@ -36,9 +36,7 @@ GoRouter goRouter(Ref ref) {
     refreshNotifier.notify();
   });
 
-  ref.onDispose(refreshNotifier.dispose);
-
-  return GoRouter(
+  final router = GoRouter(
     initialLocation: AppRoutes.splash,
     refreshListenable: refreshNotifier,
     errorBuilder: (context, state) => Scaffold(
@@ -173,4 +171,14 @@ GoRouter goRouter(Ref ref) {
       return null;
     },
   );
+
+  // The router owns platform listeners of its own, so disposing the refresh
+  // bridge alone leaks it — in the app it lives as long as the process, but
+  // every test that builds one leaves it behind.
+  ref.onDispose(() {
+    router.dispose();
+    refreshNotifier.dispose();
+  });
+
+  return router;
 }
