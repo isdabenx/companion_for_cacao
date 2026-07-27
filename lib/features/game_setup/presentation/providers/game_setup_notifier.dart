@@ -37,21 +37,37 @@ class GameSetupNotifier extends _$GameSetupNotifier {
     return GameSetupStateEntity(expansions: [baseGame]);
   }
 
+  /// Applies [change] to the loaded setup, and does nothing while the game
+  /// data is still loading.
+  ///
+  /// Every mutator goes through here. Written out, each one repeats the null
+  /// guard and then reaches back through `state.value!` two or three more
+  /// times — and a new mutator that forgets the guard throws instead of
+  /// no-opping. Returning [setup] unchanged is a valid no-op: the state
+  /// compares equal, so nothing rebuilds.
+  void _update(
+    GameSetupStateEntity Function(GameSetupStateEntity setup) change,
+  ) {
+    final setup = state.value;
+    if (setup == null) return;
+    state = AsyncData(change(setup));
+  }
+
   void reorderColorOrder(int oldIndex, int newIndex) {
-    if (state.value == null) return;
-    final order = List<String>.from(state.value!.colorOrder);
-    final item = order.removeAt(oldIndex);
-    order.insert(newIndex, item);
-    state = AsyncData(state.value!.copyWith(colorOrder: order));
+    _update((setup) {
+      final order = List<String>.from(setup.colorOrder);
+      final item = order.removeAt(oldIndex);
+      order.insert(newIndex, item);
+      return setup.copyWith(colorOrder: order);
+    });
   }
 
   void addPlayer(String name, String color) {
-    if (state.value == null) return;
-    // Add player to the end of the list
-    state = AsyncData(
-      state.value!.copyWith(
+    // Added at the end of the list.
+    _update(
+      (setup) => setup.copyWith(
         players: [
-          ...state.value!.players,
+          ...setup.players,
           PlayerEntity(name: name, color: color, isSelected: true),
         ],
       ),
@@ -60,54 +76,50 @@ class GameSetupNotifier extends _$GameSetupNotifier {
   }
 
   void removePlayer(String color) {
-    if (state.value == null) return;
-    state = AsyncData(
-      state.value!.copyWith(
-        players: state.value!.players.where((p) => p.color != color).toList(),
+    _update(
+      (setup) => setup.copyWith(
+        players: setup.players.where((p) => p.color != color).toList(),
       ),
     );
     _resetBigGameIfInvalid();
   }
 
   void reorderPlayers(int oldIndex, int newIndex) {
-    if (state.value == null) return;
-    final players = List<PlayerEntity>.from(state.value!.players);
-    if (oldIndex < newIndex) {
-      newIndex -= 1;
-    }
-    final item = players.removeAt(oldIndex);
-    players.insert(newIndex, item);
-    state = AsyncData(state.value!.copyWith(players: players));
+    _update((setup) {
+      final players = List<PlayerEntity>.from(setup.players);
+      if (oldIndex < newIndex) {
+        newIndex -= 1;
+      }
+      final item = players.removeAt(oldIndex);
+      players.insert(newIndex, item);
+      return setup.copyWith(players: players);
+    });
   }
 
   void updatePlayerSelection(String color, {required bool isSelected}) {
-    if (state.value == null) return;
-    state = AsyncData(
-      state.value!.copyWith(
-        players: state.value!.players.map((p) {
-          if (p.color == color) {
-            return p.copyWith(isSelected: isSelected);
-          }
-          return p;
-        }).toList(),
+    _update(
+      (setup) => setup.copyWith(
+        players: [
+          for (final player in setup.players)
+            if (player.color == color)
+              player.copyWith(isSelected: isSelected)
+            else
+              player,
+        ],
       ),
     );
   }
 
   void addExpansion(BoardgameEntity expansion) {
-    if (state.value == null) return;
-    state = AsyncData(
-      state.value!.copyWith(
-        expansions: [...state.value!.expansions, expansion],
-      ),
+    _update(
+      (setup) => setup.copyWith(expansions: [...setup.expansions, expansion]),
     );
   }
 
   void removeExpansion(BoardgameEntity expansion) {
-    if (state.value == null) return;
-    state = AsyncData(
-      state.value!.copyWith(
-        expansions: state.value!.expansions
+    _update(
+      (setup) => setup.copyWith(
+        expansions: setup.expansions
             .where((e) => e.id != expansion.id)
             .toList(),
       ),
@@ -116,8 +128,9 @@ class GameSetupNotifier extends _$GameSetupNotifier {
   }
 
   void toggleExpansion(BoardgameEntity expansion) {
-    if (state.value == null) return;
-    if (state.value!.expansions.any((e) => e.id == expansion.id)) {
+    final setup = state.value;
+    if (setup == null) return;
+    if (setup.expansions.any((e) => e.id == expansion.id)) {
       removeExpansion(expansion);
     } else {
       addExpansion(expansion);
@@ -125,32 +138,29 @@ class GameSetupNotifier extends _$GameSetupNotifier {
   }
 
   void addModule(ModuleEntity module) {
-    if (state.value == null) return;
-    state = AsyncData(
-      state.value!.copyWith(modules: [...state.value!.modules, module]),
-    );
+    _update((setup) => setup.copyWith(modules: [...setup.modules, module]));
   }
 
   void removeModule(ModuleEntity module) {
-    if (state.value == null) return;
-    state = AsyncData(
-      state.value!.copyWith(
-        modules: state.value!.modules.where((m) => m.id != module.id).toList(),
+    _update(
+      (setup) => setup.copyWith(
+        modules: setup.modules.where((m) => m.id != module.id).toList(),
       ),
     );
   }
 
   void toggleModule(ModuleEntity module) {
-    if (state.value == null) return;
-    if (state.value!.modules.any((m) => m.id == module.id)) {
+    final setup = state.value;
+    if (setup == null) return;
+    if (setup.modules.any((m) => m.id == module.id)) {
       removeModule(module);
       // Clear worker selection when Module D is removed
       if (module.id == NewWorkersModuleHandler.moduleId) {
-        state = AsyncData(state.value!.copyWith(clearWorkerSelection: true));
+        _update((s) => s.copyWith(clearWorkerSelection: true));
       }
       // Clear the registered hut throw when the Hut Module is removed
       if (module.id == HutsModuleHandler.moduleId) {
-        state = AsyncData(state.value!.copyWith(clearHutLayout: true));
+        _update((s) => s.copyWith(clearHutLayout: true));
       }
     } else {
       addModule(module);
@@ -159,38 +169,39 @@ class GameSetupNotifier extends _$GameSetupNotifier {
   }
 
   void setBigGame(bool value) {
-    if (state.value == null) return;
-    state = AsyncData(state.value!.copyWith(isBigGame: value));
+    _update((setup) => setup.copyWith(isBigGame: value));
   }
 
   /// Resets isBigGame to false if the Big Game rule
   /// ([GameSetupStateEntity.canEnableBigGame]) is no longer met.
   void _resetBigGameIfInvalid() {
-    if (state.value == null || !state.value!.isBigGame) return;
-    if (!state.value!.canEnableBigGame) {
-      state = AsyncData(state.value!.copyWith(isBigGame: false));
-    }
+    final setup = state.value;
+    if (setup == null || !setup.isBigGame || setup.canEnableBigGame) return;
+    state = AsyncData(setup.copyWith(isBigGame: false));
   }
 
   void startGame() {
+    // Guarded before the side effects: with nothing loaded there is no game
+    // to start, so the in-play filters must not be dropped either.
     if (state.value == null) return;
-    // Worker selection and the hut throw are per-game choices made during
-    // preparation: every new game starts from scratch, never from choices
-    // applied in a previous game.
-    final setup = state.value!.copyWith(
-      clearWorkerSelection: true,
-      clearHutLayout: true,
-    );
     // A new game also starts without leftover in-play tile filters
     ref.invalidate(tileFilterProvider(TileFilterScope.inPlay));
     final useCase = ref.read(prepareGameUseCaseProvider);
-    state = AsyncData(useCase.execute(setup).copyWith(isStarted: true));
+    _update((setup) {
+      // Worker selection and the hut throw are per-game choices made during
+      // preparation: every new game starts from scratch, never from choices
+      // applied in a previous game.
+      final fresh = setup.copyWith(
+        clearWorkerSelection: true,
+        clearHutLayout: true,
+      );
+      return useCase.execute(fresh).copyWith(isStarted: true);
+    });
   }
 
   void resetGame() {
-    if (state.value == null) return;
-    state = AsyncData(
-      state.value!.copyWith(
+    _update(
+      (setup) => setup.copyWith(
         preparation: [],
         tiles: [],
         isStarted: false,
@@ -310,8 +321,7 @@ class GameSetupNotifier extends _$GameSetupNotifier {
 
   /// Clears the worker tile selection (reverts to default addAll behavior).
   void clearWorkerSelection() {
-    if (state.value == null) return;
-    state = AsyncData(state.value!.copyWith(clearWorkerSelection: true));
+    _update((setup) => setup.copyWith(clearWorkerSelection: true));
   }
 
   /// Registers which side of each hut tile landed face up in the throw.
@@ -319,10 +329,8 @@ class GameSetupNotifier extends _$GameSetupNotifier {
   /// DetailedPreparationWidget), so registering IS completing the step.
   /// The tiles in play are refreshed to show exactly the face-up huts.
   void applyHutLayout(HutLayoutEntity layout) {
-    if (state.value == null) return;
-    final previous = state.value!;
-    state = AsyncData(
-      _rerunPipeline(previous, previous.copyWith(hutLayout: layout)),
+    _update(
+      (setup) => _rerunPipeline(setup, setup.copyWith(hutLayout: layout)),
     );
   }
 
@@ -330,23 +338,21 @@ class GameSetupNotifier extends _$GameSetupNotifier {
   /// which also reopens its preparation step and restores the full hut
   /// list in the tiles in play.
   void clearHutLayout() {
-    if (state.value == null) return;
-    final previous = state.value!;
-    state = AsyncData(
-      _rerunPipeline(previous, previous.copyWith(clearHutLayout: true)),
+    _update(
+      (setup) => _rerunPipeline(setup, setup.copyWith(clearHutLayout: true)),
     );
   }
 
   void togglePreparationCompletion(String id) {
-    if (state.value == null) return;
-    state = AsyncData(
-      state.value!.copyWith(
-        preparation: state.value!.preparation.map((prep) {
-          if (prep.id == id) {
-            return prep.copyWith(isCompleted: !prep.isCompleted);
-          }
-          return prep;
-        }).toList(),
+    _update(
+      (setup) => setup.copyWith(
+        preparation: [
+          for (final prep in setup.preparation)
+            if (prep.id == id)
+              prep.copyWith(isCompleted: !prep.isCompleted)
+            else
+              prep,
+        ],
       ),
     );
   }
@@ -355,23 +361,23 @@ class GameSetupNotifier extends _$GameSetupNotifier {
   /// if every member is completed, unchecks them all; otherwise checks
   /// them all. Group completion itself stays derived from the members.
   void toggleGroupCompletion(String groupId) {
-    if (state.value == null) return;
-    // Informational rows never toggle (they carry no completion).
-    final members = state.value!.preparation.where(
-      (p) => p.groupId == groupId && !p.informational,
-    );
-    if (members.isEmpty) return;
-    final allCompleted = members.every((p) => p.isCompleted);
-    state = AsyncData(
-      state.value!.copyWith(
-        preparation: state.value!.preparation.map((prep) {
-          if (prep.groupId == groupId && !prep.informational) {
-            return prep.copyWith(isCompleted: !allCompleted);
-          }
-          return prep;
-        }).toList(),
-      ),
-    );
+    _update((setup) {
+      // Informational rows never toggle (they carry no completion).
+      final members = setup.preparation.where(
+        (p) => p.groupId == groupId && !p.informational,
+      );
+      if (members.isEmpty) return setup;
+      final allCompleted = members.every((p) => p.isCompleted);
+      return setup.copyWith(
+        preparation: [
+          for (final prep in setup.preparation)
+            if (prep.groupId == groupId && !prep.informational)
+              prep.copyWith(isCompleted: !allCompleted)
+            else
+              prep,
+        ],
+      );
+    });
   }
 
   /// Draws a random first player among the selected ones: rotates
@@ -394,15 +400,15 @@ class GameSetupNotifier extends _$GameSetupNotifier {
   }
 
   void updatePlayerName(String color, String newName) {
-    if (state.value == null) return;
-    state = AsyncData(
-      state.value!.copyWith(
-        players: state.value!.players.map((p) {
-          if (p.color == color) {
-            return p.copyWith(name: newName);
-          }
-          return p;
-        }).toList(),
+    _update(
+      (setup) => setup.copyWith(
+        players: [
+          for (final player in setup.players)
+            if (player.color == color)
+              player.copyWith(name: newName)
+            else
+              player,
+        ],
       ),
     );
   }

@@ -595,6 +595,10 @@
           }
       }
   },
+  "errorTitle": "Error",
+  "@errorTitle": {
+    "description": "App bar title of the screen shown when a route receives data of the wrong type."
+  },
   "invalidDataMessage": "Invalid data for this screen.",
   "retryAction": "Retry",
   "playerNameHint": "Name",

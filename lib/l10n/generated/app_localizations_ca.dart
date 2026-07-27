@@ -1308,6 +1308,9 @@ class AppLocalizationsCa extends AppLocalizations {
   }
 
   @override
+  String get errorTitle => 'Error';
+
+  @override
   String get invalidDataMessage => 'Dades no vàlides per a aquesta pantalla.';
 
   @override

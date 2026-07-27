@@ -27,6 +27,18 @@ class _RouterRefreshNotifier extends ChangeNotifier {
   void notify() => notifyListeners();
 }
 
+/// Shown when a route is entered with `extra` of the wrong type — which in
+/// practice means the process was restarted while that screen was on top,
+/// since `extra` does not survive it. Five routes take a typed `extra` and
+/// every one of them needs this, so it lives here once.
+Widget _invalidExtraScreen(BuildContext context) {
+  final l10n = AppLocalizations.of(context);
+  return Scaffold(
+    appBar: AppBar(title: Text(l10n.errorTitle)),
+    body: Center(child: Text(l10n.invalidDataMessage)),
+  );
+}
+
 @Riverpod(keepAlive: true)
 GoRouter goRouter(Ref ref) {
   final refreshNotifier = _RouterRefreshNotifier();
@@ -65,12 +77,7 @@ GoRouter goRouter(Ref ref) {
         builder: (context, state) {
           final tile = state.extra;
           if (tile is! TileEntity) {
-            return Scaffold(
-              appBar: AppBar(title: const Text('Error')),
-              body: Center(
-                child: Text(AppLocalizations.of(context).invalidDataMessage),
-              ),
-            );
+            return _invalidExtraScreen(context);
           }
           return TileDetailScreen(tile: tile);
         },
@@ -84,12 +91,7 @@ GoRouter goRouter(Ref ref) {
         builder: (context, state) {
           final extra = state.extra;
           if (extra is! Map<String, String>) {
-            return Scaffold(
-              appBar: AppBar(title: const Text('Error')),
-              body: Center(
-                child: Text(AppLocalizations.of(context).invalidDataMessage),
-              ),
-            );
+            return _invalidExtraScreen(context);
           }
           return RulePdfScreen(
             title: extra['title'] ?? '',
@@ -106,12 +108,7 @@ GoRouter goRouter(Ref ref) {
         builder: (context, state) {
           final gameSetup = state.extra;
           if (gameSetup is! GameSetupStateEntity) {
-            return Scaffold(
-              appBar: AppBar(title: const Text('Error')),
-              body: Center(
-                child: Text(AppLocalizations.of(context).invalidDataMessage),
-              ),
-            );
+            return _invalidExtraScreen(context);
           }
           return GameSetupDetailScreen(gameSetup: gameSetup);
         },
@@ -121,12 +118,7 @@ GoRouter goRouter(Ref ref) {
         builder: (context, state) {
           final gameSetup = state.extra;
           if (gameSetup is! GameSetupStateEntity) {
-            return Scaffold(
-              appBar: AppBar(title: const Text('Error')),
-              body: Center(
-                child: Text(AppLocalizations.of(context).invalidDataMessage),
-              ),
-            );
+            return _invalidExtraScreen(context);
           }
           return GameSetupPreparationScreen(gameSetup: gameSetup);
         },
@@ -144,12 +136,7 @@ GoRouter goRouter(Ref ref) {
         builder: (context, state) {
           final gameSetup = state.extra;
           if (gameSetup is! GameSetupStateEntity) {
-            return Scaffold(
-              appBar: AppBar(title: const Text('Error')),
-              body: Center(
-                child: Text(AppLocalizations.of(context).invalidDataMessage),
-              ),
-            );
+            return _invalidExtraScreen(context);
           }
           return GameSetupTilesScreen(gameSetup: gameSetup);
         },

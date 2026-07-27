@@ -1,6 +1,8 @@
 import 'package:companion_for_cacao/config/routes/app_router.dart';
 import 'package:companion_for_cacao/config/routes/app_routes.dart';
 import 'package:companion_for_cacao/features/splash/presentation/providers/splash_provider.dart';
+import 'package:companion_for_cacao/l10n/generated/app_localizations.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
@@ -65,6 +67,33 @@ void main() {
         all.toSet().length,
         reason: 'a duplicated path silently shadows the later route',
       );
+    });
+
+    // Five routes carry a typed `extra`, and none of them can be reached with
+    // the wrong type by tapping — only by the process restarting on top of
+    // one, since `extra` does not survive it. So it gets a test instead: they
+    // all share one screen, and it must be localized, which is what the
+    // hardcoded 'Error' title it replaced was not.
+    testWidgets('a route entered without its extra shows the localized '
+        'error screen', (tester) async {
+      // No teardown of our own: the provider disposes the router when the
+      // container goes, and disposing it twice throws.
+      final router = buildRouter();
+
+      await tester.pumpWidget(
+        MaterialApp.router(
+          routerConfig: router,
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+        ),
+      );
+      await tester.pumpAndSettle();
+
+      router.go(AppRoutes.tileDetail);
+      await tester.pumpAndSettle();
+
+      expect(find.text('Error'), findsOneWidget);
+      expect(find.text('Invalid data for this screen.'), findsOneWidget);
     });
 
     test('starts on the splash route', () {

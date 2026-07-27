@@ -400,6 +400,10 @@
   "errorGenericRetry": "Alguna cosa ha fallat. Torna-ho a provar.",
   "pageNotFoundTitle": "Pàgina no trobada",
   "routeNotFound": "Ruta no trobada: {uri}",
+  "errorTitle": "Error",
+  "@errorTitle": {
+    "description": "App bar title of the screen shown when a route receives data of the wrong type."
+  },
   "invalidDataMessage": "Dades no vàlides per a aquesta pantalla.",
   "retryAction": "Reintenta",
   "playerNameHint": "Nom",

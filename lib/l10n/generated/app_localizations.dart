@@ -2296,6 +2296,12 @@ abstract class AppLocalizations {
   /// **'Route not found: {uri}'**
   String routeNotFound(String uri);
 
+  /// App bar title of the screen shown when a route receives data of the wrong type.
+  ///
+  /// In en, this message translates to:
+  /// **'Error'**
+  String get errorTitle;
+
   /// No description provided for @invalidDataMessage.
   ///
   /// In en, this message translates to:
