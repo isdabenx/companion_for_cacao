@@ -61,10 +61,14 @@ class CountStepperWidget extends StatelessWidget {
     required this.value,
     required this.onChanged,
     this.min = 0,
-    this.max = 999,
+    this.max = uncapped,
     this.allowDirectEntry = true,
     super.key,
   });
+
+  /// Sanity ceiling for counts the game does not cap (gold, workers, gems),
+  /// so callers that mean "no limit" can say so instead of repeating 999.
+  static const int uncapped = 999;
 
   final int value;
   final ValueChanged<int> onChanged;

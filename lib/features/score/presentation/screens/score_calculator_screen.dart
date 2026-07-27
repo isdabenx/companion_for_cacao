@@ -6,12 +6,10 @@ import 'package:companion_for_cacao/core/theme/app_text_styles.dart';
 import 'package:companion_for_cacao/features/game_setup/presentation/providers/game_setup_notifier.dart';
 import 'package:companion_for_cacao/features/score/domain/entities/score_state_entity.dart';
 import 'package:companion_for_cacao/features/score/presentation/providers/score_notifier.dart';
-import 'package:companion_for_cacao/features/score/presentation/widgets/steps/cacao_step_widget.dart';
+import 'package:companion_for_cacao/features/score/presentation/widgets/steps/counter_step_widget.dart';
 import 'package:companion_for_cacao/features/score/presentation/widgets/steps/gems_step_widget.dart';
-import 'package:companion_for_cacao/features/score/presentation/widgets/steps/gold_step_widget.dart';
 import 'package:companion_for_cacao/features/score/presentation/widgets/steps/huts_step_widget.dart';
 import 'package:companion_for_cacao/features/score/presentation/widgets/steps/setup_step_widget.dart';
-import 'package:companion_for_cacao/features/score/presentation/widgets/steps/sun_step_widget.dart';
 import 'package:companion_for_cacao/features/score/presentation/widgets/steps/temples_step_widget.dart';
 import 'package:companion_for_cacao/features/score/presentation/utils/score_l10n.dart';
 import 'package:companion_for_cacao/features/score/presentation/utils/score_step_assets.dart';
@@ -326,20 +324,41 @@ class _StepReferenceImage extends StatelessWidget {
   }
 }
 
-class _StepContent extends StatelessWidget {
+class _StepContent extends ConsumerWidget {
   const _StepContent({required this.step});
 
   final ScoreStep step;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
+    final notifier = ref.read(scoreProvider.notifier);
+
     return switch (step) {
       ScoreStep.setup => const SetupStepWidget(),
-      ScoreStep.accumulatedGold => const GoldStepWidget(),
+      // The three one-number-per-player steps share a widget, so their whole
+      // configuration is visible here rather than in three near-identical
+      // files. Caps come from the village board: 3 sun-worshiping places and
+      // 5 cacao storage spaces. Gold is uncapped.
+      ScoreStep.accumulatedGold => CounterStepWidget(
+        intro: l10n.scoreGoldIntro,
+        valueOf: (input) => input.accumulatedGold,
+        onChanged: notifier.setAccumulatedGold,
+      ),
+      ScoreStep.sunTokens => CounterStepWidget(
+        intro: l10n.scoreSunIntro,
+        valueOf: (input) => input.sunTokens,
+        onChanged: notifier.setSunTokens,
+        max: 3,
+      ),
+      ScoreStep.cacaoFruits => CounterStepWidget(
+        intro: l10n.scoreCacaoIntro,
+        valueOf: (input) => input.cacaoFruits,
+        onChanged: notifier.setCacaoFruits,
+        max: 5,
+      ),
       ScoreStep.waterTrack => const WaterStepWidget(),
       ScoreStep.temples => const TemplesStepWidget(),
-      ScoreStep.sunTokens => const SunStepWidget(),
-      ScoreStep.cacaoFruits => const CacaoStepWidget(),
       ScoreStep.huts => const HutsStepWidget(),
       ScoreStep.gemMines => const GemsStepWidget(),
     };
