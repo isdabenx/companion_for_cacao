@@ -1,3 +1,5 @@
+import 'package:companion_for_cacao/shared/widgets/async_loading_widget.dart';
+import 'package:companion_for_cacao/shared/widgets/async_error_widget.dart';
 import 'package:companion_for_cacao/core/theme/app_colors.dart';
 import 'package:companion_for_cacao/core/theme/app_spacing.dart';
 import 'package:companion_for_cacao/core/theme/app_text_styles.dart';
@@ -56,8 +58,8 @@ class GameSetupWidget extends ConsumerWidget {
           const StartButtonWidget(),
         ],
       ),
-      loading: () => const Center(child: CircularProgressIndicator()),
-      error: (e, _) => Center(child: Text('Error: $e')),
+      loading: () => const AsyncLoadingWidget(),
+      error: (error, _) => AsyncErrorWidget(error: error),
     );
   }
 }
