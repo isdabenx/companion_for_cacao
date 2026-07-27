@@ -96,6 +96,18 @@ void main() {
     group('getAllTiles', () {
       test('returns correctly mapped TileEntities with parsed enums', () async {
         await insertBoardgame(id: 1, name: 'Cacao');
+        // The hut tile below belongs to module 4, which has to exist:
+        // foreign keys are enforced on the connection.
+        await db
+            .into(db.modules)
+            .insert(
+              ModulesCompanion.insert(
+                id: const Value(4),
+                name: 'Huts',
+                description: 'Hut module',
+                boardgameId: const Value(1),
+              ),
+            );
         await db
             .into(db.tiles)
             .insert(
