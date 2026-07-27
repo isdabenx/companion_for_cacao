@@ -1086,6 +1086,10 @@ class AppLocalizationsEn extends AppLocalizations {
       'This discards all entered scores and reloads players and modules from the current game setup.';
 
   @override
+  String get scoreClearBlankBody =>
+      'This discards all entered scores and leaves the calculator empty.';
+
+  @override
   String get scoreContextGame => 'Scoring the game in progress';
 
   @override

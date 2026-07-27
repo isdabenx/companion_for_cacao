@@ -339,6 +339,10 @@
   "startOverAction": "Torna a començar",
   "startOverTitle": "Tornar a començar?",
   "startOverBody": "Això descarta totes les puntuacions introduïdes i torna a carregar els jugadors i mòduls de la partida configurada.",
+  "scoreClearBlankBody": "Això descarta totes les puntuacions introduïdes i deixa la calculadora buida.",
+  "@scoreClearBlankBody": {
+    "description": "Reset confirmation when no game is running: nothing to reload from, the calculator simply empties."
+  },
   "scoreContextGame": "Puntuant la partida en curs",
   "scoreContextDetached": "Càlcul a part",
   "scoreBackToGameAction": "Torna a la partida",

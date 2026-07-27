@@ -1948,6 +1948,12 @@ abstract class AppLocalizations {
   /// **'This discards all entered scores and reloads players and modules from the current game setup.'**
   String get startOverBody;
 
+  /// Reset confirmation when no game is running: nothing to reload from, the calculator simply empties.
+  ///
+  /// In en, this message translates to:
+  /// **'This discards all entered scores and leaves the calculator empty.'**
+  String get scoreClearBlankBody;
+
   /// No description provided for @scoreContextGame.
   ///
   /// In en, this message translates to:

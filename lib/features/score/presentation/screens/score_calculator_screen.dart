@@ -40,16 +40,26 @@ class ScoreCalculatorScreen extends ConsumerWidget {
     );
     final l10n = AppLocalizations.of(context);
 
+    // Reached by push from the game dashboard, or as a root destination from
+    // Home, which replaces the stack. The two are different tools: from the
+    // board this is *the game's* scoreboard, from Home it is a calculator
+    // that happens to know about the game. It decides both the leading
+    // button and what "start over" is allowed to mean.
+    final fromGameBoard = context.canPop();
+
     return CustomScaffoldWidget(
       title: l10n.scoreCalculator,
-      // Reached by push from the game dashboard (back to it) or as a root
-      // destination from Home (keep the menu): show whichever fits.
-      showBackButton: context.canPop(),
+      showBackButton: fromGameBoard,
       actions: [
         Tooltip(
           message: l10n.startOverAction,
           child: IconButton(
-            onPressed: () => _confirmReset(context, notifier, gameActive),
+            onPressed: () => _confirmReset(
+              context,
+              notifier,
+              gameActive: gameActive,
+              fromGameBoard: fromGameBoard,
+            ),
             icon: const Icon(Icons.refresh),
           ),
         ),
@@ -84,33 +94,40 @@ class ScoreCalculatorScreen extends ConsumerWidget {
 
   Future<void> _confirmReset(
     BuildContext context,
-    ScoreNotifier notifier,
-    bool gameActive,
-  ) async {
+    ScoreNotifier notifier, {
+    required bool gameActive,
+    required bool fromGameBoard,
+  }) async {
     final l10n = AppLocalizations.of(context);
 
-    // No game running: reset is simply "start over" on a blank calculator.
-    if (!gameActive) {
-      final confirmed = await showDialog<bool>(
-        context: context,
-        builder: (dialogContext) => AlertDialog(
-          title: Text(l10n.startOverTitle),
-          content: Text(l10n.startOverBody),
-          actions: [
-            DialogButtonBarWidget(
-              onCancel: () => Navigator.of(dialogContext).pop(false),
-              onConfirm: () => Navigator.of(dialogContext).pop(true),
-              confirmLabel: l10n.startOverAction,
-            ),
-          ],
-        ),
+    // Opened from the game board: this screen is that game's scoreboard, so
+    // the only thing "start over" can mean is scoring it again. Emptying the
+    // calculator would detach it from the game the player navigated in from
+    // — that belongs to the calculator reached from Home.
+    if (gameActive && fromGameBoard) {
+      final confirmed = await _confirm(
+        context,
+        body: l10n.startOverBody,
+        confirmLabel: l10n.scoreResetGameOption,
       );
-      if (confirmed ?? false) notifier.clearToBlank();
+      if (confirmed) notifier.resetToGame();
       return;
     }
 
-    // A game is running: let the player choose between rescoring it or
-    // starting a separate, empty calculation.
+    // No game running: nothing to reload from, so reset just empties.
+    if (!gameActive) {
+      final confirmed = await _confirm(
+        context,
+        body: l10n.scoreClearBlankBody,
+        confirmLabel: l10n.startOverAction,
+      );
+      if (confirmed) notifier.clearToBlank();
+      return;
+    }
+
+    // Opened from Home with a game running: the standalone calculator, so
+    // both readings are on the table — rescore the game, or take it away
+    // for a separate calculation.
     final choice = await showDialog<_ResetChoice>(
       context: context,
       builder: (dialogContext) => AlertDialog(
@@ -150,6 +167,30 @@ class ScoreCalculatorScreen extends ConsumerWidget {
       case null:
         break;
     }
+  }
+
+  /// A yes/no confirmation under the "start over" title, shared by the two
+  /// single-action shapes of the reset.
+  Future<bool> _confirm(
+    BuildContext context, {
+    required String body,
+    required String confirmLabel,
+  }) async {
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        title: Text(AppLocalizations.of(dialogContext).startOverTitle),
+        content: Text(body),
+        actions: [
+          DialogButtonBarWidget(
+            onCancel: () => Navigator.of(dialogContext).pop(false),
+            onConfirm: () => Navigator.of(dialogContext).pop(true),
+            confirmLabel: confirmLabel,
+          ),
+        ],
+      ),
+    );
+    return confirmed ?? false;
   }
 }
 

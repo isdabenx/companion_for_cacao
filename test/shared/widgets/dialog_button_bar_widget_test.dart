@@ -1,6 +1,14 @@
+import 'package:companion_for_cacao/l10n/generated/app_localizations.dart';
 import 'package:companion_for_cacao/shared/widgets/dialog_button_bar_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+
+/// The bar falls back to the localized OK/Cancel, so it needs the delegates.
+Widget wrap(Widget child) => MaterialApp(
+  localizationsDelegates: AppLocalizations.localizationsDelegates,
+  supportedLocales: AppLocalizations.supportedLocales,
+  home: Scaffold(body: child),
+);
 
 void main() {
   group('DialogButtonBarWidget Widget Tests', () {
@@ -8,28 +16,22 @@ void main() {
       WidgetTester tester,
     ) async {
       await tester.pumpWidget(
-        MaterialApp(
-          home: Scaffold(
-            body: DialogButtonBarWidget(onConfirm: () {}, onCancel: () {}),
-          ),
-        ),
+        wrap(DialogButtonBarWidget(onConfirm: () {}, onCancel: () {})),
       );
 
       expect(find.byType(DialogButtonBarWidget), findsOneWidget);
-      expect(find.widgetWithText(FilledButton, 'Confirm'), findsOneWidget);
+      expect(find.widgetWithText(FilledButton, 'OK'), findsOneWidget);
       expect(find.widgetWithText(TextButton, 'Cancel'), findsOneWidget);
     });
 
     testWidgets('renders with custom labels', (WidgetTester tester) async {
       await tester.pumpWidget(
-        MaterialApp(
-          home: Scaffold(
-            body: DialogButtonBarWidget(
-              confirmLabel: 'Yes',
-              cancelLabel: 'No',
-              onConfirm: () {},
-              onCancel: () {},
-            ),
+        wrap(
+          DialogButtonBarWidget(
+            confirmLabel: 'Yes',
+            cancelLabel: 'No',
+            onConfirm: () {},
+            onCancel: () {},
           ),
         ),
       );
@@ -44,17 +46,15 @@ void main() {
       var confirmTapped = false;
 
       await tester.pumpWidget(
-        MaterialApp(
-          home: Scaffold(
-            body: DialogButtonBarWidget(
-              onConfirm: () => confirmTapped = true,
-              onCancel: () {},
-            ),
+        wrap(
+          DialogButtonBarWidget(
+            onConfirm: () => confirmTapped = true,
+            onCancel: () {},
           ),
         ),
       );
 
-      await tester.tap(find.widgetWithText(FilledButton, 'Confirm'));
+      await tester.tap(find.widgetWithText(FilledButton, 'OK'));
       await tester.pumpAndSettle();
 
       expect(confirmTapped, isTrue);
@@ -66,12 +66,10 @@ void main() {
       var cancelTapped = false;
 
       await tester.pumpWidget(
-        MaterialApp(
-          home: Scaffold(
-            body: DialogButtonBarWidget(
-              onConfirm: () {},
-              onCancel: () => cancelTapped = true,
-            ),
+        wrap(
+          DialogButtonBarWidget(
+            onConfirm: () {},
+            onCancel: () => cancelTapped = true,
           ),
         ),
       );
@@ -86,15 +84,33 @@ void main() {
       WidgetTester tester,
     ) async {
       await tester.pumpWidget(
-        MaterialApp(
-          home: Scaffold(
-            body: DialogButtonBarWidget(onConfirm: () {}, onCancel: () {}),
-          ),
-        ),
+        wrap(DialogButtonBarWidget(onConfirm: () {}, onCancel: () {})),
       );
 
       expect(find.byType(FilledButton), findsOneWidget);
       expect(find.byType(TextButton), findsOneWidget);
+    });
+
+    // A confirm label that says what it does is longer than a dialog is
+    // wide. An unconstrained Row painted it off the edge of the sheet; a
+    // RenderFlex overflow fails the test, which is the point.
+    testWidgets('a confirm label wider than the dialog does not overflow', (
+      WidgetTester tester,
+    ) async {
+      await tester.pumpWidget(
+        wrap(
+          SizedBox(
+            width: 280,
+            child: DialogButtonBarWidget(
+              confirmLabel: 'Reinicia la puntuació de la partida',
+              onConfirm: () {},
+              onCancel: () {},
+            ),
+          ),
+        ),
+      );
+
+      expect(tester.takeException(), isNull);
     });
   });
 }

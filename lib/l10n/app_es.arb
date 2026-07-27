@@ -339,6 +339,10 @@
   "startOverAction": "Empezar de nuevo",
   "startOverTitle": "¿Empezar de nuevo?",
   "startOverBody": "Esto descarta todas las puntuaciones introducidas y vuelve a cargar los jugadores y módulos de la partida configurada.",
+  "scoreClearBlankBody": "Esto descarta todas las puntuaciones introducidas y deja la calculadora vacía.",
+  "@scoreClearBlankBody": {
+    "description": "Reset confirmation when no game is running: nothing to reload from, the calculator simply empties."
+  },
   "scoreContextGame": "Puntuando la partida en curso",
   "scoreContextDetached": "Cálculo aparte",
   "scoreBackToGameAction": "Volver a la partida",

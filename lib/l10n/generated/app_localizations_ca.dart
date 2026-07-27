@@ -1095,6 +1095,10 @@ class AppLocalizationsCa extends AppLocalizations {
       'Això descarta totes les puntuacions introduïdes i torna a carregar els jugadors i mòduls de la partida configurada.';
 
   @override
+  String get scoreClearBlankBody =>
+      'Això descarta totes les puntuacions introduïdes i deixa la calculadora buida.';
+
+  @override
   String get scoreContextGame => 'Puntuant la partida en curs';
 
   @override

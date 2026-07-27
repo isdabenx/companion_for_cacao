@@ -485,6 +485,10 @@
   "startOverAction": "Start over",
   "startOverTitle": "Start over?",
   "startOverBody": "This discards all entered scores and reloads players and modules from the current game setup.",
+  "scoreClearBlankBody": "This discards all entered scores and leaves the calculator empty.",
+  "@scoreClearBlankBody": {
+    "description": "Reset confirmation when no game is running: nothing to reload from, the calculator simply empties."
+  },
   "scoreContextGame": "Scoring the game in progress",
   "scoreContextDetached": "Separate calculation",
   "scoreBackToGameAction": "Back to the game",

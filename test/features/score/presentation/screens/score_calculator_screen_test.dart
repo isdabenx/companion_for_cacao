@@ -2,6 +2,9 @@
 // ignore_for_file: riverpod_lint/scoped_providers_should_specify_dependencies
 import 'package:companion_for_cacao/config/routes/app_routes.dart';
 import 'package:companion_for_cacao/core/domain/entities/boardgame_entity.dart';
+import 'package:companion_for_cacao/core/domain/entities/player_entity.dart';
+import 'package:companion_for_cacao/features/game_setup/domain/entities/game_setup_state_entity.dart';
+import 'package:companion_for_cacao/features/game_setup/presentation/providers/game_setup_notifier.dart';
 import 'package:companion_for_cacao/features/score/domain/entities/score_state_entity.dart';
 import 'package:companion_for_cacao/features/score/presentation/providers/score_notifier.dart';
 import 'package:companion_for_cacao/features/score/presentation/screens/score_calculator_screen.dart';
@@ -20,6 +23,15 @@ import '../../../../support/fakes.dart';
 
 class MockGoRouter extends Mock implements GoRouter {}
 
+class _FakeGameSetupNotifier extends GameSetupNotifier {
+  _FakeGameSetupNotifier(this.initial);
+
+  final GameSetupStateEntity initial;
+
+  @override
+  Future<GameSetupStateEntity> build() async => initial;
+}
+
 void main() {
   late MockGoRouter mockGoRouter;
 
@@ -31,7 +43,9 @@ void main() {
     when(() => mockGoRouter.canPop()).thenReturn(false);
   });
 
-  Widget wrap(Widget child) {
+  /// [gameStarted] gives the calculator a running two-player game to attach
+  /// to, which is what makes "start over" ambiguous.
+  Widget wrap(Widget child, {bool gameStarted = false}) {
     return ProviderScope(
       overrides: [
         boardgameProvider.overrideWith(
@@ -44,6 +58,18 @@ void main() {
             ),
           ]),
         ),
+        if (gameStarted)
+          gameSetupProvider.overrideWith(
+            () => _FakeGameSetupNotifier(
+              GameSetupStateEntity(
+                players: [
+                  PlayerEntity(name: 'Alice', color: 'red', isSelected: true),
+                  PlayerEntity(name: 'Bob', color: 'white', isSelected: true),
+                ],
+                isStarted: true,
+              ),
+            ),
+          ),
       ],
       child: MaterialApp(
         localizationsDelegates: AppLocalizations.localizationsDelegates,
@@ -167,6 +193,102 @@ void main() {
       await tester.pump();
 
       verify(() => mockGoRouter.push(AppRoutes.scoreResult)).called(1);
+    });
+
+    // Start over means different things depending on how you got here: from
+    // the board this screen IS the game's scoreboard, so emptying it would
+    // throw away the game the player navigated in from.
+    group('start over', () {
+      testWidgets('from the game board offers only rescoring the game', (
+        tester,
+      ) async {
+        when(() => mockGoRouter.canPop()).thenReturn(true);
+        await tester.pumpWidget(
+          wrap(const ScoreCalculatorScreen(), gameStarted: true),
+        );
+        await tester.pumpAndSettle();
+
+        await tester.tap(find.byIcon(Icons.refresh));
+        await tester.pumpAndSettle();
+
+        expect(find.text('Start over?'), findsOneWidget);
+        expect(find.text('Reset the game scoring'), findsOneWidget);
+        expect(
+          find.text('Clear everything (separate calculation)'),
+          findsNothing,
+        );
+      });
+
+      testWidgets('confirming from the board keeps the game attached', (
+        tester,
+      ) async {
+        when(() => mockGoRouter.canPop()).thenReturn(true);
+        await tester.pumpWidget(
+          wrap(const ScoreCalculatorScreen(), gameStarted: true),
+        );
+        await tester.pumpAndSettle();
+
+        final container = ProviderScope.containerOf(
+          tester.element(find.byType(ScoreCalculatorScreen)),
+        );
+        container.read(scoreProvider.notifier).setAccumulatedGold('red', 30);
+        await tester.pump();
+
+        await tester.tap(find.byIcon(Icons.refresh));
+        await tester.pumpAndSettle();
+        await tester.tap(find.text('Reset the game scoring'));
+        await tester.pumpAndSettle();
+
+        final state = container.read(scoreProvider);
+        expect(state.prefilledFromGame, isTrue, reason: 'still on the game');
+        expect(state.players, hasLength(2));
+        expect(
+          state.inputOf('red').accumulatedGold,
+          0,
+          reason: 'entered scores cleared',
+        );
+      });
+
+      testWidgets('from Home with a game running still offers both', (
+        tester,
+      ) async {
+        when(() => mockGoRouter.canPop()).thenReturn(false);
+        await tester.pumpWidget(
+          wrap(const ScoreCalculatorScreen(), gameStarted: true),
+        );
+        await tester.pumpAndSettle();
+
+        await tester.tap(find.byIcon(Icons.refresh));
+        await tester.pumpAndSettle();
+
+        expect(find.text('Reset the game scoring'), findsOneWidget);
+        expect(
+          find.text('Clear everything (separate calculation)'),
+          findsOneWidget,
+        );
+      });
+
+      testWidgets('with no game running it just empties the calculator', (
+        tester,
+      ) async {
+        await tester.pumpWidget(wrap(const ScoreCalculatorScreen()));
+        await tester.pumpAndSettle();
+
+        await tester.tap(find.byIcon(Icons.refresh));
+        await tester.pumpAndSettle();
+
+        // The body must not promise reloading from a game that isn't there.
+        expect(
+          find.text(
+            'This discards all entered scores and leaves the calculator empty.',
+          ),
+          findsOneWidget,
+        );
+        expect(
+          find.text('Clear everything (separate calculation)'),
+          findsNothing,
+        );
+      });
     });
   });
 
