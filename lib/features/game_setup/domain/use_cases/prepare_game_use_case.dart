@@ -1,7 +1,6 @@
 import 'package:companion_for_cacao/config/constants/game_constants.dart';
 import 'package:companion_for_cacao/core/domain/entities/tile_entity.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/content/preparation_l10n.dart';
-import 'package:companion_for_cacao/core/theme/app_colors.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/game_setup_state_entity.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/preparation_entity.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/preparation_phase.dart';
@@ -35,7 +34,7 @@ class PrepareGameUseCase {
     final players = currentSetup.players.where((p) => p.isSelected).toList();
 
     final playerColors = players.map((p) => p.color).toSet();
-    final filteredColors = AppColors.colors.keys
+    final filteredColors = GameConstants.playerColorOrder
         .where(playerColors.contains)
         .toList();
 

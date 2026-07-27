@@ -1,3 +1,4 @@
+import 'package:companion_for_cacao/config/constants/game_constants.dart';
 import 'package:companion_for_cacao/core/theme/app_colors.dart';
 import 'package:companion_for_cacao/core/theme/app_spacing.dart';
 import 'package:companion_for_cacao/core/theme/app_text_styles.dart';
@@ -32,7 +33,7 @@ class SetupStepWidget extends ConsumerWidget {
               spacing: AppSpacing.s,
               runSpacing: AppSpacing.s,
               children: [
-                for (final color in AppColors.colors.keys)
+                for (final color in GameConstants.playerColorOrder)
                   SizedBox(
                     width: itemWidth,
                     child: PlayerNameChipWidget(
