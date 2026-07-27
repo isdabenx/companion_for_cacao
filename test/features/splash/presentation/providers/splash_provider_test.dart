@@ -42,11 +42,10 @@ void main() {
   late MockInitializeAppUseCase mockUseCase;
 
   ProviderContainer createContainer({List<dynamic> overrides = const []}) {
-    final container = ProviderContainer(
+    final container = ProviderContainer.test(
       retry: (_, _) => null,
       overrides: overrides.cast(),
     );
-    addTearDown(container.dispose);
     return container;
   }
 

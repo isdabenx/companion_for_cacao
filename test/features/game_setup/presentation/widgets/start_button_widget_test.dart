@@ -14,7 +14,7 @@ void main() {
     testWidgets('should be disabled when less than 2 players selected', (
       tester,
     ) async {
-      final container = ProviderContainer(
+      final container = ProviderContainer.test(
         overrides: [
           gameSetupProvider.overrideWith(
             () => FakeGameSetupNotifier(
@@ -47,7 +47,7 @@ void main() {
     });
 
     testWidgets('should be disabled with only 1 player', (tester) async {
-      final container = ProviderContainer(
+      final container = ProviderContainer.test(
         overrides: [
           gameSetupProvider.overrideWith(
             () => FakeGameSetupNotifier(
@@ -77,7 +77,7 @@ void main() {
     });
 
     testWidgets('should be enabled with 2 or more players', (tester) async {
-      final container = ProviderContainer(
+      final container = ProviderContainer.test(
         overrides: [
           gameSetupProvider.overrideWith(
             () => FakeGameSetupNotifier(
@@ -110,7 +110,7 @@ void main() {
     testWidgets('is enabled with 2 selected players even without names', (
       tester,
     ) async {
-      final container = ProviderContainer(
+      final container = ProviderContainer.test(
         overrides: [
           gameSetupProvider.overrideWith(
             () => FakeGameSetupNotifier(
@@ -143,7 +143,7 @@ void main() {
     testWidgets('should display Start Game text when not started', (
       tester,
     ) async {
-      final container = ProviderContainer(
+      final container = ProviderContainer.test(
         overrides: [
           gameSetupProvider.overrideWith(
             () => FakeGameSetupNotifier(
@@ -175,7 +175,7 @@ void main() {
     });
 
     testWidgets('should display Resume Game text when started', (tester) async {
-      final container = ProviderContainer(
+      final container = ProviderContainer.test(
         overrides: [
           gameSetupProvider.overrideWith(
             () => FakeGameSetupNotifier(
@@ -209,7 +209,7 @@ void main() {
     testWidgets('does not render the clear control itself', (tester) async {
       // Clear moved to the game-setup app bar; the button widget is now just
       // the start/resume action.
-      final container = ProviderContainer(
+      final container = ProviderContainer.test(
         overrides: [
           gameSetupProvider.overrideWith(
             () => FakeGameSetupNotifier(
@@ -240,7 +240,7 @@ void main() {
     testWidgets('surfaces the players hint when fewer than 2 are selected', (
       tester,
     ) async {
-      final container = ProviderContainer(
+      final container = ProviderContainer.test(
         overrides: [
           gameSetupProvider.overrideWith(
             () => FakeGameSetupNotifier(
@@ -278,7 +278,7 @@ void main() {
         filenameImage: '',
         modules: [ModuleEntity(id: 4, name: 'Huts', description: '')],
       );
-      final container = ProviderContainer(
+      final container = ProviderContainer.test(
         overrides: [
           gameSetupProvider.overrideWith(
             () => FakeGameSetupNotifier(
@@ -322,7 +322,7 @@ void main() {
         filenameImage: '',
         modules: [huts],
       );
-      final container = ProviderContainer(
+      final container = ProviderContainer.test(
         overrides: [
           gameSetupProvider.overrideWith(
             () => FakeGameSetupNotifier(

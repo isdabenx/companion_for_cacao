@@ -14,10 +14,9 @@ class _StubSplashNotifier extends SplashNotifier {
 
 void main() {
   GoRouter buildRouter() {
-    final container = ProviderContainer(
+    final container = ProviderContainer.test(
       overrides: [splashProvider.overrideWith(_StubSplashNotifier.new)],
     );
-    addTearDown(container.dispose);
     return container.read(goRouterProvider);
   }
 

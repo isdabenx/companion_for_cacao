@@ -26,8 +26,7 @@ void main() {
   late ProviderContainer container;
 
   setUp(() {
-    container = ProviderContainer();
-    addTearDown(container.dispose);
+    container = ProviderContainer.test();
   });
 
   ScoreNotifier notifier() => container.read(scoreProvider.notifier);
@@ -50,10 +49,9 @@ void main() {
           isStarted: true,
         ),
       );
-      final gameContainer = ProviderContainer(
+      final gameContainer = ProviderContainer.test(
         overrides: [gameSetupProvider.overrideWith(() => fake)],
       );
-      addTearDown(gameContainer.dispose);
       await gameContainer.read(gameSetupProvider.future);
 
       final prefilled = gameContainer.read(scoreProvider);
@@ -73,10 +71,9 @@ void main() {
           isStarted: true,
         ),
       );
-      final c = ProviderContainer(
+      final c = ProviderContainer.test(
         overrides: [gameSetupProvider.overrideWith(() => fake)],
       );
-      addTearDown(c.dispose);
       await c.read(gameSetupProvider.future);
       expect(c.read(scoreProvider).prefilledFromGame, isTrue);
 
@@ -101,10 +98,9 @@ void main() {
             isStarted: true,
           ),
         );
-        final c = ProviderContainer(
+        final c = ProviderContainer.test(
           overrides: [gameSetupProvider.overrideWith(() => fake)],
         );
-        addTearDown(c.dispose);
         await c.read(gameSetupProvider.future);
 
         c.read(scoreProvider.notifier).setAccumulatedGold('red', 15);
@@ -212,10 +208,9 @@ void main() {
 
     test('starting a new game discards the previous scoring session', () async {
       final fake = _FakeGameSetupNotifier(GameSetupStateEntity());
-      final container = ProviderContainer(
+      final container = ProviderContainer.test(
         overrides: [gameSetupProvider.overrideWith(() => fake)],
       );
-      addTearDown(container.dispose);
       await container.read(gameSetupProvider.future);
 
       // Leftover standalone session from before the game.
@@ -264,10 +259,9 @@ void main() {
           isStarted: true,
         ),
       );
-      final container = ProviderContainer(
+      final container = ProviderContainer.test(
         overrides: [gameSetupProvider.overrideWith(() => fake)],
       );
-      addTearDown(container.dispose);
       await container.read(gameSetupProvider.future);
 
       final prefilled = container.read(scoreProvider);

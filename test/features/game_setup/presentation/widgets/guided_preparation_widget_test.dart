@@ -40,7 +40,7 @@ void main() {
     WidgetTester tester,
     List<PreparationEntity> preparation,
   ) async {
-    final container = ProviderContainer(
+    final container = ProviderContainer.test(
       overrides: [
         gameSetupProvider.overrideWith(
           () => FakeGameSetupNotifier(
@@ -54,7 +54,6 @@ void main() {
         ),
       ],
     );
-    addTearDown(container.dispose);
 
     await tester.pumpWidget(
       UncontrolledProviderScope(

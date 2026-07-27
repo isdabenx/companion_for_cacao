@@ -24,7 +24,7 @@ void main() {
   );
 
   ProviderContainer createContainer() {
-    return ProviderContainer(
+    return ProviderContainer.test(
       overrides: [
         customPresetRepositoryProvider.overrideWithValue(mockRepository),
       ],
@@ -47,7 +47,6 @@ void main() {
       ).thenAnswer((_) async => [presetA]);
 
       final container = createContainer();
-      addTearDown(container.dispose);
 
       final presets = await container.read(customPresetProvider.future);
       expect(presets, [presetA]);
@@ -57,7 +56,6 @@ void main() {
       when(() => mockRepository.getPresets()).thenAnswer((_) async => []);
 
       final container = createContainer();
-      addTearDown(container.dispose);
       await container.read(customPresetProvider.future);
 
       container.read(customPresetProvider.notifier).addPreset(presetA);
@@ -73,7 +71,6 @@ void main() {
       ).thenAnswer((_) async => [presetA, presetB]);
 
       final container = createContainer();
-      addTearDown(container.dispose);
       await container.read(customPresetProvider.future);
 
       container.read(customPresetProvider.notifier).deletePreset(presetA.id);
@@ -89,7 +86,6 @@ void main() {
       ).thenThrow(Exception('storage error'));
 
       final container = createContainer();
-      addTearDown(container.dispose);
 
       final presets = await container.read(customPresetProvider.future);
       expect(presets, isEmpty);

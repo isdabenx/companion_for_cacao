@@ -40,7 +40,7 @@ void main() {
     List<BoardgameEntity>? boardgames,
     PrepareGameUseCase? prepareGameUseCase,
   }) {
-    return ProviderContainer(
+    return ProviderContainer.test(
       overrides: [
         boardgameProvider.overrideWith(
           () => FakeBoardgameNotifier(boardgames ?? [baseGame, chocolatl]),
@@ -90,7 +90,6 @@ void main() {
   group('GameSetupNotifier', () {
     test('build returns initial state with base game expansion', () async {
       final container = createContainer();
-      addTearDown(container.dispose);
 
       final state = await container.read(gameSetupProvider.future);
 
@@ -105,7 +104,6 @@ void main() {
 
     test('addPlayer adds player to state', () async {
       final container = createContainer();
-      addTearDown(container.dispose);
       await container.read(gameSetupProvider.future);
 
       final notifier = container.read(gameSetupProvider.notifier);
@@ -121,7 +119,6 @@ void main() {
 
     test('removePlayer removes player by color', () async {
       final container = createContainer();
-      addTearDown(container.dispose);
       await container.read(gameSetupProvider.future);
 
       final notifier = container.read(gameSetupProvider.notifier);
@@ -138,7 +135,6 @@ void main() {
 
     test('reorderPlayers reorders player list', () async {
       final container = createContainer();
-      addTearDown(container.dispose);
       await container.read(gameSetupProvider.future);
 
       final notifier = container.read(gameSetupProvider.notifier);
@@ -158,7 +154,6 @@ void main() {
 
     test('updatePlayerSelection toggles player selection', () async {
       final container = createContainer();
-      addTearDown(container.dispose);
       await container.read(gameSetupProvider.future);
 
       final notifier = container.read(gameSetupProvider.notifier);
@@ -173,7 +168,6 @@ void main() {
 
     test('toggleExpansion adds and removes expansions', () async {
       final container = createContainer();
-      addTearDown(container.dispose);
       await container.read(gameSetupProvider.future);
 
       final notifier = container.read(gameSetupProvider.notifier);
@@ -193,7 +187,6 @@ void main() {
 
     test('toggleModule adds and removes modules', () async {
       final container = createContainer();
-      addTearDown(container.dispose);
       await container.read(gameSetupProvider.future);
 
       final notifier = container.read(gameSetupProvider.notifier);
@@ -210,7 +203,6 @@ void main() {
 
     test('setBigGame sets big game flag', () async {
       final container = createContainer();
-      addTearDown(container.dispose);
       await container.read(gameSetupProvider.future);
 
       final notifier = container.read(gameSetupProvider.notifier);
@@ -225,7 +217,6 @@ void main() {
       '_resetBigGameIfInvalid resets bigGame when a module is removed',
       () async {
         final container = createContainer();
-        addTearDown(container.dispose);
         await container.read(gameSetupProvider.future);
 
         final notifier = container.read(gameSetupProvider.notifier);
@@ -250,7 +241,6 @@ void main() {
       '_resetBigGameIfInvalid resets bigGame when player count is invalid',
       () async {
         final container = createContainer();
-        addTearDown(container.dispose);
         await container.read(gameSetupProvider.future);
 
         final notifier = container.read(gameSetupProvider.notifier);
@@ -302,7 +292,6 @@ void main() {
         final container = createContainer(
           prepareGameUseCase: mockPrepareGameUseCase,
         );
-        addTearDown(container.dispose);
         await container.read(gameSetupProvider.future);
 
         final notifier = container.read(gameSetupProvider.notifier);
@@ -352,7 +341,6 @@ void main() {
         final container = createContainer(
           prepareGameUseCase: mockPrepareGameUseCase,
         );
-        addTearDown(container.dispose);
         await container.read(gameSetupProvider.future);
 
         final notifier = container.read(gameSetupProvider.notifier);
@@ -380,7 +368,6 @@ void main() {
         final container = createContainer(
           prepareGameUseCase: mockPrepareGameUseCase,
         );
-        addTearDown(container.dispose);
         await container.read(gameSetupProvider.future);
 
         final notifier = container.read(gameSetupProvider.notifier);
@@ -429,7 +416,6 @@ void main() {
         final container = createContainer(
           prepareGameUseCase: mockPrepareGameUseCase,
         );
-        addTearDown(container.dispose);
         await container.read(gameSetupProvider.future);
 
         final notifier = container.read(gameSetupProvider.notifier);
@@ -476,7 +462,6 @@ void main() {
         final container = createContainer(
           prepareGameUseCase: mockPrepareGameUseCase,
         );
-        addTearDown(container.dispose);
         await container.read(gameSetupProvider.future);
 
         final notifier = container.read(gameSetupProvider.notifier);
@@ -523,7 +508,6 @@ void main() {
         final container = createContainer(
           prepareGameUseCase: mockPrepareGameUseCase,
         );
-        addTearDown(container.dispose);
         await container.read(gameSetupProvider.future);
 
         final notifier = container.read(gameSetupProvider.notifier);
@@ -551,7 +535,6 @@ void main() {
         final container = createContainer(
           prepareGameUseCase: mockPrepareGameUseCase,
         );
-        addTearDown(container.dispose);
         await container.read(gameSetupProvider.future);
 
         final notifier = container.read(gameSetupProvider.notifier);
@@ -589,7 +572,6 @@ void main() {
         final container = createContainer(
           prepareGameUseCase: mockPrepareGameUseCase,
         );
-        addTearDown(container.dispose);
         await container.read(gameSetupProvider.future);
 
         final notifier = container.read(gameSetupProvider.notifier);
@@ -615,7 +597,6 @@ void main() {
       final container = createContainer(
         prepareGameUseCase: mockPrepareGameUseCase,
       );
-      addTearDown(container.dispose);
       await container.read(gameSetupProvider.future);
 
       // Leftover filter from a previous game's Tiles in Play screen
@@ -649,7 +630,6 @@ void main() {
       final container = createContainer(
         prepareGameUseCase: mockPrepareGameUseCase,
       );
-      addTearDown(container.dispose);
       await container.read(gameSetupProvider.future);
 
       final notifier = container.read(gameSetupProvider.notifier);
@@ -665,7 +645,6 @@ void main() {
 
     test('clearAll resets to initial state', () async {
       final container = createContainer();
-      addTearDown(container.dispose);
       await container.read(gameSetupProvider.future);
 
       final notifier = container.read(gameSetupProvider.notifier);
@@ -690,7 +669,6 @@ void main() {
 
     test('updatePlayerName keeps player order and Big Game state', () async {
       final container = createContainer();
-      addTearDown(container.dispose);
       await container.read(gameSetupProvider.future);
 
       final notifier = container.read(gameSetupProvider.notifier);
@@ -717,7 +695,6 @@ void main() {
 
     test('reorderColorOrder reorders color list', () async {
       final container = createContainer();
-      addTearDown(container.dispose);
       await container.read(gameSetupProvider.future);
 
       final notifier = container.read(gameSetupProvider.notifier);
@@ -730,7 +707,6 @@ void main() {
 
     test('updatePlayerName updates player name', () async {
       final container = createContainer();
-      addTearDown(container.dispose);
       await container.read(gameSetupProvider.future);
 
       final notifier = container.read(gameSetupProvider.notifier);
@@ -773,7 +749,6 @@ void main() {
         final container = createContainer(
           prepareGameUseCase: mockPrepareGameUseCase,
         );
-        addTearDown(container.dispose);
         await container.read(gameSetupProvider.future);
 
         final notifier = container.read(gameSetupProvider.notifier);
@@ -823,7 +798,6 @@ void main() {
       final container = createContainer(
         prepareGameUseCase: mockPrepareGameUseCase,
       );
-      addTearDown(container.dispose);
       await container.read(gameSetupProvider.future);
 
       final notifier = container.read(gameSetupProvider.notifier);
@@ -874,7 +848,6 @@ void main() {
       final container = createContainer(
         prepareGameUseCase: mockPrepareGameUseCase,
       );
-      addTearDown(container.dispose);
       await container.read(gameSetupProvider.future);
 
       final notifier = container.read(gameSetupProvider.notifier);
@@ -903,7 +876,6 @@ void main() {
     test('drawRandomFirstPlayer moves the drawn color to the front of '
         'colorOrder and returns the player', () async {
       final container = createContainer();
-      addTearDown(container.dispose);
       await container.read(gameSetupProvider.future);
 
       final notifier = container.read(gameSetupProvider.notifier);
@@ -923,7 +895,6 @@ void main() {
       'drawRandomFirstPlayer returns null with fewer than 2 players',
       () async {
         final container = createContainer();
-        addTearDown(container.dispose);
         await container.read(gameSetupProvider.future);
 
         final notifier = container.read(gameSetupProvider.notifier);

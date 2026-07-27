@@ -26,7 +26,7 @@ void main() {
   late MockSettingsRepository mockSettingsRepository;
 
   ProviderContainer createContainer() {
-    final container = ProviderContainer(
+    final container = ProviderContainer.test(
       retry: (_, _) => null,
       overrides: [
         settingsRepositoryProvider.overrideWith(
@@ -34,7 +34,6 @@ void main() {
         ),
       ],
     );
-    addTearDown(container.dispose);
     return container;
   }
 

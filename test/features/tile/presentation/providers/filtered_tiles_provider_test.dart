@@ -94,7 +94,7 @@ void main() {
     });
 
     test('should return all tiles when no filters are active', () async {
-      final container = ProviderContainer(
+      final container = ProviderContainer.test(
         overrides: [
           getTilesWithBoardgameUseCaseProvider.overrideWith(
             (ref) => Future.value(
@@ -106,7 +106,6 @@ void main() {
           ),
         ],
       );
-      addTearDown(container.dispose);
 
       final result = await container.read(filteredTilesProvider.future);
 
@@ -115,7 +114,7 @@ void main() {
     });
 
     test('should filter tiles by search query (case-insensitive)', () async {
-      final container = ProviderContainer(
+      final container = ProviderContainer.test(
         overrides: [
           getTilesWithBoardgameUseCaseProvider.overrideWith(
             (ref) => Future.value(
@@ -127,7 +126,6 @@ void main() {
           ),
         ],
       );
-      addTearDown(container.dispose);
 
       // Wait for initial load
       await container.read(filteredTilesProvider.future);
@@ -146,7 +144,7 @@ void main() {
     });
 
     test('should filter tiles by boardgame ID', () async {
-      final container = ProviderContainer(
+      final container = ProviderContainer.test(
         overrides: [
           getTilesWithBoardgameUseCaseProvider.overrideWith(
             (ref) => Future.value(
@@ -158,7 +156,6 @@ void main() {
           ),
         ],
       );
-      addTearDown(container.dispose);
 
       await container.read(filteredTilesProvider.future);
 
@@ -174,7 +171,7 @@ void main() {
     });
 
     test('should filter tiles by tile type', () async {
-      final container = ProviderContainer(
+      final container = ProviderContainer.test(
         overrides: [
           getTilesWithBoardgameUseCaseProvider.overrideWith(
             (ref) => Future.value(
@@ -186,7 +183,6 @@ void main() {
           ),
         ],
       );
-      addTearDown(container.dispose);
 
       await container.read(filteredTilesProvider.future);
 
@@ -202,7 +198,7 @@ void main() {
     });
 
     test('should apply multiple filters simultaneously (AND logic)', () async {
-      final container = ProviderContainer(
+      final container = ProviderContainer.test(
         overrides: [
           getTilesWithBoardgameUseCaseProvider.overrideWith(
             (ref) => Future.value(
@@ -214,7 +210,6 @@ void main() {
           ),
         ],
       );
-      addTearDown(container.dispose);
 
       await container.read(filteredTilesProvider.future);
 
@@ -236,7 +231,7 @@ void main() {
     });
 
     test('should return empty list when no tiles match filters', () async {
-      final container = ProviderContainer(
+      final container = ProviderContainer.test(
         overrides: [
           getTilesWithBoardgameUseCaseProvider.overrideWith(
             (ref) => Future.value(
@@ -248,7 +243,6 @@ void main() {
           ),
         ],
       );
-      addTearDown(container.dispose);
 
       await container.read(filteredTilesProvider.future);
 
@@ -263,7 +257,7 @@ void main() {
     });
 
     test('should reset to all tiles when filters are cleared', () async {
-      final container = ProviderContainer(
+      final container = ProviderContainer.test(
         overrides: [
           getTilesWithBoardgameUseCaseProvider.overrideWith(
             (ref) => Future.value(
@@ -275,7 +269,6 @@ void main() {
           ),
         ],
       );
-      addTearDown(container.dispose);
 
       await container.read(filteredTilesProvider.future);
 
@@ -300,7 +293,7 @@ void main() {
     });
 
     test('should filter by multiple boardgame IDs (OR logic)', () async {
-      final container = ProviderContainer(
+      final container = ProviderContainer.test(
         overrides: [
           getTilesWithBoardgameUseCaseProvider.overrideWith(
             (ref) => Future.value(
@@ -312,7 +305,6 @@ void main() {
           ),
         ],
       );
-      addTearDown(container.dispose);
 
       await container.read(filteredTilesProvider.future);
 
@@ -333,7 +325,7 @@ void main() {
     });
 
     test('should filter by multiple tile types (OR logic)', () async {
-      final container = ProviderContainer(
+      final container = ProviderContainer.test(
         overrides: [
           getTilesWithBoardgameUseCaseProvider.overrideWith(
             (ref) => Future.value(
@@ -345,7 +337,6 @@ void main() {
           ),
         ],
       );
-      addTearDown(container.dispose);
 
       await container.read(filteredTilesProvider.future);
 
@@ -367,7 +358,7 @@ void main() {
     test(
       'in-play filter scope is independent from the catalog scope',
       () async {
-        final container = ProviderContainer(
+        final container = ProviderContainer.test(
           overrides: [
             getTilesWithBoardgameUseCaseProvider.overrideWith(
               (ref) => Future.value(
@@ -379,7 +370,6 @@ void main() {
             ),
           ],
         );
-        addTearDown(container.dispose);
 
         await container.read(filteredTilesProvider.future);
 

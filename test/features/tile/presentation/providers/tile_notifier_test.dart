@@ -33,7 +33,7 @@ void main() {
   late List<TileEntity> mockTiles;
 
   ProviderContainer createContainer() {
-    final container = ProviderContainer(
+    final container = ProviderContainer.test(
       retry: (_, _) => null,
       overrides: [
         getTilesWithBoardgameUseCaseProvider.overrideWith(
@@ -41,7 +41,6 @@ void main() {
         ),
       ],
     );
-    addTearDown(container.dispose);
     return container;
   }
 
