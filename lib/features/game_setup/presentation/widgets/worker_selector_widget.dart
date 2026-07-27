@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:companion_for_cacao/core/theme/app_colors.dart';
 import 'package:companion_for_cacao/core/theme/app_spacing.dart';
+import 'package:companion_for_cacao/core/theme/color_filters.dart';
 import 'package:companion_for_cacao/l10n/generated/app_localizations.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/custom_preset_entity.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/worker_selection_entity.dart';
@@ -204,8 +205,171 @@ class WorkerSelectorWidget extends ConsumerWidget {
         ),
         isTreeOfLifeActive: isTreeOfLifeActive,
         onApply: (selection) {
-          ref.read(gameSetupProvider.notifier).applyWorkerSelection(selection);
+          final reopened = ref
+              .read(gameSetupProvider.notifier)
+              .applyWorkerSelection(selection);
+          // Only warn when the change re-opened a step the user had ticked —
+          // otherwise they already know it's still pending. The SnackBar shows
+          // in both the checklist and the paged view, where the re-opened step
+          // may sit on another page.
+          if (reopened && context.mounted) {
+            final l10n = AppLocalizations.of(context);
+            ScaffoldMessenger.of(context)
+              ..hideCurrentSnackBar()
+              ..showSnackBar(
+                SnackBar(content: Text(l10n.workerSelectionResetNotice)),
+              );
+          }
         },
+      ),
+    );
+  }
+}
+
+// =============================================================================
+// Build Summary — the physical "take these" instruction
+// =============================================================================
+
+/// Translates the applied worker selection into a physical action: which
+/// tiles to take from the base game and which from the expansion. Reads the
+/// current selection (defaults to "add all"), so it always matches the bag.
+class WorkerBuildSummary extends ConsumerWidget {
+  const WorkerBuildSummary({super.key});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
+    final selection = ref.watch(
+      gameSetupProvider.select((s) => s.value?.workerSelection),
+    );
+    final effective =
+        selection?.effectiveQuantities ??
+        const {
+          ...WorkerSelectionEntity.baseDistributions,
+          ...WorkerSelectionEntity.newDistributions,
+        };
+
+    List<(String, int)> pick(Iterable<String> keys) => [
+      for (final d in keys)
+        if ((effective[d] ?? 0) > 0) (d, effective[d]!),
+    ];
+
+    final base = pick(WorkerSelectionEntity.baseDistributions.keys);
+    final neu = pick(WorkerSelectionEntity.newDistributions.keys);
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _BuildGroup(label: l10n.workerBuildFromBase, tiles: base, isNew: false),
+        if (neu.isNotEmpty) ...[
+          const SizedBox(height: AppSpacing.s),
+          _BuildGroup(
+            label: l10n.workerBuildFromExpansion,
+            tiles: neu,
+            isNew: true,
+          ),
+        ],
+      ],
+    );
+  }
+}
+
+class _BuildGroup extends StatelessWidget {
+  const _BuildGroup({
+    required this.label,
+    required this.tiles,
+    required this.isNew,
+  });
+
+  final String label;
+  final List<(String, int)> tiles;
+  final bool isNew;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          label,
+          style: Theme.of(context).textTheme.labelMedium?.copyWith(
+            color: AppColors.greenDarker,
+            fontWeight: FontWeight.w700,
+          ),
+        ),
+        const SizedBox(height: AppSpacing.xs),
+        Wrap(
+          spacing: AppSpacing.s,
+          runSpacing: AppSpacing.s,
+          children: [
+            for (final (distribution, qty) in tiles)
+              _BuildTile(distribution: distribution, qty: qty, isNew: isNew),
+          ],
+        ),
+      ],
+    );
+  }
+}
+
+class _BuildTile extends StatelessWidget {
+  const _BuildTile({
+    required this.distribution,
+    required this.qty,
+    required this.isNew,
+  });
+
+  final String distribution;
+  final int qty;
+  final bool isNew;
+
+  String get _imagePath {
+    final underscored = distribution.replaceAll('-', '_');
+    final folder = isNew ? 'diamante' : 'base';
+    return 'assets/images/tiles/$folder/player_white_$underscored.webp';
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(
+        horizontal: AppSpacing.s,
+        vertical: AppSpacing.xs,
+      ),
+      decoration: BoxDecoration(
+        color: AppColors.white,
+        borderRadius: BorderRadius.circular(10),
+        border: Border.all(color: AppColors.brown.withValues(alpha: 0.15)),
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          SizedBox(
+            width: 56,
+            height: 56,
+            // Worker tiles come in each player's colour; shown as a neutral
+            // (grayscale) reference, like the other "each player" steps.
+            child: ColorFiltered(
+              colorFilter: kGrayscaleFilter,
+              child: Image.asset(
+                _imagePath,
+                fit: BoxFit.contain,
+                errorBuilder: (_, _, _) => const Icon(
+                  Icons.image_not_supported_outlined,
+                  color: AppColors.grey,
+                  size: 28,
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(width: AppSpacing.xs),
+          Text(
+            '×$qty',
+            style: Theme.of(context).textTheme.titleSmall?.copyWith(
+              fontWeight: FontWeight.bold,
+              color: AppColors.brown,
+            ),
+          ),
+        ],
       ),
     );
   }

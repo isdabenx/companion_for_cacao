@@ -88,6 +88,16 @@ class _GuidedPreparationWidgetState
   }) {
     switch (unit) {
       case GroupUnit(:final groupId, :final steps):
+        if (groupId == PreparationGroups.jungle) {
+          return PreparationGroupCard(
+            key: ValueKey(groupId),
+            groupId: groupId,
+            title: AppLocalizations.of(context).jungleGroupTitle,
+            steps: steps,
+            // The step details are the point of a guided page.
+            initiallyExpandedRows: true,
+          );
+        }
         if (groupId == PreparationGroups.returnToBox) {
           return ReturnToBoxCard(
             key: ValueKey(groupId),
@@ -110,6 +120,14 @@ class _GuidedPreparationWidgetState
       case StepUnit(:final step):
         if (step.id == NewWorkersModuleHandler.selectionStepId) {
           return const WorkerSelectorWidget();
+        }
+        if (step.id == NewWorkersModuleHandler.buildStepId) {
+          return PreparationCard(
+            key: ValueKey(step.id),
+            preparation: step,
+            initiallyExpanded: true,
+            footer: const WorkerBuildSummary(),
+          );
         }
         final isHutThrow = step.id == HutsModuleHandler.marketStepId;
         return PreparationCard(

@@ -1,11 +1,14 @@
 import 'package:collection/collection.dart';
 import 'package:companion_for_cacao/core/theme/app_colors.dart';
 import 'package:companion_for_cacao/core/theme/app_spacing.dart';
+import 'package:companion_for_cacao/core/theme/color_filters.dart';
+import 'package:companion_for_cacao/features/game_setup/domain/entities/preparation_actor.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/preparation_entity.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/table_zone.dart';
 import 'package:companion_for_cacao/features/game_setup/presentation/providers/game_setup_notifier.dart';
 import 'package:companion_for_cacao/features/game_setup/presentation/utils/preparation_image_resolver.dart';
 import 'package:companion_for_cacao/features/game_setup/presentation/widgets/preparation_image_dialog.dart';
+import 'package:companion_for_cacao/shared/widgets/players_color_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -82,12 +85,32 @@ class _PreparationStepRowState extends ConsumerState<PreparationStepRow> {
     final isCompleted =
         widget.isCompletedOverride ?? storedCompleted ?? step.isCompleted;
 
+    // "Each player…" steps: show a colour bar of who does it, and grey out
+    // the reference (white) component art.
+    final isAllPlayers = step.actor == PreparationActor.allPlayers;
+    final isGrayscale = isAllPlayers && step.colorReferenceImage;
+    final playersKey = ref.watch(
+      gameSetupProvider.select(
+        (s) => (s.value?.players.map((p) => p.color) ?? const <String>[]).join(
+          ',',
+        ),
+      ),
+    );
+    final playerColors = isAllPlayers && playersKey.isNotEmpty
+        ? playersKey.split(',')
+        : const <String>[];
+
     return Opacity(
       opacity: isCompleted ? 0.55 : 1.0,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          if (playerColors.isNotEmpty)
+            Padding(
+              padding: const EdgeInsets.only(top: 2, bottom: AppSpacing.xs),
+              child: PlayersColorBar(colors: playerColors),
+            ),
           InkWell(
             borderRadius: BorderRadius.circular(10),
             onTap: () => setState(() => _expanded = !_expanded),
@@ -99,12 +122,14 @@ class _PreparationStepRowState extends ConsumerState<PreparationStepRow> {
                     imageKey: step.imageKey,
                     quantity: step.quantity,
                     fallbackIcon: _fallbackIcon,
+                    grayscale: isGrayscale,
                     size: _expanded ? 64 : 42,
                     onTap: step.imageKey != null
                         ? () => showPreparationImageDialog(
                             context,
                             imagePath: step.imageKey!.toAssetPath(),
                             heroTag: _heroTag,
+                            grayscale: isGrayscale,
                           )
                         : null,
                     heroTag: _heroTag,
@@ -130,15 +155,39 @@ class _PreparationStepRowState extends ConsumerState<PreparationStepRow> {
                     ),
                   ),
                   AppSpacing.horizontalS,
-                  InkResponse(
-                    onTap: _onCheckTap,
-                    radius: 24,
-                    child: AnimatedCheckIcon(isCompleted: isCompleted),
-                  ),
+                  // Informational steps (e.g. "if you store this expansion
+                  // mixed in…") carry guidance, not a task, so they show an
+                  // info glyph instead of a checkbox and can't be ticked.
+                  if (step.informational)
+                    Icon(
+                      Icons.info_outline,
+                      size: 24,
+                      color: AppColors.brown.withValues(alpha: 0.4),
+                    )
+                  else
+                    InkResponse(
+                      onTap: _onCheckTap,
+                      radius: 24,
+                      child: AnimatedCheckIcon(isCompleted: isCompleted),
+                    ),
                 ],
               ),
             ),
           ),
+          // Extra tile faces (e.g. the ones a mixed-storage note asks to take
+          // out), shown as a strip so they're recognised without expanding.
+          if (step.imageStrip.isNotEmpty)
+            Padding(
+              padding: const EdgeInsets.only(left: 54, bottom: AppSpacing.xs),
+              child: Wrap(
+                spacing: AppSpacing.s,
+                runSpacing: AppSpacing.xs,
+                children: [
+                  for (final tile in step.imageStrip)
+                    _MiniTile(imageKey: tile.imageKey, quantity: tile.quantity),
+                ],
+              ),
+            ),
           AnimatedCrossFade(
             duration: const Duration(milliseconds: 200),
             crossFadeState: _expanded
@@ -235,6 +284,77 @@ class AnimatedCheckIcon extends StatelessWidget {
   }
 }
 
+/// A small tile face shown in a step's image strip (e.g. the tiles a
+/// mixed-storage note asks to take out). Tappable to zoom.
+class _MiniTile extends StatelessWidget {
+  const _MiniTile({required this.imageKey, required this.quantity});
+
+  final String imageKey;
+  final int quantity;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () => showPreparationImageDialog(
+        context,
+        imagePath: imageKey.toAssetPath(),
+        heroTag: 'prep_mini_$imageKey',
+      ),
+      child: Stack(
+        clipBehavior: Clip.none,
+        children: [
+          Container(
+            width: 46,
+            height: 46,
+            decoration: BoxDecoration(
+              color: AppColors.white,
+              borderRadius: BorderRadius.circular(9),
+              boxShadow: [
+                BoxShadow(
+                  color: AppColors.brown.withValues(alpha: 0.12),
+                  blurRadius: 3,
+                  offset: const Offset(0, 1),
+                ),
+              ],
+            ),
+            padding: const EdgeInsets.all(3),
+            child: Image.asset(
+              imageKey.toAssetPath(),
+              fit: BoxFit.contain,
+              errorBuilder: (context, error, stackTrace) => Icon(
+                Icons.image_not_supported_outlined,
+                color: AppColors.brown.withValues(alpha: 0.5),
+                size: 20,
+              ),
+            ),
+          ),
+          if (quantity >= 1)
+            Positioned(
+              top: -5,
+              right: -5,
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 1),
+                decoration: BoxDecoration(
+                  color: AppColors.brown,
+                  borderRadius: BorderRadius.circular(999),
+                  border: Border.all(color: AppColors.cream, width: 1.5),
+                ),
+                child: Text(
+                  '×$quantity',
+                  style: const TextStyle(
+                    color: AppColors.white,
+                    fontSize: 10,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ),
+        ],
+      ),
+    );
+  }
+}
+
 /// Step thumbnail: the real asset when available (tappable to zoom, with
 /// a visible magnifier affordance) or a zone icon otherwise. Grows when
 /// the row expands.
@@ -246,6 +366,7 @@ class _Thumb extends StatelessWidget {
     required this.size,
     required this.heroTag,
     this.onTap,
+    this.grayscale = false,
   });
 
   final String? imageKey;
@@ -254,6 +375,7 @@ class _Thumb extends StatelessWidget {
   final double size;
   final String heroTag;
   final VoidCallback? onTap;
+  final bool grayscale;
 
   @override
   Widget build(BuildContext context) {
@@ -275,15 +397,28 @@ class _Thumb extends StatelessWidget {
                 ],
               ),
               padding: const EdgeInsets.all(4),
-              child: Image.asset(
-                imageKey!.toAssetPath(),
-                fit: BoxFit.contain,
-                errorBuilder: (context, error, stackTrace) => Icon(
-                  Icons.image_not_supported_outlined,
-                  color: AppColors.brown,
-                  size: size * 0.5,
-                ),
-              ),
+              child: grayscale
+                  ? ColorFiltered(
+                      colorFilter: kGrayscaleFilter,
+                      child: Image.asset(
+                        imageKey!.toAssetPath(),
+                        fit: BoxFit.contain,
+                        errorBuilder: (context, error, stackTrace) => Icon(
+                          Icons.image_not_supported_outlined,
+                          color: AppColors.brown,
+                          size: size * 0.5,
+                        ),
+                      ),
+                    )
+                  : Image.asset(
+                      imageKey!.toAssetPath(),
+                      fit: BoxFit.contain,
+                      errorBuilder: (context, error, stackTrace) => Icon(
+                        Icons.image_not_supported_outlined,
+                        color: AppColors.brown,
+                        size: size * 0.5,
+                      ),
+                    ),
             ),
           )
         : Container(
@@ -308,7 +443,7 @@ class _Thumb extends StatelessWidget {
           clipBehavior: Clip.none,
           children: [
             content,
-            if (quantity != null && quantity! > 1)
+            if (quantity != null && quantity! >= 1)
               Positioned(
                 top: -5,
                 right: -5,

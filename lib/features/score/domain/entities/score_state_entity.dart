@@ -32,9 +32,16 @@ class ScoreStateEntity {
     this.maskOwners = const [null, null, null, null, null, null, null],
     this.currentStepIndex = 0,
     this.availableHutCounts,
+    this.prefilledFromGame = false,
   });
 
   final List<PlayerEntity> players;
+
+  /// True when this session was seeded from an active game: players and
+  /// modules are already known, so the setup step is skipped and the flow
+  /// starts straight at scoring. Standalone sessions (from Home) keep the
+  /// setup step to pick players and modules.
+  final bool prefilledFromGame;
   final bool hutModuleActive;
   final bool gemMinesActive;
   final List<TempleEntryEntity> temples;
@@ -55,7 +62,7 @@ class ScoreStateEntity {
   /// The visible steps given the active modules. Temples are replaced by
   /// gem mines when the Gem Mines module is in play.
   List<ScoreStep> get steps => [
-    ScoreStep.setup,
+    if (!prefilledFromGame) ScoreStep.setup,
     ScoreStep.accumulatedGold,
     ScoreStep.waterTrack,
     if (!gemMinesActive) ScoreStep.temples,
@@ -74,6 +81,16 @@ class ScoreStateEntity {
 
   PlayerScoreInputEntity inputOf(String color) =>
       inputsByColor[color] ?? PlayerScoreInputEntity();
+
+  /// Whether [hut] can be part of this game at all. With a registered throw
+  /// ([availableHutCounts] known), only the functions that landed face up
+  /// count — the rest can never be built, so the UI can hide them. Without a
+  /// registered throw every function is still possible.
+  bool isHutInGame(HutType hut) {
+    final counts = availableHutCounts;
+    if (counts == null) return true;
+    return (counts[hut] ?? 0) > 0;
+  }
 
   /// Every hut built by any player, duplicates included (some functions
   /// exist on two physical tiles, so two players can hold the same one).
@@ -133,6 +150,7 @@ class ScoreStateEntity {
     List<String?>? maskOwners,
     int? currentStepIndex,
     Map<HutType, int>? availableHutCounts,
+    bool? prefilledFromGame,
   }) {
     return ScoreStateEntity(
       players: players ?? this.players,
@@ -143,6 +161,7 @@ class ScoreStateEntity {
       maskOwners: maskOwners ?? this.maskOwners,
       currentStepIndex: currentStepIndex ?? this.currentStepIndex,
       availableHutCounts: availableHutCounts ?? this.availableHutCounts,
+      prefilledFromGame: prefilledFromGame ?? this.prefilledFromGame,
     );
   }
 
@@ -157,7 +176,8 @@ class ScoreStateEntity {
         mapEquals(other.inputsByColor, inputsByColor) &&
         listEquals(other.maskOwners, maskOwners) &&
         other.currentStepIndex == currentStepIndex &&
-        mapEquals(other.availableHutCounts, availableHutCounts);
+        mapEquals(other.availableHutCounts, availableHutCounts) &&
+        other.prefilledFromGame == prefilledFromGame;
   }
 
   @override
@@ -176,5 +196,6 @@ class ScoreStateEntity {
         : Object.hashAllUnordered(
             availableHutCounts!.entries.map((e) => Object.hash(e.key, e.value)),
           ),
+    prefilledFromGame,
   );
 }

@@ -24,6 +24,10 @@ class AppLocalizationsEs extends AppLocalizations {
   String get villageBoardLabel => 'Coge el tablero de tu aldea';
 
   @override
+  String get villageBoardDetailAll =>
+      'Cada jugador coge el tablero de aldea de su color y lo coloca delante de sí. Ahí están los almacenes y los remansos del aguador.';
+
+  @override
   String villageBoardDetail(String color) {
     return 'Coge el tablero de aldea de color $color y colócalo delante de ti. Ahí están tus almacenes y los remansos del aguador.';
   }
@@ -32,12 +36,20 @@ class AppLocalizationsEs extends AppLocalizations {
   String get waterCarrierLabel => 'Pon el aguador en el remanso \"-10\"';
 
   @override
+  String get waterCarrierDetailAll =>
+      'Cada jugador coge el aguador de su color y lo coloca en el remanso de valor \"-10\" de su tablero.';
+
+  @override
   String waterCarrierDetail(String color) {
     return 'Coge el aguador de color $color y colócalo en el remanso de valor \"-10\" del tablero de tu aldea.';
   }
 
   @override
   String get ownTilesLabel => 'Coge todas tus losetas de recolectores';
+
+  @override
+  String get ownTilesDetailAll =>
+      'Cada jugador reúne todas las losetas de recolectores de su color; son su reserva personal para toda la partida.';
 
   @override
   String ownTilesDetail(String color) {
@@ -52,6 +64,11 @@ class AppLocalizationsEs extends AppLocalizations {
   @override
   String removeWorkerDetail(String distribution) {
     return 'Busca entre tus losetas de recolectores una de las $distribution y devuélvela a la caja del juego.';
+  }
+
+  @override
+  String removeWorkerDetailAll(String distribution) {
+    return 'Cada jugador busca entre sus losetas de recolectores una de las $distribution y la devuelve a la caja del juego.';
   }
 
   @override
@@ -74,11 +91,31 @@ class AppLocalizationsEs extends AppLocalizations {
       'De las losetas de selva, busca la \"plantación simple\" y el \"mercado de precio de venta 2\" y colócalas boca arriba en el centro de la mesa, en diagonal una respecto de la otra; son las losetas iniciales de la zona de juego.';
 
   @override
-  String get junglePileLabel => 'Monta la pila de la selva';
+  String get jungleGroupTitle => 'La selva';
+
+  @override
+  String get gatherJungleLabel => 'Reúne las losetas de la selva';
+
+  @override
+  String get gatherJungleDetail =>
+      'Coge todas las losetas de selva del juego base; luego las modificarás (quitar/añadir) y formarás la pila.';
+
+  @override
+  String get junglePileLabel => 'Baraja y forma la pila';
 
   @override
   String get junglePileDetail =>
-      'Mezcla las losetas de selva restantes y colócalas boca abajo formando la pila de la selva.';
+      'Baraja todas las losetas de la selva boca abajo y forma la pila, junto al tablero.';
+
+  @override
+  String junglePurgeLabel(String expansion) {
+    return 'Si tienes $expansion mezclada';
+  }
+
+  @override
+  String junglePurgeDetail(String expansion, String tiles) {
+    return 'Esta partida no usa estas losetas de selva de $expansion: $tiles. Si las tienes mezcladas con el juego base, sácalas antes de montar la pila.';
+  }
 
   @override
   String get jungleDisplayLabel => 'Revela la selva explorada';
@@ -189,6 +226,9 @@ class AppLocalizationsEs extends AppLocalizations {
   }
 
   @override
+  String get mapTokensDetailAll => 'Cada jugador coge 2 fichas de mapa.';
+
+  @override
   String get mapTokensSurplusLabel =>
       'Devuelve las fichas de mapa sobrantes a la caja';
 
@@ -287,6 +327,10 @@ class AppLocalizationsEs extends AppLocalizations {
   }
 
   @override
+  String get treeOfLife0004DetailAll =>
+      'Módulo El árbol de la vida: cada jugador coge la loseta de recolectores 0-0-0-4 de su color (del módulo Los nuevos recolectores) y la añade a sus losetas.';
+
+  @override
   String get treeOfLife0004Rationale =>
       'Con 2 jugadores El árbol de la vida requiere la loseta 0-0-0-4 para que todos los árboles puedan cosecharse por completo (reglamento de Diamante).';
 
@@ -307,6 +351,19 @@ class AppLocalizationsEs extends AppLocalizations {
   @override
   String get newWorkersSelectionDetail =>
       'Selecciona qué losetas de recolectores queréis usar en esta partida.';
+
+  @override
+  String get newWorkersBuildLabel => 'Monta la pila de recolectores';
+
+  @override
+  String get newWorkersBuildDetail =>
+      'Cada jugador coge las losetas indicadas de cada origen.';
+
+  @override
+  String get workerBuildFromBase => 'Del juego base, coge:';
+
+  @override
+  String get workerBuildFromExpansion => 'De la expansión Diamante, coge:';
 
   @override
   String get returnToBoxTitle => 'Devolver a la caja';
@@ -579,6 +636,10 @@ class AppLocalizationsEs extends AppLocalizations {
   String get applyAction => 'Aplicar';
 
   @override
+  String get workerSelectionResetNotice =>
+      'Has cambiado los recolectores: vuelve a montar la pila.';
+
+  @override
   String get saveAction => 'Guardar';
 
   @override
@@ -614,7 +675,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get hutRegisterHint =>
-      'Toca una loseta para elegir la cara que ha quedado boca arriba; vuelve a tocarla para girarla.';
+      'Toca cada cara de cabaña que ha quedado boca arriba. Las imposibles desaparecen solas.';
 
   @override
   String get hutRegisterAction => 'Registra qué bohíos han quedado boca arriba';
@@ -1033,6 +1094,25 @@ class AppLocalizationsEs extends AppLocalizations {
       'Esto descarta todas las puntuaciones introducidas y vuelve a cargar los jugadores y módulos de la partida configurada.';
 
   @override
+  String get scoreContextGame => 'Puntuando la partida en curso';
+
+  @override
+  String get scoreContextDetached => 'Cálculo aparte';
+
+  @override
+  String get scoreBackToGameAction => 'Volver a la partida';
+
+  @override
+  String get scoreResetChooseBody =>
+      '¿Quieres reiniciar la puntuación de esta partida o empezar un cálculo aparte, vacío?';
+
+  @override
+  String get scoreResetGameOption => 'Reinicia la puntuación de la partida';
+
+  @override
+  String get scoreClearBlankOption => 'Vaciarlo todo (cálculo aparte)';
+
+  @override
   String get backAction => 'Atrás';
 
   @override
@@ -1231,4 +1311,137 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get playerNameHint => 'Nombre';
+
+  @override
+  String get aboutIntro =>
+      'Herramientas digitales para los jugadores de Cacao y sus expansiones: preparación de la partida, recuento de puntos y consulta de reglas, todo en un solo lugar.';
+
+  @override
+  String get aboutOpenSource => 'Código abierto';
+
+  @override
+  String get aboutIncludedTitle => 'Qué incluye';
+
+  @override
+  String get aboutInDevelopmentTitle => 'En desarrollo';
+
+  @override
+  String get aboutSoonBadge => 'pronto';
+
+  @override
+  String get aboutRepoTitle => 'Repositorio en GitHub';
+
+  @override
+  String get aboutRepoSubtitle => 'Reporta errores, propón mejoras o colabora';
+
+  @override
+  String get aboutMadeWith => 'Hecho con Flutter';
+
+  @override
+  String get aboutFeaturePrep => 'Preparación guiada';
+
+  @override
+  String get aboutFeaturePrepSub =>
+      'Paso a paso para el juego base y las expansiones';
+
+  @override
+  String get aboutFeatureScore => 'Calculadora de puntos';
+
+  @override
+  String get aboutFeatureScoreSub =>
+      'Puntuación final con los desempates oficiales';
+
+  @override
+  String get aboutFeatureTiles => 'Catálogo de losetas';
+
+  @override
+  String get aboutFeatureTilesSub => 'Busca y filtra por múltiples criterios';
+
+  @override
+  String get aboutFeatureRules => 'Reglas y manuales';
+
+  @override
+  String get aboutFeatureRulesSub => 'Consulta integrada dentro de la app';
+
+  @override
+  String get aboutFeatureExpansions => 'Expansiones completas';
+
+  @override
+  String get aboutFeatureExpansionsSub =>
+      'Xocolatl, Diamante y la variante Big Game';
+
+  @override
+  String get aboutFeatureLangs => 'Multi-idioma';
+
+  @override
+  String get aboutFeatureLangsSub => 'Catalán, castellano e inglés';
+
+  @override
+  String get aboutSoonTimer => 'Temporizador de turnos';
+
+  @override
+  String get aboutSoonHistory => 'Historial y estadísticas';
+
+  @override
+  String get aboutSoonSettings => 'Configuración personalizada';
+
+  @override
+  String get homeCardSetupSub => 'Configura jugadores, expansiones y módulos';
+
+  @override
+  String get homeCardTilesSub => 'Consulta el catálogo completo de losetas';
+
+  @override
+  String get homeCardScoresSub => 'Calcula la puntuación final automáticamente';
+
+  @override
+  String get homeCardRulesSub => 'Manuales integrados y referencia rápida';
+
+  @override
+  String get homeAboutTitle => 'Sobre la app';
+
+  @override
+  String get homeTagline => 'Tu compañero de mesa para Cacao';
+
+  @override
+  String get loadingLabel => 'Cargando…';
+
+  @override
+  String get scoreTemplesEmpty =>
+      'Aún no hay templos — añade uno por cada templo del tablero.';
+
+  @override
+  String get expansionsModulesSection => 'Expansiones y módulos';
+
+  @override
+  String get expansionSelectHint =>
+      'Toca una expansión para activarla y elegir sus módulos.';
+
+  @override
+  String get expansionTapHint => 'Toca para elegir sus módulos';
+
+  @override
+  String get modulesPickLabel => 'Elige los módulos';
+
+  @override
+  String moduleCountLabel(int count, int total) {
+    return '$count / $total módulos';
+  }
+
+  @override
+  String get cancelAction => 'Cancelar';
+
+  @override
+  String get clearSetupBody =>
+      'Esto borra los jugadores, expansiones y módulos seleccionados.';
+
+  @override
+  String get moduleWarningPickOne => 'Elige al menos un módulo';
+
+  @override
+  String get expansionNeedsModuleHint =>
+      'Alguna expansión no tiene módulos elegidos';
+
+  @override
+  String get playersNeededHint => 'Añade al menos 2 jugadores';
 }

@@ -116,7 +116,7 @@ class _PreparationCelebrationOverlayState
               child: IconButton(
                 onPressed: widget.onClose,
                 icon: const Icon(Icons.close, color: AppColors.brown),
-                tooltip: 'Close',
+                tooltip: l10n.closeAction,
               ),
             ),
             Center(

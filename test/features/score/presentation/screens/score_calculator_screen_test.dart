@@ -26,6 +26,9 @@ void main() {
   setUp(() {
     mockGoRouter = MockGoRouter();
     when(() => mockGoRouter.push(any())).thenAnswer((_) async => null);
+    // The screen asks the router whether it can pop to decide between a back
+    // arrow and the menu; these tests exercise the root (menu) case.
+    when(() => mockGoRouter.canPop()).thenReturn(false);
   });
 
   Widget wrap(Widget child) {
@@ -57,7 +60,7 @@ void main() {
       await tester.pumpWidget(wrap(const ScoreCalculatorScreen()));
       await tester.pump();
 
-      expect(find.text('Score Calculator'), findsOneWidget);
+      expect(find.text('SCORE CALCULATOR'), findsOneWidget);
       // The drawer menu uses the short label so it fits on one line.
       expect(find.text('Scores'), findsOneWidget);
       expect(find.text('Players & Modules'), findsOneWidget);
@@ -182,7 +185,8 @@ void main() {
         ..setAccumulatedGold('white', 20)
         // Both on water field 0 (value -10).
         ..setSunTokens('red', 2);
-      await tester.pump();
+      // pumpAndSettle so the result cards' entrance animation completes.
+      await tester.pumpAndSettle();
 
       // Winner banner + standings card.
       expect(find.text('Alice'), findsNWidgets(2));
@@ -209,7 +213,7 @@ void main() {
         ..addPlayer('Bob', 'white')
         ..setAccumulatedGold('red', 15)
         ..setAccumulatedGold('white', 15);
-      await tester.pump();
+      await tester.pumpAndSettle();
 
       expect(find.text('win the game!'), findsOneWidget);
       expect(

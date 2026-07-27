@@ -36,20 +36,11 @@ void main() {
 
       mockPreparationSteps = [
         makePrepStep(
-          id: 'setup_tiles_red',
-          detail: 'Setup tiles for red.',
-          actor: PreparationActor.player,
+          id: 'setup_tiles',
+          detail: 'Each player takes their tiles.',
+          actor: PreparationActor.allPlayers,
           tableZone: TableZone.playerArea,
           phase: PreparationPhase.playerSetup,
-          color: 'red',
-        ),
-        makePrepStep(
-          id: 'setup_tiles_blue',
-          detail: 'Setup tiles for blue.',
-          actor: PreparationActor.player,
-          tableZone: TableZone.playerArea,
-          phase: PreparationPhase.playerSetup,
-          color: 'blue',
         ),
         makePrepStep(
           id: 'setup_jungle_display',
@@ -73,108 +64,92 @@ void main() {
     });
 
     group('modifyPreparationSteps', () {
-      test(
-        'should add map tokens for each player and replace jungle display',
-        () {
-          final result = handler.modifyPreparationSteps(
-            mockPlayers,
-            mockTiles,
-            mockPreparationSteps,
-          );
+      test('should add a single generalized map tokens step and replace jungle '
+          'display', () {
+        final result = handler.modifyPreparationSteps(
+          mockPlayers,
+          mockTiles,
+          mockPreparationSteps,
+        );
 
-          // Original steps: 3
-          // Added map tokens: 2
-          // Surplus step (2 players < 4): 1
-          // Replaced jungle display with 2 steps: -1 + 2 = +1
-          // Total expected: 3 + 2 + 1 + 1 = 7
-          expect(result.length, equals(7));
+        // Original steps: 2 (setup_tiles, setup_jungle_display)
+        // Added map tokens: 1 (single "each player" step)
+        // Surplus step (2 players < 4): 1
+        // Replaced jungle display with 2 steps: -1 + 2 = +1
+        // Total expected: 2 + 1 + 1 + 1 = 5
+        expect(result.length, equals(5));
 
-          // Check map tokens for red
-          final mapTokensRedIndex = result.indexWhere(
-            (step) => step.id == 'setup_map_tokens_red',
-          );
-          expect(mapTokensRedIndex, greaterThan(0));
-          expect(
-            result[mapTokensRedIndex].phase,
-            equals(PreparationPhase.playerSetup),
-          );
-          expect(result[mapTokensRedIndex].color, equals('red'));
-          expect(
-            result[mapTokensRedIndex].actor,
-            equals(PreparationActor.player),
-          );
-          expect(result[mapTokensRedIndex].groupId, equals('group_player_red'));
-          expect(result[mapTokensRedIndex].quantity, equals(2));
+        // Check the single generalized map tokens step
+        final mapTokensIndex = result.indexWhere(
+          (step) => step.id == 'setup_map_tokens',
+        );
+        expect(mapTokensIndex, greaterThan(0));
+        expect(
+          result[mapTokensIndex].phase,
+          equals(PreparationPhase.playerSetup),
+        );
+        expect(result[mapTokensIndex].color, isNull);
+        expect(
+          result[mapTokensIndex].actor,
+          equals(PreparationActor.allPlayers),
+        );
+        expect(result[mapTokensIndex].groupId, isNull);
+        expect(result[mapTokensIndex].quantity, equals(2));
 
-          // Check map tokens detail (individual, no surplus text)
-          expect(
-            result[mapTokensRedIndex].detail,
-            equals('Player red takes 2 map tiles.'),
-          );
+        // Check map tokens detail (generalized "each player" text)
+        expect(
+          result[mapTokensIndex].detail,
+          equals('Each player takes 2 map tiles.'),
+        );
 
-          // Check map tokens for blue
-          final mapTokensBlueIndex = result.indexWhere(
-            (step) => step.id == 'setup_map_tokens_blue',
-          );
-          expect(mapTokensBlueIndex, greaterThan(0));
-          expect(
-            result[mapTokensBlueIndex].phase,
-            equals(PreparationPhase.playerSetup),
-          );
-          expect(result[mapTokensBlueIndex].color, equals('blue'));
+        // Check surplus step exists (2 players < 4)
+        final surplusIndex = result.indexWhere(
+          (step) => step.id == 'setup_map_tokens_surplus',
+        );
+        expect(surplusIndex, greaterThan(mapTokensIndex));
+        expect(
+          result[surplusIndex].phase,
+          equals(PreparationPhase.playerSetup),
+        );
+        expect(result[surplusIndex].tableZone, equals(TableZone.box));
 
-          // Check surplus step exists (2 players < 4)
-          final surplusIndex = result.indexWhere(
-            (step) => step.id == 'setup_map_tokens_surplus',
-          );
-          expect(surplusIndex, greaterThan(mapTokensBlueIndex));
-          expect(
-            result[surplusIndex].phase,
-            equals(PreparationPhase.playerSetup),
-          );
-          expect(result[surplusIndex].tableZone, equals(TableZone.box));
+        // Check replaced jungle display
+        expect(
+          result.any((step) => step.id == 'setup_jungle_display'),
+          isFalse,
+        );
 
-          // Check replaced jungle display
-          expect(
-            result.any((step) => step.id == 'setup_jungle_display'),
-            isFalse,
-          );
+        final mapBoardIndex = result.indexWhere(
+          (step) => step.id == 'setup_map_board',
+        );
+        expect(mapBoardIndex, greaterThan(0));
+        expect(
+          result[mapBoardIndex].phase,
+          equals(PreparationPhase.boardSetup),
+        );
+        expect(
+          result[mapBoardIndex].detail,
+          equals('Place the map board directly next to the jungle draw pile.'),
+        );
 
-          final mapBoardIndex = result.indexWhere(
-            (step) => step.id == 'setup_map_board',
-          );
-          expect(mapBoardIndex, greaterThan(0));
-          expect(
-            result[mapBoardIndex].phase,
-            equals(PreparationPhase.boardSetup),
-          );
-          expect(
-            result[mapBoardIndex].detail,
-            equals(
-              'Place the map board directly next to the jungle draw pile.',
-            ),
-          );
-
-          final jungleDisplayMapIndex = result.indexWhere(
-            (step) => step.id == 'setup_jungle_display_map',
-          );
-          expect(jungleDisplayMapIndex, equals(mapBoardIndex + 1));
-          expect(
-            result[jungleDisplayMapIndex].phase,
-            equals(PreparationPhase.boardSetup),
-          );
-        },
-      );
+        final jungleDisplayMapIndex = result.indexWhere(
+          (step) => step.id == 'setup_jungle_display_map',
+        );
+        expect(jungleDisplayMapIndex, equals(mapBoardIndex + 1));
+        expect(
+          result[jungleDisplayMapIndex].phase,
+          equals(PreparationPhase.boardSetup),
+        );
+      });
 
       test('should handle missing setup_jungle_display gracefully', () {
         final stepsWithoutDisplay = [
           makePrepStep(
-            id: 'setup_tiles_red',
-            detail: 'Setup tiles for red.',
-            actor: PreparationActor.player,
+            id: 'setup_tiles',
+            detail: 'Each player takes their tiles.',
+            actor: PreparationActor.allPlayers,
             tableZone: TableZone.playerArea,
             phase: PreparationPhase.playerSetup,
-            color: 'red',
           ),
         ];
 
@@ -202,36 +177,11 @@ void main() {
 
         final stepsWithFourPlayers = [
           makePrepStep(
-            id: 'setup_tiles_red',
-            detail: 'Setup tiles for red.',
-            actor: PreparationActor.player,
+            id: 'setup_tiles',
+            detail: 'Each player takes their tiles.',
+            actor: PreparationActor.allPlayers,
             tableZone: TableZone.playerArea,
             phase: PreparationPhase.playerSetup,
-            color: 'red',
-          ),
-          makePrepStep(
-            id: 'setup_tiles_blue',
-            detail: 'Setup tiles for blue.',
-            actor: PreparationActor.player,
-            tableZone: TableZone.playerArea,
-            phase: PreparationPhase.playerSetup,
-            color: 'blue',
-          ),
-          makePrepStep(
-            id: 'setup_tiles_white',
-            detail: 'Setup tiles for white.',
-            actor: PreparationActor.player,
-            tableZone: TableZone.playerArea,
-            phase: PreparationPhase.playerSetup,
-            color: 'white',
-          ),
-          makePrepStep(
-            id: 'setup_tiles_yellow',
-            detail: 'Setup tiles for yellow.',
-            actor: PreparationActor.player,
-            tableZone: TableZone.playerArea,
-            phase: PreparationPhase.playerSetup,
-            color: 'yellow',
           ),
           makePrepStep(
             id: 'setup_jungle_display',
@@ -253,15 +203,11 @@ void main() {
           isFalse,
         );
 
-        // Should have 4 map token steps
+        // Still a single generalized map tokens step regardless of count
         final mapTokenSteps = result
-            .where(
-              (step) =>
-                  step.id.startsWith('setup_map_tokens_') &&
-                  step.id != 'setup_map_tokens_surplus',
-            )
+            .where((step) => step.id == 'setup_map_tokens')
             .toList();
-        expect(mapTokenSteps.length, equals(4));
+        expect(mapTokenSteps.length, equals(1));
       });
     });
   });

@@ -24,6 +24,10 @@ class AppLocalizationsCa extends AppLocalizations {
   String get villageBoardLabel => 'Agafa el tauler del teu poblat';
 
   @override
+  String get villageBoardDetailAll =>
+      'Cada jugador agafa el tauler de poblat del seu color i se\'l posa al davant. Hi ha els magatzems i els remansos de l\'aiguader.';
+
+  @override
   String villageBoardDetail(String color) {
     return 'Agafa el tauler de poblat de color $color i posa-te\'l al davant. Hi ha els teus magatzems i els remansos de l\'aiguader.';
   }
@@ -32,12 +36,20 @@ class AppLocalizationsCa extends AppLocalizations {
   String get waterCarrierLabel => 'Posa l\'aiguader al remans \"-10\"';
 
   @override
+  String get waterCarrierDetailAll =>
+      'Cada jugador agafa l\'aiguader del seu color i el col·loca al remans de valor \"-10\" del seu tauler.';
+
+  @override
   String waterCarrierDetail(String color) {
     return 'Agafa l\'aiguader de color $color i col·loca\'l al remans de valor \"-10\" del tauler del teu poblat.';
   }
 
   @override
   String get ownTilesLabel => 'Agafa totes les teves rajoles de recol·lectors';
+
+  @override
+  String get ownTilesDetailAll =>
+      'Cada jugador reuneix totes les rajoles de recol·lectors del seu color; són la seva reserva personal per a tota la partida.';
 
   @override
   String ownTilesDetail(String color) {
@@ -52,6 +64,11 @@ class AppLocalizationsCa extends AppLocalizations {
   @override
   String removeWorkerDetail(String distribution) {
     return 'Busca entre les teves rajoles de recol·lectors una de les $distribution i torna-la a la capsa del joc.';
+  }
+
+  @override
+  String removeWorkerDetailAll(String distribution) {
+    return 'Cada jugador busca entre les seves rajoles de recol·lectors una de les $distribution i la torna a la capsa del joc.';
   }
 
   @override
@@ -74,11 +91,31 @@ class AppLocalizationsCa extends AppLocalizations {
       'De les rajoles de selva, busca la \"plantació simple\" i el \"mercat de preu de venda 2\" i posa-les cara amunt al mig de la taula, en diagonal l\'una respecte de l\'altra; són les rajoles inicials de la zona de joc.';
 
   @override
-  String get junglePileLabel => 'Munta la pila de la selva';
+  String get jungleGroupTitle => 'La selva';
+
+  @override
+  String get gatherJungleLabel => 'Reuneix les rajoles de la selva';
+
+  @override
+  String get gatherJungleDetail =>
+      'Agafa totes les rajoles de selva del joc base; tot seguit les modificaràs (treure/afegir) i en formaràs la pila.';
+
+  @override
+  String get junglePileLabel => 'Barreja i forma la pila';
 
   @override
   String get junglePileDetail =>
-      'Barreja les rajoles de selva restants i posa-les cap per avall formant la pila de la selva.';
+      'Barreja totes les rajoles de la selva cara avall i forma la pila, al costat del tauler.';
+
+  @override
+  String junglePurgeLabel(String expansion) {
+    return 'Si tens $expansion barrejada';
+  }
+
+  @override
+  String junglePurgeDetail(String expansion, String tiles) {
+    return 'Aquesta partida no usa aquestes rajoles de selva de $expansion: $tiles. Si les tens barrejades amb el joc base, treu-les abans de muntar la pila.';
+  }
 
   @override
   String get jungleDisplayLabel => 'Descobreix la selva explorada';
@@ -189,6 +226,9 @@ class AppLocalizationsCa extends AppLocalizations {
   }
 
   @override
+  String get mapTokensDetailAll => 'Cada jugador agafa 2 fitxes de mapa.';
+
+  @override
   String get mapTokensSurplusLabel =>
       'Torna les fitxes de mapa sobrants a la capsa';
 
@@ -288,6 +328,10 @@ class AppLocalizationsCa extends AppLocalizations {
   }
 
   @override
+  String get treeOfLife0004DetailAll =>
+      'Mòdul L\'arbre de la vida: cada jugador agafa la rajola de recol·lectors 0-0-0-4 del seu color (del mòdul Els nous recol·lectors) i l\'afegeix a les seves rajoles.';
+
+  @override
   String get treeOfLife0004Rationale =>
       'Amb 2 jugadors L\'arbre de la vida requereix la rajola 0-0-0-4 perquè tots els arbres es puguin collir del tot (reglament de Diamante).';
 
@@ -308,6 +352,19 @@ class AppLocalizationsCa extends AppLocalizations {
   @override
   String get newWorkersSelectionDetail =>
       'Selecciona quines rajoles de recol·lectors voleu usar en aquesta partida.';
+
+  @override
+  String get newWorkersBuildLabel => 'Munta la pila de recol·lectors';
+
+  @override
+  String get newWorkersBuildDetail =>
+      'Cada jugador agafa les rajoles indicades de cada origen.';
+
+  @override
+  String get workerBuildFromBase => 'Del joc base, agafa:';
+
+  @override
+  String get workerBuildFromExpansion => 'De l\'expansió Diamante, agafa:';
 
   @override
   String get returnToBoxTitle => 'Torna a la capsa';
@@ -580,6 +637,10 @@ class AppLocalizationsCa extends AppLocalizations {
   String get applyAction => 'Aplica';
 
   @override
+  String get workerSelectionResetNotice =>
+      'Has canviat els recol·lectors: torna a muntar la pila.';
+
+  @override
   String get saveAction => 'Desa';
 
   @override
@@ -614,7 +675,7 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String get hutRegisterHint =>
-      'Toca una rajola per triar la cara que ha quedat amunt; torna-la a tocar per girar-la.';
+      'Toca cada cara de cabana que ha quedat amunt. Les impossibles desapareixen soles.';
 
   @override
   String get hutRegisterAction =>
@@ -1034,6 +1095,25 @@ class AppLocalizationsCa extends AppLocalizations {
       'Això descarta totes les puntuacions introduïdes i torna a carregar els jugadors i mòduls de la partida configurada.';
 
   @override
+  String get scoreContextGame => 'Puntuant la partida en curs';
+
+  @override
+  String get scoreContextDetached => 'Càlcul a part';
+
+  @override
+  String get scoreBackToGameAction => 'Torna a la partida';
+
+  @override
+  String get scoreResetChooseBody =>
+      'Vols reiniciar la puntuació d\'aquesta partida o començar un càlcul a part, buit?';
+
+  @override
+  String get scoreResetGameOption => 'Reinicia la puntuació de la partida';
+
+  @override
+  String get scoreClearBlankOption => 'Buida-ho tot (càlcul a part)';
+
+  @override
   String get backAction => 'Enrere';
 
   @override
@@ -1231,4 +1311,138 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String get playerNameHint => 'Nom';
+
+  @override
+  String get aboutIntro =>
+      'Eines digitals per als jugadors de Cacao i les seves expansions: preparació de la partida, recompte de punts i consulta de regles, tot en un sol lloc.';
+
+  @override
+  String get aboutOpenSource => 'Codi obert';
+
+  @override
+  String get aboutIncludedTitle => 'Què inclou';
+
+  @override
+  String get aboutInDevelopmentTitle => 'En desenvolupament';
+
+  @override
+  String get aboutSoonBadge => 'aviat';
+
+  @override
+  String get aboutRepoTitle => 'Repositori a GitHub';
+
+  @override
+  String get aboutRepoSubtitle =>
+      'Reporta errors, proposa millores o col·labora';
+
+  @override
+  String get aboutMadeWith => 'Fet amb Flutter';
+
+  @override
+  String get aboutFeaturePrep => 'Preparació guiada';
+
+  @override
+  String get aboutFeaturePrepSub =>
+      'Pas a pas per al joc base i les expansions';
+
+  @override
+  String get aboutFeatureScore => 'Calculadora de punts';
+
+  @override
+  String get aboutFeatureScoreSub =>
+      'Puntuació final amb els desempats oficials';
+
+  @override
+  String get aboutFeatureTiles => 'Catàleg de rajoles';
+
+  @override
+  String get aboutFeatureTilesSub => 'Cerca i filtra per múltiples criteris';
+
+  @override
+  String get aboutFeatureRules => 'Regles i manuals';
+
+  @override
+  String get aboutFeatureRulesSub => 'Consulta integrada dins l\'app';
+
+  @override
+  String get aboutFeatureExpansions => 'Expansions completes';
+
+  @override
+  String get aboutFeatureExpansionsSub =>
+      'Xocolatl, Diamante i la variant Big Game';
+
+  @override
+  String get aboutFeatureLangs => 'Multi-idioma';
+
+  @override
+  String get aboutFeatureLangsSub => 'Català, castellà i anglès';
+
+  @override
+  String get aboutSoonTimer => 'Temporitzador de torns';
+
+  @override
+  String get aboutSoonHistory => 'Historial i estadístiques';
+
+  @override
+  String get aboutSoonSettings => 'Configuració personalitzada';
+
+  @override
+  String get homeCardSetupSub => 'Configura jugadors, expansions i mòduls';
+
+  @override
+  String get homeCardTilesSub => 'Consulta el catàleg complet de rajoles';
+
+  @override
+  String get homeCardScoresSub => 'Calcula la puntuació final automàticament';
+
+  @override
+  String get homeCardRulesSub => 'Manuals integrats i referència ràpida';
+
+  @override
+  String get homeAboutTitle => 'Sobre l\'app';
+
+  @override
+  String get homeTagline => 'El teu company de taula per al Cacao';
+
+  @override
+  String get loadingLabel => 'Carregant…';
+
+  @override
+  String get scoreTemplesEmpty =>
+      'Encara no hi ha temples — afegeix-ne un per cada temple del tauler.';
+
+  @override
+  String get expansionsModulesSection => 'Expansions i mòduls';
+
+  @override
+  String get expansionSelectHint =>
+      'Toca una expansió per activar-la i triar-ne els mòduls.';
+
+  @override
+  String get expansionTapHint => 'Toca per triar-ne els mòduls';
+
+  @override
+  String get modulesPickLabel => 'Tria els mòduls';
+
+  @override
+  String moduleCountLabel(int count, int total) {
+    return '$count / $total mòduls';
+  }
+
+  @override
+  String get cancelAction => 'Cancel·la';
+
+  @override
+  String get clearSetupBody =>
+      'Això esborra els jugadors, expansions i mòduls seleccionats.';
+
+  @override
+  String get moduleWarningPickOne => 'Tria almenys un mòdul';
+
+  @override
+  String get expansionNeedsModuleHint =>
+      'Alguna expansió no té cap mòdul triat';
+
+  @override
+  String get playersNeededHint => 'Afegeix almenys 2 jugadors';
 }

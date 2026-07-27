@@ -1,3 +1,4 @@
+import 'package:companion_for_cacao/features/game_setup/domain/entities/game_setup_state_entity.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/player_entity.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/services/handlers/gem_mines_module_handler.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/services/handlers/huts_module_handler.dart';
@@ -34,25 +35,39 @@ class ScoreNotifier extends _$ScoreNotifier {
       if (!wasStarted && isStarted) ref.invalidateSelf();
     });
     // Snapshot, not watch: other setup changes (players, modules) must not
-    // wipe a scoring session in progress. Use reset() to start over.
+    // wipe a scoring session in progress. Use resetToGame()/clearToBlank().
     final setup = ref.read(gameSetupProvider).value;
     if (setup == null || !setup.isStarted) return ScoreStateEntity();
-    return ScoreStateEntity(
-      players: setup.players,
-      hutModuleActive: setup.modules.any(
-        (m) => m.id == HutsModuleHandler.moduleId,
-      ),
-      gemMinesActive: setup.modules.any(
-        (m) => m.id == GemMinesModuleHandler.moduleId,
-      ),
-      // With the hut throw registered, the calculator offers exactly the
-      // huts in play.
-      availableHutCounts: setup.hutLayout?.availableCounts,
-    );
+    return _fromGame(setup);
   }
 
-  /// Discards the session and prefills again from the current game setup.
-  void reset() => ref.invalidateSelf();
+  /// A fresh session seeded from an active game: players and modules come
+  /// from the game, so the setup step is skipped and scoring opens directly.
+  /// With the hut throw registered, the exact hut supply is carried over too.
+  ScoreStateEntity _fromGame(GameSetupStateEntity setup) => ScoreStateEntity(
+    players: setup.players,
+    hutModuleActive: setup.modules.any(
+      (m) => m.id == HutsModuleHandler.moduleId,
+    ),
+    gemMinesActive: setup.modules.any(
+      (m) => m.id == GemMinesModuleHandler.moduleId,
+    ),
+    availableHutCounts: setup.hutLayout?.availableCounts,
+    prefilledFromGame: true,
+  );
+
+  /// Clears entered scores and reloads players/modules from the active game.
+  /// Falls back to a blank session when no game is active.
+  void resetToGame() {
+    final setup = ref.read(gameSetupProvider).value;
+    state = (setup?.isStarted ?? false)
+        ? _fromGame(setup!)
+        : ScoreStateEntity();
+  }
+
+  /// Empties the whole session and detaches it from the active game — a
+  /// scratch calculation. Reattach with [resetToGame].
+  void clearToBlank() => state = ScoreStateEntity();
 
   // -------------------- Setup step --------------------
 

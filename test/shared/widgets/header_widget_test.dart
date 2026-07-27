@@ -37,7 +37,9 @@ void main() {
       final decoration = container.decoration as BoxDecoration;
       final text = tester.widget<Text>(find.text('Styled Header'));
 
-      expect(decoration.color, AppColors.greenNormal);
+      // The header now leads with a gold accent bar (instead of a green
+      // pill) next to bold body-font text.
+      expect(decoration.color, AppColors.gold);
       expect(text.style, AppTextStyles.markdownH2);
     });
   });

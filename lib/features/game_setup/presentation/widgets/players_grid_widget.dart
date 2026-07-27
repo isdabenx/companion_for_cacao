@@ -35,21 +35,27 @@ class PlayersGridWidget extends ConsumerWidget {
         ),
         AppSpacing.verticalM,
 
-        // All colors - reorderable
+        // All colors - reorderable. Two per row with a compact height that
+        // hugs the content (matching the score-calculator player picker),
+        // instead of tall square cells with wasted green space.
         LayoutBuilder(
           builder: (context, constraints) {
-            final crossAxisCount = constraints.maxWidth > 400 ? 4 : 2;
             final isLandscape =
                 MediaQuery.sizeOf(context).width >
                 MediaQuery.sizeOf(context).height;
 
             return ReorderableGridView.count(
-              crossAxisCount: crossAxisCount,
+              crossAxisCount: 2,
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
-              mainAxisSpacing: 12,
-              crossAxisSpacing: 12,
-              childAspectRatio: isLandscape ? 1.6 : 1.0,
+              mainAxisSpacing: AppSpacing.s,
+              crossAxisSpacing: AppSpacing.s,
+              // Wide and short: the chip is now one row (disc + name), so a
+              // tall cell would just re-introduce the dead space. The ratio
+              // still has to clear the 40px colour disc plus the chip's
+              // padding and border, or the disc (and the turn number inside
+              // it) gets clipped.
+              childAspectRatio: isLandscape ? 4.0 : 2.2,
               onReorder: (oldIndex, newIndex) {
                 ref
                     .read(gameSetupProvider.notifier)

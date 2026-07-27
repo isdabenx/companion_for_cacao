@@ -84,7 +84,7 @@ void main() {
       );
 
       // Verify the title
-      expect(find.text('Game Dashboard'), findsOneWidget);
+      expect(find.text('GAME DASHBOARD'), findsOneWidget);
 
       // Verify DetailedSummaryWidget is present
       expect(find.byType(DetailedSummaryWidget), findsOneWidget);

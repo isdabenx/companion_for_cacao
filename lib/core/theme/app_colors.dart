@@ -13,12 +13,26 @@ class AppColors {
   static const Color iconColor = brown;
   static const Color shadow = Color(0x1F000000);
 
+  // Content surfaces (the calm, warm layer that content sits on, so the
+  // leafy background stays a texture and text keeps its contrast).
+  /// Full-width framed panels.
+  static const Color surface = cream;
+
+  /// Cards floating on [surface].
+  static const Color surfaceCard = white;
+
+  /// Wash laid over the leaf background image to calm it (used with alpha).
+  static const Color scrim = greenLight;
+
   static const Color greenLight = Color(0xFFE7F3DE);
   static const Color greenNormal = Color(0xFFC1DFAE);
   static const Color greenDark = Color(0xFF63B944);
   static const Color greenDarker = Color(0xFF35762C);
   static const Color brown = Color(0xFF2C0801);
   static const Color gold = Color(0xFFFFC20F);
+
+  /// Deeper gold, for gradients and shadows on gold accents.
+  static const Color goldDark = Color(0xFFE09A08);
 
   /// Amber tone for non-blocking warnings (readable on cream/white).
   static const Color warning = Color(0xFFD97706);

@@ -21,17 +21,16 @@ void main() {
         activeModules: [],
       );
 
-      // Player setup: village board, carrier, field, tiles for each player
-      expect(hasStep(r.stepIds, 'setup_village_board_red'), isTrue);
-      expect(hasStep(r.stepIds, 'setup_village_board_purple'), isTrue);
-      expect(hasStep(r.stepIds, 'setup_tiles_red'), isTrue);
-      expect(hasStep(r.stepIds, 'setup_tiles_purple'), isTrue);
+      // Personal setup is stated once for all players.
+      expect(hasStep(r.stepIds, 'setup_village_board'), isTrue);
+      expect(hasStep(r.stepIds, 'setup_water_carrier'), isTrue);
+      expect(hasStep(r.stepIds, 'setup_tiles'), isTrue);
 
       // NO worker removal steps for 2 players
       expect(
         hasAnyStepMatching(
           r.stepIds,
-          (id) => id.startsWith('setup_remove_worker_'),
+          (id) => id.startsWith('setup_remove_worker'),
         ),
         isFalse,
       );
@@ -98,16 +97,14 @@ void main() {
         activeModules: [],
       );
 
-      // Worker removal: 1x 1-1-1-1 per player
-      expect(hasStep(r.stepIds, 'setup_remove_worker_1_red'), isTrue);
-      expect(hasStep(r.stepIds, 'setup_remove_worker_1_purple'), isTrue);
-      expect(hasStep(r.stepIds, 'setup_remove_worker_1_white'), isTrue);
+      // Worker removal: single generalized "each player returns 1-1-1-1" step
+      expect(hasStep(r.stepIds, 'setup_remove_worker_1'), isTrue);
 
       // NO 2-1-0-1 removal
       expect(
         hasAnyStepMatching(
           r.stepIds,
-          (id) => id.startsWith('setup_remove_worker_2_'),
+          (id) => id.startsWith('setup_remove_worker_2'),
         ),
         isFalse,
       );
@@ -141,13 +138,9 @@ void main() {
         activeModules: [],
       );
 
-      // Worker removal: 1-1-1-1 per player
-      expect(hasStep(r.stepIds, 'setup_remove_worker_1_red'), isTrue);
-      expect(hasStep(r.stepIds, 'setup_remove_worker_1_yellow'), isTrue);
-
-      // AND 2-1-0-1 per player
-      expect(hasStep(r.stepIds, 'setup_remove_worker_2_red'), isTrue);
-      expect(hasStep(r.stepIds, 'setup_remove_worker_2_yellow'), isTrue);
+      // Worker removal: single generalized steps for both values
+      expect(hasStep(r.stepIds, 'setup_remove_worker_1'), isTrue);
+      expect(hasStep(r.stepIds, 'setup_remove_worker_2'), isTrue);
 
       // Worker quantities: both reduced
       expect(tileQty(r.tiles, 'base.worker_red_1-1-1-1'), 3);
@@ -166,9 +159,8 @@ void main() {
         activeModules: [mapModule],
       );
 
-      // Map tokens per player
-      expect(hasStep(r.stepIds, 'setup_map_tokens_red'), isTrue);
-      expect(hasStep(r.stepIds, 'setup_map_tokens_purple'), isTrue);
+      // Map tokens (single generalized "each player" step)
+      expect(hasStep(r.stepIds, 'setup_map_tokens'), isTrue);
 
       // Surplus step (< 4 players)
       expect(hasStep(r.stepIds, 'setup_map_tokens_surplus'), isTrue);
@@ -188,9 +180,8 @@ void main() {
         activeModules: [mapModule],
       );
 
-      // Map tokens per player
-      expect(hasStep(r.stepIds, 'setup_map_tokens_red'), isTrue);
-      expect(hasStep(r.stepIds, 'setup_map_tokens_yellow'), isTrue);
+      // Map tokens (single generalized "each player" step)
+      expect(hasStep(r.stepIds, 'setup_map_tokens'), isTrue);
 
       // NO surplus step (4 players = 0 surplus)
       expect(hasStep(r.stepIds, 'setup_map_tokens_surplus'), isFalse);
@@ -480,15 +471,14 @@ void main() {
       // Tree of life tiles added
       expect(hasStep(r.stepIds, 'setup_tree_of_life_add_tiles'), isTrue);
 
-      // 0-0-0-4 worker tile per player
-      expect(hasStep(r.stepIds, 'setup_tree_of_life_add_0004_red'), isTrue);
-      expect(hasStep(r.stepIds, 'setup_tree_of_life_add_0004_purple'), isTrue);
+      // 0-0-0-4 worker tile (single generalized "each player" step)
+      expect(hasStep(r.stepIds, 'setup_tree_of_life_add_0004'), isTrue);
 
       // NO worker removal steps for 2p
       expect(
         hasAnyStepMatching(
           r.stepIds,
-          (id) => id.startsWith('setup_remove_worker_'),
+          (id) => id.startsWith('setup_remove_worker'),
         ),
         isFalse,
       );
@@ -538,7 +528,7 @@ void main() {
       expect(
         hasAnyStepMatching(
           r.stepIds,
-          (id) => id.startsWith('setup_remove_worker_1_'),
+          (id) => id.startsWith('setup_remove_worker_1'),
         ),
         isFalse,
       );
@@ -576,14 +566,13 @@ void main() {
       expect(hasStep(r.stepIds, 'setup_tree_of_life_add_tiles'), isTrue);
 
       // Worker 1-1-1-1 IS removed (4p: only restores 2-1-0-1)
-      expect(hasStep(r.stepIds, 'setup_remove_worker_1_red'), isTrue);
-      expect(hasStep(r.stepIds, 'setup_remove_worker_1_yellow'), isTrue);
+      expect(hasStep(r.stepIds, 'setup_remove_worker_1'), isTrue);
 
       // Worker 2-1-0-1 NOT removed (Tree of Life restores)
       expect(
         hasAnyStepMatching(
           r.stepIds,
-          (id) => id.startsWith('setup_remove_worker_2_'),
+          (id) => id.startsWith('setup_remove_worker_2'),
         ),
         isFalse,
       );
@@ -752,9 +741,8 @@ void main() {
       // Tree of Life adds tiles
       expect(hasStep(r.stepIds, 'setup_tree_of_life_add_tiles'), isTrue);
 
-      // 0-0-0-4 worker tiles for each player
-      expect(hasStep(r.stepIds, 'setup_tree_of_life_add_0004_red'), isTrue);
-      expect(hasStep(r.stepIds, 'setup_tree_of_life_add_0004_purple'), isTrue);
+      // 0-0-0-4 worker tile (single generalized "each player" step)
+      expect(hasStep(r.stepIds, 'setup_tree_of_life_add_0004'), isTrue);
 
       // Chocolate bars
       expect(hasStep(r.stepIds, 'setup_chocolate_bars'), isTrue);
@@ -808,7 +796,7 @@ void main() {
       expect(
         hasAnyStepMatching(
           r.stepIds,
-          (id) => id.startsWith('setup_remove_worker_1_'),
+          (id) => id.startsWith('setup_remove_worker_1'),
         ),
         isFalse,
       );
@@ -838,13 +826,13 @@ void main() {
       );
 
       // Worker 1-1-1-1 IS removed (4p)
-      expect(hasStep(r.stepIds, 'setup_remove_worker_1_red'), isTrue);
+      expect(hasStep(r.stepIds, 'setup_remove_worker_1'), isTrue);
 
       // Worker 2-1-0-1 NOT removed (Tree of Life restores)
       expect(
         hasAnyStepMatching(
           r.stepIds,
-          (id) => id.startsWith('setup_remove_worker_2_'),
+          (id) => id.startsWith('setup_remove_worker_2'),
         ),
         isFalse,
       );
@@ -936,7 +924,7 @@ void main() {
       expect(
         hasAnyStepMatching(
           r.stepIds,
-          (id) => id.startsWith('setup_remove_worker_1_'),
+          (id) => id.startsWith('setup_remove_worker_1'),
         ),
         isFalse,
       );
@@ -998,9 +986,8 @@ void main() {
         expansions: [chocolatlExp],
       );
 
-      // Map tokens per player
-      expect(hasStep(r.stepIds, 'setup_map_tokens_red'), isTrue);
-      expect(hasStep(r.stepIds, 'setup_map_tokens_purple'), isTrue);
+      // Map tokens (single generalized "each player" step)
+      expect(hasStep(r.stepIds, 'setup_map_tokens'), isTrue);
       expect(hasStep(r.stepIds, 'setup_map_tokens_surplus'), isTrue);
 
       // Starting tiles: water (Watering active)
@@ -1064,24 +1051,26 @@ void main() {
       final shuffleIdx27 = stepIndex(r.stepIds, 'setup_shuffle_workers');
       expect(nwIdx27, lessThan(shuffleIdx27));
 
-      // Village board, carrier, field, tiles for each player
-      expect(hasStep(r.stepIds, 'setup_village_board_red'), isTrue);
-      expect(hasStep(r.stepIds, 'setup_tiles_red'), isTrue);
+      // Village board, carrier, field for each player. New Workers replaces
+      // the base "take all your worker tiles" step with the selection + a
+      // build step that says which tiles to take from each source.
+      expect(hasStep(r.stepIds, 'setup_village_board'), isTrue);
+      expect(hasStep(r.stepIds, 'setup_tiles'), isFalse);
+      expect(hasStep(r.stepIds, 'setup_new_workers_build'), isTrue);
 
       // Map tokens + surplus
-      expect(hasStep(r.stepIds, 'setup_map_tokens_red'), isTrue);
+      expect(hasStep(r.stepIds, 'setup_map_tokens'), isTrue);
       expect(hasStep(r.stepIds, 'setup_map_tokens_surplus'), isTrue);
 
-      // 0-0-0-4 worker tile steps removed by New Workers handler (selector
-      // subsumes them when both Tree of Life and New Workers are active)
-      expect(hasStep(r.stepIds, 'setup_tree_of_life_add_0004_red'), isFalse);
-      expect(hasStep(r.stepIds, 'setup_tree_of_life_add_0004_purple'), isFalse);
+      // 0-0-0-4 worker tile step removed by New Workers handler (selector
+      // subsumes it when both Tree of Life and New Workers are active)
+      expect(hasStep(r.stepIds, 'setup_tree_of_life_add_0004'), isFalse);
 
       // NO worker removal steps (2p)
       expect(
         hasAnyStepMatching(
           r.stepIds,
-          (id) => id.startsWith('setup_remove_worker_'),
+          (id) => id.startsWith('setup_remove_worker'),
         ),
         isFalse,
       );
@@ -1228,14 +1217,14 @@ void main() {
       expect(nwIdx28, lessThan(shuffleIdx28));
 
       // Map tokens (3p → surplus exists: 8 total - 6 = 2 surplus)
-      expect(hasStep(r.stepIds, 'setup_map_tokens_red'), isTrue);
+      expect(hasStep(r.stepIds, 'setup_map_tokens'), isTrue);
       expect(hasStep(r.stepIds, 'setup_map_tokens_surplus'), isTrue);
 
       // Worker 1-1-1-1 NOT removed (Tree of Life restores)
       expect(
         hasAnyStepMatching(
           r.stepIds,
-          (id) => id.startsWith('setup_remove_worker_1_'),
+          (id) => id.startsWith('setup_remove_worker_1'),
         ),
         isFalse,
       );
@@ -1359,15 +1348,14 @@ void main() {
       expect(nwIdx29, lessThan(shuffleIdx29));
 
       // Map tokens, NO surplus (4 players)
-      expect(hasStep(r.stepIds, 'setup_map_tokens_red'), isTrue);
-      expect(hasStep(r.stepIds, 'setup_map_tokens_yellow'), isTrue);
+      expect(hasStep(r.stepIds, 'setup_map_tokens'), isTrue);
       expect(hasStep(r.stepIds, 'setup_map_tokens_surplus'), isFalse);
 
       // Worker removal steps removed by New Workers selector (always authoritative)
       expect(
         hasAnyStepMatching(
           r.stepIds,
-          (id) => id.startsWith('setup_remove_worker_1_'),
+          (id) => id.startsWith('setup_remove_worker_1'),
         ),
         isFalse,
       );
@@ -1376,7 +1364,7 @@ void main() {
       expect(
         hasAnyStepMatching(
           r.stepIds,
-          (id) => id.startsWith('setup_remove_worker_2_'),
+          (id) => id.startsWith('setup_remove_worker_2'),
         ),
         isFalse,
       );
@@ -1478,24 +1466,19 @@ void main() {
 
       // ---- Player Setup ----
       // Village board, carrier, field, tiles for each player
-      expect(hasStep(r.stepIds, 'setup_village_board_red'), isTrue);
-      expect(hasStep(r.stepIds, 'setup_village_board_purple'), isTrue);
-      expect(hasStep(r.stepIds, 'setup_village_board_white'), isTrue);
-      expect(hasStep(r.stepIds, 'setup_tiles_red'), isTrue);
-      expect(hasStep(r.stepIds, 'setup_tiles_purple'), isTrue);
-      expect(hasStep(r.stepIds, 'setup_tiles_white'), isTrue);
+      expect(hasStep(r.stepIds, 'setup_village_board'), isTrue);
+      expect(hasStep(r.stepIds, 'setup_water_carrier'), isTrue);
+      expect(hasStep(r.stepIds, 'setup_tiles'), isTrue);
 
       // Map tokens (3p → surplus exists)
-      expect(hasStep(r.stepIds, 'setup_map_tokens_red'), isTrue);
-      expect(hasStep(r.stepIds, 'setup_map_tokens_purple'), isTrue);
-      expect(hasStep(r.stepIds, 'setup_map_tokens_white'), isTrue);
+      expect(hasStep(r.stepIds, 'setup_map_tokens'), isTrue);
       expect(hasStep(r.stepIds, 'setup_map_tokens_surplus'), isTrue);
 
       // NO worker removal steps at all (Big Game = no removals)
       expect(
         hasAnyStepMatching(
           r.stepIds,
-          (id) => id.startsWith('setup_remove_worker_'),
+          (id) => id.startsWith('setup_remove_worker'),
         ),
         isFalse,
       );
@@ -1507,7 +1490,7 @@ void main() {
       expect(
         hasAnyStepMatching(
           r.stepIds,
-          (id) => id.startsWith('setup_tree_of_life_add_0004_'),
+          (id) => id.startsWith('setup_tree_of_life_add_0004'),
         ),
         isFalse,
       );
@@ -1676,23 +1659,19 @@ void main() {
 
       // ---- Player Setup ----
       // Village board, carrier, field, tiles for each player
-      expect(hasStep(r.stepIds, 'setup_village_board_red'), isTrue);
-      expect(hasStep(r.stepIds, 'setup_village_board_purple'), isTrue);
-      expect(hasStep(r.stepIds, 'setup_village_board_white'), isTrue);
-      expect(hasStep(r.stepIds, 'setup_village_board_yellow'), isTrue);
-      expect(hasStep(r.stepIds, 'setup_tiles_red'), isTrue);
-      expect(hasStep(r.stepIds, 'setup_tiles_yellow'), isTrue);
+      expect(hasStep(r.stepIds, 'setup_village_board'), isTrue);
+      expect(hasStep(r.stepIds, 'setup_water_carrier'), isTrue);
+      expect(hasStep(r.stepIds, 'setup_tiles'), isTrue);
 
       // Map tokens, NO surplus (4 players)
-      expect(hasStep(r.stepIds, 'setup_map_tokens_red'), isTrue);
-      expect(hasStep(r.stepIds, 'setup_map_tokens_yellow'), isTrue);
+      expect(hasStep(r.stepIds, 'setup_map_tokens'), isTrue);
       expect(hasStep(r.stepIds, 'setup_map_tokens_surplus'), isFalse);
 
       // NO worker removal steps at all
       expect(
         hasAnyStepMatching(
           r.stepIds,
-          (id) => id.startsWith('setup_remove_worker_'),
+          (id) => id.startsWith('setup_remove_worker'),
         ),
         isFalse,
       );
@@ -1704,7 +1683,7 @@ void main() {
       expect(
         hasAnyStepMatching(
           r.stepIds,
-          (id) => id.startsWith('setup_tree_of_life_add_0004_'),
+          (id) => id.startsWith('setup_tree_of_life_add_0004'),
         ),
         isFalse,
       );
@@ -1871,7 +1850,7 @@ void main() {
       expect(
         hasAnyStepMatching(
           r.stepIds,
-          (id) => id.startsWith('setup_remove_worker_1_'),
+          (id) => id.startsWith('setup_remove_worker_1'),
         ),
         isFalse,
       );
@@ -1905,7 +1884,7 @@ void main() {
         expect(
           hasAnyStepMatching(
             r.stepIds,
-            (id) => id.startsWith('setup_remove_worker_1_'),
+            (id) => id.startsWith('setup_remove_worker_1'),
           ),
           isFalse,
         );
@@ -1944,7 +1923,7 @@ void main() {
         expect(
           hasAnyStepMatching(
             r.stepIds,
-            (id) => id.startsWith('setup_remove_worker_1_'),
+            (id) => id.startsWith('setup_remove_worker_1'),
           ),
           isFalse,
         );
@@ -1953,7 +1932,7 @@ void main() {
         expect(
           hasAnyStepMatching(
             r.stepIds,
-            (id) => id.startsWith('setup_remove_worker_2_'),
+            (id) => id.startsWith('setup_remove_worker_2'),
           ),
           isFalse,
         );
@@ -1989,14 +1968,14 @@ void main() {
       expect(
         hasAnyStepMatching(
           r.stepIds,
-          (id) => id.startsWith('setup_remove_worker_1_'),
+          (id) => id.startsWith('setup_remove_worker_1'),
         ),
         isFalse,
       );
       expect(
         hasAnyStepMatching(
           r.stepIds,
-          (id) => id.startsWith('setup_remove_worker_2_'),
+          (id) => id.startsWith('setup_remove_worker_2'),
         ),
         isFalse,
       );
@@ -2028,7 +2007,7 @@ void main() {
         expect(
           hasAnyStepMatching(
             r.stepIds,
-            (id) => id.startsWith('setup_tree_of_life_add_0004_'),
+            (id) => id.startsWith('setup_tree_of_life_add_0004'),
           ),
           isFalse,
         );
@@ -2067,7 +2046,7 @@ void main() {
         expect(
           hasAnyStepMatching(
             r.stepIds,
-            (id) => id.startsWith('setup_remove_worker_1_'),
+            (id) => id.startsWith('setup_remove_worker_1'),
           ),
           isFalse,
         );
@@ -2076,7 +2055,7 @@ void main() {
         expect(
           hasAnyStepMatching(
             r.stepIds,
-            (id) => id.startsWith('setup_remove_worker_2_'),
+            (id) => id.startsWith('setup_remove_worker_2'),
           ),
           isFalse,
         );
@@ -2109,7 +2088,7 @@ void main() {
       expect(
         hasAnyStepMatching(
           r.stepIds,
-          (id) => id.startsWith('setup_remove_worker_1_'),
+          (id) => id.startsWith('setup_remove_worker_1'),
         ),
         isFalse,
       );
@@ -2149,7 +2128,7 @@ void main() {
         expect(
           hasAnyStepMatching(
             r.stepIds,
-            (id) => id.startsWith('setup_tree_of_life_add_0004_'),
+            (id) => id.startsWith('setup_tree_of_life_add_0004'),
           ),
           isFalse,
         );

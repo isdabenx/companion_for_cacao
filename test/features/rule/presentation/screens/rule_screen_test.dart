@@ -43,7 +43,8 @@ void main() {
       await pumpRuleScreen(tester);
 
       expect(
-        find.descendant(of: find.byType(AppBar), matching: find.text('Rules')),
+        // The app-bar title is chrome: uppercased by the scaffold.
+        find.descendant(of: find.byType(AppBar), matching: find.text('RULES')),
         findsOneWidget,
       );
       expect(find.text('BASE GAME'), findsOneWidget);

@@ -214,14 +214,49 @@ class GameSetupNotifier extends _$GameSetupNotifier {
     state = AsyncData(GameSetupStateEntity(expansions: [baseGame]));
   }
 
+  /// Preparation steps whose physical action depends on the worker
+  /// composition. When the selection changes they become stale, so any that
+  /// were already ticked must be re-opened (ids mirror BaseGameHandler and
+  /// [NewWorkersModuleHandler.buildStepId]).
+  static const _workerDependentStepIds = {
+    'setup_new_workers_build',
+    'setup_shuffle_workers',
+  };
+
   /// Applies a worker tile selection and re-runs the pipeline to update
   /// tiles and preparation steps accordingly.
-  void applyWorkerSelection(WorkerSelectionEntity selection) {
-    if (state.value == null) return;
-    final previous = state.value!;
-    state = AsyncData(
-      _rerunPipeline(previous, previous.copyWith(workerSelection: selection)),
+  ///
+  /// Returns true when the change re-opened a dependent step the user had
+  /// already completed (so the UI can warn them to redo it).
+  bool applyWorkerSelection(WorkerSelectionEntity selection) {
+    final previous = state.value;
+    if (previous == null) return false;
+    final selectionChanged = previous.workerSelection != selection;
+    var next = _rerunPipeline(
+      previous,
+      previous.copyWith(workerSelection: selection),
     );
+
+    var reopenedCompleted = false;
+    if (selectionChanged) {
+      // Only re-open (and later warn) if a dependent step was actually ticked.
+      reopenedCompleted = next.preparation.any(
+        (s) => s.isCompleted && _workerDependentStepIds.contains(s.id),
+      );
+      if (reopenedCompleted) {
+        next = next.copyWith(
+          preparation: [
+            for (final step in next.preparation)
+              if (step.isCompleted && _workerDependentStepIds.contains(step.id))
+                step.copyWith(isCompleted: false)
+              else
+                step,
+          ],
+        );
+      }
+    }
+    state = AsyncData(next);
+    return reopenedCompleted;
   }
 
   /// Re-runs the preparation pipeline for [updated] mid-game, carrying over
@@ -321,13 +356,16 @@ class GameSetupNotifier extends _$GameSetupNotifier {
   /// them all. Group completion itself stays derived from the members.
   void toggleGroupCompletion(String groupId) {
     if (state.value == null) return;
-    final members = state.value!.preparation.where((p) => p.groupId == groupId);
+    // Informational rows never toggle (they carry no completion).
+    final members = state.value!.preparation.where(
+      (p) => p.groupId == groupId && !p.informational,
+    );
     if (members.isEmpty) return;
     final allCompleted = members.every((p) => p.isCompleted);
     state = AsyncData(
       state.value!.copyWith(
         preparation: state.value!.preparation.map((prep) {
-          if (prep.groupId == groupId) {
+          if (prep.groupId == groupId && !prep.informational) {
             return prep.copyWith(isCompleted: !allCompleted);
           }
           return prep;

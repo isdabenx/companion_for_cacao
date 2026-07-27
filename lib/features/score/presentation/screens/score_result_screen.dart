@@ -10,6 +10,7 @@ import 'package:companion_for_cacao/shared/widgets/circle_badge.dart';
 import 'package:companion_for_cacao/shared/widgets/container_full_style_widget.dart';
 import 'package:companion_for_cacao/shared/widgets/custom_scaffold_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 /// Final standings with the winner(s) highlighted and the gold breakdown
@@ -29,10 +30,22 @@ class ScoreResultScreen extends ConsumerWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              _WinnerBanner(result: result),
+              _WinnerBanner(result: result)
+                  .animate()
+                  .fadeIn(duration: 300.ms)
+                  .scaleXY(begin: 0.96, curve: Curves.easeOutBack),
               AppSpacing.verticalL,
-              for (final score in result.standings) ...[
-                _PlayerScoreCard(score: score),
+              for (var i = 0; i < result.standings.length; i++) ...[
+                _PlayerScoreCard(score: result.standings[i])
+                    .animate()
+                    .fadeIn(duration: 260.ms, delay: (120 + 80 * i).ms)
+                    .slideY(
+                      begin: 0.1,
+                      end: 0,
+                      duration: 260.ms,
+                      delay: (120 + 80 * i).ms,
+                      curve: Curves.easeOutCubic,
+                    ),
                 AppSpacing.verticalS,
               ],
             ],
@@ -103,9 +116,11 @@ class _PlayerScoreCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
+      // Winner cards wear a warm gold tint; the rest stay crisp white so
+      // they read cleanly on the cream panel instead of muddy tan.
       color: score.isWinner
-          ? AppColors.gold.withValues(alpha: 0.15)
-          : AppColors.white.withValues(alpha: 0.6),
+          ? AppColors.gold.withValues(alpha: 0.18)
+          : AppColors.surfaceCard,
       child: Padding(
         padding: AppSpacing.allM,
         child: Column(

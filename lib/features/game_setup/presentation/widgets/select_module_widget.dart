@@ -1,11 +1,17 @@
 import 'package:companion_for_cacao/core/domain/entities/module_entity.dart';
 import 'package:companion_for_cacao/core/theme/app_colors.dart';
+import 'package:companion_for_cacao/core/theme/app_shapes.dart';
+import 'package:companion_for_cacao/core/theme/app_spacing.dart';
+import 'package:companion_for_cacao/core/theme/app_text_styles.dart';
 import 'package:companion_for_cacao/features/game_setup/presentation/providers/game_setup_notifier.dart';
 import 'package:companion_for_cacao/l10n/generated/app_localizations.dart';
 import 'package:companion_for_cacao/shared/utils/catalog_l10n.dart';
+import 'package:companion_for_cacao/shared/widgets/selectable_chip.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+/// A single module as a selectable chip. Lives inside its expansion's card
+/// (see `ExpansionCardWidget`); long-press reveals what the module adds.
 class SelectModuleWidget extends ConsumerWidget {
   const SelectModuleWidget({required this.module, super.key});
 
@@ -18,35 +24,42 @@ class SelectModuleWidget extends ConsumerWidget {
         (s) => s.value?.modules.any((e) => e.id == module.id) ?? false,
       ),
     );
-    void onToggleModule() {
-      ref.read(gameSetupProvider.notifier).toggleModule(module);
-    }
-
     final l10n = AppLocalizations.of(context);
-    return Row(
-      children: [
-        Flexible(
-          // Long-press (or hover) reveals what the module adds to the game.
-          child: Tooltip(
-            message: module.localizedDescription(l10n),
-            triggerMode: TooltipTriggerMode.longPress,
-            child: ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                foregroundColor: AppColors.brown,
-                backgroundColor: isSelected
-                    ? AppColors.greenDark
-                    : AppColors.greenNormal,
-                elevation: 4,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
-                ),
-              ),
-              onPressed: onToggleModule,
-              child: Text(module.localizedName(l10n)),
-            ),
-          ),
+
+    return Tooltip(
+      message: module.localizedDescription(l10n),
+      triggerMode: TooltipTriggerMode.longPress,
+      child: SelectableChip(
+        isSelected: isSelected,
+        onTap: () => ref.read(gameSetupProvider.notifier).toggleModule(module),
+        selectedColor: AppColors.greenDarker,
+        unselectedColor: AppColors.greenNormal,
+        selectedBorderColor: AppColors.greenDarker,
+        unselectedBorderColor: AppColors.greenNormal,
+        borderRadius: AppShapes.radiusM,
+        showShadow: false,
+        padding: const EdgeInsets.symmetric(
+          horizontal: AppSpacing.m,
+          vertical: AppSpacing.s,
         ),
-      ],
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(
+              isSelected ? Icons.check_circle : Icons.circle_outlined,
+              size: 18,
+              color: isSelected ? AppColors.white : AppColors.brown,
+            ),
+            AppSpacing.horizontalS,
+            Text(
+              module.localizedName(l10n),
+              style: AppTextStyles.tileName.copyWith(
+                color: isSelected ? AppColors.white : AppColors.brown,
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

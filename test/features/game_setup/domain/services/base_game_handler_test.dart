@@ -140,19 +140,19 @@ void main() {
 
         final result = handler.modifyPreparationSteps(players, allTiles, []);
 
-        // Player setup steps: 3 per player (village board, water carrier
-        // fused with its field, tiles)
+        // Personal setup is stated once for all players (village board,
+        // water carrier fused with its field, tiles) + 1 shuffle step = 4.
         final playerSetupSteps = result
             .where((s) => s.phase == PreparationPhase.playerSetup)
             .toList();
-        // 3 steps per player + 1 shuffle step = 7
-        expect(playerSetupSteps.length, 7);
+        expect(playerSetupSteps.length, 4);
 
-        // Board setup steps: initial tiles + 6 individual 2p removal + jungle draw pile + jungle display = 9
+        // Board setup steps: initial tiles + gather jungle + 6 individual 2p
+        // removals + jungle draw pile + jungle display = 10
         final boardSetupSteps = result
             .where((s) => s.phase == PreparationPhase.boardSetup)
             .toList();
-        expect(boardSetupSteps.length, 9);
+        expect(boardSetupSteps.length, 10);
 
         // Supply steps: 1 (resources bank)
         final supplySteps = result
@@ -305,13 +305,14 @@ void main() {
 
         final result = handler.modifyPreparationSteps(players, allTiles, []);
 
-        // Should have removal steps for 1-1-1-1 for each player with matching tiles
+        // A single generalized "each player returns their 1-1-1-1" step.
         final removalSteps = result.where(
-          (s) => s.id.startsWith('setup_remove_worker_1_'),
+          (s) => s.id.startsWith('setup_remove_worker_1'),
         );
-        // Only red has tiles in our mock data
         expect(removalSteps.length, 1);
-        expect(removalSteps.first.id, 'setup_remove_worker_1_red');
+        expect(removalSteps.first.id, 'setup_remove_worker_1');
+        expect(removalSteps.first.actor, PreparationActor.allPlayers);
+        expect(removalSteps.first.groupId, isNull);
       });
 
       test('should NOT include worker tile removal steps for 2 players', () {
@@ -329,7 +330,7 @@ void main() {
         final result = handler.modifyPreparationSteps(players, allTiles, []);
 
         final removalSteps = result.where(
-          (s) => s.id.startsWith('setup_remove_worker_'),
+          (s) => s.id.startsWith('setup_remove_worker'),
         );
         expect(removalSteps.length, 0);
       });
@@ -353,44 +354,43 @@ void main() {
       test('fuses the water carrier and water field steps into one', () {
         final result = stepsFor(['red', 'purple']);
 
-        expect(result.any((s) => s.id == 'setup_water_carrier_red'), isTrue);
+        expect(result.any((s) => s.id == 'setup_water_carrier'), isTrue);
         expect(
           result.any((s) => s.id.startsWith('setup_water_field_')),
           isFalse,
         );
-        final carrier = result.firstWhere(
-          (s) => s.id == 'setup_water_carrier_red',
-        );
+        final carrier = result.firstWhere((s) => s.id == 'setup_water_carrier');
         expect(carrier.detail, contains('"-10"'));
       });
 
-      test('groups each player corner under group_player_<color>', () {
+      test('states each personal step once for all players', () {
         final result = stepsFor(['red', 'purple']);
 
-        final redGroup = result.where((s) => s.groupId == 'group_player_red');
-        expect(
-          redGroup.map((s) => s.id),
-          containsAll([
-            'setup_village_board_red',
-            'setup_water_carrier_red',
-            'setup_tiles_red',
-          ]),
-        );
-        for (final step in redGroup) {
-          expect(step.actor, PreparationActor.player);
-          expect(step.color, 'red');
+        // Identical per-player actions are a single "each player…" step now,
+        // not one per colour — so no per-colour ids and no player group.
+        for (final id in const [
+          'setup_village_board',
+          'setup_water_carrier',
+          'setup_tiles',
+        ]) {
+          final matches = result.where((s) => s.id == id).toList();
+          expect(matches, hasLength(1), reason: id);
+          expect(matches.single.actor, PreparationActor.allPlayers);
+          expect(matches.single.groupId, isNull);
+          expect(matches.single.color, isNull);
         }
       });
 
-      test('collects 2p jungle removals into the return-to-box group '
+      test('collects 2p jungle removals into the jungle group '
           'with quantities and box zone', () {
         final result = stepsFor(['red', 'purple']);
 
         final removals = result.where(
-          (s) => s.groupId == PreparationGroups.returnToBox,
+          (s) => s.id.startsWith('setup_jungle_tiles_2p_removal_'),
         );
         expect(removals.length, 6);
         for (final step in removals) {
+          expect(step.groupId, PreparationGroups.jungle);
           expect(step.tableZone, TableZone.box);
           expect(step.quantity, isNotNull);
           expect(step.rationale, isNotNull);

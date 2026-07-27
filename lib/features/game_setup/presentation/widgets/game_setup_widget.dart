@@ -4,7 +4,6 @@ import 'package:companion_for_cacao/core/theme/app_text_styles.dart';
 import 'package:companion_for_cacao/features/game_setup/presentation/providers/game_setup_notifier.dart';
 import 'package:companion_for_cacao/features/game_setup/presentation/widgets/start_button_widget.dart';
 import 'package:companion_for_cacao/features/game_setup/presentation/widgets/step_expansion_widget.dart';
-import 'package:companion_for_cacao/features/game_setup/presentation/widgets/step_module_widget.dart';
 import 'package:companion_for_cacao/features/game_setup/presentation/widgets/step_player_widget.dart';
 import 'package:companion_for_cacao/l10n/generated/app_localizations.dart';
 import 'package:flutter/material.dart';
@@ -22,18 +21,6 @@ class GameSetupWidget extends ConsumerWidget {
     final isStarted = ref.watch(
       gameSetupProvider.select((s) => s.value?.isStarted ?? false),
     );
-    final screenHeight = MediaQuery.sizeOf(context).height;
-
-    // Adaptive heights
-    const double baseHeightAllExpansions = 180;
-    const double baseHeightExpansion = 140;
-    final heightAllExpansions = screenHeight > 400
-        ? baseHeightAllExpansions
-        : baseHeightAllExpansions * 0.75;
-    final heightExpansion = screenHeight > 400
-        ? baseHeightExpansion
-        : baseHeightExpansion * 0.75;
-    final widthExpansion = heightExpansion * 0.72;
 
     return gameSetupAsync.when(
       data: (_) => Column(
@@ -55,20 +42,12 @@ class GameSetupWidget extends ConsumerWidget {
                     const StepPlayerWidget(),
                     AppSpacing.verticalL,
                     _SectionHeader(
-                      title: AppLocalizations.of(context).expansionsSection,
+                      title: AppLocalizations.of(
+                        context,
+                      ).expansionsModulesSection,
                     ),
                     AppSpacing.verticalS,
-                    StepExpansionWidget(
-                      heightAllExpansions: heightAllExpansions,
-                      heightExpansion: heightExpansion,
-                      widthExpansion: widthExpansion,
-                    ),
-                    AppSpacing.verticalL,
-                    _SectionHeader(
-                      title: AppLocalizations.of(context).modulesSection,
-                    ),
-                    AppSpacing.verticalS,
-                    const StepModuleWidget(),
+                    const StepExpansionWidget(),
                   ],
                 ),
               ),

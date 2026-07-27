@@ -26,6 +26,9 @@ class PreparationEntity {
     this.isCompleted = false,
     this.color,
     this.variables,
+    this.colorReferenceImage = false,
+    this.informational = false,
+    this.imageStrip = const [],
   });
 
   final String id;
@@ -61,6 +64,21 @@ class PreparationEntity {
   final String? color;
   final Map<String, String>? variables;
 
+  /// True when [imageKey] shows a component that comes in each player's
+  /// colour, displayed as a neutral (grayscale) reference on an all-players
+  /// step. Neutral images (e.g. map tokens) keep it false and stay in colour.
+  final bool colorReferenceImage;
+
+  /// True for a conditional guidance step (no checkbox): e.g. "if you store
+  /// this expansion mixed in, remove its jungle tiles". It never counts
+  /// toward completion and renders with an info affordance instead of a check.
+  final bool informational;
+
+  /// Extra tiles shown as an image strip under the label (e.g. the several
+  /// tiles a mixed-storage note asks to take out), each with its quantity.
+  /// Complements the single [imageKey].
+  final List<({String imageKey, int quantity})> imageStrip;
+
   PreparationEntity copyWith({
     String? id,
     String? label,
@@ -75,6 +93,9 @@ class PreparationEntity {
     bool? isCompleted,
     String? color,
     Map<String, String>? variables,
+    bool? colorReferenceImage,
+    bool? informational,
+    List<({String imageKey, int quantity})>? imageStrip,
   }) {
     return PreparationEntity(
       id: id ?? this.id,
@@ -90,6 +111,9 @@ class PreparationEntity {
       isCompleted: isCompleted ?? this.isCompleted,
       color: color ?? this.color,
       variables: variables ?? this.variables,
+      colorReferenceImage: colorReferenceImage ?? this.colorReferenceImage,
+      informational: informational ?? this.informational,
+      imageStrip: imageStrip ?? this.imageStrip,
     );
   }
 
@@ -110,6 +134,9 @@ class PreparationEntity {
         other.imageKey == imageKey &&
         other.isCompleted == isCompleted &&
         other.color == color &&
+        other.colorReferenceImage == colorReferenceImage &&
+        other.informational == informational &&
+        listEquals(other.imageStrip, imageStrip) &&
         mapEquals(other.variables, variables);
   }
 
@@ -127,6 +154,9 @@ class PreparationEntity {
     imageKey,
     isCompleted,
     color,
+    colorReferenceImage,
+    informational,
+    Object.hashAll(imageStrip),
     variables == null ? null : Object.hashAll(variables!.entries),
   );
 }

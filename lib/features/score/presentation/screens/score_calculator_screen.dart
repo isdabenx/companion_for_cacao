@@ -1,7 +1,9 @@
 import 'package:companion_for_cacao/config/routes/app_routes.dart';
 import 'package:companion_for_cacao/core/theme/app_colors.dart';
+import 'package:companion_for_cacao/core/theme/app_shapes.dart';
 import 'package:companion_for_cacao/core/theme/app_spacing.dart';
 import 'package:companion_for_cacao/core/theme/app_text_styles.dart';
+import 'package:companion_for_cacao/features/game_setup/presentation/providers/game_setup_notifier.dart';
 import 'package:companion_for_cacao/features/score/domain/entities/score_state_entity.dart';
 import 'package:companion_for_cacao/features/score/presentation/providers/score_notifier.dart';
 import 'package:companion_for_cacao/features/score/presentation/widgets/steps/cacao_step_widget.dart';
@@ -17,6 +19,7 @@ import 'package:companion_for_cacao/features/score/presentation/widgets/steps/wa
 import 'package:companion_for_cacao/l10n/generated/app_localizations.dart';
 import 'package:companion_for_cacao/shared/widgets/container_full_style_widget.dart';
 import 'package:companion_for_cacao/shared/widgets/custom_scaffold_widget.dart';
+import 'package:companion_for_cacao/shared/utils/player_display_l10n.dart';
 import 'package:companion_for_cacao/shared/widgets/dialog_button_bar_widget.dart';
 import 'package:companion_for_cacao/shared/widgets/safe_asset_image.dart';
 import 'package:flutter/material.dart';
@@ -32,15 +35,21 @@ class ScoreCalculatorScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(scoreProvider);
     final notifier = ref.read(scoreProvider.notifier);
+    final gameActive = ref.watch(
+      gameSetupProvider.select((s) => s.value?.isStarted ?? false),
+    );
     final l10n = AppLocalizations.of(context);
 
     return CustomScaffoldWidget(
       title: l10n.scoreCalculator,
+      // Reached by push from the game dashboard (back to it) or as a root
+      // destination from Home (keep the menu): show whichever fits.
+      showBackButton: context.canPop(),
       actions: [
         Tooltip(
           message: l10n.startOverAction,
           child: IconButton(
-            onPressed: () => _confirmReset(context, notifier),
+            onPressed: () => _confirmReset(context, notifier, gameActive),
             icon: const Icon(Icons.refresh),
           ),
         ),
@@ -48,6 +57,10 @@ class ScoreCalculatorScreen extends ConsumerWidget {
       body: ContainerFullStyleWidget(
         child: Column(
           children: [
+            if (gameActive) ...[
+              _ContextBanner(state: state, notifier: notifier),
+              AppSpacing.verticalS,
+            ],
             _StepHeader(state: state),
             AppSpacing.verticalS,
             Expanded(
@@ -72,23 +85,137 @@ class ScoreCalculatorScreen extends ConsumerWidget {
   Future<void> _confirmReset(
     BuildContext context,
     ScoreNotifier notifier,
+    bool gameActive,
   ) async {
     final l10n = AppLocalizations.of(context);
-    final confirmed = await showDialog<bool>(
+
+    // No game running: reset is simply "start over" on a blank calculator.
+    if (!gameActive) {
+      final confirmed = await showDialog<bool>(
+        context: context,
+        builder: (dialogContext) => AlertDialog(
+          title: Text(l10n.startOverTitle),
+          content: Text(l10n.startOverBody),
+          actions: [
+            DialogButtonBarWidget(
+              onCancel: () => Navigator.of(dialogContext).pop(false),
+              onConfirm: () => Navigator.of(dialogContext).pop(true),
+              confirmLabel: l10n.startOverAction,
+            ),
+          ],
+        ),
+      );
+      if (confirmed ?? false) notifier.clearToBlank();
+      return;
+    }
+
+    // A game is running: let the player choose between rescoring it or
+    // starting a separate, empty calculation.
+    final choice = await showDialog<_ResetChoice>(
       context: context,
       builder: (dialogContext) => AlertDialog(
         title: Text(l10n.startOverTitle),
-        content: Text(l10n.startOverBody),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Text(l10n.scoreResetChooseBody, style: AppTextStyles.markdownBody),
+            AppSpacing.verticalM,
+            FilledButton(
+              onPressed: () =>
+                  Navigator.of(dialogContext).pop(_ResetChoice.game),
+              child: Text(l10n.scoreResetGameOption),
+            ),
+            AppSpacing.verticalS,
+            OutlinedButton(
+              onPressed: () =>
+                  Navigator.of(dialogContext).pop(_ResetChoice.blank),
+              child: Text(l10n.scoreClearBlankOption),
+            ),
+          ],
+        ),
         actions: [
-          DialogButtonBarWidget(
-            onCancel: () => Navigator.of(dialogContext).pop(false),
-            onConfirm: () => Navigator.of(dialogContext).pop(true),
-            confirmLabel: l10n.startOverAction,
+          TextButton(
+            onPressed: () => Navigator.of(dialogContext).pop(),
+            child: Text(l10n.cancelAction),
           ),
         ],
       ),
     );
-    if (confirmed ?? false) notifier.reset();
+    switch (choice) {
+      case _ResetChoice.game:
+        notifier.resetToGame();
+      case _ResetChoice.blank:
+        notifier.clearToBlank();
+      case null:
+        break;
+    }
+  }
+}
+
+enum _ResetChoice { game, blank }
+
+/// Tells the player which session they are looking at while a game is
+/// running: the game's scoring, or a separate scratch calculation they can
+/// return from with one tap.
+class _ContextBanner extends StatelessWidget {
+  const _ContextBanner({required this.state, required this.notifier});
+
+  final ScoreStateEntity state;
+  final ScoreNotifier notifier;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+    final onGame = state.prefilledFromGame;
+
+    final label = onGame ? l10n.scoreContextGame : l10n.scoreContextDetached;
+    final detail = onGame
+        ? state.players.map((p) => p.localizedDisplayName(l10n)).join(', ')
+        : null;
+
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(
+        horizontal: AppSpacing.m,
+        vertical: AppSpacing.s,
+      ),
+      decoration: BoxDecoration(
+        color: AppColors.greenDarker.withValues(alpha: 0.08),
+        borderRadius: BorderRadius.circular(AppShapes.radiusM),
+      ),
+      child: Row(
+        children: [
+          Icon(
+            onGame ? Icons.sports_esports_outlined : Icons.calculate_outlined,
+            size: 18,
+            color: AppColors.greenDarker,
+          ),
+          const SizedBox(width: AppSpacing.s),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  label,
+                  style: AppTextStyles.sectionSublabel.copyWith(
+                    color: AppColors.greenDarker,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+                if (detail != null && detail.isNotEmpty)
+                  Text(detail, style: AppTextStyles.sectionSublabel),
+              ],
+            ),
+          ),
+          if (!onGame)
+            TextButton(
+              onPressed: notifier.resetToGame,
+              child: Text(l10n.scoreBackToGameAction),
+            ),
+        ],
+      ),
+    );
   }
 }
 

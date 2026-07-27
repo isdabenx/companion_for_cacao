@@ -22,6 +22,10 @@ class NewWorkersModuleHandler implements ModulePreparationHandler {
   /// It has no checkbox, so the UI excludes it from completion counts.
   static const String selectionStepId = 'setup_new_workers_selection';
 
+  /// Follow-up step that translates the selection into a physical action:
+  /// which tiles to take from the base game and which from the expansion.
+  static const String buildStepId = 'setup_new_workers_build';
+
   /// The user's worker tile selection. When null, defaults to addAll behavior.
   final WorkerSelectionEntity? workerSelection;
 
@@ -140,17 +144,31 @@ class NewWorkersModuleHandler implements ModulePreparationHandler {
     // for each player — keeping these removal steps would conflict with or
     // duplicate the selector's choices regardless of the preset.
     preparation.removeWhere(
-      (step) => step.id.startsWith('setup_remove_worker_1_'),
+      (step) =>
+          step.id == 'setup_remove_worker_1' ||
+          step.id.startsWith('setup_remove_worker_1_'),
     );
     preparation.removeWhere(
-      (step) => step.id.startsWith('setup_remove_worker_2_'),
+      (step) =>
+          step.id == 'setup_remove_worker_2' ||
+          step.id.startsWith('setup_remove_worker_2_'),
     );
 
     // Remove Tree of Life's per-player 0-0-0-4 addition step. The selector
     // already includes this tile (and enforces min 1 when Tree of Life is
     // active for 2 players), so a separate step is redundant.
     preparation.removeWhere(
-      (step) => step.id.startsWith('setup_tree_of_life_add_0004_'),
+      (step) =>
+          step.id == 'setup_tree_of_life_add_0004' ||
+          step.id.startsWith('setup_tree_of_life_add_0004_'),
+    );
+
+    // Remove the base game's "take all your worker tiles" step: the build
+    // step below is the single authority on the composition, so we don't
+    // want to first say "take all" and then have players adjust. (Matches
+    // both the generalized id and any legacy per-colour ids.)
+    preparation.removeWhere(
+      (step) => step.id == 'setup_tiles' || step.id.startsWith('setup_tiles_'),
     );
 
     // Insert before 'setup_shuffle_workers' so players decide about new
@@ -167,6 +185,21 @@ class NewWorkersModuleHandler implements ModulePreparationHandler {
         id: selectionStepId,
         label: copy.newWorkersSelectionLabel,
         detail: copy.newWorkersSelectionDetail,
+        actor: PreparationActor.allPlayers,
+        tableZone: TableZone.playerArea,
+        phase: PreparationPhase.playerSetup,
+      ),
+    );
+
+    // Right after deciding, tell each player exactly which tiles to take
+    // from the base game and which from the expansion — so the digital
+    // choice becomes a clear physical action.
+    preparation.insert(
+      insertIndex + 1,
+      PreparationEntity(
+        id: buildStepId,
+        label: copy.newWorkersBuildLabel,
+        detail: copy.newWorkersBuildDetail,
         actor: PreparationActor.allPlayers,
         tableZone: TableZone.playerArea,
         phase: PreparationPhase.playerSetup,

@@ -24,16 +24,21 @@ class SunStepWidget extends ConsumerWidget {
           style: AppTextStyles.instruction,
         ),
         AppSpacing.verticalM,
-        for (final player in state.players)
-          ScorePlayerRowWidget(
-            player: player,
-            trailing: CountStepperWidget(
-              value: state.inputOf(player.color).sunTokens,
-              max: 3,
-              allowDirectEntry: false,
-              onChanged: (value) => notifier.setSunTokens(player.color, value),
-            ),
-          ),
+        ScoreListCard(
+          children: [
+            for (final player in state.players)
+              ScorePlayerRowWidget(
+                player: player,
+                trailing: CountStepperWidget(
+                  value: state.inputOf(player.color).sunTokens,
+                  max: 3,
+                  allowDirectEntry: false,
+                  onChanged: (value) =>
+                      notifier.setSunTokens(player.color, value),
+                ),
+              ),
+          ],
+        ),
       ],
     );
   }

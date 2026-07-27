@@ -50,26 +50,25 @@ class MapModuleHandler implements ModulePreparationHandler {
     final preparation = <PreparationEntity>[...currentSteps];
     final modifiedSteps = <PreparationEntity>[];
 
-    // First pass: identify where playerSetup phase ends and add player map token steps
+    // First pass: after the generalized "each player takes their tiles" step,
+    // add a single "each player takes 2 map tokens" step (actor allPlayers).
+    // Runs before the New Workers handler (moduleId 1 < 8), so `setup_tiles`
+    // is still present here even when that handler later removes it.
     int lastMapTokenIndex = -1;
     for (int i = 0; i < preparation.length; i++) {
       modifiedSteps.add(preparation[i]);
 
-      // After a player's setup_tiles step, add the map tokens step
       if (preparation[i].phase == PreparationPhase.playerSetup &&
-          preparation[i].id.startsWith('setup_tiles_')) {
-        final color = preparation[i].color ?? '';
+          preparation[i].id == 'setup_tiles') {
         modifiedSteps.add(
           PreparationEntity(
-            id: 'setup_map_tokens_$color',
+            id: 'setup_map_tokens',
             label: copy.mapTokensLabel,
-            detail: copy.mapTokensDetail(color),
-            actor: PreparationActor.player,
+            detail: copy.mapTokensDetailAll,
+            actor: PreparationActor.allPlayers,
             tableZone: TableZone.playerArea,
-            groupId: PreparationGroups.player(color),
             quantity: 2,
             phase: PreparationPhase.playerSetup,
-            color: color,
             imageKey: 'map_token',
           ),
         );
@@ -104,6 +103,7 @@ class MapModuleHandler implements ModulePreparationHandler {
             label: copy.mapBoardLabel,
             detail: copy.mapBoardDetail,
             tableZone: TableZone.jungleDisplay,
+            groupId: PreparationGroups.jungle,
             phase: PreparationPhase.boardSetup,
             imageKey: 'map_board',
           ),
@@ -114,6 +114,7 @@ class MapModuleHandler implements ModulePreparationHandler {
             label: copy.jungleDisplayMapLabel,
             detail: copy.jungleDisplayMapDetail,
             tableZone: TableZone.jungleDisplay,
+            groupId: PreparationGroups.jungle,
             phase: PreparationPhase.boardSetup,
           ),
         );

@@ -81,26 +81,36 @@ class _PlayerNameChipWidgetState extends State<PlayerNameChipWidget> {
     }
 
     final color = AppColors.findColorByName(widget.colorString);
-    final isDarkColor =
-        widget.colorString == 'purple' || widget.colorString == 'black';
+    // Derive the glyph colour from the disc's luminance instead of listing
+    // "dark" colours by name: red is dark enough to need a light glyph, and
+    // the hardcoded list left its turn number in brown on red.
+    final onColor = color.computeLuminance() > 0.5
+        ? AppColors.brown
+        : AppColors.white;
     const circleSize = 40.0;
 
     return SelectableChip(
       isSelected: widget.isSelected,
       selectedColor: color.withValues(alpha: 0.15),
-      unselectedColor: Theme.of(context).colorScheme.surfaceContainerHighest,
+      // White (the shared card surface) rather than the pale green fill: a
+      // stack of large green blocks read as empty space and buried the
+      // colour discs, which are the actual content here.
+      unselectedColor: AppColors.surfaceCard,
       selectedBorderColor: color,
       unselectedBorderColor: Theme.of(context).colorScheme.outlineVariant,
       onTap: _onTap,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
+      // Disc beside the name instead of stacked above it: the cell hugs one
+      // line of content, so four colours fit without dominating the screen.
+      child: Row(
         children: [
           CircleBadge(
             color: color,
             size: circleSize,
+            // A neutral hairline when idle (a grey theme outline muddied the
+            // coloured discs), the contrast glyph colour once picked.
             borderColor: widget.isSelected
-                ? (isDarkColor ? AppColors.white : AppColors.brown)
-                : Theme.of(context).colorScheme.outline,
+                ? onColor
+                : AppColors.brown.withValues(alpha: 0.3),
             borderWidth: widget.isSelected ? 3 : 2,
             text: widget.isSelected && widget.position != null
                 ? '${widget.position}'
@@ -108,54 +118,58 @@ class _PlayerNameChipWidgetState extends State<PlayerNameChipWidget> {
             icon: widget.isSelected
                 ? (widget.position == null ? Icons.check : null)
                 : Icons.add,
-            iconColor: widget.isSelected
-                ? (isDarkColor ? AppColors.white : AppColors.brown)
-                : Theme.of(context).colorScheme.onSurfaceVariant,
+            // The disc is filled with the player colour in BOTH states, so the
+            // glyph always follows the disc's luminance. The theme's grey left
+            // the "+" nearly invisible on the dark purple and red discs.
+            iconColor: onColor,
             iconSize: 20,
-            textStyle: AppTextStyles.circlePosition.copyWith(
-              color: isDarkColor ? AppColors.white : AppColors.brown,
-            ),
+            textStyle: AppTextStyles.circlePosition.copyWith(color: onColor),
           ),
-          AppSpacing.verticalS,
-          // Name field or placeholder
-          SizedBox(
-            width: 80,
-            child: widget.isSelected
-                ? TextField(
-                    controller: _controller,
-                    focusNode: _focusNode,
-                    onChanged: widget.onNameChanged,
-                    textAlign: TextAlign.center,
-                    style: AppTextStyles.playerName.copyWith(
-                      color: isDarkColor ? AppColors.white : AppColors.brown,
+          AppSpacing.horizontalM,
+          // Name field or colour label. Fixed height so the chip is exactly
+          // the same size selected or not — no growth (score picker) and no
+          // overflow (game-setup grid) when a color is picked.
+          Expanded(
+            child: SizedBox(
+              height: 38,
+              child: widget.isSelected
+                  ? TextField(
+                      controller: _controller,
+                      focusNode: _focusNode,
+                      onChanged: widget.onNameChanged,
+                      style: AppTextStyles.playerName.copyWith(
+                        color: AppColors.brown,
+                      ),
+                      decoration: InputDecoration(
+                        isDense: true,
+                        contentPadding: const EdgeInsets.symmetric(
+                          horizontal: AppSpacing.s,
+                          vertical: 6,
+                        ),
+                        filled: true,
+                        fillColor: color.withValues(alpha: 0.18),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8),
+                          borderSide: BorderSide.none,
+                        ),
+                        hintText: AppLocalizations.of(context).playerNameHint,
+                        hintStyle: AppTextStyles.hintText.copyWith(
+                          color: AppColors.brown.withValues(alpha: 0.45),
+                        ),
+                      ),
+                    )
+                  : Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        localizedColorName(
+                          AppLocalizations.of(context),
+                          widget.colorString,
+                        ).capitalized,
+                        style: AppTextStyles.colorName,
+                        overflow: TextOverflow.ellipsis,
+                      ),
                     ),
-                    decoration: InputDecoration(
-                      isDense: true,
-                      contentPadding: const EdgeInsets.symmetric(
-                        horizontal: AppSpacing.xs,
-                        vertical: 6,
-                      ),
-                      filled: true,
-                      fillColor: color.withValues(alpha: 0.2),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
-                        borderSide: BorderSide.none,
-                      ),
-                      hintText: AppLocalizations.of(context).playerNameHint,
-                      hintStyle: AppTextStyles.hintText.copyWith(
-                        color: (isDarkColor ? AppColors.white : AppColors.brown)
-                            .withValues(alpha: 0.5),
-                      ),
-                    ),
-                  )
-                : Text(
-                    localizedColorName(
-                      AppLocalizations.of(context),
-                      widget.colorString,
-                    ).capitalized,
-                    textAlign: TextAlign.center,
-                    style: AppTextStyles.colorName,
-                  ),
+            ),
           ),
         ],
       ),

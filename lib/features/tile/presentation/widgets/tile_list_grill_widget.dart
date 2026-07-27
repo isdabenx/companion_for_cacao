@@ -2,13 +2,18 @@ import 'dart:async';
 
 import 'package:companion_for_cacao/config/routes/app_routes.dart';
 import 'package:companion_for_cacao/core/domain/entities/tile_entity.dart';
+import 'package:companion_for_cacao/core/theme/app_colors.dart';
+import 'package:companion_for_cacao/core/theme/app_shapes.dart';
+import 'package:companion_for_cacao/core/theme/app_spacing.dart';
 import 'package:companion_for_cacao/features/tile/presentation/providers/tile_notifier.dart';
 import 'package:companion_for_cacao/features/tile/presentation/providers/tile_settings_notifier.dart';
 import 'package:companion_for_cacao/features/tile/presentation/widgets/card_tile_widget.dart';
+import 'package:companion_for_cacao/shared/widgets/async_error_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:go_router/go_router.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 class TileListGrillWidget extends ConsumerStatefulWidget {
   const TileListGrillWidget({super.key, this.customTiles});
@@ -49,8 +54,30 @@ class _TileListGrillWidgetState extends ConsumerState<TileListGrillWidget>
 
     return tilesAsync.when(
       data: _buildGrid,
-      loading: () => const Center(child: CircularProgressIndicator()),
-      error: (error, _) => Center(child: Text('Error: $error')),
+      loading: _buildLoadingSkeleton,
+      error: (error, _) => AsyncErrorWidget(error: error),
+    );
+  }
+
+  /// Shimmer skeleton in the shape of the grid while tiles load, instead of
+  /// a bare spinner.
+  Widget _buildLoadingSkeleton() {
+    return Skeletonizer(
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          final crossAxisCount = (constraints.maxWidth / 120.0).floor().clamp(
+            2,
+            8,
+          );
+          return AlignedGridView.count(
+            crossAxisCount: crossAxisCount,
+            crossAxisSpacing: 6,
+            mainAxisSpacing: 6,
+            itemCount: crossAxisCount * 3,
+            itemBuilder: (context, index) => const _TileSkeletonCard(),
+          );
+        },
+      ),
     );
   }
 
@@ -104,6 +131,38 @@ class _TileListGrillWidgetState extends ConsumerState<TileListGrillWidget>
           },
         );
       },
+    );
+  }
+}
+
+/// One placeholder card for the loading skeleton: a square image area over
+/// a short name line, matching [CardTileWidget]'s silhouette.
+class _TileSkeletonCard extends StatelessWidget {
+  const _TileSkeletonCard();
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        color: AppColors.surfaceCard,
+        borderRadius: BorderRadius.only(
+          bottomLeft: Radius.circular(AppShapes.radiusS),
+          bottomRight: Radius.circular(AppShapes.radiusS),
+        ),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          const AspectRatio(
+            aspectRatio: 1,
+            child: ColoredBox(color: AppColors.greenNormal),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(AppSpacing.s),
+            child: Container(height: 12, color: AppColors.greenNormal),
+          ),
+        ],
+      ),
     );
   }
 }

@@ -130,6 +130,12 @@ abstract class AppLocalizations {
   /// **'Take your village board'**
   String get villageBoardLabel;
 
+  /// No description provided for @villageBoardDetailAll.
+  ///
+  /// In en, this message translates to:
+  /// **'Each player takes the village board of their colour and places it in front of them. Their worker draw pile and water carrier track live there.'**
+  String get villageBoardDetailAll;
+
   /// No description provided for @villageBoardDetail.
   ///
   /// In en, this message translates to:
@@ -142,6 +148,12 @@ abstract class AppLocalizations {
   /// **'Put your water carrier on the \"-10\" field'**
   String get waterCarrierLabel;
 
+  /// No description provided for @waterCarrierDetailAll.
+  ///
+  /// In en, this message translates to:
+  /// **'Each player takes the water carrier of their colour and places it on the \"-10\" water field of their village board.'**
+  String get waterCarrierDetailAll;
+
   /// No description provided for @waterCarrierDetail.
   ///
   /// In en, this message translates to:
@@ -153,6 +165,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Take all your worker tiles'**
   String get ownTilesLabel;
+
+  /// No description provided for @ownTilesDetailAll.
+  ///
+  /// In en, this message translates to:
+  /// **'Each player gathers all worker tiles with their colour on the back; they are their personal supply for the whole game.'**
+  String get ownTilesDetailAll;
 
   /// No description provided for @ownTilesDetail.
   ///
@@ -171,6 +189,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Search your worker tiles for one of the {distribution} tiles and return it to the game box.'**
   String removeWorkerDetail(String distribution);
+
+  /// No description provided for @removeWorkerDetailAll.
+  ///
+  /// In en, this message translates to:
+  /// **'Each player searches their worker tiles for one of the {distribution} tiles and returns it to the game box.'**
+  String removeWorkerDetailAll(String distribution);
 
   /// No description provided for @removeWorkerRationale.
   ///
@@ -202,17 +226,47 @@ abstract class AppLocalizations {
   /// **'From the jungle tiles, get \"single plantation\" and \"market, selling price 2\" and place them face up in the middle of the table diagonally to one another; they form the starting tiles of the playing area.'**
   String get initialTilesMarketDetail;
 
+  /// No description provided for @jungleGroupTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'The jungle'**
+  String get jungleGroupTitle;
+
+  /// No description provided for @gatherJungleLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Gather the jungle tiles'**
+  String get gatherJungleLabel;
+
+  /// No description provided for @gatherJungleDetail.
+  ///
+  /// In en, this message translates to:
+  /// **'Take all the base-game jungle tiles; you\'ll then modify them (remove/add) and form the pile.'**
+  String get gatherJungleDetail;
+
   /// No description provided for @junglePileLabel.
   ///
   /// In en, this message translates to:
-  /// **'Build the jungle draw pile'**
+  /// **'Shuffle and form the pile'**
   String get junglePileLabel;
 
   /// No description provided for @junglePileDetail.
   ///
   /// In en, this message translates to:
-  /// **'Mix the remaining jungle tiles and lay them out as a face-down jungle draw pile.'**
+  /// **'Shuffle all the jungle tiles face-down and form the pile, next to the board.'**
   String get junglePileDetail;
+
+  /// No description provided for @junglePurgeLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'If you keep {expansion} mixed in'**
+  String junglePurgeLabel(String expansion);
+
+  /// No description provided for @junglePurgeDetail.
+  ///
+  /// In en, this message translates to:
+  /// **'This game doesn\'t use these {expansion} jungle tiles: {tiles}. If you store them mixed with the base game, take them out before forming the pile.'**
+  String junglePurgeDetail(String expansion, String tiles);
 
   /// No description provided for @jungleDisplayLabel.
   ///
@@ -382,6 +436,12 @@ abstract class AppLocalizations {
   /// **'Player {color} takes 2 map tiles.'**
   String mapTokensDetail(String color);
 
+  /// No description provided for @mapTokensDetailAll.
+  ///
+  /// In en, this message translates to:
+  /// **'Each player takes 2 map tiles.'**
+  String get mapTokensDetailAll;
+
   /// No description provided for @mapTokensSurplusLabel.
   ///
   /// In en, this message translates to:
@@ -538,6 +598,12 @@ abstract class AppLocalizations {
   /// **'Tree of Life Module: Player {color} takes their 0-0-0-4 worker tile from the New Workers Module and adds it to their worker tiles.'**
   String treeOfLife0004Detail(String color);
 
+  /// No description provided for @treeOfLife0004DetailAll.
+  ///
+  /// In en, this message translates to:
+  /// **'Tree of Life Module: each player takes the 0-0-0-4 worker tile of their colour (from the New Workers Module) and adds it to their worker tiles.'**
+  String get treeOfLife0004DetailAll;
+
   /// No description provided for @treeOfLife0004Rationale.
   ///
   /// In en, this message translates to:
@@ -573,6 +639,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Select which worker tiles you want to use for this game.'**
   String get newWorkersSelectionDetail;
+
+  /// No description provided for @newWorkersBuildLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Build the worker pile'**
+  String get newWorkersBuildLabel;
+
+  /// No description provided for @newWorkersBuildDetail.
+  ///
+  /// In en, this message translates to:
+  /// **'Each player takes the tiles shown from each source.'**
+  String get newWorkersBuildDetail;
+
+  /// No description provided for @workerBuildFromBase.
+  ///
+  /// In en, this message translates to:
+  /// **'From the base game, take:'**
+  String get workerBuildFromBase;
+
+  /// No description provided for @workerBuildFromExpansion.
+  ///
+  /// In en, this message translates to:
+  /// **'From the Diamante expansion, take:'**
+  String get workerBuildFromExpansion;
 
   /// No description provided for @returnToBoxTitle.
   ///
@@ -1054,6 +1144,12 @@ abstract class AppLocalizations {
   /// **'Apply'**
   String get applyAction;
 
+  /// No description provided for @workerSelectionResetNotice.
+  ///
+  /// In en, this message translates to:
+  /// **'You changed the workers: build the pile again.'**
+  String get workerSelectionResetNotice;
+
   /// No description provided for @saveAction.
   ///
   /// In en, this message translates to:
@@ -1117,7 +1213,7 @@ abstract class AppLocalizations {
   /// No description provided for @hutRegisterHint.
   ///
   /// In en, this message translates to:
-  /// **'Tap a tile to pick its face-up side; tap it again to flip it over.'**
+  /// **'Tap each hut face that landed up. Impossible ones disappear on their own.'**
   String get hutRegisterHint;
 
   /// No description provided for @hutRegisterAction.
@@ -1852,6 +1948,42 @@ abstract class AppLocalizations {
   /// **'This discards all entered scores and reloads players and modules from the current game setup.'**
   String get startOverBody;
 
+  /// No description provided for @scoreContextGame.
+  ///
+  /// In en, this message translates to:
+  /// **'Scoring the game in progress'**
+  String get scoreContextGame;
+
+  /// No description provided for @scoreContextDetached.
+  ///
+  /// In en, this message translates to:
+  /// **'Separate calculation'**
+  String get scoreContextDetached;
+
+  /// No description provided for @scoreBackToGameAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Back to the game'**
+  String get scoreBackToGameAction;
+
+  /// No description provided for @scoreResetChooseBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Reset the scoring for this game, or start a separate, empty calculation?'**
+  String get scoreResetChooseBody;
+
+  /// No description provided for @scoreResetGameOption.
+  ///
+  /// In en, this message translates to:
+  /// **'Reset the game scoring'**
+  String get scoreResetGameOption;
+
+  /// No description provided for @scoreClearBlankOption.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear everything (separate calculation)'**
+  String get scoreClearBlankOption;
+
   /// No description provided for @backAction.
   ///
   /// In en, this message translates to:
@@ -2175,6 +2307,252 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Name'**
   String get playerNameHint;
+
+  /// No description provided for @aboutIntro.
+  ///
+  /// In en, this message translates to:
+  /// **'Digital tools for Cacao players and its expansions: game setup, score counting and rules lookup, all in one place.'**
+  String get aboutIntro;
+
+  /// No description provided for @aboutOpenSource.
+  ///
+  /// In en, this message translates to:
+  /// **'Open source'**
+  String get aboutOpenSource;
+
+  /// No description provided for @aboutIncludedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'What\'s included'**
+  String get aboutIncludedTitle;
+
+  /// No description provided for @aboutInDevelopmentTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'In development'**
+  String get aboutInDevelopmentTitle;
+
+  /// No description provided for @aboutSoonBadge.
+  ///
+  /// In en, this message translates to:
+  /// **'soon'**
+  String get aboutSoonBadge;
+
+  /// No description provided for @aboutRepoTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'GitHub repository'**
+  String get aboutRepoTitle;
+
+  /// No description provided for @aboutRepoSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Report bugs, suggest improvements or contribute'**
+  String get aboutRepoSubtitle;
+
+  /// No description provided for @aboutMadeWith.
+  ///
+  /// In en, this message translates to:
+  /// **'Made with Flutter'**
+  String get aboutMadeWith;
+
+  /// No description provided for @aboutFeaturePrep.
+  ///
+  /// In en, this message translates to:
+  /// **'Guided setup'**
+  String get aboutFeaturePrep;
+
+  /// No description provided for @aboutFeaturePrepSub.
+  ///
+  /// In en, this message translates to:
+  /// **'Step by step for the base game and expansions'**
+  String get aboutFeaturePrepSub;
+
+  /// No description provided for @aboutFeatureScore.
+  ///
+  /// In en, this message translates to:
+  /// **'Score calculator'**
+  String get aboutFeatureScore;
+
+  /// No description provided for @aboutFeatureScoreSub.
+  ///
+  /// In en, this message translates to:
+  /// **'Final score with the official tiebreakers'**
+  String get aboutFeatureScoreSub;
+
+  /// No description provided for @aboutFeatureTiles.
+  ///
+  /// In en, this message translates to:
+  /// **'Tile catalogue'**
+  String get aboutFeatureTiles;
+
+  /// No description provided for @aboutFeatureTilesSub.
+  ///
+  /// In en, this message translates to:
+  /// **'Search and filter by multiple criteria'**
+  String get aboutFeatureTilesSub;
+
+  /// No description provided for @aboutFeatureRules.
+  ///
+  /// In en, this message translates to:
+  /// **'Rules and manuals'**
+  String get aboutFeatureRules;
+
+  /// No description provided for @aboutFeatureRulesSub.
+  ///
+  /// In en, this message translates to:
+  /// **'Built-in lookup inside the app'**
+  String get aboutFeatureRulesSub;
+
+  /// No description provided for @aboutFeatureExpansions.
+  ///
+  /// In en, this message translates to:
+  /// **'Full expansions'**
+  String get aboutFeatureExpansions;
+
+  /// No description provided for @aboutFeatureExpansionsSub.
+  ///
+  /// In en, this message translates to:
+  /// **'Xocolatl, Diamante and the Big Game variant'**
+  String get aboutFeatureExpansionsSub;
+
+  /// No description provided for @aboutFeatureLangs.
+  ///
+  /// In en, this message translates to:
+  /// **'Multi-language'**
+  String get aboutFeatureLangs;
+
+  /// No description provided for @aboutFeatureLangsSub.
+  ///
+  /// In en, this message translates to:
+  /// **'Catalan, Spanish and English'**
+  String get aboutFeatureLangsSub;
+
+  /// No description provided for @aboutSoonTimer.
+  ///
+  /// In en, this message translates to:
+  /// **'Turn timer'**
+  String get aboutSoonTimer;
+
+  /// No description provided for @aboutSoonHistory.
+  ///
+  /// In en, this message translates to:
+  /// **'History and statistics'**
+  String get aboutSoonHistory;
+
+  /// No description provided for @aboutSoonSettings.
+  ///
+  /// In en, this message translates to:
+  /// **'Custom settings'**
+  String get aboutSoonSettings;
+
+  /// No description provided for @homeCardSetupSub.
+  ///
+  /// In en, this message translates to:
+  /// **'Set up players, expansions and modules'**
+  String get homeCardSetupSub;
+
+  /// No description provided for @homeCardTilesSub.
+  ///
+  /// In en, this message translates to:
+  /// **'Browse the full tile catalogue'**
+  String get homeCardTilesSub;
+
+  /// No description provided for @homeCardScoresSub.
+  ///
+  /// In en, this message translates to:
+  /// **'Compute the final score automatically'**
+  String get homeCardScoresSub;
+
+  /// No description provided for @homeCardRulesSub.
+  ///
+  /// In en, this message translates to:
+  /// **'Built-in manuals and quick reference'**
+  String get homeCardRulesSub;
+
+  /// No description provided for @homeAboutTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'About the app'**
+  String get homeAboutTitle;
+
+  /// No description provided for @homeTagline.
+  ///
+  /// In en, this message translates to:
+  /// **'Your table-side companion for Cacao'**
+  String get homeTagline;
+
+  /// No description provided for @loadingLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Loading…'**
+  String get loadingLabel;
+
+  /// No description provided for @scoreTemplesEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'No temples yet — add one for each temple on the board.'**
+  String get scoreTemplesEmpty;
+
+  /// No description provided for @expansionsModulesSection.
+  ///
+  /// In en, this message translates to:
+  /// **'Expansions and modules'**
+  String get expansionsModulesSection;
+
+  /// No description provided for @expansionSelectHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap an expansion to turn it on and pick its modules.'**
+  String get expansionSelectHint;
+
+  /// No description provided for @expansionTapHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap to pick its modules'**
+  String get expansionTapHint;
+
+  /// No description provided for @modulesPickLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose modules'**
+  String get modulesPickLabel;
+
+  /// No description provided for @moduleCountLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} / {total} modules'**
+  String moduleCountLabel(int count, int total);
+
+  /// No description provided for @cancelAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get cancelAction;
+
+  /// No description provided for @clearSetupBody.
+  ///
+  /// In en, this message translates to:
+  /// **'This clears the selected players, expansions and modules.'**
+  String get clearSetupBody;
+
+  /// No description provided for @moduleWarningPickOne.
+  ///
+  /// In en, this message translates to:
+  /// **'Pick at least one module'**
+  String get moduleWarningPickOne;
+
+  /// No description provided for @expansionNeedsModuleHint.
+  ///
+  /// In en, this message translates to:
+  /// **'An expansion has no modules selected'**
+  String get expansionNeedsModuleHint;
+
+  /// No description provided for @playersNeededHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Add at least 2 players'**
+  String get playersNeededHint;
 }
 
 class _AppLocalizationsDelegate

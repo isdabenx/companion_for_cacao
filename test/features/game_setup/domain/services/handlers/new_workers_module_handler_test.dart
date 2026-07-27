@@ -275,8 +275,13 @@ void main() {
             phase: PreparationPhase.playerSetup,
           ),
           makePrepStep(
-            id: 'setup_tree_of_life_add_0004_red',
-            detail: 'Add 0-0-0-4 for red.',
+            id: 'setup_tree_of_life_add_0004',
+            detail: 'Each player adds their 0-0-0-4 tile.',
+            phase: PreparationPhase.playerSetup,
+          ),
+          makePrepStep(
+            id: 'setup_tiles',
+            detail: 'Each player takes all their worker tiles.',
             phase: PreparationPhase.playerSetup,
           ),
           makePrepStep(
@@ -302,21 +307,33 @@ void main() {
         );
 
         expect(
-          result.any((s) => s.id.startsWith('setup_remove_worker_1_')),
+          result.any((s) => s.id.startsWith('setup_remove_worker_1')),
           isFalse,
         );
         expect(
-          result.any((s) => s.id.startsWith('setup_remove_worker_2_')),
+          result.any((s) => s.id.startsWith('setup_remove_worker_2')),
           isFalse,
         );
         expect(
-          result.any((s) => s.id.startsWith('setup_tree_of_life_add_0004_')),
+          result.any(
+            (s) =>
+                s.id == 'setup_tree_of_life_add_0004' ||
+                s.id.startsWith('setup_tree_of_life_add_0004_'),
+          ),
+          isFalse,
+        );
+        // The base "take all your worker tiles" step is superseded by the
+        // build step, so it is removed too.
+        expect(
+          result.any(
+            (s) => s.id == 'setup_tiles' || s.id.startsWith('setup_tiles_'),
+          ),
           isFalse,
         );
       });
 
       test(
-        'inserts selection step immediately before setup_shuffle_workers',
+        'inserts selection then build step before setup_shuffle_workers',
         () {
           final handler = NewWorkersModuleHandler();
 
@@ -329,35 +346,48 @@ void main() {
           final selectionIndex = result.indexWhere(
             (s) => s.id == NewWorkersModuleHandler.selectionStepId,
           );
+          final buildIndex = result.indexWhere(
+            (s) => s.id == NewWorkersModuleHandler.buildStepId,
+          );
           final shuffleIndex = result.indexWhere(
             (s) => s.id == 'setup_shuffle_workers',
           );
 
           expect(selectionIndex, isNonNegative);
-          expect(selectionIndex, shuffleIndex - 1);
+          // Selection, then the physical "take these" build step, then shuffle.
+          expect(buildIndex, selectionIndex + 1);
+          expect(buildIndex, shuffleIndex - 1);
           expect(result[selectionIndex].phase, PreparationPhase.playerSetup);
+          expect(result[buildIndex].phase, PreparationPhase.playerSetup);
         },
       );
 
-      test('appends selection step when setup_shuffle_workers is absent', () {
-        final handler = NewWorkersModuleHandler();
+      test(
+        'appends selection and build steps when setup_shuffle_workers is absent',
+        () {
+          final handler = NewWorkersModuleHandler();
 
-        final steps = [
-          makePrepStep(
-            id: 'setup_jungle_draw_pile',
-            detail: 'Mix remaining jungle tiles.',
-            phase: PreparationPhase.boardSetup,
-          ),
-        ];
+          final steps = [
+            makePrepStep(
+              id: 'setup_jungle_draw_pile',
+              detail: 'Mix remaining jungle tiles.',
+              phase: PreparationPhase.boardSetup,
+            ),
+          ];
 
-        final result = handler.modifyPreparationSteps(
-          mockPlayers2,
-          baseWorkerTiles,
-          steps,
-        );
+          final result = handler.modifyPreparationSteps(
+            mockPlayers2,
+            baseWorkerTiles,
+            steps,
+          );
 
-        expect(result.last.id, NewWorkersModuleHandler.selectionStepId);
-      });
+          expect(
+            result[result.length - 2].id,
+            NewWorkersModuleHandler.selectionStepId,
+          );
+          expect(result.last.id, NewWorkersModuleHandler.buildStepId);
+        },
+      );
 
       test('Big Game returns steps unchanged', () {
         final handler = NewWorkersModuleHandler();

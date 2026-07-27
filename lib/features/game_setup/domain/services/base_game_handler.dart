@@ -179,108 +179,98 @@ class BaseGameHandler with TileAdjustments implements ModulePreparationHandler {
   }) {
     final preparation = <PreparationEntity>[...currentSteps];
 
-    for (final player in players) {
-      final color = player.color;
+    // Personal setup is the same action for every player, so state it once
+    // ("each player…") instead of repeating it per colour — fewer steps. The
+    // component image is shown in grey (white as reference) and a colour bar
+    // of the players indicates who does it (added at render time).
+    preparation
+      ..add(
+        PreparationEntity(
+          id: 'setup_village_board',
+          label: copy.villageBoardLabel,
+          detail: copy.villageBoardDetailAll,
+          actor: PreparationActor.allPlayers,
+          tableZone: TableZone.playerArea,
+          imageKey: 'village_board_white',
+          colorReferenceImage: true,
+          phase: PreparationPhase.playerSetup,
+        ),
+      )
+      // Fuses the former take-the-carrier and put-it-on-the-field steps:
+      // one physical gesture, one step (spec-fase-ux1 §2.2).
+      ..add(
+        PreparationEntity(
+          id: 'setup_water_carrier',
+          label: copy.waterCarrierLabel,
+          detail: copy.waterCarrierDetailAll,
+          actor: PreparationActor.allPlayers,
+          tableZone: TableZone.playerArea,
+          imageKey: 'carrier_white',
+          colorReferenceImage: true,
+          phase: PreparationPhase.playerSetup,
+        ),
+      )
+      ..add(
+        PreparationEntity(
+          id: 'setup_tiles',
+          label: copy.ownTilesLabel,
+          detail: copy.ownTilesDetailAll,
+          actor: PreparationActor.allPlayers,
+          tableZone: TableZone.playerArea,
+          imageKey: 'tile_back_white',
+          colorReferenceImage: true,
+          phase: PreparationPhase.playerSetup,
+        ),
+      );
 
-      preparation
-        ..add(
-          PreparationEntity(
-            id: 'setup_village_board_$color',
-            label: copy.villageBoardLabel,
-            detail: copy.villageBoardDetail(color),
-            actor: PreparationActor.player,
-            tableZone: TableZone.playerArea,
-            groupId: PreparationGroups.player(color),
-            color: color,
-            variables: {'color': color},
-            imageKey: 'village_board_$color',
-            phase: PreparationPhase.playerSetup,
-          ),
-        )
-        // Fuses the former take-the-carrier and put-it-on-the-field steps:
-        // one physical gesture, one step (spec-fase-ux1 §2.2).
-        ..add(
-          PreparationEntity(
-            id: 'setup_water_carrier_$color',
-            label: copy.waterCarrierLabel,
-            detail: copy.waterCarrierDetail(color),
-            actor: PreparationActor.player,
-            tableZone: TableZone.playerArea,
-            groupId: PreparationGroups.player(color),
-            color: color,
-            variables: {'color': color},
-            imageKey: 'carrier_$color',
-            phase: PreparationPhase.playerSetup,
-          ),
-        )
-        ..add(
-          PreparationEntity(
-            id: 'setup_tiles_$color',
-            label: copy.ownTilesLabel,
-            detail: copy.ownTilesDetail(color),
-            actor: PreparationActor.player,
-            tableZone: TableZone.playerArea,
-            groupId: PreparationGroups.player(color),
-            color: color,
-            variables: {'color': color},
-            imageKey: 'tile_back_$color',
-            phase: PreparationPhase.playerSetup,
-          ),
-        );
-    }
-
-    // Worker tile removals only in normal mode (Big Game uses all workers)
+    // Worker tile removals only in normal mode (Big Game uses all workers).
+    // A single generalized "each player returns their own tile" step per
+    // value — the tile art is any colour's (the UI greys it as a reference).
     if (!isBigGame && players.length > 2) {
-      for (final player in players) {
-        final workerTile = _findWorkerTileByColorAndValue(
-          tiles,
-          color: player.color,
-          value: '1-1-1-1',
+      final workerTile = _findWorkerTileByColorAndValue(
+        tiles,
+        color: players.first.color,
+        value: '1-1-1-1',
+      );
+      if (workerTile != null) {
+        preparation.add(
+          PreparationEntity(
+            id: 'setup_remove_worker_1',
+            label: copy.removeWorkerLabel('1-1-1-1'),
+            detail: copy.removeWorkerDetailAll('1-1-1-1'),
+            rationale: copy.removeWorkerRationale,
+            actor: PreparationActor.allPlayers,
+            tableZone: TableZone.box,
+            quantity: 1,
+            imageKey: 'tile_${workerTile.filenameImage}',
+            colorReferenceImage: true,
+            phase: PreparationPhase.playerSetup,
+          ),
         );
-        if (workerTile != null) {
+      }
+
+      if (players.length > 3) {
+        final workerTile201 = _findWorkerTileByColorAndValue(
+          tiles,
+          color: players.first.color,
+          value: '2-1-0-1',
+        );
+
+        if (workerTile201 != null) {
           preparation.add(
             PreparationEntity(
-              id: 'setup_remove_worker_1_${player.color}',
-              label: copy.removeWorkerLabel('1-1-1-1'),
-              detail: copy.removeWorkerDetail('1-1-1-1'),
+              id: 'setup_remove_worker_2',
+              label: copy.removeWorkerLabel('2-1-0-1'),
+              detail: copy.removeWorkerDetailAll('2-1-0-1'),
               rationale: copy.removeWorkerRationale,
-              actor: PreparationActor.player,
+              actor: PreparationActor.allPlayers,
               tableZone: TableZone.box,
-              groupId: PreparationGroups.player(player.color),
               quantity: 1,
-              color: player.color,
-              variables: {'color': player.color},
-              imageKey: 'tile_${workerTile.filenameImage}',
+              imageKey: 'tile_${workerTile201.filenameImage}',
+              colorReferenceImage: true,
               phase: PreparationPhase.playerSetup,
             ),
           );
-        }
-
-        if (players.length > 3) {
-          final workerTile201 = _findWorkerTileByColorAndValue(
-            tiles,
-            color: player.color,
-            value: '2-1-0-1',
-          );
-
-          if (workerTile201 != null) {
-            preparation.add(
-              PreparationEntity(
-                id: 'setup_remove_worker_2_${player.color}',
-                label: copy.removeWorkerLabel('2-1-0-1'),
-                detail: copy.removeWorkerDetail('2-1-0-1'),
-                rationale: copy.removeWorkerRationale,
-                actor: PreparationActor.player,
-                tableZone: TableZone.box,
-                groupId: PreparationGroups.player(player.color),
-                quantity: 1,
-                color: player.color,
-                variables: {'color': player.color},
-                imageKey: 'tile_${workerTile201.filenameImage}',
-                phase: PreparationPhase.playerSetup,
-              ),
-            );
-          }
         }
       }
     }
@@ -307,6 +297,20 @@ class BaseGameHandler with TileAdjustments implements ModulePreparationHandler {
         ),
       );
 
+    // Jungle-pile assembly, all under one "the jungle" card: gather first,
+    // then any return/add steps modules slot in before the shuffle, then
+    // shuffle and reveal. See [PreparationGroups.jungle].
+    preparation.add(
+      PreparationEntity(
+        id: 'setup_gather_jungle',
+        label: copy.gatherJungleLabel,
+        detail: copy.gatherJungleDetail,
+        tableZone: TableZone.junglePile,
+        groupId: PreparationGroups.jungle,
+        phase: PreparationPhase.boardSetup,
+      ),
+    );
+
     if (!isBigGame && players.length == 2) {
       preparation.addAll(_twoPlayerJungleTileRemovals());
     }
@@ -322,6 +326,7 @@ class BaseGameHandler with TileAdjustments implements ModulePreparationHandler {
           label: copy.junglePileLabel,
           detail: copy.junglePileDetail,
           tableZone: TableZone.junglePile,
+          groupId: PreparationGroups.jungle,
           phase: PreparationPhase.boardSetup,
         ),
       )
@@ -331,6 +336,7 @@ class BaseGameHandler with TileAdjustments implements ModulePreparationHandler {
           label: copy.jungleDisplayLabel,
           detail: copy.jungleDisplayDetail,
           tableZone: TableZone.jungleDisplay,
+          groupId: PreparationGroups.jungle,
           phase: PreparationPhase.boardSetup,
         ),
       )

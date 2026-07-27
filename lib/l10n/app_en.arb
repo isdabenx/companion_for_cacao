@@ -7,6 +7,7 @@
   "colorYellow": "yellow",
 
   "villageBoardLabel": "Take your village board",
+  "villageBoardDetailAll": "Each player takes the village board of their colour and places it in front of them. Their worker draw pile and water carrier track live there.",
   "villageBoardDetail": "Take the village board of color {color} and place it in front of you. Your worker draw pile and water carrier track live there.",
   "@villageBoardDetail": {
     "placeholders": {
@@ -15,6 +16,7 @@
   },
 
   "waterCarrierLabel": "Put your water carrier on the \"-10\" field",
+  "waterCarrierDetailAll": "Each player takes the water carrier of their colour and places it on the \"-10\" water field of their village board.",
   "waterCarrierDetail": "Take the water carrier of color {color} and place it on the water field with the value \"-10\" of your village board.",
   "@waterCarrierDetail": {
     "placeholders": {
@@ -23,6 +25,7 @@
   },
 
   "ownTilesLabel": "Take all your worker tiles",
+  "ownTilesDetailAll": "Each player gathers all worker tiles with their colour on the back; they are their personal supply for the whole game.",
   "ownTilesDetail": "Gather all worker tiles with the {color} back; they are your personal supply for the whole game.",
   "@ownTilesDetail": {
     "placeholders": {
@@ -42,6 +45,12 @@
       "distribution": { "type": "String" }
     }
   },
+  "removeWorkerDetailAll": "Each player searches their worker tiles for one of the {distribution} tiles and returns it to the game box.",
+  "@removeWorkerDetailAll": {
+    "placeholders": {
+      "distribution": { "type": "String" }
+    }
+  },
   "removeWorkerRationale": "With 3 or more players each player uses fewer worker tiles so the jungle does not run out before the game ends.",
 
   "shuffleWorkersLabel": "Shuffle your workers and draw 3",
@@ -50,8 +59,19 @@
   "initialTilesMarketLabel": "Place the 2 starting tiles diagonally",
   "initialTilesMarketDetail": "From the jungle tiles, get \"single plantation\" and \"market, selling price 2\" and place them face up in the middle of the table diagonally to one another; they form the starting tiles of the playing area.",
 
-  "junglePileLabel": "Build the jungle draw pile",
-  "junglePileDetail": "Mix the remaining jungle tiles and lay them out as a face-down jungle draw pile.",
+  "jungleGroupTitle": "The jungle",
+  "gatherJungleLabel": "Gather the jungle tiles",
+  "gatherJungleDetail": "Take all the base-game jungle tiles; you'll then modify them (remove/add) and form the pile.",
+  "junglePileLabel": "Shuffle and form the pile",
+  "junglePileDetail": "Shuffle all the jungle tiles face-down and form the pile, next to the board.",
+  "junglePurgeLabel": "If you keep {expansion} mixed in",
+  "junglePurgeDetail": "This game doesn't use these {expansion} jungle tiles: {tiles}. If you store them mixed with the base game, take them out before forming the pile.",
+  "@junglePurgeLabel": {
+    "placeholders": { "expansion": { "type": "String" } }
+  },
+  "@junglePurgeDetail": {
+    "placeholders": { "expansion": { "type": "String" }, "tiles": { "type": "String" } }
+  },
 
   "jungleDisplayLabel": "Reveal 2 jungle tiles",
   "jungleDisplayDetail": "Draw the 2 top jungle tiles from the jungle draw pile and place them next to the pile as a face-up jungle display.",
@@ -125,6 +145,7 @@
       "color": { "type": "String" }
     }
   },
+  "mapTokensDetailAll": "Each player takes 2 map tiles.",
   "mapTokensSurplusLabel": "Return the surplus map tiles to the box",
   "mapTokensSurplusDetail": "Put the surplus map tiles back into the box.",
   "mapBoardLabel": "Place the map board",
@@ -156,6 +177,7 @@
 
   "treeOfLife0004Label": "Add your 0-0-0-4 worker tile",
   "treeOfLife0004Detail": "Tree of Life Module: Player {color} takes their 0-0-0-4 worker tile from the New Workers Module and adds it to their worker tiles.",
+  "treeOfLife0004DetailAll": "Tree of Life Module: each player takes the 0-0-0-4 worker tile of their colour (from the New Workers Module) and adds it to their worker tiles.",
   "@treeOfLife0004Detail": {
     "placeholders": {
       "color": { "type": "String" }
@@ -169,6 +191,10 @@
 
   "newWorkersSelectionLabel": "Choose the worker tiles",
   "newWorkersSelectionDetail": "Select which worker tiles you want to use for this game.",
+  "newWorkersBuildLabel": "Build the worker pile",
+  "newWorkersBuildDetail": "Each player takes the tiles shown from each source.",
+  "workerBuildFromBase": "From the base game, take:",
+  "workerBuildFromExpansion": "From the Diamante expansion, take:",
 
   "returnToBoxTitle": "Return to the box",
   "returnToBoxSubtitle": "These tiles are not used in this game",
@@ -292,6 +318,7 @@
   "workerLockedTooltip": "Required by Tree of Life (2 players)",
   "resetAction": "Reset",
   "applyAction": "Apply",
+  "workerSelectionResetNotice": "You changed the workers: build the pile again.",
   "saveAction": "Save",
   "deleteAction": "Delete",
   "savePresetTitle": "Save as preset",
@@ -308,7 +335,7 @@
   "errorSavingPresets": "Error saving custom presets",
 
   "hutRegisterTitle": "Register the hut throw",
-  "hutRegisterHint": "Tap a tile to pick its face-up side; tap it again to flip it over.",
+  "hutRegisterHint": "Tap each hut face that landed up. Impossible ones disappear on their own.",
   "hutRegisterAction": "Register which huts landed face up",
   "hutRegisteredEdit": "Throw registered · tap to edit",
   "forgetThrowAction": "Forget throw",
@@ -458,6 +485,12 @@
   "startOverAction": "Start over",
   "startOverTitle": "Start over?",
   "startOverBody": "This discards all entered scores and reloads players and modules from the current game setup.",
+  "scoreContextGame": "Scoring the game in progress",
+  "scoreContextDetached": "Separate calculation",
+  "scoreBackToGameAction": "Back to the game",
+  "scoreResetChooseBody": "Reset the scoring for this game, or start a separate, empty calculation?",
+  "scoreResetGameOption": "Reset the game scoring",
+  "scoreClearBlankOption": "Clear everything (separate calculation)",
   "backAction": "Back",
   "nextAction": "Next",
   "resultsAction": "Results",
@@ -560,5 +593,49 @@
   },
   "invalidDataMessage": "Invalid data for this screen.",
   "retryAction": "Retry",
-  "playerNameHint": "Name"
+  "playerNameHint": "Name",
+  "aboutIntro": "Digital tools for Cacao players and its expansions: game setup, score counting and rules lookup, all in one place.",
+  "aboutOpenSource": "Open source",
+  "aboutIncludedTitle": "What's included",
+  "aboutInDevelopmentTitle": "In development",
+  "aboutSoonBadge": "soon",
+  "aboutRepoTitle": "GitHub repository",
+  "aboutRepoSubtitle": "Report bugs, suggest improvements or contribute",
+  "aboutMadeWith": "Made with Flutter",
+  "aboutFeaturePrep": "Guided setup",
+  "aboutFeaturePrepSub": "Step by step for the base game and expansions",
+  "aboutFeatureScore": "Score calculator",
+  "aboutFeatureScoreSub": "Final score with the official tiebreakers",
+  "aboutFeatureTiles": "Tile catalogue",
+  "aboutFeatureTilesSub": "Search and filter by multiple criteria",
+  "aboutFeatureRules": "Rules and manuals",
+  "aboutFeatureRulesSub": "Built-in lookup inside the app",
+  "aboutFeatureExpansions": "Full expansions",
+  "aboutFeatureExpansionsSub": "Xocolatl, Diamante and the Big Game variant",
+  "aboutFeatureLangs": "Multi-language",
+  "aboutFeatureLangsSub": "Catalan, Spanish and English",
+  "aboutSoonTimer": "Turn timer",
+  "aboutSoonHistory": "History and statistics",
+  "aboutSoonSettings": "Custom settings",
+  "homeCardSetupSub": "Set up players, expansions and modules",
+  "homeCardTilesSub": "Browse the full tile catalogue",
+  "homeCardScoresSub": "Compute the final score automatically",
+  "homeCardRulesSub": "Built-in manuals and quick reference",
+  "homeAboutTitle": "About the app",
+  "homeTagline": "Your table-side companion for Cacao",
+  "loadingLabel": "Loading…",
+  "scoreTemplesEmpty": "No temples yet — add one for each temple on the board.",
+  "expansionsModulesSection": "Expansions and modules",
+  "expansionSelectHint": "Tap an expansion to turn it on and pick its modules.",
+  "expansionTapHint": "Tap to pick its modules",
+  "modulesPickLabel": "Choose modules",
+  "moduleCountLabel": "{count} / {total} modules",
+  "@moduleCountLabel": {
+    "placeholders": { "count": { "type": "int" }, "total": { "type": "int" } }
+  },
+  "cancelAction": "Cancel",
+  "clearSetupBody": "This clears the selected players, expansions and modules.",
+  "moduleWarningPickOne": "Pick at least one module",
+  "expansionNeedsModuleHint": "An expansion has no modules selected",
+  "playersNeededHint": "Add at least 2 players"
 }

@@ -40,6 +40,87 @@ void main() {
       expect(state().steps.first, ScoreStep.setup);
     });
 
+    test('prefilled from a game skips the setup step', () async {
+      final fake = _FakeGameSetupNotifier(
+        GameSetupStateEntity(
+          players: [
+            PlayerEntity(name: 'Alice', color: 'red', isSelected: true),
+            PlayerEntity(name: 'Bob', color: 'white', isSelected: true),
+          ],
+          isStarted: true,
+        ),
+      );
+      final gameContainer = ProviderContainer(
+        overrides: [gameSetupProvider.overrideWith(() => fake)],
+      );
+      addTearDown(gameContainer.dispose);
+      await gameContainer.read(gameSetupProvider.future);
+
+      final prefilled = gameContainer.read(scoreProvider);
+      expect(prefilled.prefilledFromGame, isTrue);
+      expect(prefilled.steps, isNot(contains(ScoreStep.setup)));
+      // The flow opens straight on the first scoring page.
+      expect(prefilled.currentStep, ScoreStep.accumulatedGold);
+    });
+
+    test('clearToBlank detaches into an empty scratch session', () async {
+      final fake = _FakeGameSetupNotifier(
+        GameSetupStateEntity(
+          players: [
+            PlayerEntity(name: 'Alice', color: 'red', isSelected: true),
+            PlayerEntity(name: 'Bob', color: 'white', isSelected: true),
+          ],
+          isStarted: true,
+        ),
+      );
+      final c = ProviderContainer(
+        overrides: [gameSetupProvider.overrideWith(() => fake)],
+      );
+      addTearDown(c.dispose);
+      await c.read(gameSetupProvider.future);
+      expect(c.read(scoreProvider).prefilledFromGame, isTrue);
+
+      c.read(scoreProvider.notifier).clearToBlank();
+
+      final s = c.read(scoreProvider);
+      expect(s.players, isEmpty);
+      expect(s.prefilledFromGame, isFalse);
+      // The setup step comes back for the standalone calculation.
+      expect(s.steps.first, ScoreStep.setup);
+    });
+
+    test(
+      'resetToGame reattaches to the game and clears entered scores',
+      () async {
+        final fake = _FakeGameSetupNotifier(
+          GameSetupStateEntity(
+            players: [
+              PlayerEntity(name: 'Alice', color: 'red', isSelected: true),
+              PlayerEntity(name: 'Bob', color: 'white', isSelected: true),
+            ],
+            isStarted: true,
+          ),
+        );
+        final c = ProviderContainer(
+          overrides: [gameSetupProvider.overrideWith(() => fake)],
+        );
+        addTearDown(c.dispose);
+        await c.read(gameSetupProvider.future);
+
+        c.read(scoreProvider.notifier).setAccumulatedGold('red', 15);
+        c.read(scoreProvider.notifier).clearToBlank();
+        expect(c.read(scoreProvider).players, isEmpty);
+
+        c.read(scoreProvider.notifier).resetToGame();
+
+        final s = c.read(scoreProvider);
+        expect(s.players.map((p) => p.color), ['red', 'white']);
+        expect(s.prefilledFromGame, isTrue);
+        // Scores from before are gone.
+        expect(s.inputOf('red').accumulatedGold, 0);
+      },
+    );
+
     test('players can be added once per color and removed with their data', () {
       notifier()
         ..addPlayer('Alice', 'red')

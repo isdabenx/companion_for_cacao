@@ -24,6 +24,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get villageBoardLabel => 'Take your village board';
 
   @override
+  String get villageBoardDetailAll =>
+      'Each player takes the village board of their colour and places it in front of them. Their worker draw pile and water carrier track live there.';
+
+  @override
   String villageBoardDetail(String color) {
     return 'Take the village board of color $color and place it in front of you. Your worker draw pile and water carrier track live there.';
   }
@@ -32,12 +36,20 @@ class AppLocalizationsEn extends AppLocalizations {
   String get waterCarrierLabel => 'Put your water carrier on the \"-10\" field';
 
   @override
+  String get waterCarrierDetailAll =>
+      'Each player takes the water carrier of their colour and places it on the \"-10\" water field of their village board.';
+
+  @override
   String waterCarrierDetail(String color) {
     return 'Take the water carrier of color $color and place it on the water field with the value \"-10\" of your village board.';
   }
 
   @override
   String get ownTilesLabel => 'Take all your worker tiles';
+
+  @override
+  String get ownTilesDetailAll =>
+      'Each player gathers all worker tiles with their colour on the back; they are their personal supply for the whole game.';
 
   @override
   String ownTilesDetail(String color) {
@@ -52,6 +64,11 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String removeWorkerDetail(String distribution) {
     return 'Search your worker tiles for one of the $distribution tiles and return it to the game box.';
+  }
+
+  @override
+  String removeWorkerDetailAll(String distribution) {
+    return 'Each player searches their worker tiles for one of the $distribution tiles and returns it to the game box.';
   }
 
   @override
@@ -73,11 +90,31 @@ class AppLocalizationsEn extends AppLocalizations {
       'From the jungle tiles, get \"single plantation\" and \"market, selling price 2\" and place them face up in the middle of the table diagonally to one another; they form the starting tiles of the playing area.';
 
   @override
-  String get junglePileLabel => 'Build the jungle draw pile';
+  String get jungleGroupTitle => 'The jungle';
+
+  @override
+  String get gatherJungleLabel => 'Gather the jungle tiles';
+
+  @override
+  String get gatherJungleDetail =>
+      'Take all the base-game jungle tiles; you\'ll then modify them (remove/add) and form the pile.';
+
+  @override
+  String get junglePileLabel => 'Shuffle and form the pile';
 
   @override
   String get junglePileDetail =>
-      'Mix the remaining jungle tiles and lay them out as a face-down jungle draw pile.';
+      'Shuffle all the jungle tiles face-down and form the pile, next to the board.';
+
+  @override
+  String junglePurgeLabel(String expansion) {
+    return 'If you keep $expansion mixed in';
+  }
+
+  @override
+  String junglePurgeDetail(String expansion, String tiles) {
+    return 'This game doesn\'t use these $expansion jungle tiles: $tiles. If you store them mixed with the base game, take them out before forming the pile.';
+  }
 
   @override
   String get jungleDisplayLabel => 'Reveal 2 jungle tiles';
@@ -188,6 +225,9 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get mapTokensDetailAll => 'Each player takes 2 map tiles.';
+
+  @override
   String get mapTokensSurplusLabel => 'Return the surplus map tiles to the box';
 
   @override
@@ -283,6 +323,10 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get treeOfLife0004DetailAll =>
+      'Tree of Life Module: each player takes the 0-0-0-4 worker tile of their colour (from the New Workers Module) and adds it to their worker tiles.';
+
+  @override
   String get treeOfLife0004Rationale =>
       'With 2 players the Tree of Life requires the 0-0-0-4 tile so every tree can be fully harvested (Diamante rulebook).';
 
@@ -303,6 +347,19 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get newWorkersSelectionDetail =>
       'Select which worker tiles you want to use for this game.';
+
+  @override
+  String get newWorkersBuildLabel => 'Build the worker pile';
+
+  @override
+  String get newWorkersBuildDetail =>
+      'Each player takes the tiles shown from each source.';
+
+  @override
+  String get workerBuildFromBase => 'From the base game, take:';
+
+  @override
+  String get workerBuildFromExpansion => 'From the Diamante expansion, take:';
 
   @override
   String get returnToBoxTitle => 'Return to the box';
@@ -573,6 +630,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get applyAction => 'Apply';
 
   @override
+  String get workerSelectionResetNotice =>
+      'You changed the workers: build the pile again.';
+
+  @override
   String get saveAction => 'Save';
 
   @override
@@ -606,7 +667,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get hutRegisterHint =>
-      'Tap a tile to pick its face-up side; tap it again to flip it over.';
+      'Tap each hut face that landed up. Impossible ones disappear on their own.';
 
   @override
   String get hutRegisterAction => 'Register which huts landed face up';
@@ -1025,6 +1086,25 @@ class AppLocalizationsEn extends AppLocalizations {
       'This discards all entered scores and reloads players and modules from the current game setup.';
 
   @override
+  String get scoreContextGame => 'Scoring the game in progress';
+
+  @override
+  String get scoreContextDetached => 'Separate calculation';
+
+  @override
+  String get scoreBackToGameAction => 'Back to the game';
+
+  @override
+  String get scoreResetChooseBody =>
+      'Reset the scoring for this game, or start a separate, empty calculation?';
+
+  @override
+  String get scoreResetGameOption => 'Reset the game scoring';
+
+  @override
+  String get scoreClearBlankOption => 'Clear everything (separate calculation)';
+
+  @override
   String get backAction => 'Back';
 
   @override
@@ -1221,4 +1301,137 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get playerNameHint => 'Name';
+
+  @override
+  String get aboutIntro =>
+      'Digital tools for Cacao players and its expansions: game setup, score counting and rules lookup, all in one place.';
+
+  @override
+  String get aboutOpenSource => 'Open source';
+
+  @override
+  String get aboutIncludedTitle => 'What\'s included';
+
+  @override
+  String get aboutInDevelopmentTitle => 'In development';
+
+  @override
+  String get aboutSoonBadge => 'soon';
+
+  @override
+  String get aboutRepoTitle => 'GitHub repository';
+
+  @override
+  String get aboutRepoSubtitle =>
+      'Report bugs, suggest improvements or contribute';
+
+  @override
+  String get aboutMadeWith => 'Made with Flutter';
+
+  @override
+  String get aboutFeaturePrep => 'Guided setup';
+
+  @override
+  String get aboutFeaturePrepSub =>
+      'Step by step for the base game and expansions';
+
+  @override
+  String get aboutFeatureScore => 'Score calculator';
+
+  @override
+  String get aboutFeatureScoreSub =>
+      'Final score with the official tiebreakers';
+
+  @override
+  String get aboutFeatureTiles => 'Tile catalogue';
+
+  @override
+  String get aboutFeatureTilesSub => 'Search and filter by multiple criteria';
+
+  @override
+  String get aboutFeatureRules => 'Rules and manuals';
+
+  @override
+  String get aboutFeatureRulesSub => 'Built-in lookup inside the app';
+
+  @override
+  String get aboutFeatureExpansions => 'Full expansions';
+
+  @override
+  String get aboutFeatureExpansionsSub =>
+      'Xocolatl, Diamante and the Big Game variant';
+
+  @override
+  String get aboutFeatureLangs => 'Multi-language';
+
+  @override
+  String get aboutFeatureLangsSub => 'Catalan, Spanish and English';
+
+  @override
+  String get aboutSoonTimer => 'Turn timer';
+
+  @override
+  String get aboutSoonHistory => 'History and statistics';
+
+  @override
+  String get aboutSoonSettings => 'Custom settings';
+
+  @override
+  String get homeCardSetupSub => 'Set up players, expansions and modules';
+
+  @override
+  String get homeCardTilesSub => 'Browse the full tile catalogue';
+
+  @override
+  String get homeCardScoresSub => 'Compute the final score automatically';
+
+  @override
+  String get homeCardRulesSub => 'Built-in manuals and quick reference';
+
+  @override
+  String get homeAboutTitle => 'About the app';
+
+  @override
+  String get homeTagline => 'Your table-side companion for Cacao';
+
+  @override
+  String get loadingLabel => 'Loading…';
+
+  @override
+  String get scoreTemplesEmpty =>
+      'No temples yet — add one for each temple on the board.';
+
+  @override
+  String get expansionsModulesSection => 'Expansions and modules';
+
+  @override
+  String get expansionSelectHint =>
+      'Tap an expansion to turn it on and pick its modules.';
+
+  @override
+  String get expansionTapHint => 'Tap to pick its modules';
+
+  @override
+  String get modulesPickLabel => 'Choose modules';
+
+  @override
+  String moduleCountLabel(int count, int total) {
+    return '$count / $total modules';
+  }
+
+  @override
+  String get cancelAction => 'Cancel';
+
+  @override
+  String get clearSetupBody =>
+      'This clears the selected players, expansions and modules.';
+
+  @override
+  String get moduleWarningPickOne => 'Pick at least one module';
+
+  @override
+  String get expansionNeedsModuleHint => 'An expansion has no modules selected';
+
+  @override
+  String get playersNeededHint => 'Add at least 2 players';
 }

@@ -25,27 +25,32 @@ class WaterStepWidget extends ConsumerWidget {
           style: AppTextStyles.instruction,
         ),
         AppSpacing.verticalM,
-        for (final player in state.players)
-          ScorePlayerRowWidget(
-            player: player,
-            below: Wrap(
-              spacing: AppSpacing.xs,
-              runSpacing: AppSpacing.xs,
-              children: [
-                for (
-                  var i = 0;
-                  i < ScoreCalculatorService.waterTrackValues.length;
-                  i++
-                )
-                  _WaterFieldChip(
-                    value: ScoreCalculatorService.waterTrackValues[i],
-                    isSelected:
-                        state.inputOf(player.color).waterFieldIndex == i,
-                    onTap: () => notifier.setWaterFieldIndex(player.color, i),
-                  ),
-              ],
-            ),
-          ),
+        ScoreListCard(
+          children: [
+            for (final player in state.players)
+              ScorePlayerRowWidget(
+                player: player,
+                below: Wrap(
+                  spacing: AppSpacing.xs,
+                  runSpacing: AppSpacing.xs,
+                  children: [
+                    for (
+                      var i = 0;
+                      i < ScoreCalculatorService.waterTrackValues.length;
+                      i++
+                    )
+                      _WaterFieldChip(
+                        value: ScoreCalculatorService.waterTrackValues[i],
+                        isSelected:
+                            state.inputOf(player.color).waterFieldIndex == i,
+                        onTap: () =>
+                            notifier.setWaterFieldIndex(player.color, i),
+                      ),
+                  ],
+                ),
+              ),
+          ],
+        ),
       ],
     );
   }
