@@ -11,6 +11,7 @@ import 'package:companion_for_cacao/features/game_setup/domain/services/handlers
 import 'package:companion_for_cacao/features/game_setup/domain/services/handlers/new_workers_module_handler.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/services/preparation_steps.dart';
 import 'package:companion_for_cacao/features/game_setup/presentation/providers/game_setup_notifier.dart';
+import 'package:companion_for_cacao/features/game_setup/presentation/providers/preparation_providers.dart';
 import 'package:companion_for_cacao/features/game_setup/presentation/utils/preparation_render_units.dart';
 import 'package:companion_for_cacao/features/game_setup/presentation/widgets/hut_layout_selector_widget.dart';
 import 'package:companion_for_cacao/features/game_setup/presentation/widgets/preparation_celebration_overlay.dart';
@@ -23,72 +24,6 @@ import 'package:companion_for_cacao/shared/widgets/container_full_style_widget.d
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
-
-part 'detailed_preparation_widget.g.dart';
-
-// Local provider for phase expansion state
-@riverpod
-class PhaseExpansion extends _$PhaseExpansion {
-  @override
-  Map<PreparationPhase, bool> build() {
-    return {};
-  }
-
-  void toggle(PreparationPhase phase, {required bool isDefaultExpanded}) {
-    final currentlyExpanded = state[phase] ?? isDefaultExpanded;
-    final newValue = !currentlyExpanded;
-    if (newValue == isDefaultExpanded) {
-      // Toggling back to default — remove override to keep map clean
-      state = Map.from(state)..remove(phase);
-    } else {
-      state = {...state, phase: newValue};
-    }
-  }
-
-  void clearAll() {
-    state = {};
-  }
-}
-
-/// True the first time the preparation screen is shown on this device:
-/// step rows start expanded so new players read the full instructions
-/// without any interaction. [DetailedPreparationWidget] marks it seen.
-@riverpod
-Future<bool> preparationFirstRun(Ref ref) async {
-  final repository = ref.watch(settingsRepositoryProvider);
-  return !(await repository.hasSeenPreparation());
-}
-
-/// Overall preparation progress as (completed, total), counting the
-/// derived completion of the interactive steps (worker selection, hut
-/// throw). Feeds the global progress bar and the celebration overlay.
-@riverpod
-(int, int) preparationProgress(Ref ref) {
-  final preparation = ref.watch(
-    gameSetupProvider.select((s) => s.value?.preparation ?? const []),
-  );
-  final workerSelectionApplied = ref.watch(
-    gameSetupProvider.select((s) => s.value?.workerSelection != null),
-  );
-  final hutThrowRegistered = ref.watch(
-    gameSetupProvider.select((s) => s.value?.hutLayout != null),
-  );
-  var completed = 0;
-  var total = 0;
-  for (final step in preparation) {
-    // Informational rows (mixed-storage notes) are guidance, not tasks.
-    if (step.informational) continue;
-    total++;
-    final isDone = switch (step.id) {
-      NewWorkersModuleHandler.selectionStepId => workerSelectionApplied,
-      HutsModuleHandler.marketStepId => hutThrowRegistered,
-      _ => step.isCompleted,
-    };
-    if (isDone) completed++;
-  }
-  return (completed, total);
-}
 
 class DetailedPreparationWidget extends ConsumerStatefulWidget {
   const DetailedPreparationWidget({required this.preparation, super.key});
