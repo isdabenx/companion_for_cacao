@@ -1313,6 +1313,92 @@ class AppLocalizationsCa extends AppLocalizations {
   String get playerNameHint => 'Nom';
 
   @override
+  String get aboutIntro =>
+      'Eines digitals per als jugadors de Cacao i les seves expansions: preparació de la partida, recompte de punts i consulta de regles, tot en un sol lloc.';
+
+  @override
+  String get aboutOpenSource => 'Codi obert';
+
+  @override
+  String get aboutIncludedTitle => 'Què inclou';
+
+  @override
+  String get aboutInDevelopmentTitle => 'En desenvolupament';
+
+  @override
+  String get aboutSoonBadge => 'aviat';
+
+  @override
+  String get aboutRepoTitle => 'Repositori a GitHub';
+
+  @override
+  String get aboutRepoSubtitle =>
+      'Reporta errors, proposa millores o col·labora';
+
+  @override
+  String get aboutMadeWith => 'Fet amb Flutter';
+
+  @override
+  String get aboutFeaturePrep => 'Preparació guiada';
+
+  @override
+  String get aboutFeaturePrepSub =>
+      'Pas a pas per al joc base i les expansions';
+
+  @override
+  String get aboutFeatureScore => 'Calculadora de punts';
+
+  @override
+  String get aboutFeatureScoreSub =>
+      'Puntuació final amb els desempats oficials';
+
+  @override
+  String get aboutFeatureTiles => 'Catàleg de rajoles';
+
+  @override
+  String get aboutFeatureTilesSub => 'Cerca i filtra per múltiples criteris';
+
+  @override
+  String get aboutFeatureRules => 'Regles i manuals';
+
+  @override
+  String get aboutFeatureRulesSub => 'Consulta integrada dins l\'app';
+
+  @override
+  String get aboutFeatureExpansions => 'Expansions completes';
+
+  @override
+  String get aboutFeatureExpansionsSub =>
+      'Xocolatl, Diamante i la variant Big Game';
+
+  @override
+  String get aboutFeatureLangs => 'Multi-idioma';
+
+  @override
+  String get aboutFeatureLangsSub => 'Català, castellà i anglès';
+
+  @override
+  String get aboutSoonTimer => 'Temporitzador de torns';
+
+  @override
+  String get aboutSoonHistory => 'Historial i estadístiques';
+
+  @override
+  String get aboutSoonSettings => 'Configuració personalitzada';
+
+  @override
+  String get homeCardSetupSub => 'Configura jugadors, expansions i mòduls';
+
+  @override
+  String get homeCardTilesSub => 'Consulta el catàleg complet de rajoles';
+
+  @override
+  String get homeCardScoresSub => 'Calcula la puntuació final automàticament';
+
+  @override
+  String get homeCardRulesSub => 'Manuals integrats i referència ràpida';
+
+  @override
   String get homeAboutTitle => 'Sobre l\'app';
 
   @override

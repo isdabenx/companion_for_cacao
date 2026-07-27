@@ -13,12 +13,17 @@ import 'package:flutter/material.dart';
 /// By default the leading is a soft gold icon chip built from [icon] and the
 /// trailing is a chevron; pass [leading] / [trailing] to override (e.g. a
 /// cover image and a PDF icon on the rules screen).
+/// Accent of the default icon chip. Alternating them down a list gives the
+/// launchpad rhythm without introducing new colours.
+enum ActionCardTone { gold, green }
+
 class ActionCardWidget extends StatelessWidget {
   const ActionCardWidget({
     required this.title,
     required this.onTap,
     this.subtitle,
     this.icon,
+    this.tone = ActionCardTone.gold,
     this.leading,
     this.trailing,
     super.key,
@@ -30,8 +35,11 @@ class ActionCardWidget extends StatelessWidget {
   final String title;
   final String? subtitle;
 
-  /// Icon for the default gold chip; ignored when [leading] is given.
+  /// Icon for the default chip; ignored when [leading] is given.
   final IconData? icon;
+
+  /// Accent of the default icon chip.
+  final ActionCardTone tone;
 
   /// Custom leading widget (a cover image, avatar…). Falls back to the gold
   /// icon chip built from [icon].
@@ -55,7 +63,7 @@ class ActionCardWidget extends StatelessWidget {
           ),
           child: Row(
             children: [
-              leading ?? _GoldIconChip(icon: icon!),
+              leading ?? _IconChip(icon: icon!, tone: tone),
               AppSpacing.horizontalL,
               Expanded(
                 child: Column(
@@ -84,23 +92,47 @@ class ActionCardWidget extends StatelessWidget {
   }
 }
 
-/// The default leading badge: a soft gold chip with a brand-green icon.
-class _GoldIconChip extends StatelessWidget {
-  const _GoldIconChip({required this.icon});
+/// The default leading badge: a filled brand chip with a white glyph. The
+/// solid fill (over the previous 22%-alpha wash) gives the card a focal point
+/// and keeps the icon legible on the cream card surface.
+class _IconChip extends StatelessWidget {
+  const _IconChip({required this.icon, required this.tone});
 
   final IconData icon;
+  final ActionCardTone tone;
 
   @override
   Widget build(BuildContext context) {
+    final (List<Color> gradient, Color glyph) = switch (tone) {
+      ActionCardTone.green => (
+        [AppColors.greenDark, AppColors.greenDarker],
+        AppColors.white,
+      ),
+      ActionCardTone.gold => (
+        [AppColors.gold, AppColors.goldDark],
+        AppColors.brown,
+      ),
+    };
+
     return Container(
       width: 48,
       height: 48,
       decoration: ShapeDecoration(
-        // A gentle brand accent that doesn't shout.
-        color: AppColors.gold.withValues(alpha: 0.22),
+        gradient: LinearGradient(
+          colors: gradient,
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
         shape: AppShapes.shape(AppShapes.radiusM),
+        shadows: [
+          BoxShadow(
+            color: gradient.last.withValues(alpha: 0.35),
+            blurRadius: 6,
+            offset: const Offset(0, 2),
+          ),
+        ],
       ),
-      child: Icon(icon, size: 26, color: AppColors.greenDarker),
+      child: Icon(icon, size: 26, color: glyph),
     );
   }
 }

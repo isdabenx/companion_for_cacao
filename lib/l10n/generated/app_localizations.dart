@@ -2308,6 +2308,168 @@ abstract class AppLocalizations {
   /// **'Name'**
   String get playerNameHint;
 
+  /// No description provided for @aboutIntro.
+  ///
+  /// In en, this message translates to:
+  /// **'Digital tools for Cacao players and its expansions: game setup, score counting and rules lookup, all in one place.'**
+  String get aboutIntro;
+
+  /// No description provided for @aboutOpenSource.
+  ///
+  /// In en, this message translates to:
+  /// **'Open source'**
+  String get aboutOpenSource;
+
+  /// No description provided for @aboutIncludedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'What\'s included'**
+  String get aboutIncludedTitle;
+
+  /// No description provided for @aboutInDevelopmentTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'In development'**
+  String get aboutInDevelopmentTitle;
+
+  /// No description provided for @aboutSoonBadge.
+  ///
+  /// In en, this message translates to:
+  /// **'soon'**
+  String get aboutSoonBadge;
+
+  /// No description provided for @aboutRepoTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'GitHub repository'**
+  String get aboutRepoTitle;
+
+  /// No description provided for @aboutRepoSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Report bugs, suggest improvements or contribute'**
+  String get aboutRepoSubtitle;
+
+  /// No description provided for @aboutMadeWith.
+  ///
+  /// In en, this message translates to:
+  /// **'Made with Flutter'**
+  String get aboutMadeWith;
+
+  /// No description provided for @aboutFeaturePrep.
+  ///
+  /// In en, this message translates to:
+  /// **'Guided setup'**
+  String get aboutFeaturePrep;
+
+  /// No description provided for @aboutFeaturePrepSub.
+  ///
+  /// In en, this message translates to:
+  /// **'Step by step for the base game and expansions'**
+  String get aboutFeaturePrepSub;
+
+  /// No description provided for @aboutFeatureScore.
+  ///
+  /// In en, this message translates to:
+  /// **'Score calculator'**
+  String get aboutFeatureScore;
+
+  /// No description provided for @aboutFeatureScoreSub.
+  ///
+  /// In en, this message translates to:
+  /// **'Final score with the official tiebreakers'**
+  String get aboutFeatureScoreSub;
+
+  /// No description provided for @aboutFeatureTiles.
+  ///
+  /// In en, this message translates to:
+  /// **'Tile catalogue'**
+  String get aboutFeatureTiles;
+
+  /// No description provided for @aboutFeatureTilesSub.
+  ///
+  /// In en, this message translates to:
+  /// **'Search and filter by multiple criteria'**
+  String get aboutFeatureTilesSub;
+
+  /// No description provided for @aboutFeatureRules.
+  ///
+  /// In en, this message translates to:
+  /// **'Rules and manuals'**
+  String get aboutFeatureRules;
+
+  /// No description provided for @aboutFeatureRulesSub.
+  ///
+  /// In en, this message translates to:
+  /// **'Built-in lookup inside the app'**
+  String get aboutFeatureRulesSub;
+
+  /// No description provided for @aboutFeatureExpansions.
+  ///
+  /// In en, this message translates to:
+  /// **'Full expansions'**
+  String get aboutFeatureExpansions;
+
+  /// No description provided for @aboutFeatureExpansionsSub.
+  ///
+  /// In en, this message translates to:
+  /// **'Xocolatl, Diamante and the Big Game variant'**
+  String get aboutFeatureExpansionsSub;
+
+  /// No description provided for @aboutFeatureLangs.
+  ///
+  /// In en, this message translates to:
+  /// **'Multi-language'**
+  String get aboutFeatureLangs;
+
+  /// No description provided for @aboutFeatureLangsSub.
+  ///
+  /// In en, this message translates to:
+  /// **'Catalan, Spanish and English'**
+  String get aboutFeatureLangsSub;
+
+  /// No description provided for @aboutSoonTimer.
+  ///
+  /// In en, this message translates to:
+  /// **'Turn timer'**
+  String get aboutSoonTimer;
+
+  /// No description provided for @aboutSoonHistory.
+  ///
+  /// In en, this message translates to:
+  /// **'History and statistics'**
+  String get aboutSoonHistory;
+
+  /// No description provided for @aboutSoonSettings.
+  ///
+  /// In en, this message translates to:
+  /// **'Custom settings'**
+  String get aboutSoonSettings;
+
+  /// No description provided for @homeCardSetupSub.
+  ///
+  /// In en, this message translates to:
+  /// **'Set up players, expansions and modules'**
+  String get homeCardSetupSub;
+
+  /// No description provided for @homeCardTilesSub.
+  ///
+  /// In en, this message translates to:
+  /// **'Browse the full tile catalogue'**
+  String get homeCardTilesSub;
+
+  /// No description provided for @homeCardScoresSub.
+  ///
+  /// In en, this message translates to:
+  /// **'Compute the final score automatically'**
+  String get homeCardScoresSub;
+
+  /// No description provided for @homeCardRulesSub.
+  ///
+  /// In en, this message translates to:
+  /// **'Built-in manuals and quick reference'**
+  String get homeCardRulesSub;
+
   /// No description provided for @homeAboutTitle.
   ///
   /// In en, this message translates to:

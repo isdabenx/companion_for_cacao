@@ -60,7 +60,7 @@ void main() {
       await tester.pumpWidget(wrap(const ScoreCalculatorScreen()));
       await tester.pump();
 
-      expect(find.text('Score Calculator'), findsOneWidget);
+      expect(find.text('SCORE CALCULATOR'), findsOneWidget);
       // The drawer menu uses the short label so it fits on one line.
       expect(find.text('Scores'), findsOneWidget);
       expect(find.text('Players & Modules'), findsOneWidget);

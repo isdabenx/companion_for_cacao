@@ -9,26 +9,21 @@ import 'package:shared_preferences/shared_preferences.dart';
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
-  const completedFeatures = <String>[
-    '🏠 Main Menu: Quick access to all functionalities.',
-    '🗂 Tile Database: Comprehensive catalog of tiles.',
-    '🔍 Tile Filtering: Search and filter by multiple criteria.',
-    '🌴 Cacao Base Game: Full support and game setup.',
-    '🍫 Chocolatl Expansion: Full support including all 4 modules.',
-    '🚀 Diamante Expansion: Full support including all 4 modules.',
-    '🎲 Game Dashboard: Summary, preparation, and tiles in play.',
-    '🌟 Big Game Variant: Integration of all modules and expansions.',
-    '📖 Integrated Manuals: Read the game rules.',
-    '🏆 Score Calculator: Automatic final scoring with official tie rules.',
-    '🌐 Multi-language Support: Catalan, Spanish and English.',
-    '📊 Adaptive UI: Optimized design for different screen sizes.',
-    '🔄 Auto-Updater: Automatic detection of new versions.',
+  // The About section presents shipped capabilities as tiles (name + one-line
+  // description) instead of the old emoji bullet wall.
+  const shippedFeatures = <String>[
+    'Guided setup',
+    'Score calculator',
+    'Tile catalogue',
+    'Rules and manuals',
+    'Full expansions',
+    'Multi-language',
   ];
 
-  const pendingFeatures = <String>[
-    '🕒 Turn Timer: Control the duration of each turn.',
-    '📜 Game History: Record of finished games and player stats.',
-    '⚙️ Custom Settings: Adjust the game experience.',
+  const plannedFeatures = <String>[
+    'Turn timer',
+    'History and statistics',
+    'Custom settings',
   ];
 
   setUpAll(() {
@@ -103,10 +98,12 @@ void main() {
       await pumpHomeScreen(tester);
 
       expect(
-        find.descendant(of: find.byType(AppBar), matching: find.text('Home')),
+        // The app-bar title is chrome: uppercased by the scaffold.
+        find.descendant(of: find.byType(AppBar), matching: find.text('HOME')),
         findsOneWidget,
       );
-      expect(find.text('Companion for'), findsOneWidget);
+      // The lockup above the logo is a quiet uppercase eyebrow.
+      expect(find.text('COMPANION FOR'), findsOneWidget);
       // The launchpad shows the four main destinations as action cards.
       // (Scoped to the cards: the same labels also live in the drawer menu.)
       expect(
@@ -118,13 +115,13 @@ void main() {
       expect(find.widgetWithText(ActionCardWidget, 'Rules'), findsOneWidget);
     });
 
-    testWidgets('tucks features and contact into the About section', (
+    testWidgets('tucks capabilities and the repo link into About', (
       tester,
     ) async {
       await pumpHomeScreen(tester);
 
-      // Collapsed by default: the feature wall is not shown up front.
-      expect(find.text(completedFeatures.first), findsNothing);
+      // Collapsed by default: the launchpad reads as a way in, not a spec.
+      expect(find.text(shippedFeatures.first), findsNothing);
       expect(find.text('About the app'), findsOneWidget);
 
       await tester.ensureVisible(find.text('About the app'));
@@ -132,15 +129,27 @@ void main() {
       await tester.tap(find.text('About the app'));
       await tester.pumpAndSettle();
 
-      expect(find.text('Completed Features'), findsOneWidget);
-      expect(find.text('Pending Features'), findsOneWidget);
-      expect(find.text('Contact Me'), findsOneWidget);
-      for (final feature in completedFeatures) {
+      // Identity strip and grouped blocks.
+      expect(find.text('Companion for Cacao'), findsOneWidget);
+      expect(find.text('Open source'), findsOneWidget);
+      expect(find.text("WHAT'S INCLUDED"), findsOneWidget);
+      expect(find.text('IN DEVELOPMENT'), findsOneWidget);
+
+      for (final feature in shippedFeatures) {
         expect(find.text(feature), findsOneWidget);
       }
-      for (final feature in pendingFeatures) {
+      for (final feature in plannedFeatures) {
         expect(find.text(feature), findsOneWidget);
       }
+      // "soon" badge on every planned row.
+      expect(find.text('SOON'), findsNWidgets(plannedFeatures.length));
+
+      // The repository is a button, not a raw URL.
+      expect(find.text('GitHub repository'), findsOneWidget);
+      expect(
+        find.text('https://github.com/isdabenx/companion_for_cacao'),
+        findsNothing,
+      );
     });
   });
 }

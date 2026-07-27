@@ -24,15 +24,6 @@ class AppTextStyles {
     ],
   );
 
-  // Brand base — the decorative font WITHOUT the outline, for chrome that
-  // should still feel branded but stay clean and legible (app bar, dashboard
-  // card titles, start button).
-  static const TextStyle _brandBase = TextStyle(
-    fontFamily: AppFonts.headerFont,
-    color: AppColors.brown,
-    letterSpacing: 1,
-  );
-
   // Section title base — the readable body font, bold. Section headings use
   // size/weight for hierarchy instead of the decorative font, per current
   // typography guidance (display fonts only for large headings).
@@ -58,9 +49,15 @@ class AppTextStyles {
   static TextStyle titleTextStyle = _titleBase.copyWith(fontSize: 32);
   static TextStyle menuTitle = _titleBase.copyWith(fontSize: 54);
 
-  // App bar: branded (Burrito) but clean — no gold outline, so long titles
-  // stay legible when the FittedBox scales them down.
-  static TextStyle appBarTextStyle = _brandBase.copyWith(fontSize: 26);
+  // App bar: the readable body font, bold and letterspaced, rendered
+  // uppercase by the scaffold. Chrome repeats on every screen, so it has to
+  // stay crisp — the decorative font frayed here and long titles
+  // ("CALCULADORA DE PUNTUACIÓ") were scaled down to illegible by the
+  // FittedBox. The brand voice lives in the logo and the splash.
+  static TextStyle appBarTextStyle = _sectionTitleBase.copyWith(
+    fontSize: 19,
+    letterSpacing: 2,
+  );
 
   // Markdown H2 / HeaderWidget: readable body font, bold. (Was decorative.)
   static TextStyle markdownH2 = _sectionTitleBase.copyWith(
@@ -84,9 +81,13 @@ class AppTextStyles {
     letterSpacing: 0.5,
   );
 
-  // Larger "branded" title kept in the decorative font for dashboard cards
-  // and the start button — brand flavor, no outline.
-  static TextStyle boardgameTitlePlain = _brandBase.copyWith(fontSize: 18);
+  // Card / sheet / primary-button titles at medium sizes: readable body font,
+  // bold. The decorative font is reserved for the logo and display moments —
+  // at ~18-20px it read as rough and hurt the product's finish.
+  static TextStyle boardgameTitlePlain = _sectionTitleBase.copyWith(
+    fontSize: 19,
+    letterSpacing: 0.25,
+  );
 
   // ============================================
   // MENU STYLES

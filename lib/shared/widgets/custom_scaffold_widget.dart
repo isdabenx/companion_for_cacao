@@ -57,9 +57,11 @@ class _CustomScaffoldWidgetState extends State<CustomScaffoldWidget> {
           toolbarHeight: isLandscape ? 44 : 56,
           bottom: widget.appBarBottom,
           actions: widget.actions,
+          // Uppercased: the app-bar title is chrome, so it reads as a label
+          // rather than competing with the content headings below it.
           title: FittedBox(
             fit: BoxFit.scaleDown,
-            child: Text(widget.title ?? ''),
+            child: Text((widget.title ?? '').toUpperCase()),
           ),
           centerTitle: true,
           leading: widget.showBackButton
@@ -81,11 +83,11 @@ class _CustomScaffoldWidgetState extends State<CustomScaffoldWidget> {
                 image: DecorationImage(
                   image: const AssetImage(Assets.background),
                   fit: BoxFit.cover,
-                  // Warm wash over the leaf texture: keeps the jungle
-                  // identity as a whisper while giving content real
-                  // contrast to sit on.
+                  // Warm cream wash over the leaf texture: the jungle stays a
+                  // whisper, and content sits on a calm ground instead of a
+                  // second green competing with the chrome and the cards.
                   colorFilter: ColorFilter.mode(
-                    AppColors.scrim.withValues(alpha: 0.86),
+                    AppColors.cream.withValues(alpha: 0.9),
                     BlendMode.srcOver,
                   ),
                 ),

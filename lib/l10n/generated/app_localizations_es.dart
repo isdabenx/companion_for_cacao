@@ -1313,6 +1313,91 @@ class AppLocalizationsEs extends AppLocalizations {
   String get playerNameHint => 'Nombre';
 
   @override
+  String get aboutIntro =>
+      'Herramientas digitales para los jugadores de Cacao y sus expansiones: preparación de la partida, recuento de puntos y consulta de reglas, todo en un solo lugar.';
+
+  @override
+  String get aboutOpenSource => 'Código abierto';
+
+  @override
+  String get aboutIncludedTitle => 'Qué incluye';
+
+  @override
+  String get aboutInDevelopmentTitle => 'En desarrollo';
+
+  @override
+  String get aboutSoonBadge => 'pronto';
+
+  @override
+  String get aboutRepoTitle => 'Repositorio en GitHub';
+
+  @override
+  String get aboutRepoSubtitle => 'Reporta errores, propón mejoras o colabora';
+
+  @override
+  String get aboutMadeWith => 'Hecho con Flutter';
+
+  @override
+  String get aboutFeaturePrep => 'Preparación guiada';
+
+  @override
+  String get aboutFeaturePrepSub =>
+      'Paso a paso para el juego base y las expansiones';
+
+  @override
+  String get aboutFeatureScore => 'Calculadora de puntos';
+
+  @override
+  String get aboutFeatureScoreSub =>
+      'Puntuación final con los desempates oficiales';
+
+  @override
+  String get aboutFeatureTiles => 'Catálogo de losetas';
+
+  @override
+  String get aboutFeatureTilesSub => 'Busca y filtra por múltiples criterios';
+
+  @override
+  String get aboutFeatureRules => 'Reglas y manuales';
+
+  @override
+  String get aboutFeatureRulesSub => 'Consulta integrada dentro de la app';
+
+  @override
+  String get aboutFeatureExpansions => 'Expansiones completas';
+
+  @override
+  String get aboutFeatureExpansionsSub =>
+      'Xocolatl, Diamante y la variante Big Game';
+
+  @override
+  String get aboutFeatureLangs => 'Multi-idioma';
+
+  @override
+  String get aboutFeatureLangsSub => 'Catalán, castellano e inglés';
+
+  @override
+  String get aboutSoonTimer => 'Temporizador de turnos';
+
+  @override
+  String get aboutSoonHistory => 'Historial y estadísticas';
+
+  @override
+  String get aboutSoonSettings => 'Configuración personalizada';
+
+  @override
+  String get homeCardSetupSub => 'Configura jugadores, expansiones y módulos';
+
+  @override
+  String get homeCardTilesSub => 'Consulta el catálogo completo de losetas';
+
+  @override
+  String get homeCardScoresSub => 'Calcula la puntuación final automáticamente';
+
+  @override
+  String get homeCardRulesSub => 'Manuales integrados y referencia rápida';
+
+  @override
   String get homeAboutTitle => 'Sobre la app';
 
   @override

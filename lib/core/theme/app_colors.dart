@@ -31,6 +31,9 @@ class AppColors {
   static const Color brown = Color(0xFF2C0801);
   static const Color gold = Color(0xFFFFC20F);
 
+  /// Deeper gold, for gradients and shadows on gold accents.
+  static const Color goldDark = Color(0xFFE09A08);
+
   /// Amber tone for non-blocking warnings (readable on cream/white).
   static const Color warning = Color(0xFFD97706);
 

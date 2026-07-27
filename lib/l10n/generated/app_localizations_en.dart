@@ -1303,6 +1303,92 @@ class AppLocalizationsEn extends AppLocalizations {
   String get playerNameHint => 'Name';
 
   @override
+  String get aboutIntro =>
+      'Digital tools for Cacao players and its expansions: game setup, score counting and rules lookup, all in one place.';
+
+  @override
+  String get aboutOpenSource => 'Open source';
+
+  @override
+  String get aboutIncludedTitle => 'What\'s included';
+
+  @override
+  String get aboutInDevelopmentTitle => 'In development';
+
+  @override
+  String get aboutSoonBadge => 'soon';
+
+  @override
+  String get aboutRepoTitle => 'GitHub repository';
+
+  @override
+  String get aboutRepoSubtitle =>
+      'Report bugs, suggest improvements or contribute';
+
+  @override
+  String get aboutMadeWith => 'Made with Flutter';
+
+  @override
+  String get aboutFeaturePrep => 'Guided setup';
+
+  @override
+  String get aboutFeaturePrepSub =>
+      'Step by step for the base game and expansions';
+
+  @override
+  String get aboutFeatureScore => 'Score calculator';
+
+  @override
+  String get aboutFeatureScoreSub =>
+      'Final score with the official tiebreakers';
+
+  @override
+  String get aboutFeatureTiles => 'Tile catalogue';
+
+  @override
+  String get aboutFeatureTilesSub => 'Search and filter by multiple criteria';
+
+  @override
+  String get aboutFeatureRules => 'Rules and manuals';
+
+  @override
+  String get aboutFeatureRulesSub => 'Built-in lookup inside the app';
+
+  @override
+  String get aboutFeatureExpansions => 'Full expansions';
+
+  @override
+  String get aboutFeatureExpansionsSub =>
+      'Xocolatl, Diamante and the Big Game variant';
+
+  @override
+  String get aboutFeatureLangs => 'Multi-language';
+
+  @override
+  String get aboutFeatureLangsSub => 'Catalan, Spanish and English';
+
+  @override
+  String get aboutSoonTimer => 'Turn timer';
+
+  @override
+  String get aboutSoonHistory => 'History and statistics';
+
+  @override
+  String get aboutSoonSettings => 'Custom settings';
+
+  @override
+  String get homeCardSetupSub => 'Set up players, expansions and modules';
+
+  @override
+  String get homeCardTilesSub => 'Browse the full tile catalogue';
+
+  @override
+  String get homeCardScoresSub => 'Compute the final score automatically';
+
+  @override
+  String get homeCardRulesSub => 'Built-in manuals and quick reference';
+
+  @override
   String get homeAboutTitle => 'About the app';
 
   @override
