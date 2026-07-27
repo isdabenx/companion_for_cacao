@@ -50,7 +50,12 @@ class PlayersGridWidget extends ConsumerWidget {
               physics: const NeverScrollableScrollPhysics(),
               mainAxisSpacing: AppSpacing.s,
               crossAxisSpacing: AppSpacing.s,
-              childAspectRatio: isLandscape ? 2.4 : 1.35,
+              // Wide and short: the chip is now one row (disc + name), so a
+              // tall cell would just re-introduce the dead space. The ratio
+              // still has to clear the 40px colour disc plus the chip's
+              // padding and border, or the disc (and the turn number inside
+              // it) gets clipped.
+              childAspectRatio: isLandscape ? 4.0 : 2.2,
               onReorder: (oldIndex, newIndex) {
                 ref
                     .read(gameSetupProvider.notifier)
