@@ -39,23 +39,33 @@ class WorkerSelectorWidget extends ConsumerWidget {
     final selection = gameState.workerSelection;
     final hasSelection = selection != null;
 
-    // Determine label: check if manual selection matches a custom preset
     final l10n = AppLocalizations.of(context);
     final customPresetsAsync = ref.watch(customPresetProvider);
     final customPresets = customPresetsAsync.value ?? [];
-    String label;
+
+    // A set the player named themselves wins over any generic label: the
+    // custom-preset match is tried before the origin ("Surprise", "Manual").
+    // The other way round, saving a surprise draw under a name and applying
+    // it still read as "Surprise" — the match was unreachable.
+    final matchingPreset = hasSelection
+        ? customPresets
+              .where(
+                (p) => mapEquals(p.tileQuantities, selection.tileQuantities),
+              )
+              .firstOrNull
+        : null;
+
+    final String label;
     if (!hasSelection) {
       label = l10n.workerAddAllDefault;
+    } else if (matchingPreset != null) {
+      label = matchingPreset.name;
     } else if (selection.mode == WorkerSelectionMode.preset) {
       label = _presetLabel(l10n, selection.presetType);
     } else if (selection.isSurprise) {
       label = l10n.workerSurprise;
     } else {
-      // Manual mode — check if it matches a custom preset
-      final matchingPreset = customPresets
-          .where((p) => mapEquals(p.tileQuantities, selection.tileQuantities))
-          .firstOrNull;
-      label = matchingPreset != null ? matchingPreset.name : l10n.workerManual;
+      label = l10n.workerManual;
     }
 
     final tilesPerPlayer = hasSelection
@@ -168,8 +178,16 @@ class WorkerSelectorWidget extends ConsumerWidget {
                           ),
                         ),
                         const SizedBox(width: AppSpacing.s),
-                        _BalanceBadge(isValid: balance.isValid),
-                        const SizedBox(width: AppSpacing.s),
+                        // Only verdict a set the player actually chose. The
+                        // implicit default ("add all") is out of the
+                        // recommended range at 3+ players, so badging it made
+                        // preparation open in a warning state over a decision
+                        // nobody had taken yet. The full balance panel is one
+                        // tap away, inside the editor.
+                        if (hasSelection) ...[
+                          _BalanceBadge(isValid: balance.isValid),
+                          const SizedBox(width: AppSpacing.s),
+                        ],
                         const Icon(
                           Icons.edit_outlined,
                           color: AppColors.greenDarker,
