@@ -392,7 +392,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get menuHome => 'Home';
 
   @override
-  String get menuGameSetup => 'Game Setup';
+  String get menuGame => 'Game';
 
   @override
   String get menuTiles => 'Tiles';

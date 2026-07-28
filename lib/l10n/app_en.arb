@@ -212,7 +212,7 @@
   "backToGameAction": "Back to the game",
 
   "menuHome": "Home",
-  "menuGameSetup": "Game Setup",
+  "menuGame": "Game",
   "menuTiles": "Tiles",
   "menuScores": "Scores",
   "menuRules": "Rules",

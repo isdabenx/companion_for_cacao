@@ -25,7 +25,7 @@ class GameSetupScreen extends ConsumerWidget {
     );
 
     return CustomScaffoldWidget(
-      title: l10n.menuGameSetup,
+      title: l10n.menuGame,
       actions: hasInput
           ? [
               Tooltip(

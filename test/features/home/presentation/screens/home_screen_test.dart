@@ -106,10 +106,9 @@ void main() {
       expect(find.text('COMPANION FOR'), findsOneWidget);
       // The launchpad shows the four main destinations as action cards.
       // (Scoped to the cards: the same labels also live in the drawer menu.)
-      expect(
-        find.widgetWithText(ActionCardWidget, 'Game Setup'),
-        findsOneWidget,
-      );
+      // "Game", not "Game Setup": the same entry is how you get back to a
+      // game already in progress, so it cannot be named after starting one.
+      expect(find.widgetWithText(ActionCardWidget, 'Game'), findsOneWidget);
       expect(find.widgetWithText(ActionCardWidget, 'Tiles'), findsOneWidget);
       expect(find.widgetWithText(ActionCardWidget, 'Scores'), findsOneWidget);
       expect(find.widgetWithText(ActionCardWidget, 'Rules'), findsOneWidget);

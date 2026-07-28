@@ -396,7 +396,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get menuHome => 'Inicio';
 
   @override
-  String get menuGameSetup => 'Nueva partida';
+  String get menuGame => 'Partida';
 
   @override
   String get menuTiles => 'Losetas';

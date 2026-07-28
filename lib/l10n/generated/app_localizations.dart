@@ -718,11 +718,11 @@ abstract class AppLocalizations {
   /// **'Home'**
   String get menuHome;
 
-  /// No description provided for @menuGameSetup.
+  /// No description provided for @menuGame.
   ///
   /// In en, this message translates to:
-  /// **'Game Setup'**
-  String get menuGameSetup;
+  /// **'Game'**
+  String get menuGame;
 
   /// No description provided for @menuTiles.
   ///

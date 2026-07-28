@@ -127,7 +127,7 @@
   "backToGameAction": "Volver a la partida",
 
   "menuHome": "Inicio",
-  "menuGameSetup": "Nueva partida",
+  "menuGame": "Partida",
   "menuTiles": "Losetas",
   "menuScores": "Puntuaciones",
   "menuRules": "Reglas",

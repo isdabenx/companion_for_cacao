@@ -30,7 +30,7 @@ class HomeScreen extends StatelessWidget {
 
     final actions = <ActionCardWidget>[
       ActionCardWidget(
-        title: l10n.menuGameSetup,
+        title: l10n.menuGame,
         subtitle: l10n.homeCardSetupSub,
         icon: Icons.group,
         tone: ActionCardTone.green,

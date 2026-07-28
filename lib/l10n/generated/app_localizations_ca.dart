@@ -398,7 +398,7 @@ class AppLocalizationsCa extends AppLocalizations {
   String get menuHome => 'Inici';
 
   @override
-  String get menuGameSetup => 'Nova partida';
+  String get menuGame => 'Partida';
 
   @override
   String get menuTiles => 'Rajoles';
