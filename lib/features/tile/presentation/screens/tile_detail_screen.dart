@@ -94,7 +94,11 @@ class TileDetailScreen extends ConsumerWidget {
       children: [
         SelectableText(
           tile.localizedName(l10n),
-          style: AppTextStyles.titleTextStyle,
+          // Plain, not the decorative title: this is the tile's name — data,
+          // not a brand moment — and names like "Mercat, preu de venda 3"
+          // fray in the outlined display font, which is what the UX-3 pass
+          // set out to stop. The app bar above already carries the same name.
+          style: AppTextStyles.screenTitlePlain,
           textAlign: TextAlign.center,
         ),
         AppSpacing.verticalL,
