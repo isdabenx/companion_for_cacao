@@ -11,15 +11,22 @@ part 'preparation_providers.g.dart';
 /// State for the preparation screen itself — how it is being read, not what
 /// the game is. The preparation content lives in `gameSetupProvider`.
 ///
-/// These are `autoDispose` (plain `@riverpod`) unlike the rest of the app:
-/// they describe a screen that is open, and are meant to reset when it
-/// closes. See `config/providers/repository_providers.dart` for why
-/// everything else is `keepAlive`.
+/// `preparationProgress` and `preparationFirstRun` are `autoDispose` (plain
+/// `@riverpod`): one is purely derived, the other a one-shot disk read, and
+/// neither carries a decision the reader made. See
+/// `config/providers/repository_providers.dart` for why everything else in
+/// the app is `keepAlive`.
 
 /// Which phases the reader has expanded or collapsed by hand. Only the
 /// overrides are stored, so a phase toggled back to its default drops out
 /// of the map.
-@riverpod
+///
+/// `keepAlive`, unlike its neighbours here: this one IS a decision the
+/// reader made. As autoDispose it did not survive stepping out to the game
+/// board and back, while the steps ticked on the same screen did — two
+/// things done in the same place with two different fates.
+/// [PhaseExpansion.clearAll] is the explicit reset when the flow moves on.
+@Riverpod(keepAlive: true)
 class PhaseExpansion extends _$PhaseExpansion {
   @override
   Map<PreparationPhase, bool> build() {
