@@ -1,7 +1,18 @@
+import 'package:companion_for_cacao/features/game_setup/domain/entities/game_setup_state_entity.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/preparation_phase.dart';
+import 'package:companion_for_cacao/features/game_setup/presentation/providers/game_setup_notifier.dart';
 import 'package:companion_for_cacao/features/game_setup/presentation/providers/preparation_providers.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
+
+/// Lets the test flip the game from configured to started, which is the
+/// transition PhaseExpansion listens for.
+class _FakeGameSetupNotifier extends GameSetupNotifier {
+  @override
+  Future<GameSetupStateEntity> build() async => GameSetupStateEntity();
+
+  void start() => state = AsyncData(GameSetupStateEntity(isStarted: true));
+}
 
 void main() {
   group('PhaseExpansion', () {
@@ -42,6 +53,27 @@ void main() {
         });
       },
     );
+
+    // Surviving the screen is the point; surviving the game is not — a new
+    // preparation should not open already collapsed because of how someone
+    // read the previous one.
+    testWidgets('starting a new game expands the phases again', (tester) async {
+      final fake = _FakeGameSetupNotifier();
+      final container = ProviderContainer.test(
+        overrides: [gameSetupProvider.overrideWith(() => fake)],
+      );
+      await container.read(gameSetupProvider.future);
+
+      container
+          .read(phaseExpansionProvider.notifier)
+          .toggle(PreparationPhase.playerSetup, isDefaultExpanded: true);
+      expect(container.read(phaseExpansionProvider), isNotEmpty);
+
+      fake.start();
+      await container.pump();
+
+      expect(container.read(phaseExpansionProvider), isEmpty);
+    });
 
     test('clearAll is still the way to reset it', () async {
       final container = ProviderContainer.test();

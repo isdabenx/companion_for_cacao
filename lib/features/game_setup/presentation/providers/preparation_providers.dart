@@ -30,6 +30,15 @@ part 'preparation_providers.g.dart';
 class PhaseExpansion extends _$PhaseExpansion {
   @override
   Map<PreparationPhase, bool> build() {
+    // Surviving the screen is the point; surviving the GAME is not. Without
+    // this, starting a new game opened its preparation already collapsed,
+    // inheriting how someone had been reading the previous one — the same
+    // reasoning, and the same shape, as `ScoreNotifier`.
+    ref.listen(gameSetupProvider, (previous, next) {
+      final wasStarted = previous?.value?.isStarted ?? false;
+      final isStarted = next.value?.isStarted ?? false;
+      if (!wasStarted && isStarted) state = {};
+    });
     return {};
   }
 
