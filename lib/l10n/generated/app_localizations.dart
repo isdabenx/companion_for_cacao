@@ -2548,6 +2548,24 @@ abstract class AppLocalizations {
   /// **'Cancel'**
   String get cancelAction;
 
+  /// Asked when back would close the app while a game is set up. The game lives in memory only, so closing loses it.
+  ///
+  /// In en, this message translates to:
+  /// **'Leave the app?'**
+  String get exitWithGameTitle;
+
+  /// No description provided for @exitWithGameBody.
+  ///
+  /// In en, this message translates to:
+  /// **'You have a game in progress. Closing the app discards it — the players, the modules and every step you have ticked.'**
+  String get exitWithGameBody;
+
+  /// No description provided for @exitWithGameAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Leave and discard'**
+  String get exitWithGameAction;
+
   /// No description provided for @clearSetupBody.
   ///
   /// In en, this message translates to:

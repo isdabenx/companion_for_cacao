@@ -1451,6 +1451,16 @@ class AppLocalizationsCa extends AppLocalizations {
   String get cancelAction => 'Cancel·la';
 
   @override
+  String get exitWithGameTitle => 'Vols sortir de l\'app?';
+
+  @override
+  String get exitWithGameBody =>
+      'Tens una partida en curs. Si tanques l\'app la perdràs: els jugadors, els mòduls i tots els passos que has marcat.';
+
+  @override
+  String get exitWithGameAction => 'Surt i descarta';
+
+  @override
   String get clearSetupBody =>
       'Això esborra els jugadors, expansions i mòduls seleccionats.';
 

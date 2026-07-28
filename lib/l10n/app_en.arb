@@ -647,6 +647,12 @@
     "placeholders": { "count": { "type": "int" }, "total": { "type": "int" } }
   },
   "cancelAction": "Cancel",
+  "exitWithGameTitle": "Leave the app?",
+  "@exitWithGameTitle": {
+    "description": "Asked when back would close the app while a game is set up. The game lives in memory only, so closing loses it."
+  },
+  "exitWithGameBody": "You have a game in progress. Closing the app discards it — the players, the modules and every step you have ticked.",
+  "exitWithGameAction": "Leave and discard",
   "clearSetupBody": "This clears the selected players, expansions and modules.",
   "moduleWarningPickOne": "Pick at least one module",
   "expansionNeedsModuleHint": "An expansion has no modules selected",

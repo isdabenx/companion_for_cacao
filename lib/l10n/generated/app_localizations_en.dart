@@ -1441,6 +1441,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String get cancelAction => 'Cancel';
 
   @override
+  String get exitWithGameTitle => 'Leave the app?';
+
+  @override
+  String get exitWithGameBody =>
+      'You have a game in progress. Closing the app discards it — the players, the modules and every step you have ticked.';
+
+  @override
+  String get exitWithGameAction => 'Leave and discard';
+
+  @override
   String get clearSetupBody =>
       'This clears the selected players, expansions and modules.';
 
