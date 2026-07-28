@@ -221,6 +221,7 @@
   "listModeTooltip": "Modo lista",
   "guidedBack": "Atrás",
   "guidedNext": "Siguiente",
+  "guidedPendingSteps": "{count, plural, =1{Queda 1 paso — ve a él} other{Quedan {count} pasos — ve al primero}}",
 
   "hutMarketCrier": "El voceador del mercado",
   "hutHermit": "El curandero",

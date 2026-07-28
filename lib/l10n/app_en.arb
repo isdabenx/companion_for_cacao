@@ -343,6 +343,11 @@
   "listModeTooltip": "Checklist mode",
   "guidedBack": "Back",
   "guidedNext": "Next",
+  "guidedPendingSteps": "{count, plural, =1{1 step left — go to it} other{{count} steps left — go to the first}}",
+  "@guidedPendingSteps": {
+    "description": "Button on the last guided page when steps were skipped: jumps back to the first incomplete one.",
+    "placeholders": { "count": { "type": "int" } }
+  },
 
   "hutMarketCrier": "Market Crier",
   "hutHermit": "Hermit",

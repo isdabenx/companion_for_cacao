@@ -691,6 +691,17 @@ class AppLocalizationsEn extends AppLocalizations {
   String get guidedNext => 'Next';
 
   @override
+  String guidedPendingSteps(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count steps left — go to the first',
+      one: '1 step left — go to it',
+    );
+    return '$_temp0';
+  }
+
+  @override
   String get hutMarketCrier => 'Market Crier';
 
   @override

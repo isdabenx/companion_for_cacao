@@ -1258,6 +1258,12 @@ abstract class AppLocalizations {
   /// **'Next'**
   String get guidedNext;
 
+  /// Button on the last guided page when steps were skipped: jumps back to the first incomplete one.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 step left — go to it} other{{count} steps left — go to the first}}'**
+  String guidedPendingSteps(int count);
+
   /// No description provided for @hutMarketCrier.
   ///
   /// In en, this message translates to:

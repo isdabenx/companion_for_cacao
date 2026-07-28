@@ -86,15 +86,61 @@ void main() {
       await tester.tap(find.text('Next'));
       await tester.pumpAndSettle();
       expect(find.text('3 / 3'), findsOneWidget);
-      // Last page: Next disables.
-      final next = tester.widget<FilledButton>(
-        find.widgetWithText(FilledButton, 'Next'),
-      );
-      expect(next.onPressed, isNull);
 
       await tester.tap(find.text('Back'));
       await tester.pumpAndSettle();
       expect(find.text('2 / 3'), findsOneWidget);
+    });
+
+    // The page counter counts pages, not completion, so "3 / 3" with a
+    // disabled Next used to be the whole end-of-flow signal whether you had
+    // ticked everything or skipped past it.
+    testWidgets('the last page offers a way back to what was skipped', (
+      tester,
+    ) async {
+      await pump(tester, threeSteps());
+
+      await tester.tap(find.text('Next'));
+      await tester.pumpAndSettle();
+      expect(find.text('3 / 3'), findsOneWidget);
+
+      // Steps two and three are still open, so Next gives way to the count.
+      expect(find.widgetWithText(FilledButton, 'Next'), findsNothing);
+      expect(find.text('2 steps left — go to the first'), findsOneWidget);
+
+      // It has to take the width left over, not whatever a Spacer leaves it.
+      // Squeezed to its minimum the label wraps to one word per line, which
+      // throws nothing and so needs measuring rather than catching.
+      final pending = tester.getSize(
+        find.widgetWithText(FilledButton, '2 steps left — go to the first'),
+      );
+      expect(pending.width, greaterThan(300));
+
+      await tester.tap(find.text('2 steps left — go to the first'));
+      await tester.pumpAndSettle();
+      expect(find.text('2 / 3'), findsOneWidget);
+      expect(find.text('Step two'), findsOneWidget);
+    });
+
+    testWidgets('with nothing skipped the last page just disables Next', (
+      tester,
+    ) async {
+      final container = await pump(tester, threeSteps());
+      final notifier = container.read(gameSetupProvider.notifier);
+
+      // Only step three left open: reaching it means nothing was skipped.
+      notifier.togglePreparationCompletion('two');
+      await tester.pump();
+      // Auto-advance waits a beat, then animates to the next page.
+      await tester.pump(const Duration(milliseconds: 400));
+      await tester.pumpAndSettle();
+      expect(find.text('3 / 3'), findsOneWidget);
+
+      final next = tester.widget<FilledButton>(
+        find.widgetWithText(FilledButton, 'Next'),
+      );
+      expect(next.onPressed, isNull);
+      expect(find.textContaining('go to the first'), findsNothing);
     });
 
     testWidgets('completing the current unit auto-advances', (tester) async {
