@@ -89,8 +89,8 @@ memòria amb la pantalla apagada al mig d'una partida de 45 minuts.
 
 | Id | Gravetat | Què | On |
 |---|---|---|---|
-| **P4-1** | Mitjana | En horitzontal, a «Nova partida» el botó inferior fix se solapa amb la llista: «Expansions i mòduls» queda tallat per la meitat i no es pot veure sencer. És la pantalla amb més formulari i la que pitjor porta l'apaïsat. | `game_setup_screen.dart` |
-| **P4-3** | Baixa-mitjana | En horitzontal, la imatge de referència de cada pas de puntuació ocupa tota la finestra i empeny els comptadors fora de pantalla. Es pot fer scroll i els controls hi són, però cada pas obliga a desplaçar abans de poder escriure res. Falta un topall d'alçada a la imatge. | `score_calculator_screen.dart` (`_StepReferenceImage`) |
+| **P4-1** | Baixa | En horitzontal, la pantalla «Partida» deixa uns 500 px per a tot el formulari (jugadors + expansions + mòduls), o sigui molt scroll per configurar una partida. **Corregit respecte de la primera redacció:** vaig reportar que el botó inferior se solapava amb la llista, i és fals — `game_setup_widget` és un `Column` amb `Expanded` + botó i tot és accessible. El que semblava una superposició a la captura era la vora de l'àrea de scroll tallant el text a mitja línia. Queda com a estretor, no com a defecte. | `game_setup_widget.dart` |
+| **P4-3** | Baixa-mitjana | En horitzontal, els comptadors de cada pas de puntuació queden per sota del plec: cal desplaçar abans de poder escriure res. **Corregit respecte de la primera redacció:** no és que falti un topall d'alçada — la imatge ja té `height: 120` fix. El problema és el contrari, que no s'encongeix: amb una finestra de ~411 dp, la imatge més el bàner i la capçalera se la mengen. Caldria fer l'alçada relativa a la finestra, o amagar la imatge en apaïsat. | `score_calculator_screen.dart` (`_StepReferenceImage`) |
 | **P4-2** | Baixa | En horitzontal el logo de la Home ocupa tota la finestra; cal fer scroll per arribar a qualsevol acció i només es veu la primera targeta. | `home_screen.dart` |
 
 ### Decisió pendent
