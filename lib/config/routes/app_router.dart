@@ -121,6 +121,72 @@ Future<void> _confirmExitWithGame(BuildContext context) async {
   if (leave ?? false) await SystemNavigator.pop();
 }
 
+/// Holds every branch alive and cross-fades between them.
+///
+/// The branches have to stay in the tree — that is what lets a section keep
+/// its stack and its scroll while you are away — so this is a stack of all of
+/// them with only the current one visible. The ones behind get their ticker
+/// stopped and their taps ignored, so an invisible branch cannot animate or be
+/// touched.
+///
+/// A short fade with the incoming one settling from slightly small: enough to
+/// read as movement between parts of one app rather than a hard replacement,
+/// short enough never to be in the way. Skipped entirely when the reader has
+/// asked for less motion.
+class _BranchCrossFade extends StatelessWidget {
+  const _BranchCrossFade({required this.currentIndex, required this.children});
+
+  final int currentIndex;
+  final List<Widget> children;
+
+  static const Duration _duration = Duration(milliseconds: 200);
+
+  @override
+  Widget build(BuildContext context) {
+    final animate = !MediaQuery.of(context).disableAnimations;
+
+    return Stack(
+      children: [
+        for (var index = 0; index < children.length; index++)
+          _branch(
+            index: index,
+            isCurrent: index == currentIndex,
+            animate: animate,
+          ),
+      ],
+    );
+  }
+
+  Widget _branch({
+    required int index,
+    required bool isCurrent,
+    required bool animate,
+  }) {
+    final live = IgnorePointer(
+      ignoring: !isCurrent,
+      // Stops offscreen branches animating in the background, which would
+      // burn frames on screens nobody is looking at.
+      child: TickerMode(enabled: isCurrent, child: children[index]),
+    );
+
+    if (!animate) {
+      return Offstage(offstage: !isCurrent, child: live);
+    }
+
+    return AnimatedOpacity(
+      opacity: isCurrent ? 1 : 0,
+      duration: _duration,
+      curve: Curves.easeOut,
+      child: AnimatedScale(
+        scale: isCurrent ? 1 : 0.98,
+        duration: _duration,
+        curve: Curves.easeOut,
+        child: live,
+      ),
+    );
+  }
+}
+
 /// The last segment of a nested path, which is what `GoRoute` wants for a
 /// child. Derived from the full constant so the two can never drift: the
 /// constants stay the single place a path is written down.
@@ -162,9 +228,18 @@ GoRouter goRouter(Ref ref) {
       // navigator, so a section remembers its stack and its scroll while you
       // are away in another one, and a screen pushed inside a section keeps
       // the menu on screen with that section still marked.
-      StatefulShellRoute.indexedStack(
+      StatefulShellRoute(
         builder: (context, state, navigationShell) =>
             _AppShell(navigationShell: navigationShell),
+        // Every branch stays built and alive — that is what remembers each
+        // section's stack and scroll — but they cross-fade instead of cutting.
+        // The default swap is instantaneous, which reads as the screen being
+        // replaced rather than as moving between parts of one app.
+        navigatorContainerBuilder: (context, navigationShell, children) =>
+            _BranchCrossFade(
+              currentIndex: navigationShell.currentIndex,
+              children: children,
+            ),
         branches: [
           StatefulShellBranch(
             routes: [

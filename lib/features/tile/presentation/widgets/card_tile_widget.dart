@@ -9,6 +9,7 @@ import 'package:companion_for_cacao/l10n/generated/app_localizations.dart';
 import 'package:companion_for_cacao/shared/utils/catalog_l10n.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 class CardTileWidget extends ConsumerWidget {
   const CardTileWidget({required this.tile, super.key});
@@ -17,13 +18,33 @@ class CardTileWidget extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final tileSettings = ref.watch(tileSettingsProvider.select((s) => s.value));
-
-    if (tileSettings == null) {
-      return const Center(child: CircularProgressIndicator());
-    }
-
     final l10n = AppLocalizations.of(context);
     final localizedType = tile.type?.localizedName(l10n) ?? '';
+
+    // A spinner here meant a grid of spinners, one per cell, each collapsing
+    // its card to a dot. The card's shape does not depend on the settings —
+    // only its optional extras do — so it shimmers as itself instead, and the
+    // grid holds still while the settings arrive.
+    if (tileSettings == null) {
+      return Skeletonizer(
+        child: Container(
+          decoration: _cardTileDecoration(AppColors.tileBorder),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              CardTileImageWidget(
+                tileType: localizedType,
+                filenameImage: tile.filenameImage,
+                badgeTypeInImage: false,
+                quantity: tile.quantity,
+                showQuantity: false,
+              ),
+              CardTileNameWidget(name: tile.localizedName(l10n)),
+            ],
+          ),
+        ),
+      );
+    }
 
     final tileColor = tile.color == null
         ? null
