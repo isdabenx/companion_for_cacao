@@ -13,48 +13,65 @@ import 'package:companion_for_cacao/shared/widgets/custom_scaffold_widget.dart';
 import 'package:companion_for_cacao/core/theme/app_shapes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown_plus/flutter_markdown_plus.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class TileDetailScreen extends ConsumerWidget {
+/// The tile on its own screen, for a window with no room to show it beside
+/// the catalogue.
+class TileDetailScreen extends StatelessWidget {
   const TileDetailScreen({required this.tile, super.key});
 
   final TileEntity tile;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final image = _buildTileImage();
-    final content = _buildTileContent(context);
-
+  Widget build(BuildContext context) {
     return CustomScaffoldWidget(
       showBackButton: true,
       title: tile.type?.localizedName(AppLocalizations.of(context)) ?? '',
-      body: LayoutBuilder(
-        builder: (context, constraints) {
-          // Measured on the space this screen was actually handed, not on the
-          // window: the shell caps readable content, so the window can be
-          // 900 dp wide while this body only ever gets 680.
-          final sideBySide = constraints.maxWidth >= AppBreakpoints.mediumMin;
-          return ContainerFullStyleWidget(
-            child: sideBySide
-                ? Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Expanded(flex: 2, child: Center(child: image)),
-                      AppSpacing.horizontalL,
-                      Expanded(
-                        flex: 3,
-                        child: SingleChildScrollView(child: content),
-                      ),
-                    ],
-                  )
-                : SingleChildScrollView(
-                    child: Column(
-                      children: [image, AppSpacing.verticalL, content],
+      body: TileDetailView(tile: tile),
+    );
+  }
+}
+
+/// The tile itself: art on one side, everything known about it on the other.
+///
+/// Free of any scaffold so the same view serves the pushed screen and the
+/// pane beside the catalogue — the tile reads identically either way, which
+/// is the point of splitting it out.
+class TileDetailView extends StatelessWidget {
+  const TileDetailView({required this.tile, super.key});
+
+  final TileEntity tile;
+
+  @override
+  Widget build(BuildContext context) {
+    final image = _buildTileImage();
+    final content = _buildTileContent(context);
+
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        // Measured on the space this screen was actually handed, not on the
+        // window: the shell caps readable content, so the window can be
+        // 900 dp wide while this body only ever gets 680.
+        final sideBySide = constraints.maxWidth >= AppBreakpoints.mediumMin;
+        return ContainerFullStyleWidget(
+          child: sideBySide
+              ? Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Expanded(flex: 2, child: Center(child: image)),
+                    AppSpacing.horizontalL,
+                    Expanded(
+                      flex: 3,
+                      child: SingleChildScrollView(child: content),
                     ),
+                  ],
+                )
+              : SingleChildScrollView(
+                  child: Column(
+                    children: [image, AppSpacing.verticalL, content],
                   ),
-          );
-        },
-      ),
+                ),
+        );
+      },
     );
   }
 

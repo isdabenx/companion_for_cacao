@@ -16,9 +16,22 @@ import 'package:go_router/go_router.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 class TileListGrillWidget extends ConsumerStatefulWidget {
-  const TileListGrillWidget({super.key, this.customTiles});
+  const TileListGrillWidget({
+    super.key,
+    this.customTiles,
+    this.onSelect,
+    this.selectedId,
+  });
 
   final List<TileEntity>? customTiles;
+
+  /// Given, a tap reports the tile instead of navigating — which is what a
+  /// caller showing a detail pane wants, since there is nowhere to go.
+  final void Function(TileEntity tile)? onSelect;
+
+  /// Marked in the grid, so the pane's contents and the cell it came from
+  /// stay visibly connected.
+  final String? selectedId;
 
   @override
   ConsumerState<TileListGrillWidget> createState() =>
@@ -119,12 +132,21 @@ class _TileListGrillWidgetState extends ConsumerState<TileListGrillWidget>
                 opacity: fadeAnimation,
                 child: GestureDetector(
                   key: ValueKey(tiles[index].id),
+                  // With a detail pane beside it the grid reports the choice
+                  // and stays put; without one, tapping is a trip to the
+                  // tile's own screen.
                   onTap: () {
-                    unawaited(
-                      context.push(AppRoutes.tileDetail, extra: tiles[index]),
-                    );
+                    final tile = tiles[index];
+                    if (widget.onSelect != null) {
+                      widget.onSelect!(tile);
+                      return;
+                    }
+                    unawaited(context.push(AppRoutes.tileDetail, extra: tile));
                   },
-                  child: CardTileWidget(tile: tiles[index]),
+                  child: _Selectable(
+                    isSelected: tiles[index].id == widget.selectedId,
+                    child: CardTileWidget(tile: tiles[index]),
+                  ),
                 ),
               ),
             );
@@ -163,6 +185,35 @@ class _TileSkeletonCard extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+/// A ring around the cell whose tile is showing in the detail pane.
+///
+/// Outside the card rather than over it: the tile art already carries a
+/// coloured border of its own, and drawing on top of it would read as part of
+/// the tile instead of as a state of the grid.
+class _Selectable extends StatelessWidget {
+  const _Selectable({required this.isSelected, required this.child});
+
+  final bool isSelected;
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 150),
+      padding: const EdgeInsets.all(3),
+      decoration: ShapeDecoration(
+        shape: AppShapes.shape(AppShapes.radiusM).copyWith(
+          side: BorderSide(
+            color: isSelected ? AppColors.greenDarker : Colors.transparent,
+            width: 3,
+          ),
+        ),
+      ),
+      child: child,
     );
   }
 }
