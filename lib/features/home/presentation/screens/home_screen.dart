@@ -1,16 +1,20 @@
 import 'dart:async';
 
 import 'package:companion_for_cacao/config/constants/assets.dart';
+import 'package:companion_for_cacao/config/navigation/app_destinations.dart';
 import 'package:companion_for_cacao/config/routes/app_routes.dart';
+import 'package:companion_for_cacao/core/theme/app_breakpoints.dart';
 import 'package:companion_for_cacao/core/theme/app_colors.dart';
 import 'package:companion_for_cacao/core/theme/app_shapes.dart';
 import 'package:companion_for_cacao/core/theme/app_spacing.dart';
 import 'package:companion_for_cacao/core/theme/app_text_styles.dart';
+import 'package:companion_for_cacao/features/game_setup/presentation/providers/game_setup_notifier.dart';
 import 'package:companion_for_cacao/shared/widgets/action_card_widget.dart';
 import 'package:companion_for_cacao/shared/widgets/custom_scaffold_widget.dart';
 import 'package:companion_for_cacao/l10n/generated/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:upgrader/upgrader.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -18,47 +22,54 @@ import 'package:url_launcher/url_launcher.dart';
 /// Home launchpad: a brand hero over the main destinations as large action
 /// cards, with the app description and feature list tucked into an "About"
 /// section so the first screen reads as a way in, not a wall of text.
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
 
   static const String _repoUrl =
       'https://github.com/isdabenx/companion_for_cacao';
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context);
+    final hasGameInProgress = ref.watch(
+      gameSetupProvider.select((s) => s.value?.isStarted ?? false),
+    );
+    final shortWindow = AppBreakpoints.isShortWindow(context);
 
+    // Home offers ways *into* a game, not a copy of the navigation. Tiles and
+    // Rules used to sit here as cards and are now permanent destinations in
+    // the bar and the rail, so repeating them would be two menus for one job.
+    //
+    // Scoring stays: it is a rail-only destination, and the rule for those is
+    // that they are never the only door — in a compact window this card is
+    // the way in.
     final actions = <ActionCardWidget>[
+      if (hasGameInProgress)
+        ActionCardWidget(
+          title: l10n.resumeGame,
+          subtitle: l10n.homeCardResumeSub,
+          icon: Icons.play_arrow,
+          tone: ActionCardTone.green,
+          onTap: () => context.go(AppRoutes.gameSetupDetail),
+        ),
       ActionCardWidget(
         title: l10n.menuGame,
         subtitle: l10n.homeCardSetupSub,
         icon: Icons.group,
-        tone: ActionCardTone.green,
+        tone: hasGameInProgress ? ActionCardTone.gold : ActionCardTone.green,
         onTap: () => context.go(AppRoutes.gameSetup),
-      ),
-      ActionCardWidget(
-        title: l10n.menuTiles,
-        subtitle: l10n.homeCardTilesSub,
-        icon: Icons.widgets,
-        onTap: () => context.go(AppRoutes.tiles),
       ),
       ActionCardWidget(
         title: l10n.menuScores,
         subtitle: l10n.homeCardScoresSub,
         icon: Icons.calculate,
-        tone: ActionCardTone.green,
         onTap: () => context.go(AppRoutes.scoreCalculator),
-      ),
-      ActionCardWidget(
-        title: l10n.menuRules,
-        subtitle: l10n.homeCardRulesSub,
-        icon: Icons.library_books,
-        onTap: () => context.go(AppRoutes.rules),
       ),
     ];
 
     return UpgradeAlert(
       child: CustomScaffoldWidget(
+        destination: AppDestinationId.home,
         title: l10n.menuHome,
         // Option C: no cream panel — the cards sit directly on the leafy
         // backdrop, so white cards get maximum contrast and the green frames
@@ -86,14 +97,20 @@ class HomeScreen extends StatelessWidget {
                 ),
                 textAlign: TextAlign.center,
               ),
-              Image.asset(Assets.cacaoTile, height: 132),
-              AppSpacing.verticalS,
-              Text(
-                l10n.homeTagline,
-                style: AppTextStyles.instruction,
-                textAlign: TextAlign.center,
-              ),
-              AppSpacing.verticalXl,
+              // The hero is the first thing to give ground when the window is
+              // short. At full size it left room for exactly one card in
+              // landscape, which made the launchpad useless in the very
+              // orientation people play in.
+              Image.asset(Assets.cacaoTile, height: shortWindow ? 64 : 132),
+              if (!shortWindow) ...[
+                AppSpacing.verticalS,
+                Text(
+                  l10n.homeTagline,
+                  style: AppTextStyles.instruction,
+                  textAlign: TextAlign.center,
+                ),
+              ],
+              shortWindow ? AppSpacing.verticalM : AppSpacing.verticalXl,
               // Main destinations.
               for (var i = 0; i < actions.length; i++) ...[
                 actions[i]

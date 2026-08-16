@@ -1,5 +1,6 @@
 import 'package:companion_for_cacao/config/constants/assets.dart';
 import 'package:companion_for_cacao/core/domain/entities/tile_entity.dart';
+import 'package:companion_for_cacao/core/theme/app_breakpoints.dart';
 import 'package:companion_for_cacao/core/theme/app_colors.dart';
 import 'package:companion_for_cacao/core/theme/app_markdown_style_sheet.dart';
 import 'package:companion_for_cacao/core/theme/app_spacing.dart';
@@ -21,31 +22,38 @@ class TileDetailScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final isLandscape =
-        MediaQuery.orientationOf(context) == Orientation.landscape;
-
     final image = _buildTileImage();
     final content = _buildTileContent(context);
 
     return CustomScaffoldWidget(
       showBackButton: true,
       title: tile.type?.localizedName(AppLocalizations.of(context)) ?? '',
-      body: ContainerFullStyleWidget(
-        child: isLandscape
-            ? Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Expanded(flex: 2, child: Center(child: image)),
-                  AppSpacing.horizontalL,
-                  Expanded(
-                    flex: 3,
-                    child: SingleChildScrollView(child: content),
+      body: LayoutBuilder(
+        builder: (context, constraints) {
+          // Measured on the space this screen was actually handed, not on the
+          // window: the shell caps readable content, so the window can be
+          // 900 dp wide while this body only ever gets 680.
+          final sideBySide = constraints.maxWidth >= AppBreakpoints.mediumMin;
+          return ContainerFullStyleWidget(
+            child: sideBySide
+                ? Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded(flex: 2, child: Center(child: image)),
+                      AppSpacing.horizontalL,
+                      Expanded(
+                        flex: 3,
+                        child: SingleChildScrollView(child: content),
+                      ),
+                    ],
+                  )
+                : SingleChildScrollView(
+                    child: Column(
+                      children: [image, AppSpacing.verticalL, content],
+                    ),
                   ),
-                ],
-              )
-            : SingleChildScrollView(
-                child: Column(children: [image, AppSpacing.verticalL, content]),
-              ),
+          );
+        },
       ),
     );
   }

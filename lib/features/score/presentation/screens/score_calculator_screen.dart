@@ -1,3 +1,4 @@
+import 'package:companion_for_cacao/config/navigation/app_destinations.dart';
 import 'package:companion_for_cacao/config/routes/app_routes.dart';
 import 'package:companion_for_cacao/core/theme/app_colors.dart';
 import 'package:companion_for_cacao/core/theme/app_shapes.dart';
@@ -46,6 +47,9 @@ class ScoreCalculatorScreen extends ConsumerWidget {
     final fromGameBoard = context.canPop();
 
     return CustomScaffoldWidget(
+      // Pushed from the board it is that game's scoreboard, so it behaves as
+      // a detail; reached from Home it is a destination in its own right.
+      destination: fromGameBoard ? null : AppDestinationId.scores,
       title: l10n.scoreCalculator,
       showBackButton: fromGameBoard,
       actions: [

@@ -36,7 +36,7 @@ class _DetailedSummaryWidgetState extends ConsumerState<DetailedSummaryWidget> {
     return ContainerFullStyleWidget(
       child: LayoutBuilder(
         builder: (context, constraints) {
-          final isWide = constraints.maxWidth >= AppBreakpoints.compact;
+          final isWide = constraints.maxWidth >= AppBreakpoints.mediumMin;
           return SingleChildScrollView(
             padding: EdgeInsets.symmetric(
               vertical: isWide ? AppSpacing.l : AppSpacing.m,

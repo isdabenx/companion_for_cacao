@@ -364,7 +364,6 @@
   "hutChiefsWife": "Chief's Wife",
   "hutChief": "Chief",
 
-  "menuTitle": "Menu",
   "summaryTiles": "Tiles",
   "summaryWorkers": "Workers",
   "summaryJungle": "Jungle",
@@ -588,7 +587,6 @@
           }
       }
   },
-  "openMenuTooltip": "Open menu",
   "quantityAll": "ALL",
   "errorGenericRetry": "Something went wrong. Please try again.",
   "pageNotFoundTitle": "Page Not Found",
@@ -630,6 +628,7 @@
   "aboutSoonTimer": "Turn timer",
   "aboutSoonHistory": "History and statistics",
   "aboutSoonSettings": "Custom settings",
+  "homeCardResumeSub": "Pick up where you left off",
   "homeCardSetupSub": "Set up players, expansions and modules",
   "homeCardTilesSub": "Browse the full tile catalogue",
   "homeCardScoresSub": "Compute the final score automatically",

@@ -752,9 +752,6 @@ class AppLocalizationsEs extends AppLocalizations {
   String get hutChief => 'El jefe';
 
   @override
-  String get menuTitle => 'Menú';
-
-  @override
   String get summaryTiles => 'Losetas';
 
   @override
@@ -1302,9 +1299,6 @@ class AppLocalizationsEs extends AppLocalizations {
   }
 
   @override
-  String get openMenuTooltip => 'Abrir el menú';
-
-  @override
   String get quantityAll => 'TODAS';
 
   @override
@@ -1402,6 +1396,9 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get aboutSoonSettings => 'Configuración personalizada';
+
+  @override
+  String get homeCardResumeSub => 'Continúa donde lo dejaste';
 
   @override
   String get homeCardSetupSub => 'Configura jugadores, expansiones y módulos';

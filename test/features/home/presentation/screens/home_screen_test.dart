@@ -3,6 +3,7 @@ import 'package:companion_for_cacao/l10n/generated/app_localizations.dart';
 import 'package:companion_for_cacao/shared/widgets/action_card_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -85,10 +86,12 @@ void main() {
   group('HomeScreen', () {
     Future<void> pumpHomeScreen(WidgetTester tester) async {
       await tester.pumpWidget(
-        const MaterialApp(
-          localizationsDelegates: AppLocalizations.localizationsDelegates,
-          supportedLocales: AppLocalizations.supportedLocales,
-          home: HomeScreen(),
+        const ProviderScope(
+          child: MaterialApp(
+            localizationsDelegates: AppLocalizations.localizationsDelegates,
+            supportedLocales: AppLocalizations.supportedLocales,
+            home: HomeScreen(),
+          ),
         ),
       );
       await tester.pump(const Duration(milliseconds: 100));
@@ -104,14 +107,21 @@ void main() {
       );
       // The lockup above the logo is a quiet uppercase eyebrow.
       expect(find.text('COMPANION FOR'), findsOneWidget);
-      // The launchpad shows the four main destinations as action cards.
-      // (Scoped to the cards: the same labels also live in the drawer menu.)
+      // Home offers ways *into* a game, not a second copy of the navigation.
       // "Game", not "Game Setup": the same entry is how you get back to a
       // game already in progress, so it cannot be named after starting one.
       expect(find.widgetWithText(ActionCardWidget, 'Game'), findsOneWidget);
-      expect(find.widgetWithText(ActionCardWidget, 'Tiles'), findsOneWidget);
+      // Scoring is a rail-only destination, so in a compact window this card
+      // is its way in and has to stay.
       expect(find.widgetWithText(ActionCardWidget, 'Scores'), findsOneWidget);
-      expect(find.widgetWithText(ActionCardWidget, 'Rules'), findsOneWidget);
+
+      // Tiles and Rules are permanent destinations in the bar and the rail.
+      // Repeating them here would be two menus doing one job.
+      expect(find.widgetWithText(ActionCardWidget, 'Tiles'), findsNothing);
+      expect(find.widgetWithText(ActionCardWidget, 'Rules'), findsNothing);
+
+      // No game running, so there is nothing to resume.
+      expect(find.widgetWithText(ActionCardWidget, 'Resume'), findsNothing);
     });
 
     testWidgets('tucks capabilities and the repo link into About', (

@@ -1,3 +1,4 @@
+import 'package:companion_for_cacao/config/navigation/app_destinations.dart';
 import 'dart:async';
 
 import 'package:companion_for_cacao/config/constants/assets.dart';
@@ -19,6 +20,7 @@ class RuleScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context);
     return CustomScaffoldWidget(
+      destination: AppDestinationId.rules,
       title: l10n.menuRules,
       body: ContainerFullStyleWidget(
         child: SingleChildScrollView(
