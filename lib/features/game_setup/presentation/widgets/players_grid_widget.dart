@@ -1,5 +1,6 @@
 import 'package:companion_for_cacao/config/constants/game_constants.dart';
 import 'package:companion_for_cacao/core/theme/app_colors.dart';
+import 'package:companion_for_cacao/core/theme/app_breakpoints.dart';
 import 'package:companion_for_cacao/core/theme/app_spacing.dart';
 import 'package:companion_for_cacao/core/theme/app_text_styles.dart';
 import 'package:companion_for_cacao/features/game_setup/presentation/providers/game_setup_notifier.dart';
@@ -41,9 +42,10 @@ class PlayersGridWidget extends ConsumerWidget {
         // instead of tall square cells with wasted green space.
         LayoutBuilder(
           builder: (context, constraints) {
-            final isLandscape =
-                MediaQuery.sizeOf(context).width >
-                MediaQuery.sizeOf(context).height;
+            // Measured on the space the grid was handed, not the window: two
+            // cards share this width, so how flat a cell should be depends on
+            // this constraint and nothing else.
+            final isWide = constraints.maxWidth >= AppBreakpoints.mediumMin;
 
             return ReorderableGridView.count(
               crossAxisCount: 2,
@@ -56,7 +58,7 @@ class PlayersGridWidget extends ConsumerWidget {
               // still has to clear the 40px colour disc plus the chip's
               // padding and border, or the disc (and the turn number inside
               // it) gets clipped.
-              childAspectRatio: isLandscape ? 4.0 : 2.2,
+              childAspectRatio: isWide ? 4.0 : 2.2,
               onReorder: (oldIndex, newIndex) {
                 ref
                     .read(gameSetupProvider.notifier)

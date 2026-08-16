@@ -3,6 +3,7 @@ import 'package:companion_for_cacao/l10n/generated/app_localizations.dart';
 import 'package:companion_for_cacao/shared/widgets/action_card_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -85,10 +86,12 @@ void main() {
   group('HomeScreen', () {
     Future<void> pumpHomeScreen(WidgetTester tester) async {
       await tester.pumpWidget(
-        const MaterialApp(
-          localizationsDelegates: AppLocalizations.localizationsDelegates,
-          supportedLocales: AppLocalizations.supportedLocales,
-          home: HomeScreen(),
+        const ProviderScope(
+          child: MaterialApp(
+            localizationsDelegates: AppLocalizations.localizationsDelegates,
+            supportedLocales: AppLocalizations.supportedLocales,
+            home: HomeScreen(),
+          ),
         ),
       );
       await tester.pump(const Duration(milliseconds: 100));
@@ -97,21 +100,26 @@ void main() {
     testWidgets('renders the hero and the main action cards', (tester) async {
       await pumpHomeScreen(tester);
 
-      expect(
-        // The app-bar title is chrome: uppercased by the scaffold.
-        find.descendant(of: find.byType(AppBar), matching: find.text('HOME')),
-        findsOneWidget,
-      );
+      // A destination with no actions of its own carries no app bar at all:
+      // the navigation already names the section and marks it, so a band
+      // repeating that would be the chrome saying it twice.
+      expect(find.byType(AppBar), findsNothing);
       // The lockup above the logo is a quiet uppercase eyebrow.
       expect(find.text('COMPANION FOR'), findsOneWidget);
-      // The launchpad shows the four main destinations as action cards.
-      // (Scoped to the cards: the same labels also live in the drawer menu.)
+      // Nothing in progress, so the one card is the way to start.
       // "Game", not "Game Setup": the same entry is how you get back to a
       // game already in progress, so it cannot be named after starting one.
       expect(find.widgetWithText(ActionCardWidget, 'Game'), findsOneWidget);
-      expect(find.widgetWithText(ActionCardWidget, 'Tiles'), findsOneWidget);
-      expect(find.widgetWithText(ActionCardWidget, 'Scores'), findsOneWidget);
-      expect(find.widgetWithText(ActionCardWidget, 'Rules'), findsOneWidget);
+      expect(
+        find.widgetWithText(ActionCardWidget, 'Resume Game'),
+        findsNothing,
+      );
+
+      // Every destination is a tab in the bar and an item on the rail, so a
+      // card repeating one would be a second menu doing the first menu's job.
+      expect(find.widgetWithText(ActionCardWidget, 'Tiles'), findsNothing);
+      expect(find.widgetWithText(ActionCardWidget, 'Rules'), findsNothing);
+      expect(find.widgetWithText(ActionCardWidget, 'Scores'), findsNothing);
     });
 
     testWidgets('tucks capabilities and the repo link into About', (

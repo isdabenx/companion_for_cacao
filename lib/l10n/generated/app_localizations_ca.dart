@@ -753,9 +753,6 @@ class AppLocalizationsCa extends AppLocalizations {
   String get hutChief => 'El cap';
 
   @override
-  String get menuTitle => 'Menú';
-
-  @override
   String get summaryTiles => 'Rajoles';
 
   @override
@@ -1302,9 +1299,6 @@ class AppLocalizationsCa extends AppLocalizations {
   }
 
   @override
-  String get openMenuTooltip => 'Obre el menú';
-
-  @override
   String get quantityAll => 'TOTES';
 
   @override
@@ -1405,6 +1399,9 @@ class AppLocalizationsCa extends AppLocalizations {
   String get aboutSoonSettings => 'Configuració personalitzada';
 
   @override
+  String get homeCardResumeSub => 'Continua on ho vas deixar';
+
+  @override
   String get homeCardSetupSub => 'Configura jugadors, expansions i mòduls';
 
   @override
@@ -1415,6 +1412,15 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String get homeCardRulesSub => 'Manuals integrats i referència ràpida';
+
+  @override
+  String get detailPaneClose => 'Tanca el detall';
+
+  @override
+  String get detailPaneExpand => 'Amplia el detall';
+
+  @override
+  String get detailPaneCollapse => 'Torna a la graella';
 
   @override
   String get homeAboutTitle => 'Sobre l\'app';

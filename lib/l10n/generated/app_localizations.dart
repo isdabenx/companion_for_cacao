@@ -1348,12 +1348,6 @@ abstract class AppLocalizations {
   /// **'Chief'**
   String get hutChief;
 
-  /// No description provided for @menuTitle.
-  ///
-  /// In en, this message translates to:
-  /// **'Menu'**
-  String get menuTitle;
-
   /// No description provided for @summaryTiles.
   ///
   /// In en, this message translates to:
@@ -2272,12 +2266,6 @@ abstract class AppLocalizations {
   /// **'{name} Rules'**
   String rulesExpansionRules(String name);
 
-  /// No description provided for @openMenuTooltip.
-  ///
-  /// In en, this message translates to:
-  /// **'Open menu'**
-  String get openMenuTooltip;
-
   /// No description provided for @quantityAll.
   ///
   /// In en, this message translates to:
@@ -2464,6 +2452,12 @@ abstract class AppLocalizations {
   /// **'Custom settings'**
   String get aboutSoonSettings;
 
+  /// No description provided for @homeCardResumeSub.
+  ///
+  /// In en, this message translates to:
+  /// **'Pick up where you left off'**
+  String get homeCardResumeSub;
+
   /// No description provided for @homeCardSetupSub.
   ///
   /// In en, this message translates to:
@@ -2487,6 +2481,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Built-in manuals and quick reference'**
   String get homeCardRulesSub;
+
+  /// No description provided for @detailPaneClose.
+  ///
+  /// In en, this message translates to:
+  /// **'Close the detail'**
+  String get detailPaneClose;
+
+  /// No description provided for @detailPaneExpand.
+  ///
+  /// In en, this message translates to:
+  /// **'Expand the detail'**
+  String get detailPaneExpand;
+
+  /// No description provided for @detailPaneCollapse.
+  ///
+  /// In en, this message translates to:
+  /// **'Back to the grid'**
+  String get detailPaneCollapse;
 
   /// No description provided for @homeAboutTitle.
   ///

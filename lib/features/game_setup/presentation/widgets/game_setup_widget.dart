@@ -1,5 +1,6 @@
 import 'package:companion_for_cacao/shared/widgets/async_loading_widget.dart';
 import 'package:companion_for_cacao/shared/widgets/async_error_widget.dart';
+import 'package:companion_for_cacao/core/theme/app_breakpoints.dart';
 import 'package:companion_for_cacao/core/theme/app_colors.dart';
 import 'package:companion_for_cacao/core/theme/app_spacing.dart';
 import 'package:companion_for_cacao/core/theme/app_text_styles.dart';
@@ -34,24 +35,11 @@ class GameSetupWidget extends ConsumerWidget {
               ignoring: isStarted,
               child: Opacity(
                 opacity: isStarted ? 0.6 : 1.0,
-                child: ListView(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: AppSpacing.l,
-                    vertical: AppSpacing.m,
-                  ),
-                  children: [
-                    const _PlayersSectionHeader(),
-                    AppSpacing.verticalS,
-                    const StepPlayerWidget(),
-                    AppSpacing.verticalL,
-                    _SectionHeader(
-                      title: AppLocalizations.of(
-                        context,
-                      ).expansionsModulesSection,
-                    ),
-                    AppSpacing.verticalS,
-                    const StepExpansionWidget(),
-                  ],
+                child: LayoutBuilder(
+                  builder: (context, constraints) =>
+                      constraints.maxWidth >= _sideBySideFrom
+                      ? const _TwoPaneSetup()
+                      : const _StackedSetup(),
                 ),
               ),
             ),
@@ -61,6 +49,81 @@ class GameSetupWidget extends ConsumerWidget {
       ),
       loading: () => const AsyncLoadingWidget(),
       error: (error, _) => AsyncErrorWidget(error: error),
+    );
+  }
+
+  /// Narrower than this and two columns would squeeze both.
+  static const double _sideBySideFrom = AppBreakpoints.mediumMin;
+}
+
+/// One column, everything in order. What a phone held upright gets.
+class _StackedSetup extends StatelessWidget {
+  const _StackedSetup();
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView(
+      padding: const EdgeInsets.symmetric(
+        horizontal: AppSpacing.l,
+        vertical: AppSpacing.m,
+      ),
+      children: [
+        const _PlayersSectionHeader(),
+        AppSpacing.verticalS,
+        const StepPlayerWidget(),
+        AppSpacing.verticalL,
+        _SectionHeader(
+          title: AppLocalizations.of(context).expansionsModulesSection,
+        ),
+        AppSpacing.verticalS,
+        const StepExpansionWidget(),
+      ],
+    );
+  }
+}
+
+/// Players beside expansions, each scrolling on its own.
+///
+/// Stacked in a short window these two sections shared one cramped viewport:
+/// a phone in landscape showed two of the four colours, clipped, with
+/// everything else below the fold. They are independent choices with no order
+/// between them, so side by side costs nothing and shows both at once.
+class _TwoPaneSetup extends StatelessWidget {
+  const _TwoPaneSetup();
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(
+        horizontal: AppSpacing.l,
+        vertical: AppSpacing.m,
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Expanded(
+            child: ListView(
+              children: const [
+                _PlayersSectionHeader(),
+                AppSpacing.verticalS,
+                StepPlayerWidget(),
+              ],
+            ),
+          ),
+          AppSpacing.horizontalL,
+          Expanded(
+            child: ListView(
+              children: [
+                _SectionHeader(
+                  title: AppLocalizations.of(context).expansionsModulesSection,
+                ),
+                AppSpacing.verticalS,
+                const StepExpansionWidget(),
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

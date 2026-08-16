@@ -744,9 +744,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get hutChief => 'Chief';
 
   @override
-  String get menuTitle => 'Menu';
-
-  @override
   String get summaryTiles => 'Tiles';
 
   @override
@@ -1292,9 +1289,6 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get openMenuTooltip => 'Open menu';
-
-  @override
   String get quantityAll => 'ALL';
 
   @override
@@ -1395,6 +1389,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get aboutSoonSettings => 'Custom settings';
 
   @override
+  String get homeCardResumeSub => 'Pick up where you left off';
+
+  @override
   String get homeCardSetupSub => 'Set up players, expansions and modules';
 
   @override
@@ -1405,6 +1402,15 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get homeCardRulesSub => 'Built-in manuals and quick reference';
+
+  @override
+  String get detailPaneClose => 'Close the detail';
+
+  @override
+  String get detailPaneExpand => 'Expand the detail';
+
+  @override
+  String get detailPaneCollapse => 'Back to the grid';
 
   @override
   String get homeAboutTitle => 'About the app';

@@ -28,6 +28,8 @@ class GameSetupTilesScreen extends ConsumerWidget {
         .toList();
 
     return CustomScaffoldWidget(
+      // A grid earns real columns from extra width, so it is not capped.
+      contentWidth: ContentWidth.full,
       title: AppLocalizations.of(context).tilesInPlay,
       showBackButton: true,
       actions: const [

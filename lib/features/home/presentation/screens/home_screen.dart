@@ -6,11 +6,14 @@ import 'package:companion_for_cacao/core/theme/app_colors.dart';
 import 'package:companion_for_cacao/core/theme/app_shapes.dart';
 import 'package:companion_for_cacao/core/theme/app_spacing.dart';
 import 'package:companion_for_cacao/core/theme/app_text_styles.dart';
+import 'package:companion_for_cacao/features/game_setup/presentation/providers/game_setup_notifier.dart';
 import 'package:companion_for_cacao/shared/widgets/action_card_widget.dart';
+import 'package:companion_for_cacao/shared/widgets/brand_mark_widget.dart';
 import 'package:companion_for_cacao/shared/widgets/custom_scaffold_widget.dart';
 import 'package:companion_for_cacao/l10n/generated/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:upgrader/upgrader.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -18,43 +21,52 @@ import 'package:url_launcher/url_launcher.dart';
 /// Home launchpad: a brand hero over the main destinations as large action
 /// cards, with the app description and feature list tucked into an "About"
 /// section so the first screen reads as a way in, not a wall of text.
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
 
   static const String _repoUrl =
       'https://github.com/isdabenx/companion_for_cacao';
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context);
+    final hasGameInProgress = ref.watch(
+      gameSetupProvider.select((s) => s.value?.isStarted ?? false),
+    );
 
+    // Home says what to do next; it does not restate where you can go. Every
+    // destination is one tap away in the bar and the rail, so a card that only
+    // repeats one of them is a second menu doing the first menu's job.
+    //
+    // What is left is the thing no tab can express: whether there is a game
+    // waiting for you.
     final actions = <ActionCardWidget>[
-      ActionCardWidget(
-        title: l10n.menuGame,
-        subtitle: l10n.homeCardSetupSub,
-        icon: Icons.group,
-        tone: ActionCardTone.green,
-        onTap: () => context.go(AppRoutes.gameSetup),
-      ),
-      ActionCardWidget(
-        title: l10n.menuTiles,
-        subtitle: l10n.homeCardTilesSub,
-        icon: Icons.widgets,
-        onTap: () => context.go(AppRoutes.tiles),
-      ),
-      ActionCardWidget(
-        title: l10n.menuScores,
-        subtitle: l10n.homeCardScoresSub,
-        icon: Icons.calculate,
-        tone: ActionCardTone.green,
-        onTap: () => context.go(AppRoutes.scoreCalculator),
-      ),
-      ActionCardWidget(
-        title: l10n.menuRules,
-        subtitle: l10n.homeCardRulesSub,
-        icon: Icons.library_books,
-        onTap: () => context.go(AppRoutes.rules),
-      ),
+      if (hasGameInProgress)
+        ActionCardWidget(
+          title: l10n.resumeGame,
+          subtitle: l10n.homeCardResumeSub,
+          icon: Icons.play_arrow,
+          tone: ActionCardTone.green,
+          // The board takes the game as a typed `extra` and shows an error
+          // screen without one, so this pushes it the same way the setup
+          // screen's own resume button does. Pushed, not replaced: back from
+          // the board should land on Home, where you came from.
+          onTap: () {
+            final game = ref.read(gameSetupProvider).value;
+            if (game == null) return;
+            unawaited(context.push(AppRoutes.gameSetupDetail, extra: game));
+          },
+        )
+      else
+        // Nothing in progress: the launchpad's one job is to get you started,
+        // so it says so instead of leaving an empty page under the logo.
+        ActionCardWidget(
+          title: l10n.menuGame,
+          subtitle: l10n.homeCardSetupSub,
+          icon: Icons.group,
+          tone: ActionCardTone.green,
+          onTap: () => context.go(AppRoutes.gameSetup),
+        ),
     ];
 
     return UpgradeAlert(
@@ -63,56 +75,72 @@ class HomeScreen extends StatelessWidget {
         // Option C: no cream panel — the cards sit directly on the leafy
         // backdrop, so white cards get maximum contrast and the green frames
         // the launchpad.
-        body: SingleChildScrollView(
-          padding: const EdgeInsets.fromLTRB(
-            AppSpacing.l,
-            AppSpacing.s,
-            AppSpacing.l,
-            AppSpacing.m,
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              AppSpacing.verticalS,
-              // Brand hero: the decorative type lives in the logo, so the
-              // lockup above it is a quiet letterspaced eyebrow instead of a
-              // second display treatment competing with it.
-              Text(
-                'Companion for'.toUpperCase(),
-                style: AppTextStyles.badge.copyWith(
-                  fontSize: 12,
-                  letterSpacing: 3,
-                  color: AppColors.greenDarker,
-                ),
-                textAlign: TextAlign.center,
+        body: LayoutBuilder(
+          builder: (context, constraints) {
+            // The hero is sized from the room this screen was handed, not
+            // from a window query: a query read stale across a rotation and
+            // left the logo at its portrait size. A constraint cannot,
+            // because nothing is laid out until it exists.
+            final shortWindow =
+                constraints.maxHeight.isFinite && constraints.maxHeight < 460;
+            return SingleChildScrollView(
+              padding: const EdgeInsets.fromLTRB(
+                AppSpacing.l,
+                AppSpacing.s,
+                AppSpacing.l,
+                AppSpacing.m,
               ),
-              Image.asset(Assets.cacaoTile, height: 132),
-              AppSpacing.verticalS,
-              Text(
-                l10n.homeTagline,
-                style: AppTextStyles.instruction,
-                textAlign: TextAlign.center,
-              ),
-              AppSpacing.verticalXl,
-              // Main destinations.
-              for (var i = 0; i < actions.length; i++) ...[
-                actions[i]
-                    .animate()
-                    .fadeIn(duration: 280.ms, delay: (70 * i).ms)
-                    .slideY(
-                      begin: 0.08,
-                      end: 0,
-                      duration: 280.ms,
-                      delay: (70 * i).ms,
-                      curve: Curves.easeOutCubic,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  AppSpacing.verticalS,
+                  // Brand hero: the decorative type lives in the logo, so the
+                  // lockup above it is a quiet letterspaced eyebrow instead of a
+                  // second display treatment competing with it.
+                  Text(
+                    'Companion for'.toUpperCase(),
+                    style: AppTextStyles.badge.copyWith(
+                      fontSize: 12,
+                      letterSpacing: 3,
+                      color: AppColors.greenDarker,
                     ),
-                if (i < actions.length - 1) AppSpacing.verticalM,
-              ],
-              AppSpacing.verticalXl,
-              _AboutSection(l10n: l10n, repoUrl: _repoUrl),
-              AppSpacing.verticalM,
-            ],
-          ),
+                    textAlign: TextAlign.center,
+                  ),
+                  // The hero is the first thing to give ground when the window is
+                  // short. At full size it left room for exactly one card in
+                  // landscape, which made the launchpad useless in the very
+                  // orientation people play in.
+                  Image.asset(Assets.cacaoTile, height: shortWindow ? 64 : 132),
+                  if (!shortWindow) ...[
+                    AppSpacing.verticalS,
+                    Text(
+                      l10n.homeTagline,
+                      style: AppTextStyles.instruction,
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
+                  shortWindow ? AppSpacing.verticalM : AppSpacing.verticalXl,
+                  // Main destinations.
+                  for (var i = 0; i < actions.length; i++) ...[
+                    actions[i]
+                        .animate()
+                        .fadeIn(duration: 280.ms, delay: (70 * i).ms)
+                        .slideY(
+                          begin: 0.08,
+                          end: 0,
+                          duration: 280.ms,
+                          delay: (70 * i).ms,
+                          curve: Curves.easeOutCubic,
+                        ),
+                    if (i < actions.length - 1) AppSpacing.verticalM,
+                  ],
+                  AppSpacing.verticalXl,
+                  _AboutSection(l10n: l10n, repoUrl: _repoUrl),
+                  AppSpacing.verticalM,
+                ],
+              ),
+            );
+          },
         ),
       ),
     );
@@ -185,23 +213,10 @@ class _AboutSection extends StatelessWidget {
             // developer changelog.
             Row(
               children: [
-                Container(
-                  width: 52,
-                  height: 52,
-                  alignment: Alignment.center,
-                  decoration: ShapeDecoration(
-                    color: AppColors.greenDarker,
-                    shape: AppShapes.shape(AppShapes.radiusM),
-                  ),
-                  child: Text(
-                    'C',
-                    style: AppTextStyles.titleTextStyle.copyWith(
-                      fontSize: 26,
-                      color: AppColors.white,
-                      shadows: const [],
-                    ),
-                  ),
-                ),
+                // The one place the mark earns its keep: naming the product
+                // beside its name. In chrome it was a button-shaped thing that
+                // did nothing.
+                const BrandMarkWidget(size: 52),
                 AppSpacing.horizontalM,
                 Expanded(
                   child: Column(

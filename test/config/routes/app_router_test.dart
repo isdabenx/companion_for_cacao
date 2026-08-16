@@ -33,10 +33,32 @@ void main() {
     return container.read(goRouterProvider);
   }
 
-  Set<String> declaredPaths(GoRouter router) => router.configuration.routes
-      .whereType<GoRoute>()
-      .map((route) => route.path)
-      .toSet();
+  /// Every path the router can match, rebuilt from the tree.
+  ///
+  /// Destinations live in shell branches now and their sub-screens hang off
+  /// them with relative paths, so a flat sweep of the top level would see only
+  /// the splash. Walking and re-joining is what keeps this assertion honest
+  /// about what is actually reachable.
+  Set<String> declaredPaths(GoRouter router) {
+    final paths = <String>{};
+
+    void walk(List<RouteBase> routes, String prefix) {
+      for (final route in routes) {
+        if (route is GoRoute) {
+          final full = route.path.startsWith('/')
+              ? route.path
+              : '$prefix/${route.path}';
+          paths.add(full);
+          walk(route.routes, full);
+        } else {
+          walk(route.routes, prefix);
+        }
+      }
+    }
+
+    walk(router.configuration.routes, '');
+    return paths;
+  }
 
   group('goRouter', () {
     // Every constant in AppRoutes is a navigation target somewhere in the app.
@@ -180,6 +202,44 @@ void main() {
 
       expect(find.text('Leave the app?'), findsOneWidget);
       expect(find.text('Leave and discard'), findsOneWidget);
+    });
+
+    // The board takes the game as a typed `extra` and shows an error screen
+    // without one, so Home's resume card has to carry it. It shipped once
+    // using a bare `go`, which put "Invalid data for this screen" behind the
+    // most inviting button on the launchpad.
+    testWidgets('resuming from Home reaches the board, not the error screen', (
+      tester,
+    ) async {
+      container = ProviderContainer.test(
+        overrides: [
+          splashProvider.overrideWith(_StubSplashNotifier.new),
+          gameSetupProvider.overrideWith(_StartedGameNotifier.new),
+        ],
+      );
+      final router = container.read(goRouterProvider);
+
+      await tester.pumpWidget(
+        UncontrolledProviderScope(
+          container: container,
+          child: MaterialApp.router(
+            routerConfig: router,
+            localizationsDelegates: AppLocalizations.localizationsDelegates,
+            supportedLocales: AppLocalizations.supportedLocales,
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+      router.go(AppRoutes.home);
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.text('Resume Game'));
+      await tester.pumpAndSettle();
+
+      // Asserted on what is on screen rather than the location: the point of
+      // the bug was that the route resolved fine and then refused to build.
+      expect(find.text('GAME DASHBOARD'), findsOneWidget);
+      expect(find.text('Invalid data for this screen.'), findsNothing);
     });
 
     test('starts on the splash route', () {

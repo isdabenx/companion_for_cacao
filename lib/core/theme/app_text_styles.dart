@@ -47,7 +47,19 @@ class AppTextStyles {
 
   static TextStyle loadingTextStyle = _titleBase.copyWith(fontSize: 54);
   static TextStyle titleTextStyle = _titleBase.copyWith(fontSize: 32);
-  static TextStyle menuTitle = _titleBase.copyWith(fontSize: 54);
+
+  /// The app mark: the same decorative face **without** the gold outline.
+  ///
+  /// The outline is a fixed 0.7 px whatever the size, so below roughly 26 px
+  /// it stops reading as an edge and starts closing the counters. Dropping it
+  /// keeps the face crisp down to 21 dp, which is what chrome needs. In short:
+  /// outlined [titleTextStyle] is for brand *moments* (splash, hero, winner,
+  /// celebration) and never small; this is for brand *presence* and never big.
+  static const TextStyle brandMark = TextStyle(
+    fontFamily: AppFonts.headerFont,
+    color: AppColors.white,
+    height: 1,
+  );
 
   // App bar: the readable body font, bold and letterspaced, rendered
   // uppercase by the scaffold. Chrome repeats on every screen, so it has to

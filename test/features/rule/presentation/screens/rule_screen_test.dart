@@ -42,11 +42,8 @@ void main() {
     ) async {
       await pumpRuleScreen(tester);
 
-      expect(
-        // The app-bar title is chrome: uppercased by the scaffold.
-        find.descendant(of: find.byType(AppBar), matching: find.text('RULES')),
-        findsOneWidget,
-      );
+      // No actions of its own, so no app bar: the menu names this section.
+      expect(find.byType(AppBar), findsNothing);
       expect(find.text('BASE GAME'), findsOneWidget);
       expect(find.text('EXPANSION: CHOCOLATL'), findsOneWidget);
       expect(find.text('EXPANSION: DIAMANTE'), findsOneWidget);

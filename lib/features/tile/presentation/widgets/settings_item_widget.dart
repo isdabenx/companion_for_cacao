@@ -4,6 +4,7 @@ import 'package:companion_for_cacao/features/tile/presentation/providers/tile_se
 import 'package:companion_for_cacao/shared/widgets/async_error_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 class SettingsItemWidget extends ConsumerWidget {
   const SettingsItemWidget({
@@ -34,7 +35,16 @@ class SettingsItemWidget extends ConsumerWidget {
             .read(tileSettingsProvider.notifier)
             .toggleSettings(settingsName),
       ),
-      loading: () => const Center(child: CircularProgressIndicator()),
+      // Shimmer in the shape of the row rather than a spinner that collapses
+      // it: the sheet keeps its height and its rhythm while the values load,
+      // instead of jumping once they arrive. The label is already known, so
+      // only the switch is really pending.
+      loading: () => Skeletonizer(
+        child: ListTile(
+          title: Text(title, style: AppTextStyles.bodyMedium),
+          trailing: const Switch(value: false, onChanged: null),
+        ),
+      ),
       error: (error, _) => AsyncErrorWidget(error: error),
     );
   }

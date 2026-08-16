@@ -1,3 +1,4 @@
+import 'package:companion_for_cacao/config/navigation/app_shell_scope.dart';
 import 'package:companion_for_cacao/config/routes/app_routes.dart';
 import 'package:companion_for_cacao/core/domain/entities/tile_entity.dart';
 import 'package:companion_for_cacao/features/game_setup/domain/entities/game_setup_state_entity.dart';
@@ -43,74 +44,158 @@ Widget _invalidExtraScreen(BuildContext context) {
   );
 }
 
-/// Walks the system back gesture up to Home from the root destinations.
+/// The shell every destination lives inside.
 ///
-/// Home and the drawer navigate with `go`, which replaces the stack, so from
-/// a section there is nothing to pop and back would leave the app — taking
-/// the game with it, since it lives in memory only. Wrapping the route
-/// rather than the screen keeps the shared scaffold free of route knowledge,
-/// and covers the pushed case too: with something on the stack `canPop` is
-/// true and this gets out of the way.
-class _BackToHome extends StatelessWidget {
-  const _BackToHome({required this.child});
-
-  final Widget child;
-
-  @override
-  Widget build(BuildContext context) {
-    return PopScope(
-      canPop: context.canPop(),
-      onPopInvokedWithResult: (didPop, _) {
-        if (!didPop && context.mounted) context.go(AppRoutes.home);
-      },
-      child: child,
-    );
-  }
-}
-
-/// Asks before the back gesture closes the app on top of a game.
+/// It owns the two things that have to survive moving between sections: the
+/// branch navigators, which remember each section's stack and scroll, and the
+/// back behaviour, which is the same three-step answer everywhere and so is
+/// written once here rather than wrapped around each route.
 ///
-/// Home is the one root destination where leaving IS the right outcome, so it
-/// cannot walk up any further. But a set-up game is 45 minutes of table work
-/// held in memory: the activity finishing destroys it, with no warning and
-/// nothing on disk to recover from. Pressing HOME keeps everything; only back
-/// is destructive, which is exactly the confusion worth interrupting.
-class _ExitGuard extends ConsumerWidget {
-  const _ExitGuard({required this.child});
+/// Back, in order: pop inside the current section if it has anywhere to go;
+/// otherwise return to Home, because leaving the app from a section would take
+/// a game in memory with it; and on Home, ask first when there is a game to
+/// lose.
+class _AppShell extends ConsumerWidget {
+  const _AppShell({required this.navigationShell});
 
-  final Widget child;
+  final StatefulNavigationShell navigationShell;
+
+  static const int _homeBranch = 0;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final gameInProgress = ref.watch(
       gameSetupProvider.select((s) => s.value?.isStarted ?? false),
     );
+    final onHome = navigationShell.currentIndex == _homeBranch;
 
-    return PopScope(
-      canPop: !gameInProgress,
-      onPopInvokedWithResult: (didPop, _) async {
-        if (didPop || !context.mounted) return;
-        final l10n = AppLocalizations.of(context);
-        final leave = await showDialog<bool>(
-          context: context,
-          builder: (dialogContext) => AlertDialog(
-            title: Text(l10n.exitWithGameTitle),
-            content: Text(l10n.exitWithGameBody),
-            actions: [
-              DialogButtonBarWidget(
-                onCancel: () => Navigator.of(dialogContext).pop(false),
-                onConfirm: () => Navigator.of(dialogContext).pop(true),
-                confirmLabel: l10n.exitWithGameAction,
-                isDestructive: true,
-              ),
-            ],
-          ),
-        );
-        if (leave ?? false) await SystemNavigator.pop();
-      },
-      child: child,
+    return AppShellScope(
+      currentIndex: navigationShell.currentIndex,
+      // Tapping the section you are already in returns it to its starting
+      // point, which is the familiar way out of somewhere deep.
+      onSelect: (index) => navigationShell.goBranch(
+        index,
+        initialLocation: index == navigationShell.currentIndex,
+      ),
+      child: PopScope(
+        // Leaving outright is only ever right from Home with nothing at stake.
+        // Everything else has somewhere to go first.
+        canPop: onHome && !gameInProgress,
+        onPopInvokedWithResult: (didPop, _) async {
+          if (didPop || !context.mounted) return;
+          if (!onHome) {
+            navigationShell.goBranch(_homeBranch);
+            return;
+          }
+          await _confirmExitWithGame(context);
+        },
+        child: navigationShell,
+      ),
     );
   }
+}
+
+/// Asks before the back gesture closes the app on top of a game.
+///
+/// A set-up game is 45 minutes of table work held in memory: the activity
+/// finishing destroys it, with no warning and nothing on disk to recover from.
+/// Pressing HOME keeps everything; only back is destructive, which is exactly
+/// the confusion worth interrupting.
+Future<void> _confirmExitWithGame(BuildContext context) async {
+  final l10n = AppLocalizations.of(context);
+  final leave = await showDialog<bool>(
+    context: context,
+    builder: (dialogContext) => AlertDialog(
+      title: Text(l10n.exitWithGameTitle),
+      content: Text(l10n.exitWithGameBody),
+      actions: [
+        DialogButtonBarWidget(
+          onCancel: () => Navigator.of(dialogContext).pop(false),
+          onConfirm: () => Navigator.of(dialogContext).pop(true),
+          confirmLabel: l10n.exitWithGameAction,
+          isDestructive: true,
+        ),
+      ],
+    ),
+  );
+  if (leave ?? false) await SystemNavigator.pop();
+}
+
+/// Holds every branch alive and cross-fades between them.
+///
+/// The branches have to stay in the tree — that is what lets a section keep
+/// its stack and its scroll while you are away — so this is a stack of all of
+/// them with only the current one visible. The ones behind get their ticker
+/// stopped and their taps ignored, so an invisible branch cannot animate or be
+/// touched.
+///
+/// A short fade with the incoming one settling from slightly small: enough to
+/// read as movement between parts of one app rather than a hard replacement,
+/// short enough never to be in the way. Skipped entirely when the reader has
+/// asked for less motion.
+class _BranchCrossFade extends StatelessWidget {
+  const _BranchCrossFade({required this.currentIndex, required this.children});
+
+  final int currentIndex;
+  final List<Widget> children;
+
+  static const Duration _duration = Duration(milliseconds: 200);
+
+  @override
+  Widget build(BuildContext context) {
+    final animate = !MediaQuery.of(context).disableAnimations;
+
+    return Stack(
+      children: [
+        for (var index = 0; index < children.length; index++)
+          _branch(
+            index: index,
+            isCurrent: index == currentIndex,
+            animate: animate,
+          ),
+      ],
+    );
+  }
+
+  Widget _branch({
+    required int index,
+    required bool isCurrent,
+    required bool animate,
+  }) {
+    final live = IgnorePointer(
+      ignoring: !isCurrent,
+      // Stops offscreen branches animating in the background, which would
+      // burn frames on screens nobody is looking at.
+      child: TickerMode(enabled: isCurrent, child: children[index]),
+    );
+
+    if (!animate) {
+      return Offstage(offstage: !isCurrent, child: live);
+    }
+
+    return AnimatedOpacity(
+      opacity: isCurrent ? 1 : 0,
+      duration: _duration,
+      curve: Curves.easeOut,
+      child: AnimatedScale(
+        scale: isCurrent ? 1 : 0.98,
+        duration: _duration,
+        curve: Curves.easeOut,
+        child: live,
+      ),
+    );
+  }
+}
+
+/// The last segment of a nested path, which is what `GoRoute` wants for a
+/// child. Derived from the full constant so the two can never drift: the
+/// constants stay the single place a path is written down.
+String _relative(String path, {String under = ''}) {
+  final prefix = under.isEmpty
+      ? '${path.substring(0, path.lastIndexOf('/'))}/'
+      : '$under/';
+  assert(path.startsWith(prefix), '$path is not under $prefix');
+  return path.substring(prefix.length);
 }
 
 @Riverpod(keepAlive: true)
@@ -138,84 +223,140 @@ GoRouter goRouter(Ref ref) {
         path: AppRoutes.splash,
         builder: (context, state) => const SplashScreen(),
       ),
-      GoRoute(
-        path: AppRoutes.home,
-        builder: (context, state) => const _ExitGuard(child: HomeScreen()),
-      ),
-      GoRoute(
-        path: AppRoutes.tiles,
-        builder: (context, state) => const _BackToHome(child: TileListScreen()),
-      ),
-      GoRoute(
-        path: AppRoutes.tileDetail,
-        builder: (context, state) {
-          final tile = state.extra;
-          if (tile is! TileEntity) {
-            return _invalidExtraScreen(context);
-          }
-          return TileDetailScreen(tile: tile);
-        },
-      ),
-      GoRoute(
-        path: AppRoutes.rules,
-        builder: (context, state) => const _BackToHome(child: RuleScreen()),
-      ),
-      GoRoute(
-        path: AppRoutes.rulePdf,
-        builder: (context, state) {
-          final extra = state.extra;
-          if (extra is! Map<String, String>) {
-            return _invalidExtraScreen(context);
-          }
-          return RulePdfScreen(
-            title: extra['title'] ?? '',
-            pdfPath: extra['pdfPath'] ?? '',
-          );
-        },
-      ),
-      GoRoute(
-        path: AppRoutes.gameSetup,
-        builder: (context, state) =>
-            const _BackToHome(child: GameSetupScreen()),
-      ),
-      GoRoute(
-        path: AppRoutes.gameSetupDetail,
-        builder: (context, state) {
-          final gameSetup = state.extra;
-          if (gameSetup is! GameSetupStateEntity) {
-            return _invalidExtraScreen(context);
-          }
-          return GameSetupDetailScreen(gameSetup: gameSetup);
-        },
-      ),
-      GoRoute(
-        path: AppRoutes.gameSetupPreparation,
-        builder: (context, state) {
-          final gameSetup = state.extra;
-          if (gameSetup is! GameSetupStateEntity) {
-            return _invalidExtraScreen(context);
-          }
-          return GameSetupPreparationScreen(gameSetup: gameSetup);
-        },
-      ),
-      GoRoute(
-        path: AppRoutes.scoreCalculator,
-        builder: (context, state) =>
-            const _BackToHome(child: ScoreCalculatorScreen()),
-      ),
-      GoRoute(
-        path: AppRoutes.scoreResult,
-        builder: (context, state) => const ScoreResultScreen(),
-      ),
-      GoRoute(
-        path: AppRoutes.gameSetupTiles,
-        builder: (context, state) {
-          final gameSetup = state.extra;
-          if (gameSetup is! GameSetupStateEntity) {
-            return _invalidExtraScreen(context);
-          }
-          return GameSetupTilesScreen(gameSetup: gameSetup);
-        },
+      // One branch per destination, in the same order as `appDestinations`,
+      // because the shell talks to them by index. Each branch keeps its own
+      // navigator, so a section remembers its stack and its scroll while you
+      // are away in another one, and a screen pushed inside a section keeps
+      // the menu on screen with that section still marked.
+      StatefulShellRoute(
+        builder: (context, state, navigationShell) =>
+            _AppShell(navigationShell: navigationShell),
+        // Every branch stays built and alive — that is what remembers each
+        // section's stack and scroll — but they cross-fade instead of cutting.
+        // The default swap is instantaneous, which reads as the screen being
+        // replaced rather than as moving between parts of one app.
+        navigatorContainerBuilder: (context, navigationShell, children) =>
+            _BranchCrossFade(
+              currentIndex: navigationShell.currentIndex,
+              children: children,
+            ),
+        branches: [
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: AppRoutes.home,
+                builder: (context, state) => const HomeScreen(),
+              ),
+            ],
+          ),
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: AppRoutes.gameSetup,
+                builder: (context, state) => const GameSetupScreen(),
+                routes: [
+                  GoRoute(
+                    path: _relative(AppRoutes.gameSetupDetail),
+                    builder: (context, state) {
+                      final gameSetup = state.extra;
+                      if (gameSetup is! GameSetupStateEntity) {
+                        return _invalidExtraScreen(context);
+                      }
+                      return GameSetupDetailScreen(gameSetup: gameSetup);
+                    },
+                    routes: [
+                      GoRoute(
+                        path: _relative(
+                          AppRoutes.gameSetupPreparation,
+                          under: AppRoutes.gameSetupDetail,
+                        ),
+                        builder: (context, state) {
+                          final gameSetup = state.extra;
+                          if (gameSetup is! GameSetupStateEntity) {
+                            return _invalidExtraScreen(context);
+                          }
+                          return GameSetupPreparationScreen(
+                            gameSetup: gameSetup,
+                          );
+                        },
+                      ),
+                      GoRoute(
+                        path: _relative(
+                          AppRoutes.gameSetupTiles,
+                          under: AppRoutes.gameSetupDetail,
+                        ),
+                        builder: (context, state) {
+                          final gameSetup = state.extra;
+                          if (gameSetup is! GameSetupStateEntity) {
+                            return _invalidExtraScreen(context);
+                          }
+                          return GameSetupTilesScreen(gameSetup: gameSetup);
+                        },
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ],
+          ),
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: AppRoutes.tiles,
+                builder: (context, state) => const TileListScreen(),
+                routes: [
+                  GoRoute(
+                    path: _relative(AppRoutes.tileDetail),
+                    builder: (context, state) {
+                      final tile = state.extra;
+                      if (tile is! TileEntity) {
+                        return _invalidExtraScreen(context);
+                      }
+                      return TileDetailScreen(tile: tile);
+                    },
+                  ),
+                ],
+              ),
+            ],
+          ),
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: AppRoutes.rules,
+                builder: (context, state) => const RuleScreen(),
+                routes: [
+                  GoRoute(
+                    path: _relative(AppRoutes.rulePdf),
+                    builder: (context, state) {
+                      final extra = state.extra;
+                      if (extra is! Map<String, String>) {
+                        return _invalidExtraScreen(context);
+                      }
+                      return RulePdfScreen(
+                        title: extra['title'] ?? '',
+                        pdfPath: extra['pdfPath'] ?? '',
+                      );
+                    },
+                  ),
+                ],
+              ),
+            ],
+          ),
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: AppRoutes.scoreCalculator,
+                builder: (context, state) => const ScoreCalculatorScreen(),
+                routes: [
+                  GoRoute(
+                    path: _relative(AppRoutes.scoreResult),
+                    builder: (context, state) => const ScoreResultScreen(),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ],
       ),
     ],
     redirect: (context, state) {
