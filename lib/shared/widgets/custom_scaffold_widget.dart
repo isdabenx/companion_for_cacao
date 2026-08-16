@@ -1,12 +1,12 @@
 import 'package:companion_for_cacao/config/constants/assets.dart';
 import 'package:companion_for_cacao/config/navigation/app_destinations.dart';
+import 'package:companion_for_cacao/config/navigation/app_shell_scope.dart';
 import 'package:companion_for_cacao/core/theme/app_breakpoints.dart';
 import 'package:companion_for_cacao/core/theme/app_colors.dart';
 import 'package:companion_for_cacao/core/theme/app_spacing.dart';
 import 'package:companion_for_cacao/l10n/generated/app_localizations.dart';
 import 'package:companion_for_cacao/shared/widgets/brand_mark_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 
 /// How wide the body is allowed to grow.
 enum ContentWidth {
@@ -33,7 +33,6 @@ class CustomScaffoldWidget extends StatelessWidget {
     this.showBackButton = false,
     this.appBarBottom,
     this.contentWidth = ContentWidth.readable,
-    this.destination,
   });
 
   final Widget body;
@@ -42,13 +41,6 @@ class CustomScaffoldWidget extends StatelessWidget {
   final bool showBackButton;
   final PreferredSizeWidget? appBarBottom;
   final ContentWidth contentWidth;
-
-  /// Which top-level destination this screen *is*, if any.
-  ///
-  /// `null` — the default — means a pushed detail: no bar, no rail, just a
-  /// back arrow. Stated rather than inferred, so the shell needs nothing from
-  /// the router in order to draw itself.
-  final AppDestinationId? destination;
 
   /// Max body width under [ContentWidth.readable]. Wide enough that a phone in
   /// landscape is never capped below its portrait width, narrow enough to kill
@@ -73,17 +65,16 @@ class CustomScaffoldWidget extends StatelessWidget {
     final destinations = windowClass.usesRail
         ? railDestinations()
         : barDestinations();
-    final index = destinations.indexWhere((d) => d.id == destination);
-    final selected = index < 0 ? null : index;
 
-    // Navigation is offered on destination screens only. A pushed detail is a
-    // one-way trip with a back arrow, and highlighting nothing in a bar that
-    // demands a selected index would be a lie about where you are.
-    //
-    // A secondary destination in a compact window lands here too: it is not in
-    // the bar, so the bar cannot point at it, and the back arrow is the way
-    // out.
-    final showNavigation = selected != null;
+    // The branch you are in, straight from the shell. It stays put while you
+    // go deeper into a section, so the menu stays on screen with the section
+    // still marked instead of vanishing on every pushed screen.
+    final shell = AppShellScope.maybeOf(context);
+    final selected = shell?.currentIndex;
+
+    // No shell means no router: a widget test pumping one screen. Nothing to
+    // draw, and nothing to break.
+    final showNavigation = selected != null && selected < destinations.length;
     final showRail = showNavigation && windowClass.usesRail;
     final showBar = showNavigation && !windowClass.usesRail;
 
@@ -131,8 +122,7 @@ class CustomScaffoldWidget extends StatelessWidget {
       bottomNavigationBar: showBar
           ? NavigationBar(
               selectedIndex: selected,
-              onDestinationSelected: (i) =>
-                  _goTo(context, destinations[i].route),
+              onDestinationSelected: (i) => _goToBranch(context, i),
               destinations: [
                 for (final d in destinations)
                   NavigationDestination(
@@ -175,12 +165,8 @@ class CustomScaffoldWidget extends StatelessWidget {
     );
   }
 
-  /// Navigating is the one thing the shell does need a router for, and it is
-  /// an action rather than a paint, so a screen pumped without one still
-  /// renders — the taps simply go nowhere.
-  static void _goTo(BuildContext context, String route) {
-    GoRouter.maybeOf(context)?.go(route);
-  }
+  static void _goToBranch(BuildContext context, int index) =>
+      AppShellScope.maybeOf(context)?.onSelect(index);
 }
 
 class _Rail extends StatelessWidget {
@@ -251,7 +237,7 @@ class _Rail extends StatelessWidget {
                 : const BrandMarkWidget(size: 28),
           ),
           onDestinationSelected: (i) =>
-              CustomScaffoldWidget._goTo(context, destinations[i].route),
+              CustomScaffoldWidget._goToBranch(context, i),
           destinations: [
             for (final d in destinations)
               NavigationRailDestination(

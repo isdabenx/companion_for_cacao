@@ -33,10 +33,32 @@ void main() {
     return container.read(goRouterProvider);
   }
 
-  Set<String> declaredPaths(GoRouter router) => router.configuration.routes
-      .whereType<GoRoute>()
-      .map((route) => route.path)
-      .toSet();
+  /// Every path the router can match, rebuilt from the tree.
+  ///
+  /// Destinations live in shell branches now and their sub-screens hang off
+  /// them with relative paths, so a flat sweep of the top level would see only
+  /// the splash. Walking and re-joining is what keeps this assertion honest
+  /// about what is actually reachable.
+  Set<String> declaredPaths(GoRouter router) {
+    final paths = <String>{};
+
+    void walk(List<RouteBase> routes, String prefix) {
+      for (final route in routes) {
+        if (route is GoRoute) {
+          final full = route.path.startsWith('/')
+              ? route.path
+              : '$prefix/${route.path}';
+          paths.add(full);
+          walk(route.routes, full);
+        } else {
+          walk(route.routes, prefix);
+        }
+      }
+    }
+
+    walk(router.configuration.routes, '');
+    return paths;
+  }
 
   group('goRouter', () {
     // Every constant in AppRoutes is a navigation target somewhere in the app.

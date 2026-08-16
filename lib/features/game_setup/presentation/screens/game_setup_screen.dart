@@ -1,4 +1,3 @@
-import 'package:companion_for_cacao/config/navigation/app_destinations.dart';
 import 'package:companion_for_cacao/features/game_setup/presentation/providers/game_setup_notifier.dart';
 import 'package:companion_for_cacao/features/game_setup/presentation/widgets/game_setup_widget.dart';
 import 'package:companion_for_cacao/l10n/generated/app_localizations.dart';
@@ -26,7 +25,6 @@ class GameSetupScreen extends ConsumerWidget {
     );
 
     return CustomScaffoldWidget(
-      destination: AppDestinationId.game,
       // Uncapped: wide enough, players and expansions sit side by side, and a
       // reading column would leave no room for that.
       contentWidth: ContentWidth.full,

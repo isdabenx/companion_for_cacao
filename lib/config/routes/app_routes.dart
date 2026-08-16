@@ -2,7 +2,11 @@ class AppRoutes {
   static const String splash = '/splash';
   static const String home = '/home';
   static const String tiles = '/tiles';
-  static const String tileDetail = '/tile_detail';
+
+  /// Nested under [tiles] on purpose: a destination's sub-screens have to sit
+  /// inside its branch to be pushed onto that branch's navigator, which is
+  /// what keeps the menu on screen and the section's place remembered.
+  static const String tileDetail = '/tiles/detail';
   static const String rules = '/rules';
   static const String rulePdf = '/rules/pdf';
   static const String gameSetup = '/game_setup';

@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:companion_for_cacao/config/constants/assets.dart';
-import 'package:companion_for_cacao/config/navigation/app_destinations.dart';
 import 'package:companion_for_cacao/config/routes/app_routes.dart';
 import 'package:companion_for_cacao/core/theme/app_colors.dart';
 import 'package:companion_for_cacao/core/theme/app_shapes.dart';
@@ -71,7 +70,6 @@ class HomeScreen extends ConsumerWidget {
 
     return UpgradeAlert(
       child: CustomScaffoldWidget(
-        destination: AppDestinationId.home,
         title: l10n.menuHome,
         // Option C: no cream panel — the cards sit directly on the leafy
         // backdrop, so white cards get maximum contrast and the green frames

@@ -1,4 +1,3 @@
-import 'package:companion_for_cacao/config/navigation/app_destinations.dart';
 import 'package:companion_for_cacao/core/theme/app_spacing.dart';
 import 'package:companion_for_cacao/features/tile/domain/entities/tile_filter_scope.dart';
 import 'package:companion_for_cacao/features/tile/presentation/widgets/filter_icon_widget.dart';
@@ -15,7 +14,6 @@ class TileListScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CustomScaffoldWidget(
-      destination: AppDestinationId.tiles,
       // A grid earns real columns from extra width, so it is not capped.
       contentWidth: ContentWidth.full,
       title: AppLocalizations.of(context).menuTiles,

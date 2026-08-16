@@ -1,4 +1,5 @@
 import 'package:companion_for_cacao/config/navigation/app_destinations.dart';
+import 'package:companion_for_cacao/config/navigation/app_shell_scope.dart';
 import 'package:companion_for_cacao/l10n/generated/app_localizations.dart';
 import 'package:companion_for_cacao/shared/widgets/brand_mark_widget.dart';
 import 'package:companion_for_cacao/shared/widgets/custom_scaffold_widget.dart';
@@ -9,33 +10,48 @@ void main() {
   /// Sizes are logical pixels, so they map straight onto the window classes:
   /// 411x923 is the phone in portrait, 923x411 the same phone turned, and
   /// 1280x800 a tablet in landscape.
+  var selected = <int>[];
+
+  /// [branch] is the destination index the shell reports, or `null` for "no
+  /// shell above me at all" — a screen pumped on its own in a test.
   Future<void> pumpAt(
     WidgetTester tester,
     Size size, {
-    AppDestinationId? destination = AppDestinationId.home,
+    int? branch = 0,
     bool showBackButton = false,
     ContentWidth contentWidth = ContentWidth.readable,
   }) async {
+    selected = <int>[];
     tester.view
       ..physicalSize = size
       ..devicePixelRatio = 1.0;
     addTearDown(tester.view.reset);
 
+    final scaffold = CustomScaffoldWidget(
+      title: 'Title',
+      showBackButton: showBackButton,
+      contentWidth: contentWidth,
+      body: const SizedBox(key: Key('body'), height: 100),
+    );
+
     await tester.pumpWidget(
       MaterialApp(
         localizationsDelegates: AppLocalizations.localizationsDelegates,
         supportedLocales: AppLocalizations.supportedLocales,
-        home: CustomScaffoldWidget(
-          title: 'Title',
-          destination: destination,
-          showBackButton: showBackButton,
-          contentWidth: contentWidth,
-          body: const SizedBox(key: Key('body'), height: 100),
-        ),
+        home: branch == null
+            ? scaffold
+            : AppShellScope(
+                currentIndex: branch,
+                onSelect: selected.add,
+                child: scaffold,
+              ),
       ),
     );
     await tester.pumpAndSettle();
   }
+
+  /// The locale the tests read labels in.
+  final enUs = lookupAppLocalizations(const Locale('en'));
 
   const compact = Size(411, 923);
   const expanded = Size(923, 411);
@@ -81,15 +97,26 @@ void main() {
     testWidgets('a secondary destination is still reachable in compact', (
       tester,
     ) async {
-      await pumpAt(tester, compact, destination: AppDestinationId.scores);
+      final scores = appDestinations.indexWhere(
+        (d) => d.id == AppDestinationId.scores,
+      );
+      await pumpAt(tester, compact, branch: scores);
 
       // It is a destination, so it gets navigation — not a dead end.
       expect(find.byType(NavigationBar), findsOneWidget);
       final bar = tester.widget<NavigationBar>(find.byType(NavigationBar));
-      final index = appDestinations.indexWhere(
-        (d) => d.id == AppDestinationId.scores,
-      );
-      expect(bar.selectedIndex, index);
+      expect(bar.selectedIndex, scores);
+    });
+
+    testWidgets('tapping a destination asks the shell to switch branch', (
+      tester,
+    ) async {
+      await pumpAt(tester, compact);
+
+      await tester.tap(find.text(appDestinations[2].label(enUs)));
+      await tester.pump();
+
+      expect(selected, [2]);
     });
 
     testWidgets('the rail extends only once there is width for labels', (
@@ -108,20 +135,26 @@ void main() {
       );
     });
 
-    testWidgets('a pushed detail gets no navigation at all', (tester) async {
-      await pumpAt(tester, expanded, destination: null, showBackButton: true);
+    // Going deeper into a section must not cost you the menu: the section is
+    // still where you are, so it stays marked and stays reachable. Before the
+    // branches existed a detail belonged to no destination and the chrome
+    // vanished on every pushed screen.
+    testWidgets('a screen pushed inside a section keeps the menu', (
+      tester,
+    ) async {
+      await pumpAt(tester, expanded, branch: 2, showBackButton: true);
+
+      final rail = tester.widget<NavigationRail>(find.byType(NavigationRail));
+      expect(rail.selectedIndex, 2);
+    });
+
+    testWidgets('with no shell above it there is no navigation to draw', (
+      tester,
+    ) async {
+      await pumpAt(tester, expanded, branch: null);
 
       expect(find.byType(NavigationRail), findsNothing);
       expect(find.byType(NavigationBar), findsNothing);
-    });
-
-    testWidgets('renders without a router, so screens stay testable alone', (
-      tester,
-    ) async {
-      await pumpAt(tester, compact);
-
-      // No GoRouter above this widget anywhere in the test; reaching this
-      // line at all is the assertion.
       expect(find.byKey(const Key('body')), findsOneWidget);
     });
   });
@@ -144,7 +177,7 @@ void main() {
     testWidgets('yields the slot to the back arrow on a detail', (
       tester,
     ) async {
-      await pumpAt(tester, compact, destination: null, showBackButton: true);
+      await pumpAt(tester, compact, showBackButton: true);
 
       expect(find.byType(BrandMarkWidget), findsNothing);
     });

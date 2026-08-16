@@ -1,4 +1,3 @@
-import 'package:companion_for_cacao/config/navigation/app_destinations.dart';
 import 'package:companion_for_cacao/config/routes/app_routes.dart';
 import 'package:companion_for_cacao/core/theme/app_breakpoints.dart';
 import 'package:companion_for_cacao/core/theme/app_colors.dart';
@@ -48,9 +47,6 @@ class ScoreCalculatorScreen extends ConsumerWidget {
     final fromGameBoard = context.canPop();
 
     return CustomScaffoldWidget(
-      // Pushed from the board it is that game's scoreboard, so it behaves as
-      // a detail; reached from Home it is a destination in its own right.
-      destination: fromGameBoard ? null : AppDestinationId.scores,
       // Uncapped: wide enough, the step splits into a reference pane and an
       // input pane, and squeezing that into a reading column would defeat it.
       // Narrow, the step is a single column anyway and has nothing to stretch.
@@ -72,27 +68,39 @@ class ScoreCalculatorScreen extends ConsumerWidget {
         ),
       ],
       body: ContainerFullStyleWidget(
-        child: Column(
-          children: [
-            if (gameActive) ...[
-              _ContextBanner(state: state, notifier: notifier),
-              AppSpacing.verticalS,
-            ],
-            _StepHeader(state: state),
-            AppSpacing.verticalS,
-            Expanded(
-              // Measured here, on the space the step actually has, rather
-              // than asked of the window. A window query can go stale across
-              // a rotation; a constraint cannot, because nothing is laid out
-              // until it exists.
-              child: LayoutBuilder(
-                builder: (context, constraints) =>
-                    _StepBody(step: state.currentStep, area: constraints),
-              ),
-            ),
-            AppSpacing.verticalS,
-            _NavigationBar(state: state),
-          ],
+        // Measured here, on the space the step actually has, rather than
+        // asked of the window. A window query can go stale across a rotation;
+        // a constraint cannot, because nothing is laid out until it exists.
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            final sideBySide = constraints.maxWidth >= _StepBody.sideBySideFrom;
+            final banner = gameActive
+                ? _ContextBanner(state: state, notifier: notifier)
+                : null;
+
+            return Column(
+              children: [
+                // Stacked, the banner sits above everything as context for the
+                // screen. Side by side it belongs in the reference pane with
+                // the picture — it is something to read, not something to
+                // fill in, and up here it cost the last player their counter.
+                if (banner != null && !sideBySide) ...[
+                  banner,
+                  AppSpacing.verticalS,
+                ],
+                _StepHeader(state: state),
+                AppSpacing.verticalS,
+                Expanded(
+                  child: _StepBody(
+                    step: state.currentStep,
+                    banner: sideBySide ? banner : null,
+                  ),
+                ),
+                AppSpacing.verticalS,
+                _NavigationBar(state: state),
+              ],
+            );
+          },
         ),
       ),
     );
@@ -319,14 +327,17 @@ class _StepHeader extends StatelessWidget {
 /// top — or steps aside entirely when even that would push a player below the
 /// fold, since you came here to type numbers.
 class _StepBody extends StatelessWidget {
-  const _StepBody({required this.step, required this.area});
+  const _StepBody({required this.step, this.banner});
 
   final ScoreStep step;
-  final BoxConstraints area;
+
+  /// The "scoring the game in progress" strip, when the caller has decided it
+  /// belongs in the reference pane rather than above the whole screen.
+  final Widget? banner;
 
   /// A pane narrower than this cannot hold a picture and a column of counters
   /// without squeezing both.
-  static const double _sideBySideFrom = AppBreakpoints.mediumMin;
+  static const double sideBySideFrom = AppBreakpoints.mediumMin;
 
   /// Stacked, the picture may take this share of the step area.
   static const double _stackedShare = 0.2;
@@ -339,9 +350,14 @@ class _StepBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    return LayoutBuilder(builder: (context, area) => _layout(context, area));
+  }
+
+  Widget _layout(BuildContext context, BoxConstraints area) {
     final asset = scoreStepReferenceImage(step);
     final content = _StepContent(step: step);
-    final sideBySide = asset != null && area.maxWidth >= _sideBySideFrom;
+    final sideBySide =
+        (asset != null || banner != null) && area.maxWidth >= sideBySideFrom;
 
     if (sideBySide) {
       return Row(
@@ -349,7 +365,16 @@ class _StepBody extends StatelessWidget {
         children: [
           Expanded(
             flex: 2,
-            child: Center(child: _ReferenceImage(asset: asset)),
+            child: Column(
+              children: [
+                if (banner != null) ...[banner!, AppSpacing.verticalM],
+                // Takes the room left over rather than its natural size: left
+                // to itself the picture grew past the pane and got cut off at
+                // the bottom.
+                if (asset != null)
+                  Expanded(child: _ReferenceImage(asset: asset)),
+              ],
+            ),
           ),
           AppSpacing.horizontalL,
           Expanded(flex: 3, child: SingleChildScrollView(child: content)),
