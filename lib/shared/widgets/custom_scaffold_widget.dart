@@ -3,9 +3,7 @@ import 'package:companion_for_cacao/config/navigation/app_destinations.dart';
 import 'package:companion_for_cacao/config/navigation/app_shell_scope.dart';
 import 'package:companion_for_cacao/core/theme/app_breakpoints.dart';
 import 'package:companion_for_cacao/core/theme/app_colors.dart';
-import 'package:companion_for_cacao/core/theme/app_spacing.dart';
 import 'package:companion_for_cacao/l10n/generated/app_localizations.dart';
-import 'package:companion_for_cacao/shared/widgets/brand_mark_widget.dart';
 import 'package:flutter/material.dart';
 
 /// How wide the body is allowed to grow.
@@ -51,9 +49,6 @@ class CustomScaffoldWidget extends StatelessWidget {
   static const double _railItemWithLabel = 72;
   static const double _railItemIconOnly = 56;
 
-  /// Room the brand mark takes at the top of the rail.
-  static const double _railLeadingHeight = 64;
-
   /// Narrowest the rail may be once labels sit beside the icons.
   static const double _railExtendedWidth = 220;
 
@@ -90,7 +85,7 @@ class CustomScaffoldWidget extends StatelessWidget {
           child: Text((title ?? '').toUpperCase()),
         ),
         centerTitle: true,
-        leading: _leading(showRail: showRail),
+        leading: _leading(),
       ),
       // Consume the horizontal display cutout once, here, for everything.
       //
@@ -136,17 +131,14 @@ class CustomScaffoldWidget extends StatelessWidget {
     );
   }
 
-  /// The back arrow owns the slot when there is one. Otherwise the mark goes
-  /// there — but only when no rail is already showing it, so the brand appears
-  /// once per screen and not twice.
-  Widget? _leading({required bool showRail}) {
-    if (showBackButton) return null;
-    if (showRail) return const SizedBox.shrink();
-    return const Padding(
-      padding: EdgeInsets.only(left: AppSpacing.m),
-      child: Center(child: BrandMarkWidget(size: 28)),
-    );
-  }
+  /// The back arrow, or nothing.
+  ///
+  /// The brand mark used to sit here when there was no arrow. It was not
+  /// tappable, which made it a button-shaped thing that did nothing in the
+  /// one slot where everything else is a control — and it told you the name
+  /// of the app you were already using. The mark lives in About now, next to
+  /// the product name, where it says something.
+  Widget? _leading() => showBackButton ? null : const SizedBox.shrink();
 
   /// Height is the scarce axis in a short window, so the bar gives some back —
   /// but never below 48, which is the smallest a back arrow may be and still
@@ -192,8 +184,7 @@ class _Rail extends StatelessWidget {
         // are* matters more than naming the four places you are not, and the
         // rest keep their labels as tooltips.
         final needed =
-            destinations.length * CustomScaffoldWidget._railItemWithLabel +
-            CustomScaffoldWidget._railLeadingHeight;
+            destinations.length * CustomScaffoldWidget._railItemWithLabel;
         final fitsLabels = constraints.maxHeight >= needed;
 
         return NavigationRail(
@@ -211,31 +202,6 @@ class _Rail extends StatelessWidget {
           // which is why the wordmark below is bounded — unbounded it asked
           // for 320 dp, a quarter of a tablet spent on chrome.
           minExtendedWidth: CustomScaffoldWidget._railExtendedWidth,
-          leading: Padding(
-            padding: const EdgeInsets.only(
-              top: AppSpacing.s,
-              bottom: AppSpacing.xs,
-            ),
-            child: extended
-                ? Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      const BrandMarkWidget(size: 32),
-                      AppSpacing.horizontalS,
-                      // Bounded on purpose: the wordmark is art with a wide
-                      // aspect ratio, so it has to be told how much room it
-                      // may take rather than asked how much it wants.
-                      SizedBox(
-                        width: 88,
-                        child: Image.asset(
-                          Assets.cacaoTile,
-                          fit: BoxFit.contain,
-                        ),
-                      ),
-                    ],
-                  )
-                : const BrandMarkWidget(size: 28),
-          ),
           onDestinationSelected: (i) =>
               CustomScaffoldWidget._goToBranch(context, i),
           destinations: [

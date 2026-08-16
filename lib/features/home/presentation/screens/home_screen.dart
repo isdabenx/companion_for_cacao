@@ -8,6 +8,7 @@ import 'package:companion_for_cacao/core/theme/app_spacing.dart';
 import 'package:companion_for_cacao/core/theme/app_text_styles.dart';
 import 'package:companion_for_cacao/features/game_setup/presentation/providers/game_setup_notifier.dart';
 import 'package:companion_for_cacao/shared/widgets/action_card_widget.dart';
+import 'package:companion_for_cacao/shared/widgets/brand_mark_widget.dart';
 import 'package:companion_for_cacao/shared/widgets/custom_scaffold_widget.dart';
 import 'package:companion_for_cacao/l10n/generated/app_localizations.dart';
 import 'package:flutter/material.dart';
@@ -212,23 +213,10 @@ class _AboutSection extends StatelessWidget {
             // developer changelog.
             Row(
               children: [
-                Container(
-                  width: 52,
-                  height: 52,
-                  alignment: Alignment.center,
-                  decoration: ShapeDecoration(
-                    color: AppColors.greenDarker,
-                    shape: AppShapes.shape(AppShapes.radiusM),
-                  ),
-                  child: Text(
-                    'C',
-                    style: AppTextStyles.titleTextStyle.copyWith(
-                      fontSize: 26,
-                      color: AppColors.white,
-                      shadows: const [],
-                    ),
-                  ),
-                ),
+                // The one place the mark earns its keep: naming the product
+                // beside its name. In chrome it was a button-shaped thing that
+                // did nothing.
+                const BrandMarkWidget(size: 52),
                 AppSpacing.horizontalM,
                 Expanded(
                   child: Column(

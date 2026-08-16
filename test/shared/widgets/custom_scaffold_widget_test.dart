@@ -159,27 +159,27 @@ void main() {
     });
   });
 
-  group('CustomScaffoldWidget brand mark', () {
-    testWidgets('sits in the app bar when there is no rail to hold it', (
-      tester,
-    ) async {
+  // The mark used to sit in the app bar's leading slot and at the top of the
+  // rail. It was not tappable — a button-shaped thing that did nothing, in the
+  // one slot where everything else is a control — and it named the app you
+  // were already inside. It lives in About now, beside the product name.
+  group('CustomScaffoldWidget chrome', () {
+    testWidgets('carries no brand mark, in either layout', (tester) async {
       await pumpAt(tester, compact);
-      expect(find.byType(BrandMarkWidget), findsOneWidget);
-    });
-
-    testWidgets('appears once, not twice, when the rail shows it', (
-      tester,
-    ) async {
-      await pumpAt(tester, expanded);
-      expect(find.byType(BrandMarkWidget), findsOneWidget);
-    });
-
-    testWidgets('yields the slot to the back arrow on a detail', (
-      tester,
-    ) async {
-      await pumpAt(tester, compact, showBackButton: true);
-
       expect(find.byType(BrandMarkWidget), findsNothing);
+
+      await pumpAt(tester, expanded);
+      expect(find.byType(BrandMarkWidget), findsNothing);
+    });
+
+    testWidgets('leaves the leading slot free on a detail', (tester) async {
+      // Free, not filled with something of ours: a null leading is what lets
+      // the app bar put its own back arrow there.
+      await pumpAt(tester, compact, showBackButton: true);
+      expect(tester.widget<AppBar>(find.byType(AppBar)).leading, isNull);
+
+      await pumpAt(tester, compact);
+      expect(tester.widget<AppBar>(find.byType(AppBar)).leading, isNotNull);
     });
   });
 
