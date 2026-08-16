@@ -1,5 +1,6 @@
 import 'package:companion_for_cacao/config/navigation/app_destinations.dart';
 import 'package:companion_for_cacao/config/routes/app_routes.dart';
+import 'package:companion_for_cacao/core/theme/app_breakpoints.dart';
 import 'package:companion_for_cacao/core/theme/app_colors.dart';
 import 'package:companion_for_cacao/core/theme/app_shapes.dart';
 import 'package:companion_for_cacao/core/theme/app_spacing.dart';
@@ -312,6 +313,12 @@ class _StepReferenceImage extends StatelessWidget {
     final asset = scoreStepReferenceImage(step);
     if (asset == null) return const SizedBox.shrink();
 
+    // The picture is a reminder of what to count, not the thing you came to
+    // do. At a fixed 120 it plus the banner and the header filled a short
+    // window entirely, so every step opened with the counters below the fold
+    // and no way to type without scrolling first.
+    final height = AppBreakpoints.isShortWindow(context) ? 56.0 : 120.0;
+
     return Padding(
       padding: const EdgeInsets.only(bottom: AppSpacing.s),
       child: Center(
@@ -319,7 +326,7 @@ class _StepReferenceImage extends StatelessWidget {
           borderRadius: AppShapes.radius(AppShapes.radiusM),
           child: SafeAssetImage(
             assetPath: asset,
-            height: 120,
+            height: height,
             fit: BoxFit.contain,
           ),
         ),
