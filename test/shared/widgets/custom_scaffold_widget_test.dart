@@ -20,6 +20,7 @@ void main() {
     int? branch = 0,
     bool showBackButton = false,
     ContentWidth contentWidth = ContentWidth.readable,
+    List<Widget>? actions,
   }) async {
     selected = <int>[];
     tester.view
@@ -29,6 +30,7 @@ void main() {
 
     final scaffold = CustomScaffoldWidget(
       title: 'Title',
+      actions: actions,
       showBackButton: showBackButton,
       contentWidth: contentWidth,
       body: const SizedBox(key: Key('body'), height: 100),
@@ -176,10 +178,32 @@ void main() {
       // Free, not filled with something of ours: a null leading is what lets
       // the app bar put its own back arrow there.
       await pumpAt(tester, compact, showBackButton: true);
-      expect(tester.widget<AppBar>(find.byType(AppBar)).leading, isNull);
+      final bar = tester.widget<AppBar>(find.byType(AppBar));
+      expect(bar.leading, isNull);
+      // And the title is drawn, because on a detail it is the only thing
+      // saying where you are.
+      expect(bar.title, isNotNull);
+    });
 
+    testWidgets('a destination with nothing to offer has no bar at all', (
+      tester,
+    ) async {
+      // ~50 dp of band for a 12 dp word the menu is already showing, lit up.
       await pumpAt(tester, compact);
-      expect(tester.widget<AppBar>(find.byType(AppBar)).leading, isNotNull);
+
+      expect(find.byType(AppBar), findsNothing);
+    });
+
+    testWidgets('a destination with actions keeps its bar, title and all', (
+      tester,
+    ) async {
+      // Once the band exists for the actions, the title costs nothing and
+      // stops one icon looking adrift in an empty green strip.
+      await pumpAt(tester, compact, actions: const [Icon(Icons.refresh)]);
+
+      final bar = tester.widget<AppBar>(find.byType(AppBar));
+      expect(bar.title, isNotNull);
+      expect(find.byIcon(Icons.refresh), findsOneWidget);
     });
   });
 

@@ -34,7 +34,14 @@ class CustomScaffoldWidget extends StatelessWidget {
   });
 
   final Widget body;
+
+  /// Drawn whenever there is an app bar to draw it in.
+  ///
+  /// A destination with nothing else to offer gets no bar at all, and the
+  /// title goes with it: the menu already names the section and marks it, and
+  /// ~50 dp of band for a 12 dp word is the chrome saying it twice.
   final String? title;
+
   final List<Widget>? actions;
   final bool showBackButton;
   final PreferredSizeWidget? appBarBottom;
@@ -73,20 +80,33 @@ class CustomScaffoldWidget extends StatelessWidget {
     final showRail = showNavigation && windowClass.usesRail;
     final showBar = showNavigation && !windowClass.usesRail;
 
+    // The bar earns its band or it does not appear. What it is for is the
+    // things navigation cannot express: the way back out of a detail, and
+    // whatever this particular screen lets you do. A destination with neither
+    // was spending ~50 dp to repeat the label already lit up in the menu.
+    final hasActions = actions != null && actions!.isNotEmpty;
+    final showAppBar = showBackButton || hasActions || appBarBottom != null;
+
     return Scaffold(
-      appBar: AppBar(
-        toolbarHeight: _toolbarHeight(context),
-        bottom: appBarBottom,
-        actions: actions,
-        // Uppercased: the app-bar title is chrome, so it reads as a label
-        // rather than competing with the content headings below it.
-        title: FittedBox(
-          fit: BoxFit.scaleDown,
-          child: Text((title ?? '').toUpperCase()),
-        ),
-        centerTitle: true,
-        leading: _leading(),
-      ),
+      appBar: showAppBar
+          ? AppBar(
+              toolbarHeight: _toolbarHeight(context),
+              bottom: appBarBottom,
+              actions: actions,
+              // Uppercased: the app-bar title is chrome, so it reads as a
+              // label rather than competing with the content headings below.
+              //
+              // Drawn whenever the bar is: the redundancy with the menu is a
+              // reason to drop the *band*, not to leave an existing band empty
+              // with one icon adrift in the corner.
+              title: FittedBox(
+                fit: BoxFit.scaleDown,
+                child: Text((title ?? '').toUpperCase()),
+              ),
+              centerTitle: true,
+              leading: _leading(),
+            )
+          : null,
       // Consume the horizontal display cutout once, here, for everything.
       //
       // Left to itself the rail absorbs it: in landscape with the camera on
@@ -98,7 +118,11 @@ class CustomScaffoldWidget extends StatelessWidget {
       // handles the status bar and the gesture bar.
       body: _Background(
         child: SafeArea(
-          top: false,
+          // With no bar there is nothing between the content and the status
+          // bar, so the body takes that inset itself. The leafy ground still
+          // reaches under it, which is what keeps the top edge from looking
+          // like a cut rather than a margin.
+          top: !showAppBar,
           bottom: false,
           child: Row(
             children: [

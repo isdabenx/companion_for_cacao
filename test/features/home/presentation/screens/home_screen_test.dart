@@ -100,11 +100,10 @@ void main() {
     testWidgets('renders the hero and the main action cards', (tester) async {
       await pumpHomeScreen(tester);
 
-      expect(
-        // The app-bar title is chrome: uppercased by the scaffold.
-        find.descendant(of: find.byType(AppBar), matching: find.text('HOME')),
-        findsOneWidget,
-      );
+      // A destination with no actions of its own carries no app bar at all:
+      // the navigation already names the section and marks it, so a band
+      // repeating that would be the chrome saying it twice.
+      expect(find.byType(AppBar), findsNothing);
       // The lockup above the logo is a quiet uppercase eyebrow.
       expect(find.text('COMPANION FOR'), findsOneWidget);
       // Nothing in progress, so the one card is the way to start.

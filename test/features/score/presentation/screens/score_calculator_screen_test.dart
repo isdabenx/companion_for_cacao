@@ -86,6 +86,8 @@ void main() {
       await tester.pumpWidget(wrap(const ScoreCalculatorScreen()));
       await tester.pump();
 
+      // The bar exists for the "start over" action; once it does, the title
+      // rides along.
       expect(find.text('SCORE CALCULATOR'), findsOneWidget);
       expect(find.text('Players & Modules'), findsOneWidget);
       expect(find.text('1 / 6'), findsOneWidget);
