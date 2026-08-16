@@ -1,42 +1,38 @@
-# Escombrat de QA — 2026-07-28
+# Escombrat de QA
 
-Repàs complet de l'app al dispositiu: cada pantalla, cada control, i sobretot **què
-sobreviu a què** quan navegues. Fet sobre `chore/tech-debt-review`, emulador Pixel 9a
-(1080×2424, 420 dpi), builds release instal·lats amb `adb`.
+Registre viu. Dues passades fins ara:
 
-Aquest document **no** repeteix `test/manual_test_checklist.md` — vegeu la nota al final.
+- **2026-07-28** — l'escombrat original, vertical a fons i apaïsat només a les pantalles
+  denses.
+- **2026-08-16** — l'apaïsat sencer, tauleta, i **girant amb cada pantalla oberta**, durant
+  el treball de la closca adaptativa (`feat/adaptive-shell`). El que va trobar és a
+  [la passada de la closca](#passada-de-la-closca-adaptativa--2026-08-16).
 
-## Mètode
-
-Cada troballa surt d'una captura, no d'una lectura de codi. On el comportament es podia
-fixar amb un test l'he escrit, i l'he comprovat per mutació (revertir el fix ha de fer
-fallar el test). Les correccions van commit a commit, cadascuna reverificada al dispositiu
-abans de passar a la següent.
-
-Dos falsos positius meus pel camí, tots dos per llegir malament una captura: un toc que no
-havia arribat a desmarcar un mòdul, i un dígit tapat per la barra flotant de l'IME de
-l'emulador («1 / 4 mòduls» llegit com a «0 / 4»). Cap dels dos era un problema de l'app.
+La matriu i les troballes de sota estan **al dia**; les seccions datades són història.
 
 ## Matriu de pantalles
+
+Estat a 2026-08-16. «Girat» vol dir verificat **obrint la pantalla i girant després**,
+que és on van sortir els defectes que obrir-la ja girada amagava.
 
 | Pantalla | Vertical CA | Horitzontal | ES / EN |
 |---|---|---|---|
 | Splash | OK (<3 s en instal·lació neta) | — | — |
-| Inici | OK | **P4-2** | OK |
-| Sobre l'app | OK | no provat | OK |
-| Rajoles (catàleg) | OK | no provat | — |
-| Filtres i ajustos (7 opcions) | OK | no provat | — |
-| Detall de rajola | **P1-5** (arreglat) | no provat | — |
-| Regles + visor PDF | OK | no provat | — |
-| Nova partida | OK | **P4-1** | OK |
+| Inici | OK | OK, girat (**P4-2** tancat) | OK |
+| Sobre l'app | OK | no provat en apaïsat | OK |
+| Rajoles (catàleg) | OK | OK — graella + panell de detall | — |
+| Filtres i ajustos (7 opcions) | OK | OK | — |
+| Detall de rajola | **P1-5** (arreglat) | OK, com a pantalla i com a panell | — |
+| Regles + visor PDF | OK | OK — índex + lector al costat | — |
+| Nova partida | OK | OK — dos panells (**P4-1** tancat) | OK |
 | Tauler de partida | OK | OK (aprofita l'amplada) | — |
 | Preparació (llista) | OK | OK | OK |
-| Preparació (guiada) | **P1-1**, **P1-2** (arreglats) | OK | OK |
-| Selector de recol·lectors | **P1-3**, **P1-4** (arreglats) | no provat | — |
-| Tirada de cabanes | OK | no provat | — |
-| Rajoles en joc | OK | no provat | — |
-| Calculadora (6-8 passos) | OK | **P4-3** | OK |
-| Resultats | OK | no provat | — |
+| Preparació (guiada) | **P1-1**, **P1-2** (arreglats) | OK (juliol; no reverificat al 08-16) | OK |
+| Selector de recol·lectors | **P1-3**, **P1-4** (arreglats) | no provat en apaïsat | — |
+| Tirada de cabanes | OK | no provat en apaïsat | — |
+| Rajoles en joc | OK | OK | — |
+| Calculadora (6-8 passos) | OK | OK, girat (**P4-3** tancat) | OK |
+| Resultats | OK | OK — dos panells | — |
 
 ## Matriu d'estat: què es perd i què no
 
@@ -87,11 +83,8 @@ memòria amb la pantalla apagada al mig d'una partida de 45 minuts.
 
 ### Obertes
 
-| Id | Gravetat | Què | On |
-|---|---|---|---|
-| **P4-1** | Baixa | En horitzontal, la pantalla «Partida» deixa uns 500 px per a tot el formulari (jugadors + expansions + mòduls), o sigui molt scroll per configurar una partida. **Corregit respecte de la primera redacció:** vaig reportar que el botó inferior se solapava amb la llista, i és fals — `game_setup_widget` és un `Column` amb `Expanded` + botó i tot és accessible. El que semblava una superposició a la captura era la vora de l'àrea de scroll tallant el text a mitja línia. Queda com a estretor, no com a defecte. | `game_setup_widget.dart` |
-| **P4-3** | Baixa-mitjana | En horitzontal, els comptadors de cada pas de puntuació queden per sota del plec: cal desplaçar abans de poder escriure res. **Corregit respecte de la primera redacció:** no és que falti un topall d'alçada — la imatge ja té `height: 120` fix. El problema és el contrari, que no s'encongeix: amb una finestra de ~411 dp, la imatge més el bàner i la capçalera se la mengen. Caldria fer l'alçada relativa a la finestra, o amagar la imatge en apaïsat. | `score_calculator_screen.dart` (`_StepReferenceImage`) |
-| **P4-2** | Baixa | En horitzontal el logo de la Home ocupa tota la finestra; cal fer scroll per arribar a qualsevol acció i només es veu la primera targeta. | `home_screen.dart` |
+Cap. Les tres troballes d'apaïsat de juliol (**P4-1**, **P4-2**, **P4-3**) es van tancar el
+2026-08-16; vegeu la passada de sota.
 
 ### Decisió pendent
 
@@ -112,17 +105,89 @@ de la Fase 2 necessita exactament aquesta peça.
   («Has canviat els recol·lectors: torna a muntar la pila»).
 - La configuració canvia a «Reprèn la partida» quan n'hi ha una en curs; els resultats
   gestionen negatius i empats correctament.
-- En horitzontal el mòbil ja fa **923 dp** i creua el punt de tall *expanded*: el calaix
-  passa al 35% i la barra de 56 a 44 px, tal com preveu `custom_scaffold_widget`.
+- En horitzontal el mòbil ja fa **923 dp** i creua el punt de tall *expanded*. Al juliol
+  això només movia el calaix al 35% i la barra de 56 a 44 px; des del 2026-08-16 el calaix
+  ja no existeix i l'amplada decideix tota la navegació.
 
 ## Cobertura: què NO s'ha provat
 
-- **Amplada de tauleta en vertical** (600–840 dp, la branca *medium*). L'apaïsat cobreix la
-  branca *expanded* però no aquesta.
-- L'horitzontal només s'ha escombrat a les pantalles denses; les marcades «no provat» a la
-  matriu queden pendents.
-- L'anglès s'ha comprovat per sobre: és l'idioma origen i el més curt, i les cadenes noves
-  d'avui les afirmen literalment els tests de widget.
+Al dia a 2026-08-16.
+
+- **Tres pantalles no s'han obert mai en apaïsat**: «Sobre l'app» desplegat, el selector de
+  recol·lectors i la tirada de cabanes. Cap surt a la ruta principal d'una partida, que és
+  per què han anat quedant per al final dues passades seguides.
+- **Preparació guiada en apaïsat** consta OK des del juliol i no s'ha reverificat girant, que
+  és precisament el gest que va destapar defectes en altres pantalles.
+- **Tauleta**: s'han comprovat les quatre classes de finestra (1600×2560 @320 dpi, en les
+  dues orientacions), però **només a Inici i la navegació**. Cap pantalla de contingut s'ha
+  recorregut a mida de tauleta.
+- L'anglès s'ha comprovat per sobre: és l'idioma origen i el més curt.
+
+## Escombrat original — 2026-07-28
+
+Repàs complet de l'app al dispositiu: cada pantalla, cada control, i sobretot **què
+sobreviu a què** quan navegues. Fet sobre `chore/tech-debt-review`, emulador Pixel 9a
+(1080×2424, 420 dpi), builds release instal·lats amb `adb`.
+
+Aquest document **no** repeteix `test/manual_test_checklist.md` — vegeu la nota al final.
+
+### Mètode
+
+Cada troballa surt d'una captura, no d'una lectura de codi. On el comportament es podia
+fixar amb un test l'he escrit, i l'he comprovat per mutació (revertir el fix ha de fer
+fallar el test). Les correccions van commit a commit, cadascuna reverificada al dispositiu
+abans de passar a la següent.
+
+Dos falsos positius meus pel camí, tots dos per llegir malament una captura: un toc que no
+havia arribat a desmarcar un mòdul, i un dígit tapat per la barra flotant de l'IME de
+l'emulador («1 / 4 mòduls» llegit com a «0 / 4»). Cap dels dos era un problema de l'app.
+
+## Passada de la closca adaptativa — 2026-08-16
+
+Feta durant `feat/adaptive-shell`, sobre l'emulador Pixel 9a i, per a les classes de finestra
+grans, el mateix emulador redimensionat a 1600×2560 @320 dpi. Cada troballa surt d'una
+captura o del logcat, no d'una lectura de codi.
+
+**El mètode que va marcar la diferència**: obrir una pantalla i **girar-la**, en comptes
+d'obrir-la ja girada. Dos defectes només apareixien així, i la primera passada d'aquell dia
+els va donar per bons perquè no ho feia.
+
+### Tancades
+
+| Id | Què | On |
+|---|---|---|
+| **P4-1** | El formulari de partida compartia una finestra de scroll d'uns 190 dp en apaïsat: es veien dues de les quatre targetes de color, tallades. Jugadors i expansions són decisions independents, així que ara van en dos panells amb scroll propi. | `game_setup_widget.dart` |
+| **P4-2** | El hero de la Home ocupava el 53% de la finestra apaïsada i deixava lloc per a una targeta. Ara cedeix alçada, i la Home ha deixat de ser un llançador perquè la navegació és permanent. | `home_screen.dart` |
+| **P4-3** | La imatge de referència de la calculadora empenyia els comptadors sota el plec. Ara el pas es parteix en dos panells: referència a l'esquerra, camps a la dreta. | `score_calculator_screen.dart` |
+
+### Trobades i tancades el mateix dia
+
+Cinc de sis introduïdes per la pròpia reforma; es documenten igual perquè el patró es
+repetirà.
+
+| Què | Com va sortir |
+|---|---|
+| «Reprèn la partida» a la Home anava a la pantalla d'error: navegava amb `go` i el tauler rep la partida com a `extra` tipat. | Recorrent el flux al mòbil. Cap test hi passava; ara n'hi ha un al router. |
+| Puntuacions era un atzucac en vertical: fora de la barra per nivell, sense fletxa d'enrere i sense menú. | Obrint-la des de la Home. La barra ara porta totes les destinacions mentre hi càpiguen, i un test falla el dia que en sobri una. |
+| El rail s'inflava de 79 a 135 dp en apaïsat amb la càmera a l'esquerra, amb les icones escorades. | Observació de l'usuari; confirmada mesurant les dues rotacions. |
+| El hero i la imatge de la calculadora es quedaven a la mida de vertical en girar amb la pantalla oberta. | Girant. Totes dues llegien la mida de `MediaQuery`, que va obsoleta; ara surten de les restriccions. |
+| La capçalera d'un pas de puntuació desbordava amb el títol llarg: `Row` fix, sense flexibilitat. | Un test nou a 411 dp. Hauria petat amb una traducció llarga o amb text accessible gran. |
+| En una finestra ampla sense imatge (el pas de jugadors), el peu no es dibuixava i el pas quedava sense manera d'avançar. | Un test que ja existia, en reordenar el layout. |
+
+### El que no es va tocar, i per què
+
+- **Preparació**, en tots dos modes: ja constava OK en apaïsat i reestructurar una pantalla
+  que funciona és soroll.
+- **L'anell de progrés** de la capçalera de fase: té `value`, és progrés i no espera. Les
+  rodetes que sí que es van substituir per esquelets eren les de càrrega.
+
+### Regla que en surt
+
+Cap decisió de layout hauria de venir de `MediaQuery` si hi ha una restricció a mà. Una
+consulta a la finestra pot llegir obsoleta després d'una rotació; una restricció no, perquè
+res no es disposa fins que existeix. L'única excepció viva és l'alçada de l'app bar, que
+s'ha de declarar abans que hi hagi cap disposició — i està documentada com a tal a
+`AppBreakpoints.isShortWindow`.
 
 ## Nota sobre `test/manual_test_checklist.md`
 
