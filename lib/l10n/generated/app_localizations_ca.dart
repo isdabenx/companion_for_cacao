@@ -1414,13 +1414,13 @@ class AppLocalizationsCa extends AppLocalizations {
   String get homeCardRulesSub => 'Manuals integrats i referència ràpida';
 
   @override
-  String get tilePaneClose => 'Tanca el detall';
+  String get detailPaneClose => 'Tanca el detall';
 
   @override
-  String get tilePaneExpand => 'Amplia el detall';
+  String get detailPaneExpand => 'Amplia el detall';
 
   @override
-  String get tilePaneCollapse => 'Torna a la graella';
+  String get detailPaneCollapse => 'Torna a la graella';
 
   @override
   String get homeAboutTitle => 'Sobre l\'app';

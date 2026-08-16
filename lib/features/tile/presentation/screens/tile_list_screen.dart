@@ -1,6 +1,5 @@
 import 'package:companion_for_cacao/core/domain/entities/tile_entity.dart';
 import 'package:companion_for_cacao/core/theme/app_breakpoints.dart';
-import 'package:companion_for_cacao/core/theme/app_colors.dart';
 import 'package:companion_for_cacao/core/theme/app_spacing.dart';
 import 'package:companion_for_cacao/features/tile/domain/entities/tile_filter_scope.dart';
 import 'package:companion_for_cacao/features/tile/presentation/screens/tile_detail_screen.dart';
@@ -10,6 +9,7 @@ import 'package:companion_for_cacao/features/tile/presentation/widgets/tile_list
 import 'package:companion_for_cacao/l10n/generated/app_localizations.dart';
 import 'package:companion_for_cacao/shared/utils/catalog_l10n.dart';
 import 'package:companion_for_cacao/shared/widgets/custom_scaffold_widget.dart';
+import 'package:companion_for_cacao/shared/widgets/detail_pane_header.dart';
 import 'package:companion_for_cacao/features/tile/presentation/widgets/filter_active_chip.dart';
 import 'package:flutter/material.dart';
 
@@ -135,44 +135,14 @@ class _DetailPane extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context);
-
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        Padding(
-          padding: const EdgeInsets.only(
-            left: AppSpacing.s,
-            right: AppSpacing.xs,
-            top: AppSpacing.xs,
-          ),
-          child: Row(
-            children: [
-              Expanded(
-                child: Text(
-                  tile.type?.localizedName(l10n) ?? '',
-                  overflow: TextOverflow.ellipsis,
-                  style: Theme.of(context).textTheme.titleMedium,
-                ),
-              ),
-              IconButton(
-                tooltip: isExpanded
-                    ? l10n.tilePaneCollapse
-                    : l10n.tilePaneExpand,
-                onPressed: onToggleExpanded,
-                icon: Icon(
-                  isExpanded ? Icons.close_fullscreen : Icons.open_in_full,
-                  color: AppColors.brown,
-                  size: 20,
-                ),
-              ),
-              IconButton(
-                tooltip: l10n.tilePaneClose,
-                onPressed: onClose,
-                icon: const Icon(Icons.close, color: AppColors.brown, size: 20),
-              ),
-            ],
-          ),
+        DetailPaneHeader(
+          title: tile.type?.localizedName(AppLocalizations.of(context)) ?? '',
+          isExpanded: isExpanded,
+          onToggleExpanded: onToggleExpanded,
+          onClose: onClose,
         ),
         Expanded(
           // Keyed on the tile so switching selection rebuilds the pane rather

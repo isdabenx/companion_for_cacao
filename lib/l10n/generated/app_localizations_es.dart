@@ -1413,13 +1413,13 @@ class AppLocalizationsEs extends AppLocalizations {
   String get homeCardRulesSub => 'Manuales integrados y referencia rápida';
 
   @override
-  String get tilePaneClose => 'Cierra el detalle';
+  String get detailPaneClose => 'Cierra el detalle';
 
   @override
-  String get tilePaneExpand => 'Amplía el detalle';
+  String get detailPaneExpand => 'Amplía el detalle';
 
   @override
-  String get tilePaneCollapse => 'Vuelve a la cuadrícula';
+  String get detailPaneCollapse => 'Vuelve a la cuadrícula';
 
   @override
   String get homeAboutTitle => 'Sobre la app';

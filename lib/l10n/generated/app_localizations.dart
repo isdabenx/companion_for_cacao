@@ -2482,23 +2482,23 @@ abstract class AppLocalizations {
   /// **'Built-in manuals and quick reference'**
   String get homeCardRulesSub;
 
-  /// No description provided for @tilePaneClose.
+  /// No description provided for @detailPaneClose.
   ///
   /// In en, this message translates to:
   /// **'Close the detail'**
-  String get tilePaneClose;
+  String get detailPaneClose;
 
-  /// No description provided for @tilePaneExpand.
+  /// No description provided for @detailPaneExpand.
   ///
   /// In en, this message translates to:
   /// **'Expand the detail'**
-  String get tilePaneExpand;
+  String get detailPaneExpand;
 
-  /// No description provided for @tilePaneCollapse.
+  /// No description provided for @detailPaneCollapse.
   ///
   /// In en, this message translates to:
   /// **'Back to the grid'**
-  String get tilePaneCollapse;
+  String get detailPaneCollapse;
 
   /// No description provided for @homeAboutTitle.
   ///

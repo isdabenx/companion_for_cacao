@@ -1404,13 +1404,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get homeCardRulesSub => 'Built-in manuals and quick reference';
 
   @override
-  String get tilePaneClose => 'Close the detail';
+  String get detailPaneClose => 'Close the detail';
 
   @override
-  String get tilePaneExpand => 'Expand the detail';
+  String get detailPaneExpand => 'Expand the detail';
 
   @override
-  String get tilePaneCollapse => 'Back to the grid';
+  String get detailPaneCollapse => 'Back to the grid';
 
   @override
   String get homeAboutTitle => 'About the app';
