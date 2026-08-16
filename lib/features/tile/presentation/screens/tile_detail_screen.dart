@@ -9,6 +9,7 @@ import 'package:companion_for_cacao/l10n/generated/app_localizations.dart';
 import 'package:companion_for_cacao/shared/utils/catalog_l10n.dart';
 import 'package:companion_for_cacao/shared/widgets/container_full_style_widget.dart';
 import 'package:companion_for_cacao/shared/widgets/custom_scaffold_widget.dart';
+import 'package:companion_for_cacao/core/theme/app_shapes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown_plus/flutter_markdown_plus.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -93,7 +94,11 @@ class TileDetailScreen extends ConsumerWidget {
       children: [
         SelectableText(
           tile.localizedName(l10n),
-          style: AppTextStyles.titleTextStyle,
+          // Plain, not the decorative title: this is the tile's name — data,
+          // not a brand moment — and names like "Mercat, preu de venda 3"
+          // fray in the outlined display font, which is what the UX-3 pass
+          // set out to stop. The app bar above already carries the same name.
+          style: AppTextStyles.screenTitlePlain,
           textAlign: TextAlign.center,
         ),
         AppSpacing.verticalL,
@@ -171,7 +176,7 @@ class TileDetailScreen extends ConsumerWidget {
       ),
       decoration: BoxDecoration(
         color: backgroundColor,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: AppShapes.radius(AppShapes.radiusL),
         border: Border.all(
           color: backgroundColor == Colors.transparent
               ? AppColors.brown

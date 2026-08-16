@@ -396,7 +396,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get menuHome => 'Inicio';
 
   @override
-  String get menuGameSetup => 'Nueva partida';
+  String get menuGame => 'Partida';
 
   @override
   String get menuTiles => 'Losetas';
@@ -697,6 +697,17 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get guidedNext => 'Siguiente';
+
+  @override
+  String guidedPendingSteps(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Quedan $count pasos — ve al primero',
+      one: 'Queda 1 paso — ve a él',
+    );
+    return '$_temp0';
+  }
 
   @override
   String get hutMarketCrier => 'El voceador del mercado';
@@ -1094,6 +1105,10 @@ class AppLocalizationsEs extends AppLocalizations {
       'Esto descarta todas las puntuaciones introducidas y vuelve a cargar los jugadores y módulos de la partida configurada.';
 
   @override
+  String get scoreClearBlankBody =>
+      'Esto descarta todas las puntuaciones introducidas y deja la calculadora vacía.';
+
+  @override
   String get scoreContextGame => 'Puntuando la partida en curso';
 
   @override
@@ -1304,6 +1319,9 @@ class AppLocalizationsEs extends AppLocalizations {
   }
 
   @override
+  String get errorTitle => 'Error';
+
+  @override
   String get invalidDataMessage => 'Datos no válidos para esta pantalla.';
 
   @override
@@ -1430,6 +1448,16 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get cancelAction => 'Cancelar';
+
+  @override
+  String get exitWithGameTitle => '¿Quieres salir de la app?';
+
+  @override
+  String get exitWithGameBody =>
+      'Tienes una partida en curso. Si cierras la app la perderás: los jugadores, los módulos y todos los pasos que has marcado.';
+
+  @override
+  String get exitWithGameAction => 'Salir y descartar';
 
   @override
   String get clearSetupBody =>

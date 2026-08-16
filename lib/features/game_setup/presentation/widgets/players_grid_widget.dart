@@ -1,3 +1,4 @@
+import 'package:companion_for_cacao/config/constants/game_constants.dart';
 import 'package:companion_for_cacao/core/theme/app_colors.dart';
 import 'package:companion_for_cacao/core/theme/app_spacing.dart';
 import 'package:companion_for_cacao/core/theme/app_text_styles.dart';
@@ -16,7 +17,7 @@ class PlayersGridWidget extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final gameSetupAsync = ref.watch(gameSetupProvider);
     final colorOrder =
-        gameSetupAsync.value?.colorOrder ?? AppColors.colors.keys.toList();
+        gameSetupAsync.value?.colorOrder ?? GameConstants.playerColorOrder;
     final selectedColors =
         gameSetupAsync.value?.players
             .where((p) => p.isSelected)

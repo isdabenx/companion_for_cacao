@@ -1,5 +1,6 @@
 import 'package:drift/drift.dart';
 import 'package:drift_flutter/drift_flutter.dart';
+import 'package:flutter/foundation.dart';
 
 part 'app_database.g.dart';
 
@@ -64,20 +65,47 @@ class AppDatabase extends _$AppDatabase {
         await m.createAll();
       },
       onUpgrade: (Migrator m, int from, int to) async {
-        if (from < 2) {
-          // Add the hutCost column to the Tiles table
-          await m.addColumn(tiles, tiles.hutCost);
+        // Constraints stay off while the schema is in flux: a step that
+        // recreates a table would otherwise be rejected for the references
+        // pointing at it mid-migration. `beforeOpen` turns them back on.
+        await customStatement('PRAGMA foreign_keys = OFF');
+
+        await transaction(() async {
+          if (from < 2) {
+            // Add the hutCost column to the Tiles table
+            await m.addColumn(tiles, tiles.hutCost);
+          }
+          if (from < 3) {
+            // Tiles.id changed from INTEGER to TEXT (stable string ids)
+            // without a migration at the time, leaving upgraded installs
+            // with the old column affinity. Recreate the table so it
+            // matches the declared schema. Tiles are pure seed data: the
+            // seeder repopulates the table on next startup because it
+            // re-seeds whenever a seed table is empty.
+            await m.deleteTable(tiles.actualTableName);
+            await m.createTable(tiles);
+          }
+        });
+
+        if (kDebugMode) {
+          // Fail loudly in development if a migration left dangling
+          // references behind; in release the seeder is self-healing.
+          final danglingReferences = await customSelect(
+            'PRAGMA foreign_key_check',
+          ).get();
+          assert(
+            danglingReferences.isEmpty,
+            'migration $from -> $to broke foreign keys: '
+            '${danglingReferences.map((row) => row.data)}',
+          );
         }
-        if (from < 3) {
-          // Tiles.id changed from INTEGER to TEXT (stable string ids)
-          // without a migration at the time, leaving upgraded installs
-          // with the old column affinity. Recreate the table so it
-          // matches the declared schema. Tiles are pure seed data: the
-          // seeder repopulates the table on next startup because it
-          // re-seeds whenever a seed table is empty.
-          await m.deleteTable(tiles.actualTableName);
-          await m.createTable(tiles);
-        }
+      },
+      // SQLite ships with foreign keys disabled, per connection. Without
+      // this the `references()` declared on the tables above are inert:
+      // a tile could name a boardgame that does not exist and SQLite
+      // would accept it.
+      beforeOpen: (details) async {
+        await customStatement('PRAGMA foreign_keys = ON');
       },
     );
   }

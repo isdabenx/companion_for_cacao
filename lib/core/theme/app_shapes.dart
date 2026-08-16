@@ -2,10 +2,16 @@ import 'package:flutter/widgets.dart';
 import 'package:smooth_corner/smooth_corner.dart';
 
 /// Single source of truth for corner radii, squircle shapes and soft
-/// shadows. Replaces the ~7 ad-hoc radius values scattered across the app
-/// with one scale, and gives every surface the same continuous ("squircle")
+/// shadows. Replaces the ad-hoc radius values scattered across the app with
+/// one scale, and gives every surface the same continuous ("squircle")
 /// corner and gentle depth — the 2025 soft-UI look, kept subtle so it stays
 /// on-brand rather than flashy.
+///
+/// The migration is finished for surfaces: no widget writes a raw radius
+/// that belongs to this scale. Four raw values remain on purpose — 2, 3 and
+/// 4 on hairline bars and tiny count badges, where the radius is "half the
+/// height, make it a capsule" rather than a surface rounding, and snapping
+/// them to the scale would just make them look wrong.
 class AppShapes {
   const AppShapes._();
 

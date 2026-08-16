@@ -65,6 +65,16 @@ class AppTextStyles {
     letterSpacing: 0.3,
   );
 
+  /// The plain counterpart of [titleTextStyle], for a screen's main heading
+  /// when that heading is *data* rather than a brand moment — a tile's name,
+  /// say. The decorative scale tops out at 32 and the plain one used to stop
+  /// at 19, so anything in between had no token and reached for the
+  /// decorative font by default.
+  static TextStyle screenTitlePlain = _sectionTitleBase.copyWith(
+    fontSize: 24,
+    letterSpacing: 0.25,
+  );
+
   // ============================================
   // SECTION TITLES
   // ============================================

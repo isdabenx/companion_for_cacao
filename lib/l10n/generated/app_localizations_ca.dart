@@ -398,7 +398,7 @@ class AppLocalizationsCa extends AppLocalizations {
   String get menuHome => 'Inici';
 
   @override
-  String get menuGameSetup => 'Nova partida';
+  String get menuGame => 'Partida';
 
   @override
   String get menuTiles => 'Rajoles';
@@ -698,6 +698,17 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String get guidedNext => 'Següent';
+
+  @override
+  String guidedPendingSteps(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Queden $count passos — vés al primer',
+      one: 'Queda 1 pas — vés-hi',
+    );
+    return '$_temp0';
+  }
 
   @override
   String get hutMarketCrier => 'El pregoner del mercat';
@@ -1095,6 +1106,10 @@ class AppLocalizationsCa extends AppLocalizations {
       'Això descarta totes les puntuacions introduïdes i torna a carregar els jugadors i mòduls de la partida configurada.';
 
   @override
+  String get scoreClearBlankBody =>
+      'Això descarta totes les puntuacions introduïdes i deixa la calculadora buida.';
+
+  @override
   String get scoreContextGame => 'Puntuant la partida en curs';
 
   @override
@@ -1304,6 +1319,9 @@ class AppLocalizationsCa extends AppLocalizations {
   }
 
   @override
+  String get errorTitle => 'Error';
+
+  @override
   String get invalidDataMessage => 'Dades no vàlides per a aquesta pantalla.';
 
   @override
@@ -1431,6 +1449,16 @@ class AppLocalizationsCa extends AppLocalizations {
 
   @override
   String get cancelAction => 'Cancel·la';
+
+  @override
+  String get exitWithGameTitle => 'Vols sortir de l\'app?';
+
+  @override
+  String get exitWithGameBody =>
+      'Tens una partida en curs. Si tanques l\'app la perdràs: els jugadors, els mòduls i tots els passos que has marcat.';
+
+  @override
+  String get exitWithGameAction => 'Surt i descarta';
 
   @override
   String get clearSetupBody =>

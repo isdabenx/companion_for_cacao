@@ -127,7 +127,7 @@
   "backToGameAction": "Torna a la partida",
 
   "menuHome": "Inici",
-  "menuGameSetup": "Nova partida",
+  "menuGame": "Partida",
   "menuTiles": "Rajoles",
   "menuScores": "Puntuacions",
   "menuRules": "Regles",
@@ -221,6 +221,7 @@
   "listModeTooltip": "Mode llista",
   "guidedBack": "Enrere",
   "guidedNext": "Següent",
+  "guidedPendingSteps": "{count, plural, =1{Queda 1 pas — vés-hi} other{Queden {count} passos — vés al primer}}",
 
   "hutMarketCrier": "El pregoner del mercat",
   "hutHermit": "El remeier",
@@ -339,6 +340,10 @@
   "startOverAction": "Torna a començar",
   "startOverTitle": "Tornar a començar?",
   "startOverBody": "Això descarta totes les puntuacions introduïdes i torna a carregar els jugadors i mòduls de la partida configurada.",
+  "scoreClearBlankBody": "Això descarta totes les puntuacions introduïdes i deixa la calculadora buida.",
+  "@scoreClearBlankBody": {
+    "description": "Reset confirmation when no game is running: nothing to reload from, the calculator simply empties."
+  },
   "scoreContextGame": "Puntuant la partida en curs",
   "scoreContextDetached": "Càlcul a part",
   "scoreBackToGameAction": "Torna a la partida",
@@ -396,6 +401,10 @@
   "errorGenericRetry": "Alguna cosa ha fallat. Torna-ho a provar.",
   "pageNotFoundTitle": "Pàgina no trobada",
   "routeNotFound": "Ruta no trobada: {uri}",
+  "errorTitle": "Error",
+  "@errorTitle": {
+    "description": "App bar title of the screen shown when a route receives data of the wrong type."
+  },
   "invalidDataMessage": "Dades no vàlides per a aquesta pantalla.",
   "retryAction": "Reintenta",
   "playerNameHint": "Nom",
@@ -436,6 +445,9 @@
   "modulesPickLabel": "Tria els mòduls",
   "moduleCountLabel": "{count} / {total} mòduls",
   "cancelAction": "Cancel·la",
+  "exitWithGameTitle": "Vols sortir de l'app?",
+  "exitWithGameBody": "Tens una partida en curs. Si tanques l'app la perdràs: els jugadors, els mòduls i tots els passos que has marcat.",
+  "exitWithGameAction": "Surt i descarta",
   "clearSetupBody": "Això esborra els jugadors, expansions i mòduls seleccionats.",
   "moduleWarningPickOne": "Tria almenys un mòdul",
   "expansionNeedsModuleHint": "Alguna expansió no té cap mòdul triat",

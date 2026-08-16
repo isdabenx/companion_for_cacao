@@ -392,7 +392,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get menuHome => 'Home';
 
   @override
-  String get menuGameSetup => 'Game Setup';
+  String get menuGame => 'Game';
 
   @override
   String get menuTiles => 'Tiles';
@@ -689,6 +689,17 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get guidedNext => 'Next';
+
+  @override
+  String guidedPendingSteps(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count steps left — go to the first',
+      one: '1 step left — go to it',
+    );
+    return '$_temp0';
+  }
 
   @override
   String get hutMarketCrier => 'Market Crier';
@@ -1086,6 +1097,10 @@ class AppLocalizationsEn extends AppLocalizations {
       'This discards all entered scores and reloads players and modules from the current game setup.';
 
   @override
+  String get scoreClearBlankBody =>
+      'This discards all entered scores and leaves the calculator empty.';
+
+  @override
   String get scoreContextGame => 'Scoring the game in progress';
 
   @override
@@ -1294,6 +1309,9 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get errorTitle => 'Error';
+
+  @override
   String get invalidDataMessage => 'Invalid data for this screen.';
 
   @override
@@ -1421,6 +1439,16 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get cancelAction => 'Cancel';
+
+  @override
+  String get exitWithGameTitle => 'Leave the app?';
+
+  @override
+  String get exitWithGameBody =>
+      'You have a game in progress. Closing the app discards it — the players, the modules and every step you have ticked.';
+
+  @override
+  String get exitWithGameAction => 'Leave and discard';
 
   @override
   String get clearSetupBody =>

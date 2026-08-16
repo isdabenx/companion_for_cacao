@@ -10,6 +10,7 @@ import 'package:companion_for_cacao/features/tile/presentation/providers/tile_fi
 import 'package:companion_for_cacao/l10n/generated/app_localizations.dart';
 import 'package:companion_for_cacao/shared/providers/boardgame_notifier.dart';
 import 'package:companion_for_cacao/shared/utils/catalog_l10n.dart';
+import 'package:companion_for_cacao/core/theme/app_shapes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -106,11 +107,11 @@ class _TileFilterBottomSheetWidgetState
                 ),
                 prefixIcon: const Icon(Icons.search, color: AppColors.brown),
                 border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: AppShapes.radius(AppShapes.radiusM),
                   borderSide: const BorderSide(color: AppColors.greenNormal),
                 ),
                 enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: AppShapes.radius(AppShapes.radiusM),
                   borderSide: const BorderSide(color: AppColors.greenNormal),
                 ),
                 filled: true,
@@ -199,7 +200,9 @@ class _TileFilterBottomSheetWidgetState
       selectedColor: AppColors.greenDark,
       backgroundColor: AppColors.white,
       side: const BorderSide(color: AppColors.greenNormal),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+      shape: RoundedRectangleBorder(
+        borderRadius: AppShapes.radius(AppShapes.radiusS),
+      ),
       showCheckmark: false,
       visualDensity: VisualDensity.compact,
       padding: const EdgeInsets.symmetric(
@@ -234,7 +237,9 @@ class _TileFilterBottomSheetWidgetState
       selectedColor: AppColors.greenDark,
       backgroundColor: AppColors.white,
       side: const BorderSide(color: AppColors.greenNormal),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+      shape: RoundedRectangleBorder(
+        borderRadius: AppShapes.radius(AppShapes.radiusS),
+      ),
       showCheckmark: false,
       visualDensity: VisualDensity.compact,
       padding: const EdgeInsets.symmetric(

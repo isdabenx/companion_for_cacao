@@ -28,7 +28,7 @@ void main() {
       GameSetupStateEntity? state,
       List<BoardgameEntity>? boardgames,
     }) async {
-      final container = ProviderContainer(
+      final container = ProviderContainer.test(
         overrides: [
           boardgameProvider.overrideWith(
             () => FakeBoardgameNotifier(boardgames ?? testBoardgames),

@@ -7,6 +7,7 @@ import 'package:companion_for_cacao/features/game_setup/presentation/utils/prepa
 import 'package:companion_for_cacao/features/game_setup/presentation/widgets/preparation_image_dialog.dart';
 import 'package:companion_for_cacao/features/game_setup/presentation/widgets/preparation_step_row.dart';
 import 'package:companion_for_cacao/l10n/generated/app_localizations.dart';
+import 'package:companion_for_cacao/core/theme/app_shapes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -70,7 +71,7 @@ class PreparationGroupCard extends ConsumerWidget {
       elevation: allCompleted ? 0 : 2,
       margin: const EdgeInsets.symmetric(horizontal: AppSpacing.l, vertical: 6),
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: AppShapes.radius(AppShapes.radiusM),
         side: BorderSide(color: tint.withValues(alpha: 0.55), width: 1.5),
       ),
       child: Padding(
@@ -232,7 +233,7 @@ class ReturnToBoxCard extends ConsumerWidget {
       elevation: allCompleted ? 0 : 2,
       margin: const EdgeInsets.symmetric(horizontal: AppSpacing.l, vertical: 6),
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: AppShapes.radius(AppShapes.radiusM),
         side: BorderSide(
           color: AppColors.brown.withValues(alpha: 0.2),
           width: 1,
@@ -253,7 +254,7 @@ class ReturnToBoxCard extends ConsumerWidget {
                     height: 42,
                     decoration: BoxDecoration(
                       color: AppColors.white,
-                      borderRadius: BorderRadius.circular(10),
+                      borderRadius: AppShapes.radius(AppShapes.radiusM),
                     ),
                     child: const Icon(
                       Icons.inventory_2_outlined,
@@ -343,7 +344,7 @@ class _RemovalTileCell extends ConsumerWidget {
     return Tooltip(
       message: step.label,
       child: InkWell(
-        borderRadius: BorderRadius.circular(10),
+        borderRadius: AppShapes.radius(AppShapes.radiusM),
         onTap: () {
           HapticFeedback.lightImpact();
           ref
@@ -363,7 +364,7 @@ class _RemovalTileCell extends ConsumerWidget {
             Container(
               decoration: BoxDecoration(
                 color: AppColors.white,
-                borderRadius: BorderRadius.circular(10),
+                borderRadius: AppShapes.radius(AppShapes.radiusM),
                 border: Border.all(
                   color: isCompleted
                       ? AppColors.greenDark
@@ -401,7 +402,7 @@ class _RemovalTileCell extends ConsumerWidget {
                 padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 1),
                 decoration: BoxDecoration(
                   color: AppColors.brown,
-                  borderRadius: BorderRadius.circular(999),
+                  borderRadius: AppShapes.radius(AppShapes.pill),
                   border: Border.all(color: AppColors.cream, width: 1.5),
                 ),
                 child: Text(

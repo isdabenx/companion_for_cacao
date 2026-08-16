@@ -718,11 +718,11 @@ abstract class AppLocalizations {
   /// **'Home'**
   String get menuHome;
 
-  /// No description provided for @menuGameSetup.
+  /// No description provided for @menuGame.
   ///
   /// In en, this message translates to:
-  /// **'Game Setup'**
-  String get menuGameSetup;
+  /// **'Game'**
+  String get menuGame;
 
   /// No description provided for @menuTiles.
   ///
@@ -1257,6 +1257,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Next'**
   String get guidedNext;
+
+  /// Button on the last guided page when steps were skipped: jumps back to the first incomplete one.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, =1{1 step left — go to it} other{{count} steps left — go to the first}}'**
+  String guidedPendingSteps(int count);
 
   /// No description provided for @hutMarketCrier.
   ///
@@ -1948,6 +1954,12 @@ abstract class AppLocalizations {
   /// **'This discards all entered scores and reloads players and modules from the current game setup.'**
   String get startOverBody;
 
+  /// Reset confirmation when no game is running: nothing to reload from, the calculator simply empties.
+  ///
+  /// In en, this message translates to:
+  /// **'This discards all entered scores and leaves the calculator empty.'**
+  String get scoreClearBlankBody;
+
   /// No description provided for @scoreContextGame.
   ///
   /// In en, this message translates to:
@@ -2290,6 +2302,12 @@ abstract class AppLocalizations {
   /// **'Route not found: {uri}'**
   String routeNotFound(String uri);
 
+  /// App bar title of the screen shown when a route receives data of the wrong type.
+  ///
+  /// In en, this message translates to:
+  /// **'Error'**
+  String get errorTitle;
+
   /// No description provided for @invalidDataMessage.
   ///
   /// In en, this message translates to:
@@ -2529,6 +2547,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Cancel'**
   String get cancelAction;
+
+  /// Asked when back would close the app while a game is set up. The game lives in memory only, so closing loses it.
+  ///
+  /// In en, this message translates to:
+  /// **'Leave the app?'**
+  String get exitWithGameTitle;
+
+  /// No description provided for @exitWithGameBody.
+  ///
+  /// In en, this message translates to:
+  /// **'You have a game in progress. Closing the app discards it — the players, the modules and every step you have ticked.'**
+  String get exitWithGameBody;
+
+  /// No description provided for @exitWithGameAction.
+  ///
+  /// In en, this message translates to:
+  /// **'Leave and discard'**
+  String get exitWithGameAction;
 
   /// No description provided for @clearSetupBody.
   ///

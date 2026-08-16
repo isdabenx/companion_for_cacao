@@ -1,4 +1,4 @@
-import 'package:companion_for_cacao/features/game_setup/domain/entities/player_entity.dart';
+import 'package:companion_for_cacao/core/domain/entities/player_entity.dart';
 import 'package:companion_for_cacao/features/score/domain/entities/score_category.dart';
 import 'package:flutter/foundation.dart';
 

@@ -6,12 +6,10 @@ import 'package:companion_for_cacao/core/theme/app_text_styles.dart';
 import 'package:companion_for_cacao/features/game_setup/presentation/providers/game_setup_notifier.dart';
 import 'package:companion_for_cacao/features/score/domain/entities/score_state_entity.dart';
 import 'package:companion_for_cacao/features/score/presentation/providers/score_notifier.dart';
-import 'package:companion_for_cacao/features/score/presentation/widgets/steps/cacao_step_widget.dart';
+import 'package:companion_for_cacao/features/score/presentation/widgets/steps/counter_step_widget.dart';
 import 'package:companion_for_cacao/features/score/presentation/widgets/steps/gems_step_widget.dart';
-import 'package:companion_for_cacao/features/score/presentation/widgets/steps/gold_step_widget.dart';
 import 'package:companion_for_cacao/features/score/presentation/widgets/steps/huts_step_widget.dart';
 import 'package:companion_for_cacao/features/score/presentation/widgets/steps/setup_step_widget.dart';
-import 'package:companion_for_cacao/features/score/presentation/widgets/steps/sun_step_widget.dart';
 import 'package:companion_for_cacao/features/score/presentation/widgets/steps/temples_step_widget.dart';
 import 'package:companion_for_cacao/features/score/presentation/utils/score_l10n.dart';
 import 'package:companion_for_cacao/features/score/presentation/utils/score_step_assets.dart';
@@ -40,16 +38,26 @@ class ScoreCalculatorScreen extends ConsumerWidget {
     );
     final l10n = AppLocalizations.of(context);
 
+    // Reached by push from the game dashboard, or as a root destination from
+    // Home, which replaces the stack. The two are different tools: from the
+    // board this is *the game's* scoreboard, from Home it is a calculator
+    // that happens to know about the game. It decides both the leading
+    // button and what "start over" is allowed to mean.
+    final fromGameBoard = context.canPop();
+
     return CustomScaffoldWidget(
       title: l10n.scoreCalculator,
-      // Reached by push from the game dashboard (back to it) or as a root
-      // destination from Home (keep the menu): show whichever fits.
-      showBackButton: context.canPop(),
+      showBackButton: fromGameBoard,
       actions: [
         Tooltip(
           message: l10n.startOverAction,
           child: IconButton(
-            onPressed: () => _confirmReset(context, notifier, gameActive),
+            onPressed: () => _confirmReset(
+              context,
+              notifier,
+              gameActive: gameActive,
+              fromGameBoard: fromGameBoard,
+            ),
             icon: const Icon(Icons.refresh),
           ),
         ),
@@ -84,33 +92,40 @@ class ScoreCalculatorScreen extends ConsumerWidget {
 
   Future<void> _confirmReset(
     BuildContext context,
-    ScoreNotifier notifier,
-    bool gameActive,
-  ) async {
+    ScoreNotifier notifier, {
+    required bool gameActive,
+    required bool fromGameBoard,
+  }) async {
     final l10n = AppLocalizations.of(context);
 
-    // No game running: reset is simply "start over" on a blank calculator.
-    if (!gameActive) {
-      final confirmed = await showDialog<bool>(
-        context: context,
-        builder: (dialogContext) => AlertDialog(
-          title: Text(l10n.startOverTitle),
-          content: Text(l10n.startOverBody),
-          actions: [
-            DialogButtonBarWidget(
-              onCancel: () => Navigator.of(dialogContext).pop(false),
-              onConfirm: () => Navigator.of(dialogContext).pop(true),
-              confirmLabel: l10n.startOverAction,
-            ),
-          ],
-        ),
+    // Opened from the game board: this screen is that game's scoreboard, so
+    // the only thing "start over" can mean is scoring it again. Emptying the
+    // calculator would detach it from the game the player navigated in from
+    // — that belongs to the calculator reached from Home.
+    if (gameActive && fromGameBoard) {
+      final confirmed = await _confirm(
+        context,
+        body: l10n.startOverBody,
+        confirmLabel: l10n.scoreResetGameOption,
       );
-      if (confirmed ?? false) notifier.clearToBlank();
+      if (confirmed) notifier.resetToGame();
       return;
     }
 
-    // A game is running: let the player choose between rescoring it or
-    // starting a separate, empty calculation.
+    // No game running: nothing to reload from, so reset just empties.
+    if (!gameActive) {
+      final confirmed = await _confirm(
+        context,
+        body: l10n.scoreClearBlankBody,
+        confirmLabel: l10n.startOverAction,
+      );
+      if (confirmed) notifier.clearToBlank();
+      return;
+    }
+
+    // Opened from Home with a game running: the standalone calculator, so
+    // both readings are on the table — rescore the game, or take it away
+    // for a separate calculation.
     final choice = await showDialog<_ResetChoice>(
       context: context,
       builder: (dialogContext) => AlertDialog(
@@ -150,6 +165,30 @@ class ScoreCalculatorScreen extends ConsumerWidget {
       case null:
         break;
     }
+  }
+
+  /// A yes/no confirmation under the "start over" title, shared by the two
+  /// single-action shapes of the reset.
+  Future<bool> _confirm(
+    BuildContext context, {
+    required String body,
+    required String confirmLabel,
+  }) async {
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        title: Text(AppLocalizations.of(dialogContext).startOverTitle),
+        content: Text(body),
+        actions: [
+          DialogButtonBarWidget(
+            onCancel: () => Navigator.of(dialogContext).pop(false),
+            onConfirm: () => Navigator.of(dialogContext).pop(true),
+            confirmLabel: confirmLabel,
+          ),
+        ],
+      ),
+    );
+    return confirmed ?? false;
   }
 }
 
@@ -273,7 +312,7 @@ class _StepReferenceImage extends StatelessWidget {
       padding: const EdgeInsets.only(bottom: AppSpacing.s),
       child: Center(
         child: ClipRRect(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: AppShapes.radius(AppShapes.radiusM),
           child: SafeAssetImage(
             assetPath: asset,
             height: 120,
@@ -285,20 +324,41 @@ class _StepReferenceImage extends StatelessWidget {
   }
 }
 
-class _StepContent extends StatelessWidget {
+class _StepContent extends ConsumerWidget {
   const _StepContent({required this.step});
 
   final ScoreStep step;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context);
+    final notifier = ref.read(scoreProvider.notifier);
+
     return switch (step) {
       ScoreStep.setup => const SetupStepWidget(),
-      ScoreStep.accumulatedGold => const GoldStepWidget(),
+      // The three one-number-per-player steps share a widget, so their whole
+      // configuration is visible here rather than in three near-identical
+      // files. Caps come from the village board: 3 sun-worshiping places and
+      // 5 cacao storage spaces. Gold is uncapped.
+      ScoreStep.accumulatedGold => CounterStepWidget(
+        intro: l10n.scoreGoldIntro,
+        valueOf: (input) => input.accumulatedGold,
+        onChanged: notifier.setAccumulatedGold,
+      ),
+      ScoreStep.sunTokens => CounterStepWidget(
+        intro: l10n.scoreSunIntro,
+        valueOf: (input) => input.sunTokens,
+        onChanged: notifier.setSunTokens,
+        max: 3,
+      ),
+      ScoreStep.cacaoFruits => CounterStepWidget(
+        intro: l10n.scoreCacaoIntro,
+        valueOf: (input) => input.cacaoFruits,
+        onChanged: notifier.setCacaoFruits,
+        max: 5,
+      ),
       ScoreStep.waterTrack => const WaterStepWidget(),
       ScoreStep.temples => const TemplesStepWidget(),
-      ScoreStep.sunTokens => const SunStepWidget(),
-      ScoreStep.cacaoFruits => const CacaoStepWidget(),
       ScoreStep.huts => const HutsStepWidget(),
       ScoreStep.gemMines => const GemsStepWidget(),
     };

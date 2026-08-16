@@ -30,7 +30,7 @@ class HomeScreen extends StatelessWidget {
 
     final actions = <ActionCardWidget>[
       ActionCardWidget(
-        title: l10n.menuGameSetup,
+        title: l10n.menuGame,
         subtitle: l10n.homeCardSetupSub,
         icon: Icons.group,
         tone: ActionCardTone.green,
@@ -327,7 +327,7 @@ class _Chip extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 3),
       decoration: BoxDecoration(
         color: AppColors.greenLight,
-        borderRadius: BorderRadius.circular(999),
+        borderRadius: AppShapes.radius(AppShapes.pill),
       ),
       child: Text(
         label,
@@ -452,7 +452,7 @@ class _SoonRow extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
             decoration: BoxDecoration(
               color: AppColors.gold.withValues(alpha: 0.25),
-              borderRadius: BorderRadius.circular(999),
+              borderRadius: AppShapes.radius(AppShapes.pill),
             ),
             child: Text(
               badge.toUpperCase(),

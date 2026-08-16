@@ -22,7 +22,7 @@ void main() {
   late List<BoardgameEntity> mockBoardgames;
 
   ProviderContainer createContainer() {
-    final container = ProviderContainer(
+    final container = ProviderContainer.test(
       retry: (_, _) => null,
       overrides: [
         loadBoardgamesUseCaseProvider.overrideWith(
@@ -30,7 +30,6 @@ void main() {
         ),
       ],
     );
-    addTearDown(container.dispose);
     return container;
   }
 

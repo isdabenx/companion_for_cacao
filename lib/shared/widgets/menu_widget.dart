@@ -63,7 +63,7 @@ class MenuWidget extends StatelessWidget {
                   _menuItem(
                     context,
                     Icons.group,
-                    AppLocalizations.of(context).menuGameSetup,
+                    AppLocalizations.of(context).menuGame,
                     AppRoutes.gameSetup,
                   ),
                   _menuItem(

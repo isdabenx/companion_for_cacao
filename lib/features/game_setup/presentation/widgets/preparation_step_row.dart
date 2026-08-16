@@ -9,6 +9,7 @@ import 'package:companion_for_cacao/features/game_setup/presentation/providers/g
 import 'package:companion_for_cacao/features/game_setup/presentation/utils/preparation_image_resolver.dart';
 import 'package:companion_for_cacao/features/game_setup/presentation/widgets/preparation_image_dialog.dart';
 import 'package:companion_for_cacao/shared/widgets/players_color_bar.dart';
+import 'package:companion_for_cacao/core/theme/app_shapes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -112,7 +113,7 @@ class _PreparationStepRowState extends ConsumerState<PreparationStepRow> {
               child: PlayersColorBar(colors: playerColors),
             ),
           InkWell(
-            borderRadius: BorderRadius.circular(10),
+            borderRadius: AppShapes.radius(AppShapes.radiusM),
             onTap: () => setState(() => _expanded = !_expanded),
             child: Padding(
               padding: const EdgeInsets.symmetric(vertical: 4),
@@ -308,7 +309,7 @@ class _MiniTile extends StatelessWidget {
             height: 46,
             decoration: BoxDecoration(
               color: AppColors.white,
-              borderRadius: BorderRadius.circular(9),
+              borderRadius: AppShapes.radius(AppShapes.radiusM),
               boxShadow: [
                 BoxShadow(
                   color: AppColors.brown.withValues(alpha: 0.12),
@@ -336,7 +337,7 @@ class _MiniTile extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 1),
                 decoration: BoxDecoration(
                   color: AppColors.brown,
-                  borderRadius: BorderRadius.circular(999),
+                  borderRadius: AppShapes.radius(AppShapes.pill),
                   border: Border.all(color: AppColors.cream, width: 1.5),
                 ),
                 child: Text(
@@ -387,7 +388,7 @@ class _Thumb extends StatelessWidget {
               height: size,
               decoration: BoxDecoration(
                 color: AppColors.white,
-                borderRadius: BorderRadius.circular(10),
+                borderRadius: AppShapes.radius(AppShapes.radiusM),
                 boxShadow: [
                   BoxShadow(
                     color: AppColors.brown.withValues(alpha: 0.15),
@@ -426,7 +427,7 @@ class _Thumb extends StatelessWidget {
             height: size,
             decoration: BoxDecoration(
               color: AppColors.white.withValues(alpha: 0.6),
-              borderRadius: BorderRadius.circular(10),
+              borderRadius: AppShapes.radius(AppShapes.radiusM),
             ),
             child: Icon(
               fallbackIcon,
@@ -454,7 +455,7 @@ class _Thumb extends StatelessWidget {
                   ),
                   decoration: BoxDecoration(
                     color: AppColors.brown,
-                    borderRadius: BorderRadius.circular(999),
+                    borderRadius: AppShapes.radius(AppShapes.pill),
                     border: Border.all(color: AppColors.cream, width: 1.5),
                   ),
                   child: Text(

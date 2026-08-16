@@ -17,7 +17,7 @@ import 'package:companion_for_cacao/features/game_setup/presentation/widgets/pre
 import 'package:companion_for_cacao/features/game_setup/presentation/widgets/worker_selector_widget.dart';
 import 'package:companion_for_cacao/l10n/generated/app_localizations.dart';
 import 'package:companion_for_cacao/shared/utils/player_display_l10n.dart';
-import 'package:companion_for_cacao/shared/utils/preparation_phase_l10n.dart';
+import 'package:companion_for_cacao/features/game_setup/presentation/utils/preparation_phase_l10n.dart';
 import 'package:companion_for_cacao/shared/widgets/container_full_style_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -175,9 +175,11 @@ class _GuidedPreparationWidgetState
         unit.steps.every((s) => completionMap[s.id] ?? s.isCompleted),
     ];
 
+    final firstIncomplete = completion.indexWhere((done) => !done);
+    final pendingCount = completion.where((done) => !done).length;
+
     // Opening guided mode jumps to the first incomplete unit.
     if (_controller == null) {
-      final firstIncomplete = completion.indexWhere((done) => !done);
       _currentPage = firstIncomplete == -1 ? 0 : firstIncomplete;
       _controller = PageController(initialPage: _currentPage);
     }
@@ -195,6 +197,13 @@ class _GuidedPreparationWidgetState
     _maybeAutoAdvance(completion);
 
     final allComplete = completion.isNotEmpty && completion.every((c) => c);
+    // After the clamp above, so it reflects the page actually shown.
+    final isLastPage = _currentPage >= units.length - 1;
+    // Only when something EARLIER was skipped. Reaching the last page with
+    // just this page still open is the normal end of the flow — pointing the
+    // player "back" to the page they are already on would be nonsense.
+    final skippedEarlier =
+        isLastPage && firstIncomplete != -1 && firstIncomplete != _currentPage;
     if (!allComplete && _celebrationDismissed) {
       _celebrationDismissed = false;
     }
@@ -223,7 +232,7 @@ class _GuidedPreparationWidgetState
                       itemBuilder: (context, index) {
                         final unit = units[index];
                         final phase = unit.steps.first.phase;
-                        return SingleChildScrollView(
+                        return Padding(
                           padding: const EdgeInsets.symmetric(
                             vertical: AppSpacing.m,
                           ),
@@ -250,10 +259,31 @@ class _GuidedPreparationWidgetState
                                 ),
                               ),
                               AppSpacing.verticalS,
-                              _unitContent(
-                                unit,
-                                hutThrowRegistered: hutThrowRegistered,
-                                playerTitle: playerTitle,
+                              // The phase header stays pinned; the card
+                              // itself centres in what is left. A one-row
+                              // step used to sit at the top of an otherwise
+                              // empty page. Taller units still scroll, from
+                              // the top, because the min-height only kicks
+                              // in when the content is shorter.
+                              Expanded(
+                                child: LayoutBuilder(
+                                  builder: (context, constraints) =>
+                                      SingleChildScrollView(
+                                        child: ConstrainedBox(
+                                          constraints: BoxConstraints(
+                                            minHeight: constraints.maxHeight,
+                                          ),
+                                          child: Center(
+                                            child: _unitContent(
+                                              unit,
+                                              hutThrowRegistered:
+                                                  hutThrowRegistered,
+                                              playerTitle: playerTitle,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                ),
                               ),
                             ],
                           ),
@@ -280,20 +310,52 @@ class _GuidedPreparationWidgetState
                           icon: const Icon(Icons.chevron_left, size: 20),
                           label: Text(l10n.guidedBack),
                         ),
-                        const Spacer(),
-                        FilledButton.icon(
-                          onPressed: _currentPage < units.length - 1
-                              ? () => _controller?.nextPage(
-                                  duration: const Duration(milliseconds: 300),
-                                  curve: Curves.easeOutCubic,
-                                )
-                              : null,
-                          style: FilledButton.styleFrom(
-                            backgroundColor: AppColors.greenDark,
+                        // On the last page with steps still open, "Next" is
+                        // disabled and nothing else says the preparation is
+                        // unfinished — the counter reads 8/8 because it counts
+                        // pages, not completion. Send the player back to the
+                        // first one they skipped instead. It takes the width
+                        // instead of a Spacer: the label spells out the count,
+                        // and a Spacer would eat the room and wrap it to one
+                        // word per line.
+                        if (skippedEarlier) ...[
+                          const SizedBox(width: AppSpacing.s),
+                          Expanded(
+                            child: FilledButton.icon(
+                              onPressed: () => _controller?.animateToPage(
+                                firstIncomplete,
+                                duration: const Duration(milliseconds: 300),
+                                curve: Curves.easeOutCubic,
+                              ),
+                              style: FilledButton.styleFrom(
+                                backgroundColor: AppColors.warning,
+                              ),
+                              icon: const Icon(
+                                Icons.assignment_late_outlined,
+                                size: 20,
+                              ),
+                              label: Text(
+                                l10n.guidedPendingSteps(pendingCount),
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
                           ),
-                          icon: const Icon(Icons.chevron_right, size: 20),
-                          label: Text(l10n.guidedNext),
-                        ),
+                        ] else ...[
+                          const Spacer(),
+                          FilledButton.icon(
+                            onPressed: _currentPage < units.length - 1
+                                ? () => _controller?.nextPage(
+                                    duration: const Duration(milliseconds: 300),
+                                    curve: Curves.easeOutCubic,
+                                  )
+                                : null,
+                            style: FilledButton.styleFrom(
+                              backgroundColor: AppColors.greenDark,
+                            ),
+                            icon: const Icon(Icons.chevron_right, size: 20),
+                            label: Text(l10n.guidedNext),
+                          ),
+                        ],
                       ],
                     ),
                   ),

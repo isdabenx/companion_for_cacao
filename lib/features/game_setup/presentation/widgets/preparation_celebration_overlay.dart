@@ -9,6 +9,7 @@ import 'package:companion_for_cacao/features/game_setup/presentation/providers/g
 import 'package:companion_for_cacao/features/game_setup/presentation/widgets/preparation_group_card.dart';
 import 'package:companion_for_cacao/shared/utils/player_display_l10n.dart';
 import 'package:confetti/confetti.dart';
+import 'package:companion_for_cacao/core/theme/app_shapes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -159,7 +160,7 @@ class _PreparationCelebrationOverlayState
                                 tint.withValues(alpha: 0.18),
                                 AppColors.cream,
                               ),
-                              borderRadius: BorderRadius.circular(999),
+                              borderRadius: AppShapes.radius(AppShapes.pill),
                               border: Border.all(color: tint, width: 1.5),
                             ),
                             child: Row(

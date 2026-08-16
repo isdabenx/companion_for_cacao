@@ -10,6 +10,7 @@ import 'package:companion_for_cacao/l10n/generated/app_localizations.dart';
 import 'package:companion_for_cacao/shared/utils/player_display_l10n.dart';
 import 'package:companion_for_cacao/shared/widgets/circle_badge.dart';
 import 'package:companion_for_cacao/shared/widgets/safe_asset_image.dart';
+import 'package:companion_for_cacao/core/theme/app_shapes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -168,7 +169,7 @@ class _MaskCard extends ConsumerWidget {
             color: ownerColor ?? AppColors.grey,
             width: ownerColor != null ? 2.5 : 1.5,
           ),
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: AppShapes.radius(AppShapes.radiusM),
         ),
         child: SizedBox(
           width: 56,

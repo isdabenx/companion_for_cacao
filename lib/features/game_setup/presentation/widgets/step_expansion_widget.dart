@@ -1,3 +1,4 @@
+import 'package:companion_for_cacao/shared/widgets/async_loading_widget.dart';
 import 'package:companion_for_cacao/config/constants/game_constants.dart';
 import 'package:companion_for_cacao/core/theme/app_colors.dart';
 import 'package:companion_for_cacao/core/theme/app_spacing.dart';
@@ -46,7 +47,7 @@ class StepExpansionWidget extends ConsumerWidget {
           ],
         );
       },
-      loading: () => const Center(child: CircularProgressIndicator()),
+      loading: () => const AsyncLoadingWidget(),
       error: (error, _) => AsyncErrorWidget(error: error),
     );
   }

@@ -11,6 +11,7 @@ import 'package:companion_for_cacao/features/game_setup/presentation/providers/c
 import 'package:companion_for_cacao/features/game_setup/presentation/providers/game_setup_notifier.dart';
 import 'package:companion_for_cacao/shared/widgets/dialog_button_bar_widget.dart';
 import 'package:flutter/foundation.dart';
+import 'package:companion_for_cacao/core/theme/app_shapes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -38,23 +39,33 @@ class WorkerSelectorWidget extends ConsumerWidget {
     final selection = gameState.workerSelection;
     final hasSelection = selection != null;
 
-    // Determine label: check if manual selection matches a custom preset
     final l10n = AppLocalizations.of(context);
     final customPresetsAsync = ref.watch(customPresetProvider);
     final customPresets = customPresetsAsync.value ?? [];
-    String label;
+
+    // A set the player named themselves wins over any generic label: the
+    // custom-preset match is tried before the origin ("Surprise", "Manual").
+    // The other way round, saving a surprise draw under a name and applying
+    // it still read as "Surprise" — the match was unreachable.
+    final matchingPreset = hasSelection
+        ? customPresets
+              .where(
+                (p) => mapEquals(p.tileQuantities, selection.tileQuantities),
+              )
+              .firstOrNull
+        : null;
+
+    final String label;
     if (!hasSelection) {
       label = l10n.workerAddAllDefault;
+    } else if (matchingPreset != null) {
+      label = matchingPreset.name;
     } else if (selection.mode == WorkerSelectionMode.preset) {
       label = _presetLabel(l10n, selection.presetType);
     } else if (selection.isSurprise) {
       label = l10n.workerSurprise;
     } else {
-      // Manual mode — check if it matches a custom preset
-      final matchingPreset = customPresets
-          .where((p) => mapEquals(p.tileQuantities, selection.tileQuantities))
-          .firstOrNull;
-      label = matchingPreset != null ? matchingPreset.name : l10n.workerManual;
+      label = l10n.workerManual;
     }
 
     final tilesPerPlayer = hasSelection
@@ -84,14 +95,14 @@ class WorkerSelectorWidget extends ConsumerWidget {
           vertical: 6,
         ),
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: AppShapes.radius(AppShapes.radiusM),
           side: BorderSide(
             color: AppColors.brown.withValues(alpha: 0.2),
             width: 1,
           ),
         ),
         child: InkWell(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: AppShapes.radius(AppShapes.radiusM),
           onTap: () => _openEditor(context, ref, gameState),
           child: Padding(
             padding: const EdgeInsets.symmetric(
@@ -108,7 +119,7 @@ class WorkerSelectorWidget extends ConsumerWidget {
                       height: 42,
                       decoration: BoxDecoration(
                         color: AppColors.white,
-                        borderRadius: BorderRadius.circular(10),
+                        borderRadius: AppShapes.radius(AppShapes.radiusM),
                       ),
                       child: const Icon(
                         Icons.people_outline,
@@ -138,7 +149,7 @@ class WorkerSelectorWidget extends ConsumerWidget {
                 const SizedBox(height: AppSpacing.s),
                 Material(
                   color: AppColors.greenLight.withValues(alpha: 0.6),
-                  borderRadius: BorderRadius.circular(8),
+                  borderRadius: AppShapes.radius(AppShapes.radiusS),
                   child: Padding(
                     padding: const EdgeInsets.symmetric(
                       horizontal: AppSpacing.s,
@@ -167,8 +178,16 @@ class WorkerSelectorWidget extends ConsumerWidget {
                           ),
                         ),
                         const SizedBox(width: AppSpacing.s),
-                        _BalanceBadge(isValid: balance.isValid),
-                        const SizedBox(width: AppSpacing.s),
+                        // Only verdict a set the player actually chose. The
+                        // implicit default ("add all") is out of the
+                        // recommended range at 3+ players, so badging it made
+                        // preparation open in a warning state over a decision
+                        // nobody had taken yet. The full balance panel is one
+                        // tap away, inside the editor.
+                        if (hasSelection) ...[
+                          _BalanceBadge(isValid: balance.isValid),
+                          const SizedBox(width: AppSpacing.s),
+                        ],
                         const Icon(
                           Icons.edit_outlined,
                           color: AppColors.greenDarker,
@@ -337,7 +356,7 @@ class _BuildTile extends StatelessWidget {
       ),
       decoration: BoxDecoration(
         color: AppColors.white,
-        borderRadius: BorderRadius.circular(10),
+        borderRadius: AppShapes.radius(AppShapes.radiusM),
         border: Border.all(color: AppColors.brown.withValues(alpha: 0.15)),
       ),
       child: Row(
@@ -1117,7 +1136,7 @@ class _TileQuantityCard extends StatelessWidget {
         color: isActive
             ? AppColors.white
             : AppColors.grey.withValues(alpha: 0.15),
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: AppShapes.radius(AppShapes.radiusS),
         border: Border.all(
           color: isActive
               ? AppColors.greenDark.withValues(alpha: 0.4)
@@ -1250,7 +1269,9 @@ class _SmallIconButton extends StatelessWidget {
               ? AppColors.greenNormal.withValues(alpha: 0.5)
               : AppColors.grey.withValues(alpha: 0.15),
           foregroundColor: onPressed != null ? AppColors.brown : AppColors.grey,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+          shape: RoundedRectangleBorder(
+            borderRadius: AppShapes.radius(AppShapes.radiusS),
+          ),
         ),
       ),
     );
@@ -1279,7 +1300,7 @@ class _BalanceIndicator extends StatelessWidget {
       ),
       decoration: BoxDecoration(
         color: color.withValues(alpha: 0.08),
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: AppShapes.radius(AppShapes.radiusS),
         border: Border.all(color: color.withValues(alpha: 0.3), width: 1),
       ),
       child: Column(
@@ -1390,7 +1411,7 @@ class _BalanceBadge extends StatelessWidget {
       ),
       decoration: BoxDecoration(
         color: color.withValues(alpha: 0.12),
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: AppShapes.radius(AppShapes.radiusM),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,

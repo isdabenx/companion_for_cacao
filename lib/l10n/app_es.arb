@@ -127,7 +127,7 @@
   "backToGameAction": "Volver a la partida",
 
   "menuHome": "Inicio",
-  "menuGameSetup": "Nueva partida",
+  "menuGame": "Partida",
   "menuTiles": "Losetas",
   "menuScores": "Puntuaciones",
   "menuRules": "Reglas",
@@ -221,6 +221,7 @@
   "listModeTooltip": "Modo lista",
   "guidedBack": "Atrás",
   "guidedNext": "Siguiente",
+  "guidedPendingSteps": "{count, plural, =1{Queda 1 paso — ve a él} other{Quedan {count} pasos — ve al primero}}",
 
   "hutMarketCrier": "El voceador del mercado",
   "hutHermit": "El curandero",
@@ -339,6 +340,10 @@
   "startOverAction": "Empezar de nuevo",
   "startOverTitle": "¿Empezar de nuevo?",
   "startOverBody": "Esto descarta todas las puntuaciones introducidas y vuelve a cargar los jugadores y módulos de la partida configurada.",
+  "scoreClearBlankBody": "Esto descarta todas las puntuaciones introducidas y deja la calculadora vacía.",
+  "@scoreClearBlankBody": {
+    "description": "Reset confirmation when no game is running: nothing to reload from, the calculator simply empties."
+  },
   "scoreContextGame": "Puntuando la partida en curso",
   "scoreContextDetached": "Cálculo aparte",
   "scoreBackToGameAction": "Volver a la partida",
@@ -396,6 +401,10 @@
   "errorGenericRetry": "Algo ha fallado. Vuelve a intentarlo.",
   "pageNotFoundTitle": "Página no encontrada",
   "routeNotFound": "Ruta no encontrada: {uri}",
+  "errorTitle": "Error",
+  "@errorTitle": {
+    "description": "App bar title of the screen shown when a route receives data of the wrong type."
+  },
   "invalidDataMessage": "Datos no válidos para esta pantalla.",
   "retryAction": "Reintentar",
   "playerNameHint": "Nombre",
@@ -436,6 +445,9 @@
   "modulesPickLabel": "Elige los módulos",
   "moduleCountLabel": "{count} / {total} módulos",
   "cancelAction": "Cancelar",
+  "exitWithGameTitle": "¿Quieres salir de la app?",
+  "exitWithGameBody": "Tienes una partida en curso. Si cierras la app la perderás: los jugadores, los módulos y todos los pasos que has marcado.",
+  "exitWithGameAction": "Salir y descartar",
   "clearSetupBody": "Esto borra los jugadores, expansiones y módulos seleccionados.",
   "moduleWarningPickOne": "Elige al menos un módulo",
   "expansionNeedsModuleHint": "Alguna expansión no tiene módulos elegidos",

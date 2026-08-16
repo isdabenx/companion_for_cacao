@@ -1,5 +1,5 @@
 import 'package:companion_for_cacao/core/utils/string_extensions.dart';
-import 'package:companion_for_cacao/features/game_setup/domain/entities/player_entity.dart';
+import 'package:companion_for_cacao/core/domain/entities/player_entity.dart';
 import 'package:companion_for_cacao/l10n/generated/app_localizations.dart';
 
 /// Localized name for a raw player color string ('red', 'white'...).

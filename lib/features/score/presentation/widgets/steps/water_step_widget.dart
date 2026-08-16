@@ -5,6 +5,7 @@ import 'package:companion_for_cacao/features/score/domain/services/score_calcula
 import 'package:companion_for_cacao/features/score/presentation/providers/score_notifier.dart';
 import 'package:companion_for_cacao/features/score/presentation/widgets/score_player_row_widget.dart';
 import 'package:companion_for_cacao/l10n/generated/app_localizations.dart';
+import 'package:companion_for_cacao/core/theme/app_shapes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -72,7 +73,7 @@ class _WaterFieldChip extends StatelessWidget {
     final isNegative = value < 0;
     return InkWell(
       onTap: onTap,
-      borderRadius: BorderRadius.circular(16),
+      borderRadius: AppShapes.radius(AppShapes.radiusL),
       child: Container(
         constraints: const BoxConstraints(minWidth: 40),
         padding: const EdgeInsets.symmetric(
@@ -87,7 +88,7 @@ class _WaterFieldChip extends StatelessWidget {
             color: isNegative ? AppColors.red : AppColors.greenDarker,
             width: isSelected ? 2 : 1,
           ),
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: AppShapes.radius(AppShapes.radiusL),
         ),
         child: Text(
           '$value',

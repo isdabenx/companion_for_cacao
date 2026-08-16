@@ -1,3 +1,5 @@
+import 'package:companion_for_cacao/shared/widgets/async_loading_widget.dart';
+import 'package:companion_for_cacao/shared/widgets/async_error_widget.dart';
 import 'package:companion_for_cacao/core/theme/app_colors.dart';
 import 'package:companion_for_cacao/core/theme/app_spacing.dart';
 import 'package:companion_for_cacao/core/theme/app_text_styles.dart';
@@ -6,6 +8,7 @@ import 'package:companion_for_cacao/features/game_setup/presentation/widgets/sta
 import 'package:companion_for_cacao/features/game_setup/presentation/widgets/step_expansion_widget.dart';
 import 'package:companion_for_cacao/features/game_setup/presentation/widgets/step_player_widget.dart';
 import 'package:companion_for_cacao/l10n/generated/app_localizations.dart';
+import 'package:companion_for_cacao/core/theme/app_shapes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -56,8 +59,8 @@ class GameSetupWidget extends ConsumerWidget {
           const StartButtonWidget(),
         ],
       ),
-      loading: () => const Center(child: CircularProgressIndicator()),
-      error: (e, _) => Center(child: Text('Error: $e')),
+      loading: () => const AsyncLoadingWidget(),
+      error: (error, _) => AsyncErrorWidget(error: error),
     );
   }
 }
@@ -101,7 +104,7 @@ class _PlayersSectionHeader extends ConsumerWidget {
           ),
           decoration: BoxDecoration(
             color: AppColors.greenDarker.withValues(alpha: 0.1),
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: AppShapes.radius(AppShapes.radiusM),
           ),
           child: Row(
             mainAxisSize: MainAxisSize.min,
@@ -119,7 +122,7 @@ class _PlayersSectionHeader extends ConsumerWidget {
             padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
             decoration: BoxDecoration(
               color: AppColors.gold.withValues(alpha: 0.3),
-              borderRadius: BorderRadius.circular(8),
+              borderRadius: AppShapes.radius(AppShapes.radiusS),
             ),
             child: Text(
               AppLocalizations.of(context).needMorePlayers(2 - selectedCount),

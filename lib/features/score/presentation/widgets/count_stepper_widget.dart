@@ -3,6 +3,7 @@ import 'package:companion_for_cacao/core/theme/app_spacing.dart';
 import 'package:companion_for_cacao/core/theme/app_text_styles.dart';
 import 'package:companion_for_cacao/l10n/generated/app_localizations.dart';
 import 'package:companion_for_cacao/shared/widgets/dialog_button_bar_widget.dart';
+import 'package:companion_for_cacao/core/theme/app_shapes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -61,10 +62,14 @@ class CountStepperWidget extends StatelessWidget {
     required this.value,
     required this.onChanged,
     this.min = 0,
-    this.max = 999,
+    this.max = uncapped,
     this.allowDirectEntry = true,
     super.key,
   });
+
+  /// Sanity ceiling for counts the game does not cap (gold, workers, gems),
+  /// so callers that mean "no limit" can say so instead of repeating 999.
+  static const int uncapped = 999;
 
   final int value;
   final ValueChanged<int> onChanged;
@@ -93,7 +98,7 @@ class CountStepperWidget extends StatelessWidget {
         ),
         InkWell(
           onTap: allowDirectEntry ? () => _editValue(context) : null,
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: AppShapes.radius(AppShapes.radiusS),
           child: Container(
             constraints: const BoxConstraints(minWidth: 44),
             padding: const EdgeInsets.symmetric(
@@ -103,7 +108,7 @@ class CountStepperWidget extends StatelessWidget {
             decoration: BoxDecoration(
               color: AppColors.white.withValues(alpha: 0.7),
               border: Border.all(color: AppColors.greenDarker),
-              borderRadius: BorderRadius.circular(8),
+              borderRadius: AppShapes.radius(AppShapes.radiusS),
             ),
             child: Text(
               '$value',

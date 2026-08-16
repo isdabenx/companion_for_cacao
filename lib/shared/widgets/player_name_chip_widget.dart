@@ -6,6 +6,7 @@ import 'package:companion_for_cacao/l10n/generated/app_localizations.dart';
 import 'package:companion_for_cacao/shared/utils/player_display_l10n.dart';
 import 'package:companion_for_cacao/shared/widgets/circle_badge.dart';
 import 'package:companion_for_cacao/shared/widgets/selectable_chip.dart';
+import 'package:companion_for_cacao/core/theme/app_shapes.dart';
 import 'package:flutter/material.dart';
 
 /// A tappable player-color chip with an inline name field.
@@ -149,7 +150,7 @@ class _PlayerNameChipWidgetState extends State<PlayerNameChipWidget> {
                         filled: true,
                         fillColor: color.withValues(alpha: 0.18),
                         border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(8),
+                          borderRadius: AppShapes.radius(AppShapes.radiusS),
                           borderSide: BorderSide.none,
                         ),
                         hintText: AppLocalizations.of(context).playerNameHint,
