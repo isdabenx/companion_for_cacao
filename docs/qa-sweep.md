@@ -19,7 +19,7 @@ que és on van sortir els defectes que obrir-la ja girada amagava.
 |---|---|---|---|
 | Splash | OK (<3 s en instal·lació neta) | — | — |
 | Inici | OK | OK, girat (**P4-2** tancat) | OK |
-| Sobre l'app | OK | no provat en apaïsat | OK |
+| Sobre l'app | OK | OK — 3 columnes en comptes de 2 | OK |
 | Rajoles (catàleg) | OK | OK — graella + panell de detall | — |
 | Filtres i ajustos (7 opcions) | OK | OK | — |
 | Detall de rajola | **P1-5** (arreglat) | OK, com a pantalla i com a panell | — |
@@ -28,8 +28,8 @@ que és on van sortir els defectes que obrir-la ja girada amagava.
 | Tauler de partida | OK | OK (aprofita l'amplada) | — |
 | Preparació (llista) | OK | OK | OK |
 | Preparació (guiada) | **P1-1**, **P1-2** (arreglats) | OK (juliol; no reverificat al 08-16) | OK |
-| Selector de recol·lectors | **P1-3**, **P1-4** (arreglats) | no provat en apaïsat | — |
-| Tirada de cabanes | OK | no provat en apaïsat | — |
+| Selector de recol·lectors | **P1-3**, **P1-4** (arreglats) | OK — els 4 preajustos en una fila | — |
+| Tirada de cabanes | OK | OK — 3 columnes de cabanes | — |
 | Rajoles en joc | OK | OK | — |
 | Calculadora (6-8 passos) | OK | OK, girat (**P4-3** tancat) | OK |
 | Resultats | OK | OK — dos panells | — |
@@ -113,9 +113,6 @@ de la Fase 2 necessita exactament aquesta peça.
 
 Al dia a 2026-08-16.
 
-- **Tres pantalles no s'han obert mai en apaïsat**: «Sobre l'app» desplegat, el selector de
-  recol·lectors i la tirada de cabanes. Cap surt a la ruta principal d'una partida, que és
-  per què han anat quedant per al final dues passades seguides.
 - **Preparació guiada en apaïsat** consta OK des del juliol i no s'ha reverificat girant, que
   és precisament el gest que va destapar defectes en altres pantalles.
 - **Tauleta**: s'han comprovat les quatre classes de finestra (1600×2560 @320 dpi, en les
@@ -180,6 +177,26 @@ repetirà.
   que funciona és soroll.
 - **L'anell de progrés** de la capçalera de fase: té `value`, és progrés i no espera. Les
   rodetes que sí que es van substituir per esquelets eren les de càrrega.
+
+### Les tres pantalles que faltaven — 2026-08-16, més tard
+
+Les úniques que no s'havien obert mai en apaïsat. **Cap necessita res**, i dues hi guanyen:
+
+- **«Sobre l'app» desplegat** passa a tres columnes de capacitats en comptes de dues, pel
+  `constraints.maxWidth > 520` que ja hi havia. Es llegeix millor que en vertical.
+- **La tirada de cabanes** obre el full amb tres columnes de cabanes, el comptador 0/12 i
+  «Aplica» visible. Cal desplaçar per veure les 12, però en vertical també i amb menys
+  columnes.
+- **El selector de recol·lectors** posa els quatre preajustos —Només base, Substitueix,
+  Base + 0-0-0-4, Afegeix-les totes— **en una sola fila**, que en vertical n'ocupa dues.
+  «Restableix» i «Aplica» tots dos visibles.
+
+Cap desbordament al logcat en cap de les tres.
+
+Per arribar-hi calen configuracions concretes, i val la pena deixar-ho escrit: la tirada de
+cabanes vol el mòdul **Cabanes** de Xocolatl, i el selector de recol·lectors vol **Els nous
+recol·lectors** de Diamante. Amb el joc base i prou, cap de les dues apareix — que és
+probablement per què s'havien anat escapant.
 
 ### Regla que en surt
 
