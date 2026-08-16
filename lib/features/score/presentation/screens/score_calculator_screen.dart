@@ -93,11 +93,19 @@ class ScoreCalculatorScreen extends ConsumerWidget {
                 Expanded(
                   child: _StepBody(
                     step: state.currentStep,
+                    sideBySide: sideBySide,
                     banner: sideBySide ? banner : null,
+                    // Side by side the buttons belong to the pane they act on.
+                    // Spanning the full width they reserved a strip across the
+                    // reference pane too, cropping the picture for space
+                    // nothing over there was using.
+                    footer: sideBySide ? _NavigationBar(state: state) : null,
                   ),
                 ),
-                AppSpacing.verticalS,
-                _NavigationBar(state: state),
+                if (!sideBySide) ...[
+                  AppSpacing.verticalS,
+                  _NavigationBar(state: state),
+                ],
               ],
             );
           },
@@ -327,13 +335,26 @@ class _StepHeader extends StatelessWidget {
 /// top — or steps aside entirely when even that would push a player below the
 /// fold, since you came here to type numbers.
 class _StepBody extends StatelessWidget {
-  const _StepBody({required this.step, this.banner});
+  const _StepBody({
+    required this.step,
+    required this.sideBySide,
+    this.banner,
+    this.footer,
+  });
 
   final ScoreStep step;
+
+  /// Decided by the caller, which measures the same width and needs the answer
+  /// too — so it is passed rather than worked out twice and risked diverging.
+  final bool sideBySide;
 
   /// The "scoring the game in progress" strip, when the caller has decided it
   /// belongs in the reference pane rather than above the whole screen.
   final Widget? banner;
+
+  /// The back/next pair, when it belongs under the inputs rather than across
+  /// the bottom of both panes.
+  final Widget? footer;
 
   /// A pane narrower than this cannot hold a picture and a column of counters
   /// without squeezing both.
@@ -356,10 +377,8 @@ class _StepBody extends StatelessWidget {
   Widget _layout(BuildContext context, BoxConstraints area) {
     final asset = scoreStepReferenceImage(step);
     final content = _StepContent(step: step);
-    final sideBySide =
-        (asset != null || banner != null) && area.maxWidth >= sideBySideFrom;
 
-    if (sideBySide) {
+    if (sideBySide && (asset != null || banner != null)) {
       return Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -377,7 +396,15 @@ class _StepBody extends StatelessWidget {
             ),
           ),
           AppSpacing.horizontalL,
-          Expanded(flex: 3, child: SingleChildScrollView(child: content)),
+          Expanded(
+            flex: 3,
+            child: Column(
+              children: [
+                Expanded(child: SingleChildScrollView(child: content)),
+                if (footer != null) ...[AppSpacing.verticalS, footer!],
+              ],
+            ),
+          ),
         ],
       );
     }
@@ -387,23 +414,34 @@ class _StepBody extends StatelessWidget {
         : _stackedMax;
     final showImage = asset != null && stackedHeight >= _worthShowing;
 
-    return SingleChildScrollView(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          if (showImage)
-            Padding(
-              padding: const EdgeInsets.only(bottom: AppSpacing.s),
-              child: Center(
-                child: _ReferenceImage(
-                  asset: asset,
-                  height: stackedHeight.clamp(_worthShowing, _stackedMax),
-                ),
-              ),
+    // One column — either because the pane is narrow, or because this step has
+    // nothing to show beside its inputs. The footer still has to be drawn:
+    // a wide window on the players step took this path, and dropping it here
+    // left the step with no way forward at all.
+    return Column(
+      children: [
+        Expanded(
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                if (showImage)
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: AppSpacing.s),
+                    child: Center(
+                      child: _ReferenceImage(
+                        asset: asset,
+                        height: stackedHeight.clamp(_worthShowing, _stackedMax),
+                      ),
+                    ),
+                  ),
+                content,
+              ],
             ),
-          content,
-        ],
-      ),
+          ),
+        ),
+        if (footer != null) ...[AppSpacing.verticalS, footer!],
+      ],
     );
   }
 }
