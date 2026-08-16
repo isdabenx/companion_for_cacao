@@ -98,11 +98,23 @@ String _tiles(AppLocalizations l) => l.menuTiles;
 String _rules(AppLocalizations l) => l.menuRules;
 String _scores(AppLocalizations l) => l.menuScores;
 
-/// The destinations offered when there is, or is not, room for the secondary
-/// ones. Order is preserved so an index means the same thing in both.
-List<AppDestination> destinationsFor({required bool includeSecondary}) =>
-    includeSecondary
+/// Most a bottom bar may hold before the targets get too tight to hit.
+const int maxBarDestinations = 5;
+
+/// The destinations a bottom bar offers.
+///
+/// All of them while they fit — which they do today, and which matters: a
+/// destination missing from the bar in a compact window has no chrome at all
+/// pointing at it, so landing on one leaves no visible way out. The tiers only
+/// start filtering once the list outgrows the bar, and on that day the
+/// secondary ones will need a reachable path from content before they can be
+/// dropped from here.
+List<AppDestination> barDestinations() =>
+    appDestinations.length <= maxBarDestinations
     ? appDestinations
     : appDestinations
           .where((d) => d.tier == DestinationTier.primary)
           .toList(growable: false);
+
+/// The destinations a rail offers. It has the vertical room for all of them.
+List<AppDestination> railDestinations() => appDestinations;

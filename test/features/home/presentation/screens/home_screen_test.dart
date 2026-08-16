@@ -107,21 +107,20 @@ void main() {
       );
       // The lockup above the logo is a quiet uppercase eyebrow.
       expect(find.text('COMPANION FOR'), findsOneWidget);
-      // Home offers ways *into* a game, not a second copy of the navigation.
+      // Nothing in progress, so the one card is the way to start.
       // "Game", not "Game Setup": the same entry is how you get back to a
       // game already in progress, so it cannot be named after starting one.
       expect(find.widgetWithText(ActionCardWidget, 'Game'), findsOneWidget);
-      // Scoring is a rail-only destination, so in a compact window this card
-      // is its way in and has to stay.
-      expect(find.widgetWithText(ActionCardWidget, 'Scores'), findsOneWidget);
+      expect(
+        find.widgetWithText(ActionCardWidget, 'Resume Game'),
+        findsNothing,
+      );
 
-      // Tiles and Rules are permanent destinations in the bar and the rail.
-      // Repeating them here would be two menus doing one job.
+      // Every destination is a tab in the bar and an item on the rail, so a
+      // card repeating one would be a second menu doing the first menu's job.
       expect(find.widgetWithText(ActionCardWidget, 'Tiles'), findsNothing);
       expect(find.widgetWithText(ActionCardWidget, 'Rules'), findsNothing);
-
-      // No game running, so there is nothing to resume.
-      expect(find.widgetWithText(ActionCardWidget, 'Resume'), findsNothing);
+      expect(find.widgetWithText(ActionCardWidget, 'Scores'), findsNothing);
     });
 
     testWidgets('tucks capabilities and the repo link into About', (

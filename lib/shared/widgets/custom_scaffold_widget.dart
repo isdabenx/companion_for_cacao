@@ -70,11 +70,9 @@ class CustomScaffoldWidget extends StatelessWidget {
     final l10n = AppLocalizations.of(context);
     final windowClass = AppBreakpoints.of(context);
 
-    // The rail has vertical room the bar does not, so it carries the
-    // secondary destinations too.
-    final destinations = destinationsFor(
-      includeSecondary: windowClass.usesRail,
-    );
+    final destinations = windowClass.usesRail
+        ? railDestinations()
+        : barDestinations();
     final index = destinations.indexWhere((d) => d.id == destination);
     final selected = index < 0 ? null : index;
 
@@ -103,17 +101,32 @@ class CustomScaffoldWidget extends StatelessWidget {
         centerTitle: true,
         leading: _leading(showRail: showRail),
       ),
-      body: Row(
-        children: [
-          if (showRail)
-            _Rail(
-              destinations: destinations,
-              selectedIndex: selected,
-              extended: windowClass.usesExtendedRail,
-              l10n: l10n,
-            ),
-          Expanded(child: _Background(child: _constrainedBody())),
-        ],
+      // Consume the horizontal display cutout once, here, for everything.
+      //
+      // Left to itself the rail absorbs it: in landscape with the camera on
+      // the leading edge it grew from 79 dp to 135 dp, icons shoved off to
+      // one side behind a dead green band. Taking the inset at the body means
+      // the rail is its true width whichever way the phone is turned, and the
+      // content pane cannot slide under the camera in the other rotation
+      // either. Top and bottom are left to the Scaffold, which already
+      // handles the status bar and the gesture bar.
+      body: _Background(
+        child: SafeArea(
+          top: false,
+          bottom: false,
+          child: Row(
+            children: [
+              if (showRail)
+                _Rail(
+                  destinations: destinations,
+                  selectedIndex: selected,
+                  extended: windowClass.usesExtendedRail,
+                  l10n: l10n,
+                ),
+              Expanded(child: _constrainedBody()),
+            ],
+          ),
+        ),
       ),
       bottomNavigationBar: showBar
           ? NavigationBar(
@@ -253,6 +266,12 @@ class _Rail extends StatelessWidget {
   }
 }
 
+/// The leafy ground, behind the rail as well as the content.
+///
+/// It reaches under the display cutout on purpose: the strip the camera
+/// reserves belongs to no component, and showing the page ground there is
+/// what makes the rail read as its true width instead of as a wide band with
+/// its icons shoved to one side.
 class _Background extends StatelessWidget {
   const _Background({required this.child});
 
@@ -260,28 +279,21 @@ class _Background extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        return Container(
-          decoration: BoxDecoration(
-            image: DecorationImage(
-              image: const AssetImage(Assets.background),
-              fit: BoxFit.cover,
-              // Warm cream wash over the leaf texture: the jungle stays a
-              // whisper, and content sits on a calm ground instead of a
-              // second green competing with the chrome and the cards.
-              colorFilter: ColorFilter.mode(
-                AppColors.cream.withValues(alpha: 0.9),
-                BlendMode.srcOver,
-              ),
-            ),
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        image: DecorationImage(
+          image: const AssetImage(Assets.background),
+          fit: BoxFit.cover,
+          // Warm cream wash over the leaf texture: the jungle stays a
+          // whisper, and content sits on a calm ground instead of a
+          // second green competing with the chrome and the cards.
+          colorFilter: ColorFilter.mode(
+            AppColors.cream.withValues(alpha: 0.9),
+            BlendMode.srcOver,
           ),
-          child: ConstrainedBox(
-            constraints: BoxConstraints(minHeight: constraints.maxHeight),
-            child: child,
-          ),
-        );
-      },
+        ),
+      ),
+      child: child,
     );
   }
 }

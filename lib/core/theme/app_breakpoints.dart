@@ -55,14 +55,18 @@ class AppBreakpoints {
   /// Below this the window has no height to spare.
   static const double shortWindowMax = 500;
 
-  /// Height, not width — and the one place it is right to ask.
+  /// Height, not width — for the few things that cannot be told by a
+  /// constraint.
   ///
-  /// Anything sized in fixed pixels along the vertical axis is a welcome in a
-  /// tall window and a wall in a short one: a 132 dp logo is a quarter of a
-  /// phone in portrait and over half of it turned sideways. Heroes, reference
-  /// images and celebration banners all give ground here. This is not the
-  /// orientation test in disguise — it asks about the axis that is actually
-  /// scarce, and a tall-but-narrow window correctly answers "no".
+  /// Prefer measuring the space a widget was actually handed, with
+  /// `LayoutBuilder`. This query was tried for the Home hero and the score
+  /// reference image and read **stale across a rotation**: both stayed at
+  /// their portrait size in landscape, the second one clipping the counters
+  /// underneath it. Both now size from their constraints instead.
+  ///
+  /// What is left is the app bar, whose height has to be declared before any
+  /// layout happens and so has nothing to measure. If a constraint is within
+  /// reach, use the constraint.
   static bool isShortWindow(BuildContext context) =>
       MediaQuery.sizeOf(context).height < shortWindowMax;
 }

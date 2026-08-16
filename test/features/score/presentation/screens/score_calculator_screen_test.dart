@@ -121,6 +121,62 @@ void main() {
       expect(find.byType(CountStepperWidget), findsNWidgets(2));
     });
 
+    /// Puts the calculator on a counting step, which is the first step with a
+    /// reference picture and therefore the one with something to lay out.
+    Future<void> pumpOnGoldStep(WidgetTester tester, Size size) async {
+      tester.view
+        ..physicalSize = size
+        ..devicePixelRatio = 1.0;
+      addTearDown(tester.view.reset);
+
+      await tester.pumpWidget(wrap(const ScoreCalculatorScreen()));
+      await tester.pump();
+
+      final container = ProviderScope.containerOf(
+        tester.element(find.byType(ScoreCalculatorScreen)),
+      );
+      container.read(scoreProvider.notifier)
+        ..addPlayer('Alice', 'red')
+        ..addPlayer('Bob', 'white')
+        ..nextStep();
+      await tester.pumpAndSettle();
+
+      expect(find.text('Accumulated Gold'), findsOneWidget);
+    }
+
+    // What to count on one side, what you type on the other. Stacked, the
+    // picture pushed the second player below the fold on a phone in
+    // landscape, which is the whole reason this layout exists.
+    testWidgets('a wide step puts the picture beside the inputs', (
+      tester,
+    ) async {
+      await pumpOnGoldStep(tester, const Size(923, 411));
+
+      final image = tester.getRect(find.byType(SafeAssetImage));
+      final firstStepper = tester.getRect(
+        find.byType(CountStepperWidget).first,
+      );
+      final lastStepper = tester.getRect(find.byType(CountStepperWidget).last);
+
+      // Beside, not above.
+      expect(image.right, lessThanOrEqualTo(firstStepper.left));
+      // And with both players actually on screen, not clipped away.
+      expect(lastStepper.bottom, lessThanOrEqualTo(411));
+    });
+
+    testWidgets('a narrow step stacks the picture above the inputs', (
+      tester,
+    ) async {
+      await pumpOnGoldStep(tester, const Size(411, 923));
+
+      final image = tester.getRect(find.byType(SafeAssetImage));
+      final firstStepper = tester.getRect(
+        find.byType(CountStepperWidget).first,
+      );
+
+      expect(image.bottom, lessThanOrEqualTo(firstStepper.top));
+    });
+
     testWidgets('temples step is replaced by gem mines when active', (
       tester,
     ) async {

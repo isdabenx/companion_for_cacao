@@ -56,21 +56,40 @@ void main() {
       expect(find.byType(NavigationBar), findsNothing);
     });
 
-    testWidgets('the bar carries primary destinations only, the rail all', (
+    testWidgets('every destination is offered in every window class', (
       tester,
     ) async {
+      // A destination missing from the bar has no chrome pointing at it in a
+      // compact window, so landing on one strands you with no visible way
+      // out. They all fit today, so they are all there.
       await pumpAt(tester, compact);
       final bar = tester.widget<NavigationBar>(find.byType(NavigationBar));
-      final primaryCount = appDestinations
-          .where((d) => d.tier == DestinationTier.primary)
-          .length;
-      expect(bar.destinations, hasLength(primaryCount));
+      expect(bar.destinations, hasLength(appDestinations.length));
 
       await pumpAt(tester, expanded);
       final rail = tester.widget<NavigationRail>(find.byType(NavigationRail));
       expect(rail.destinations, hasLength(appDestinations.length));
-      // The extra ones are the secondary tier, not padding.
-      expect(rail.destinations.length, greaterThan(primaryCount));
+    });
+
+    testWidgets('the bar never grows past what it can hold', (tester) async {
+      // The day a sixth destination arrives this fails, which is the moment
+      // to give the secondary ones a path from content before dropping them
+      // out of the bar.
+      expect(barDestinations().length, lessThanOrEqualTo(maxBarDestinations));
+    });
+
+    testWidgets('a secondary destination is still reachable in compact', (
+      tester,
+    ) async {
+      await pumpAt(tester, compact, destination: AppDestinationId.scores);
+
+      // It is a destination, so it gets navigation — not a dead end.
+      expect(find.byType(NavigationBar), findsOneWidget);
+      final bar = tester.widget<NavigationBar>(find.byType(NavigationBar));
+      final index = appDestinations.indexWhere(
+        (d) => d.id == AppDestinationId.scores,
+      );
+      expect(bar.selectedIndex, index);
     });
 
     testWidgets('the rail extends only once there is width for labels', (

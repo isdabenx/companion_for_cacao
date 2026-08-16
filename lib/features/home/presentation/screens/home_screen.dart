@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:companion_for_cacao/config/constants/assets.dart';
 import 'package:companion_for_cacao/config/navigation/app_destinations.dart';
 import 'package:companion_for_cacao/config/routes/app_routes.dart';
-import 'package:companion_for_cacao/core/theme/app_breakpoints.dart';
 import 'package:companion_for_cacao/core/theme/app_colors.dart';
 import 'package:companion_for_cacao/core/theme/app_shapes.dart';
 import 'package:companion_for_cacao/core/theme/app_spacing.dart';
@@ -34,15 +33,13 @@ class HomeScreen extends ConsumerWidget {
     final hasGameInProgress = ref.watch(
       gameSetupProvider.select((s) => s.value?.isStarted ?? false),
     );
-    final shortWindow = AppBreakpoints.isShortWindow(context);
 
-    // Home offers ways *into* a game, not a copy of the navigation. Tiles and
-    // Rules used to sit here as cards and are now permanent destinations in
-    // the bar and the rail, so repeating them would be two menus for one job.
+    // Home says what to do next; it does not restate where you can go. Every
+    // destination is one tap away in the bar and the rail, so a card that only
+    // repeats one of them is a second menu doing the first menu's job.
     //
-    // Scoring stays: it is a rail-only destination, and the rule for those is
-    // that they are never the only door — in a compact window this card is
-    // the way in.
+    // What is left is the thing no tab can express: whether there is a game
+    // waiting for you.
     final actions = <ActionCardWidget>[
       if (hasGameInProgress)
         ActionCardWidget(
@@ -59,20 +56,17 @@ class HomeScreen extends ConsumerWidget {
             if (game == null) return;
             unawaited(context.push(AppRoutes.gameSetupDetail, extra: game));
           },
+        )
+      else
+        // Nothing in progress: the launchpad's one job is to get you started,
+        // so it says so instead of leaving an empty page under the logo.
+        ActionCardWidget(
+          title: l10n.menuGame,
+          subtitle: l10n.homeCardSetupSub,
+          icon: Icons.group,
+          tone: ActionCardTone.green,
+          onTap: () => context.go(AppRoutes.gameSetup),
         ),
-      ActionCardWidget(
-        title: l10n.menuGame,
-        subtitle: l10n.homeCardSetupSub,
-        icon: Icons.group,
-        tone: hasGameInProgress ? ActionCardTone.gold : ActionCardTone.green,
-        onTap: () => context.go(AppRoutes.gameSetup),
-      ),
-      ActionCardWidget(
-        title: l10n.menuScores,
-        subtitle: l10n.homeCardScoresSub,
-        icon: Icons.calculate,
-        onTap: () => context.go(AppRoutes.scoreCalculator),
-      ),
     ];
 
     return UpgradeAlert(
@@ -82,62 +76,72 @@ class HomeScreen extends ConsumerWidget {
         // Option C: no cream panel — the cards sit directly on the leafy
         // backdrop, so white cards get maximum contrast and the green frames
         // the launchpad.
-        body: SingleChildScrollView(
-          padding: const EdgeInsets.fromLTRB(
-            AppSpacing.l,
-            AppSpacing.s,
-            AppSpacing.l,
-            AppSpacing.m,
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              AppSpacing.verticalS,
-              // Brand hero: the decorative type lives in the logo, so the
-              // lockup above it is a quiet letterspaced eyebrow instead of a
-              // second display treatment competing with it.
-              Text(
-                'Companion for'.toUpperCase(),
-                style: AppTextStyles.badge.copyWith(
-                  fontSize: 12,
-                  letterSpacing: 3,
-                  color: AppColors.greenDarker,
-                ),
-                textAlign: TextAlign.center,
+        body: LayoutBuilder(
+          builder: (context, constraints) {
+            // The hero is sized from the room this screen was handed, not
+            // from a window query: a query read stale across a rotation and
+            // left the logo at its portrait size. A constraint cannot,
+            // because nothing is laid out until it exists.
+            final shortWindow =
+                constraints.maxHeight.isFinite && constraints.maxHeight < 460;
+            return SingleChildScrollView(
+              padding: const EdgeInsets.fromLTRB(
+                AppSpacing.l,
+                AppSpacing.s,
+                AppSpacing.l,
+                AppSpacing.m,
               ),
-              // The hero is the first thing to give ground when the window is
-              // short. At full size it left room for exactly one card in
-              // landscape, which made the launchpad useless in the very
-              // orientation people play in.
-              Image.asset(Assets.cacaoTile, height: shortWindow ? 64 : 132),
-              if (!shortWindow) ...[
-                AppSpacing.verticalS,
-                Text(
-                  l10n.homeTagline,
-                  style: AppTextStyles.instruction,
-                  textAlign: TextAlign.center,
-                ),
-              ],
-              shortWindow ? AppSpacing.verticalM : AppSpacing.verticalXl,
-              // Main destinations.
-              for (var i = 0; i < actions.length; i++) ...[
-                actions[i]
-                    .animate()
-                    .fadeIn(duration: 280.ms, delay: (70 * i).ms)
-                    .slideY(
-                      begin: 0.08,
-                      end: 0,
-                      duration: 280.ms,
-                      delay: (70 * i).ms,
-                      curve: Curves.easeOutCubic,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  AppSpacing.verticalS,
+                  // Brand hero: the decorative type lives in the logo, so the
+                  // lockup above it is a quiet letterspaced eyebrow instead of a
+                  // second display treatment competing with it.
+                  Text(
+                    'Companion for'.toUpperCase(),
+                    style: AppTextStyles.badge.copyWith(
+                      fontSize: 12,
+                      letterSpacing: 3,
+                      color: AppColors.greenDarker,
                     ),
-                if (i < actions.length - 1) AppSpacing.verticalM,
-              ],
-              AppSpacing.verticalXl,
-              _AboutSection(l10n: l10n, repoUrl: _repoUrl),
-              AppSpacing.verticalM,
-            ],
-          ),
+                    textAlign: TextAlign.center,
+                  ),
+                  // The hero is the first thing to give ground when the window is
+                  // short. At full size it left room for exactly one card in
+                  // landscape, which made the launchpad useless in the very
+                  // orientation people play in.
+                  Image.asset(Assets.cacaoTile, height: shortWindow ? 64 : 132),
+                  if (!shortWindow) ...[
+                    AppSpacing.verticalS,
+                    Text(
+                      l10n.homeTagline,
+                      style: AppTextStyles.instruction,
+                      textAlign: TextAlign.center,
+                    ),
+                  ],
+                  shortWindow ? AppSpacing.verticalM : AppSpacing.verticalXl,
+                  // Main destinations.
+                  for (var i = 0; i < actions.length; i++) ...[
+                    actions[i]
+                        .animate()
+                        .fadeIn(duration: 280.ms, delay: (70 * i).ms)
+                        .slideY(
+                          begin: 0.08,
+                          end: 0,
+                          duration: 280.ms,
+                          delay: (70 * i).ms,
+                          curve: Curves.easeOutCubic,
+                        ),
+                    if (i < actions.length - 1) AppSpacing.verticalM,
+                  ],
+                  AppSpacing.verticalXl,
+                  _AboutSection(l10n: l10n, repoUrl: _repoUrl),
+                  AppSpacing.verticalM,
+                ],
+              ),
+            );
+          },
         ),
       ),
     );

@@ -51,6 +51,10 @@ class ScoreCalculatorScreen extends ConsumerWidget {
       // Pushed from the board it is that game's scoreboard, so it behaves as
       // a detail; reached from Home it is a destination in its own right.
       destination: fromGameBoard ? null : AppDestinationId.scores,
+      // Uncapped: wide enough, the step splits into a reference pane and an
+      // input pane, and squeezing that into a reading column would defeat it.
+      // Narrow, the step is a single column anyway and has nothing to stretch.
+      contentWidth: ContentWidth.full,
       title: l10n.scoreCalculator,
       showBackButton: fromGameBoard,
       actions: [
@@ -77,14 +81,13 @@ class ScoreCalculatorScreen extends ConsumerWidget {
             _StepHeader(state: state),
             AppSpacing.verticalS,
             Expanded(
-              child: SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    _StepReferenceImage(step: state.currentStep),
-                    _StepContent(step: state.currentStep),
-                  ],
-                ),
+              // Measured here, on the space the step actually has, rather
+              // than asked of the window. A window query can go stale across
+              // a rotation; a constraint cannot, because nothing is laid out
+              // until it exists.
+              child: LayoutBuilder(
+                builder: (context, constraints) =>
+                    _StepBody(step: state.currentStep, area: constraints),
               ),
             ),
             AppSpacing.verticalS,
@@ -274,12 +277,18 @@ class _StepHeader extends StatelessWidget {
     return Column(
       children: [
         Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(
-              state.currentStep.localizedName(AppLocalizations.of(context)),
-              style: AppTextStyles.sectionTitlePlain.copyWith(fontSize: 18),
+            // Flexible, and the counter is not: the step name is the part
+            // that varies — by step, by language, by the reader's text size —
+            // so it is the part that has to give. Fixed, this row overflowed
+            // as soon as the name got long enough.
+            Expanded(
+              child: Text(
+                state.currentStep.localizedName(AppLocalizations.of(context)),
+                style: AppTextStyles.sectionTitlePlain.copyWith(fontSize: 18),
+              ),
             ),
+            AppSpacing.horizontalS,
             Text(
               '${state.currentStepIndex + 1} / ${steps.length}',
               style: AppTextStyles.badgeCount,
@@ -301,35 +310,98 @@ class _StepHeader extends StatelessWidget {
   }
 }
 
-/// Picture of the physical component to count in the current step, when
-/// one helps (village board for the water track, temple tile, etc.).
-class _StepReferenceImage extends StatelessWidget {
-  const _StepReferenceImage({required this.step});
+/// The step laid out into the room it has.
+///
+/// Wide enough and the reference picture moves to a pane of its own beside
+/// the inputs, which is the shape this screen wanted all along: what to count
+/// on one side, what you type on the other, nothing stacked on top of
+/// anything. Narrow, it stacks and the picture takes a modest slice off the
+/// top — or steps aside entirely when even that would push a player below the
+/// fold, since you came here to type numbers.
+class _StepBody extends StatelessWidget {
+  const _StepBody({required this.step, required this.area});
 
   final ScoreStep step;
+  final BoxConstraints area;
+
+  /// A pane narrower than this cannot hold a picture and a column of counters
+  /// without squeezing both.
+  static const double _sideBySideFrom = AppBreakpoints.mediumMin;
+
+  /// Stacked, the picture may take this share of the step area.
+  static const double _stackedShare = 0.2;
+
+  /// Below this a pile of coins is a smudge rather than a reminder.
+  static const double _worthShowing = 44;
+
+  /// Never taller than this when stacked, however roomy the window.
+  static const double _stackedMax = 120;
 
   @override
   Widget build(BuildContext context) {
     final asset = scoreStepReferenceImage(step);
-    if (asset == null) return const SizedBox.shrink();
+    final content = _StepContent(step: step);
+    final sideBySide = asset != null && area.maxWidth >= _sideBySideFrom;
 
-    // The picture is a reminder of what to count, not the thing you came to
-    // do. At a fixed 120 it plus the banner and the header filled a short
-    // window entirely, so every step opened with the counters below the fold
-    // and no way to type without scrolling first.
-    final height = AppBreakpoints.isShortWindow(context) ? 56.0 : 120.0;
-
-    return Padding(
-      padding: const EdgeInsets.only(bottom: AppSpacing.s),
-      child: Center(
-        child: ClipRRect(
-          borderRadius: AppShapes.radius(AppShapes.radiusM),
-          child: SafeAssetImage(
-            assetPath: asset,
-            height: height,
-            fit: BoxFit.contain,
+    if (sideBySide) {
+      return Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Expanded(
+            flex: 2,
+            child: Center(child: _ReferenceImage(asset: asset)),
           ),
-        ),
+          AppSpacing.horizontalL,
+          Expanded(flex: 3, child: SingleChildScrollView(child: content)),
+        ],
+      );
+    }
+
+    final stackedHeight = area.maxHeight.isFinite
+        ? area.maxHeight * _stackedShare
+        : _stackedMax;
+    final showImage = asset != null && stackedHeight >= _worthShowing;
+
+    return SingleChildScrollView(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          if (showImage)
+            Padding(
+              padding: const EdgeInsets.only(bottom: AppSpacing.s),
+              child: Center(
+                child: _ReferenceImage(
+                  asset: asset,
+                  height: stackedHeight.clamp(_worthShowing, _stackedMax),
+                ),
+              ),
+            ),
+          content,
+        ],
+      ),
+    );
+  }
+}
+
+/// Picture of the physical component to count in the current step (village
+/// board for the water track, temple tile, and so on).
+class _ReferenceImage extends StatelessWidget {
+  const _ReferenceImage({required this.asset, this.height});
+
+  final String asset;
+
+  /// Unset means "as big as the pane allows", which is what the side-by-side
+  /// layout wants.
+  final double? height;
+
+  @override
+  Widget build(BuildContext context) {
+    return ClipRRect(
+      borderRadius: AppShapes.radius(AppShapes.radiusM),
+      child: SafeAssetImage(
+        assetPath: asset,
+        height: height,
+        fit: BoxFit.contain,
       ),
     );
   }
