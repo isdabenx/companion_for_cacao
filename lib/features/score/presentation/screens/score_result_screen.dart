@@ -1,4 +1,5 @@
 import 'package:companion_for_cacao/core/theme/app_colors.dart';
+import 'package:companion_for_cacao/core/theme/app_breakpoints.dart';
 import 'package:companion_for_cacao/core/theme/app_spacing.dart';
 import 'package:companion_for_cacao/core/theme/app_text_styles.dart';
 import 'package:companion_for_cacao/features/score/domain/entities/score_result_entity.dart';
@@ -23,34 +24,58 @@ class ScoreResultScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final result = ref.watch(scoreResultProvider);
 
+    final banner = _WinnerBanner(result: result)
+        .animate()
+        .fadeIn(duration: 300.ms)
+        .scaleXY(begin: 0.96, curve: Curves.easeOutBack);
+
+    final standings = <Widget>[
+      for (var i = 0; i < result.standings.length; i++) ...[
+        _PlayerScoreCard(score: result.standings[i])
+            .animate()
+            .fadeIn(duration: 260.ms, delay: (120 + 80 * i).ms)
+            .slideY(
+              begin: 0.1,
+              end: 0,
+              duration: 260.ms,
+              delay: (120 + 80 * i).ms,
+              curve: Curves.easeOutCubic,
+            ),
+        AppSpacing.verticalS,
+      ],
+    ];
+
     return CustomScaffoldWidget(
       title: AppLocalizations.of(context).finalScoreTitle,
       showBackButton: true,
+      // Uncapped: wide enough, the announcement and the numbers sit side by
+      // side rather than one pushing the other off screen.
+      contentWidth: ContentWidth.full,
       body: ContainerFullStyleWidget(
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              _WinnerBanner(result: result)
-                  .animate()
-                  .fadeIn(duration: 300.ms)
-                  .scaleXY(begin: 0.96, curve: Curves.easeOutBack),
-              AppSpacing.verticalL,
-              for (var i = 0; i < result.standings.length; i++) ...[
-                _PlayerScoreCard(score: result.standings[i])
-                    .animate()
-                    .fadeIn(duration: 260.ms, delay: (120 + 80 * i).ms)
-                    .slideY(
-                      begin: 0.1,
-                      end: 0,
-                      duration: 260.ms,
-                      delay: (120 + 80 * i).ms,
-                      curve: Curves.easeOutCubic,
-                    ),
-                AppSpacing.verticalS,
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            // Stacked, the banner is the announcement *and* the wall between
+            // you and the scores: it filled a landscape window on its own and
+            // every breakdown started below the fold. Beside them it stays a
+            // celebration and costs nobody their numbers.
+            if (constraints.maxWidth < AppBreakpoints.mediumMin) {
+              return SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [banner, AppSpacing.verticalL, ...standings],
+                ),
+              );
+            }
+
+            return Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Expanded(flex: 2, child: SingleChildScrollView(child: banner)),
+                AppSpacing.horizontalL,
+                Expanded(flex: 3, child: ListView(children: standings)),
               ],
-            ],
-          ),
+            );
+          },
         ),
       ),
     );

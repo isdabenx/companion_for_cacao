@@ -27,6 +27,9 @@ class GameSetupScreen extends ConsumerWidget {
 
     return CustomScaffoldWidget(
       destination: AppDestinationId.game,
+      // Uncapped: wide enough, players and expansions sit side by side, and a
+      // reading column would leave no room for that.
+      contentWidth: ContentWidth.full,
       title: l10n.menuGame,
       actions: hasInput
           ? [

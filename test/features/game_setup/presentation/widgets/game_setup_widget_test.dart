@@ -124,11 +124,10 @@ void main() {
       );
       expect(pageIgnorePointer.ignoring, isFalse);
 
-      final opacityWidgets = tester.widgetList<Opacity>(find.byType(Opacity));
-      final pageOpacity = opacityWidgets.firstWhere(
-        (widget) => widget.child is ListView,
-      );
-      expect(pageOpacity.opacity, equals(1.0));
+      // Read the dimming off that same wrapper rather than hunting for an
+      // Opacity by what it wraps: the page is one column or two depending on
+      // the width, and blocking has nothing to do with which.
+      expect((pageIgnorePointer.child! as Opacity).opacity, equals(1.0));
     });
 
     testWidgets('page is blocked when isStarted is true', (tester) async {
@@ -141,12 +140,7 @@ void main() {
         (widget) => widget.child is Opacity,
       );
       expect(pageIgnorePointer.ignoring, isTrue);
-
-      final opacityWidgets = tester.widgetList<Opacity>(find.byType(Opacity));
-      final pageOpacity = opacityWidgets.firstWhere(
-        (widget) => widget.child is ListView,
-      );
-      expect(pageOpacity.opacity, equals(0.6));
+      expect((pageIgnorePointer.child! as Opacity).opacity, equals(0.6));
     });
   });
 }
