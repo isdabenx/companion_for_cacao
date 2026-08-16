@@ -50,7 +50,15 @@ class HomeScreen extends ConsumerWidget {
           subtitle: l10n.homeCardResumeSub,
           icon: Icons.play_arrow,
           tone: ActionCardTone.green,
-          onTap: () => context.go(AppRoutes.gameSetupDetail),
+          // The board takes the game as a typed `extra` and shows an error
+          // screen without one, so this pushes it the same way the setup
+          // screen's own resume button does. Pushed, not replaced: back from
+          // the board should land on Home, where you came from.
+          onTap: () {
+            final game = ref.read(gameSetupProvider).value;
+            if (game == null) return;
+            unawaited(context.push(AppRoutes.gameSetupDetail, extra: game));
+          },
         ),
       ActionCardWidget(
         title: l10n.menuGame,
